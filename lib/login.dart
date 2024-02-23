@@ -189,6 +189,7 @@ class passwordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      obscureText: true,
       controller: _password,
       decoration: InputDecoration(
         hintText: 'Enter Password',
