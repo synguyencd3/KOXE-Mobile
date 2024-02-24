@@ -1,21 +1,22 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _LoginPageState extends State<LoginPage> {
 
   late final TextEditingController _email;
   late final TextEditingController _password;
 
-  void Register() async {
+  void Login() async {
     final email = _email.text;
     final password = _password.text;
     var url = Uri.https('dummyjson.com','auth/login');
@@ -23,7 +24,15 @@ class _HomePageState extends State<HomePage> {
       'username': '$email',
       'password': '$password'
     });
-    print('Response body: ${response.body}');
+    var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+    var token = decodedResponse['token'];
+    if (token == null)
+    {
+      print('wrong password or username');
+    } else
+    {
+      print('login success');
+    }
   }
 
   @override
@@ -48,15 +57,15 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
               backgroundColor: FlutterFlowTheme.of(context).primary,
               title: Align(
-                     child: Text(
-                            'LOGIN',
-                             style: FlutterFlowTheme.of(context).headlineMedium.override(
-                                    fontFamily: 'Outfit',
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    ),
-                            ),
+                child: Text(
+                      'LOGIN',
+                        style: FlutterFlowTheme.of(context).headlineMedium.override(
+                              fontFamily: 'Outfit',
+                              color: Colors.white,
+                              fontSize: 22,
+                              ),
                       ),
+                ),
               ),
       body: Container(
         padding: EdgeInsets.all(15),
@@ -65,7 +74,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             emailField(email: _email),
             passwordField(password: _password),
-            RegisterButton(name: 'Login', callback: Register),
+            Button(name: 'Login', callback: Login),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
               child: Text(
@@ -73,19 +82,19 @@ class _HomePageState extends State<HomePage> {
                 style: FlutterFlowTheme.of(context).bodyMedium,
               ),
             ),
-            RegisterButton(name: 'Register', callback: () {print('pressed');},),
+            Button(name: 'Register', callback: () {Navigator.pushNamed(context, '/register');},),
         ]),
       ),
     );
   }
 }
 
-class RegisterButton extends StatelessWidget {
+class Button extends StatelessWidget {
 
   final String name;
   final VoidCallback callback;
 
-  const RegisterButton({
+  const Button({
     super.key,
     required this.name,
     required this.callback,
@@ -97,6 +106,7 @@ class RegisterButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
       child: FFButtonWidget(
+            showLoadingIndicator: false,
             onPressed: callback,
             text: '$name',
             options: FFButtonOptions(
@@ -107,7 +117,7 @@ class RegisterButton extends StatelessWidget {
               textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                   fontFamily: 'Readex Pro',
                   color: Colors.white,
-      ),
+              ),
               elevation: 3,
               borderSide: BorderSide(
                 color: Colors.transparent,
@@ -120,42 +130,6 @@ class RegisterButton extends StatelessWidget {
   }
 }
 
-class LoginButton extends StatelessWidget {
-  const LoginButton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
-          child: FFButtonWidget(
-            onPressed: () {
-              print('Button pressed ...');
-            },
-            text: 'Login',
-            options: FFButtonOptions(
-              height: 40,
-              padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
-              iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-              color: FlutterFlowTheme.of(context).primary,
-              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-        fontFamily: 'Readex Pro',
-        color: Colors.white,
-      ),
-              elevation: 3,
-              borderSide: BorderSide(
-    color: Colors.transparent,
-    width: 1,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        );
-  }
-}
-
-
 
 class emailField extends StatelessWidget {
   const emailField({
@@ -167,12 +141,16 @@ class emailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _email,
-      decoration: InputDecoration(
-        labelText: 'Enter Email',
-        labelStyle: FlutterFlowTheme.of(context).labelMedium,
-        hintStyle: FlutterFlowTheme.of(context).labelMedium,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0,8,8,0),
+      child: TextField(
+        controller: _email,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: const BorderRadius.all(Radius.circular(7))),
+          labelText: 'Enter Email',
+          labelStyle: FlutterFlowTheme.of(context).labelMedium,
+          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+        ),
       ),
     );
   }
@@ -188,14 +166,19 @@ class passwordField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      obscureText: true,
-      controller: _password,
-      decoration: InputDecoration(
-        hintText: 'Enter Password',
-        labelStyle: FlutterFlowTheme.of(context).labelMedium,
-        hintStyle: FlutterFlowTheme.of(context).labelMedium,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0,8,8,0),
+      child: TextField(
+        obscureText: true,
+        controller: _password,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: const BorderRadius.all(Radius.circular(7))),
+          hintText: 'Enter Password',
+          labelStyle: FlutterFlowTheme.of(context).labelMedium,
+          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+        ),
       ),
     );
   }
 }
+
