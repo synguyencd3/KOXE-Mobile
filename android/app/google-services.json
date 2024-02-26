@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "193303518481",
+    "project_id": "k20-oto",
+    "storage_bucket": "k20-oto.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193303518481:android:f625498ebfb22d70f900b0",
+        "android_client_info": {
+          "package_name": "com.example.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbfy8s5vE9W1ZkHWzpmBgGeKypSNDg82M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
