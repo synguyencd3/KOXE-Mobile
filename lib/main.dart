@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/login.dart';
-import 'package:mobile/register.dart';
+import 'package:mobile/pages/login.dart';
+import 'package:mobile/pages/news.dart';
+import 'package:mobile/pages/register.dart';
 
 
 
@@ -15,7 +16,8 @@ void main() {
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginPage(),
-        '/register': (context) => Register()
+        '/register': (context) => Register(),
+        '/news': (context) => News()
       },
     )
   );
