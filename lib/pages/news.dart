@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
 
-class News extends StatefulWidget {
-  const News({super.key});
+class NewsBoard extends StatefulWidget {
+  const NewsBoard({super.key});
 
   @override
-  State<News> createState() => _NewsState();
+  State<NewsBoard> createState() => _NewsBoardState();
 }
 
-class _NewsState extends State<News> {
+class _NewsBoardState extends State<NewsBoard> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        automaticallyImplyLeading: false,
+        title: Text(
+          'News',
+          style: FlutterFlowTheme.of(context).titleLarge,
+        ),
+      ),
+    );
   }
 }
