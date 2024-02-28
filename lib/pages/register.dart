@@ -10,10 +10,10 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-
   late final TextEditingController _email;
   late final TextEditingController _password;
   late final TextEditingController _confirmPassword;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -34,8 +34,8 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-       appBar: AppBar(
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primary,
           title: Align(
             child: Text(
@@ -46,22 +46,29 @@ class _RegisterState extends State<Register> {
                     fontSize: 22,
                   ),
             ),
-          ),   
-       ), 
-       body: Padding(
-         padding: EdgeInsets.all(15),
-         child: Form(
-          child: Column(
-            mainAxisAlignment:MainAxisAlignment.center,
-            children: [
+          ),
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(15),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 emailField(email: _email),
                 passwordField(password: _password),
-                confirmPasswordField(password: _confirmPassword),
-                Button(name: 'register', callback: () {print('registered');})
-            ],),
+                ConfirmPasswordField(confirmPassword: _confirmPassword, password: _password,),
+                Button(
+                    name: 'register',
+                    callback: () {
+                      if (_formKey.currentState!.validate()) {
+                        print('registered');
+                      }
+                    })
+              ],
+            ),
           ),
-       )
-    );
+        ));
   }
 }
 
@@ -76,11 +83,20 @@ class emailField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0,8,8,0),
-      child: TextField(
+      padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+      child: TextFormField(
+        validator: (email) {
+          if (email == null) return 'Please enter email';
+          RegExp exp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+          if (!exp.hasMatch(email)) {
+            return 'Please enter email';
+          } else
+            return null;
+        },
         controller: _email,
         decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: const BorderRadius.all(Radius.circular(7))),
+          border: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(7))),
           labelText: 'Enter Email',
           labelStyle: FlutterFlowTheme.of(context).labelMedium,
           hintStyle: FlutterFlowTheme.of(context).labelMedium,
@@ -101,12 +117,17 @@ class passwordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0,8,8,0),
-      child: TextField(
+      padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+      child: TextFormField(
+        validator: (value) {
+          if (value == "") return "Please type a password";
+          return null;
+        },
         obscureText: true,
         controller: _password,
         decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: const BorderRadius.all(Radius.circular(7))),
+          border: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(7))),
           hintText: 'Enter Password',
           labelStyle: FlutterFlowTheme.of(context).labelMedium,
           hintStyle: FlutterFlowTheme.of(context).labelMedium,
@@ -116,23 +137,33 @@ class passwordField extends StatelessWidget {
   }
 }
 
-class confirmPasswordField extends StatelessWidget {
-  const confirmPasswordField({
+class ConfirmPasswordField extends StatelessWidget {
+  const ConfirmPasswordField({
     super.key,
+    required TextEditingController confirmPassword,
     required TextEditingController password,
-  }) : _password = password;
+  }) : _password=password,_confirmPassword = confirmPassword;
 
+  final TextEditingController _confirmPassword;
   final TextEditingController _password;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0,8,8,0),
-      child: TextField(
+      padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+      child: TextFormField(
+        validator: (confirmation) {
+          print(confirmation);
+          print(_password.text);
+          return (confirmation== _password.text)
+              ? null
+              : "Confirm password should match password";
+        },
         obscureText: true,
-        controller: _password,
+        controller: _confirmPassword,
         decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: const BorderRadius.all(Radius.circular(7))),
+          border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(7))),
           hintText: 'Confirm Password',
           labelStyle: FlutterFlowTheme.of(context).labelMedium,
           hintStyle: FlutterFlowTheme.of(context).labelMedium,
@@ -143,7 +174,6 @@ class confirmPasswordField extends StatelessWidget {
 }
 
 class Button extends StatelessWidget {
-
   final String name;
   final VoidCallback callback;
 
@@ -153,33 +183,31 @@ class Button extends StatelessWidget {
     required this.callback,
   });
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
       child: FFButtonWidget(
-            showLoadingIndicator: false,
-            onPressed: callback,
-            text: '$name',
-            options: FFButtonOptions(
-              height: 40,
-              padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
-              iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-              color: FlutterFlowTheme.of(context).primary,
-              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                  fontFamily: 'Readex Pro',
-                  color: Colors.white,
+        showLoadingIndicator: false,
+        onPressed: callback,
+        text: '$name',
+        options: FFButtonOptions(
+          height: 40,
+          padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+          iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+          color: FlutterFlowTheme.of(context).primary,
+          textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                fontFamily: 'Readex Pro',
+                color: Colors.white,
               ),
-              elevation: 3,
-              borderSide: BorderSide(
-                color: Colors.transparent,
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
+          elevation: 3,
+          borderSide: BorderSide(
+            color: Colors.transparent,
+            width: 1,
           ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
     );
   }
 }
-
