@@ -17,8 +17,6 @@ void main() {
       '/login': (context) => LoginPage(),
       '/register': (context) => Register(),
       '/mhome': (context) => MainHome(),
-      '/car': (context) => IntroCar(),
-      '/home': (context) => Home(),
     },
   ));
 }
