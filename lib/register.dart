@@ -1,5 +1,3 @@
-import 'dart:js_util';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
@@ -157,7 +155,7 @@ class ConfirmPasswordField extends StatelessWidget {
         validator: (confirmation) {
           print(confirmation);
           print(_password.text);
-          return equal(confirmation, _password.text)
+          return (confirmation== _password.text)
               ? null
               : "Confirm password should match password";
         },
