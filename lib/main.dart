@@ -13,7 +13,7 @@ void main() {
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       useMaterial3: true,
     ),
-    initialRoute: '/mhome',
+    initialRoute: '/news',
     routes: {
       '/login': (context) => LoginPage(),
       '/register': (context) => Register(),

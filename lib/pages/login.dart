@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
           if (response)
             {
               Navigator.pushNamedAndRemoveUntil(
-                  context, '/news', (route) => false)
+                  context, '/mhome', (route) => false)
             }
           else
             {print("login failed")}
