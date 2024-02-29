@@ -39,7 +39,9 @@ class _HomeState extends State<Home> {
                           fontWeight: FontWeight.bold,
                         )),
                     SizedBox(height: 10),
-                    //Image(image: AssetImage('assets/1.png')),
+                    Image(image: AssetImage('assets/1.png'),
+                    fit: BoxFit.cover,),
+                    SizedBox(height: 10),
                     Text('Tin tức mới'),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

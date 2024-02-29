@@ -17,7 +17,7 @@ class _MainHomeState extends State<MainHome> {
     PageModule(page: Home(), label: 'Xin chào,'),
     PageModule(page: IntroCar(), label: 'Sản phẩm'),
     PageModule(page: Home(), label: 'Xin chào,'),
-    PageModule(page: User(), label: 'Xin chào,'),
+    PageModule(page: User(), label: 'Tài khoản'),
   ];
   int _currentIndex = 0;
 
