@@ -1,10 +1,62 @@
-import 'package:flutter/cupertino.dart';
-import 'package:mobile/widgets/car_card.dart';
-import 'package:flutter/material.dart';
-import 'package:mobile/modules/car.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile/modules/car.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+
+class CarsListing extends StatefulWidget {
+  const CarsListing({Key? key}) : super(key: key);
+  @override
+  State<CarsListing> createState() => _CarState();
+}
+
+class _CarState extends State<CarsListing> {
+  List<Car> cars = [
+    Car(
+        id: 1,
+        name: 'Toyota',
+        description: 'Camry',
+        image: 'assets/1.png',
+        price: 20000000),
+    Car(
+        id: 2,
+        name: 'Toyota',
+        description: 'Camry',
+        image: 'assets/1.png',
+        price: 20000000),
+    Car(
+        id: 2,
+        name: 'Toyota',
+        description: 'Camry',
+        image: 'assets/1.png',
+        price: 20000000)
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Manage Listing',
+            style: FlutterFlowTheme.of(context).titleLarge,
+          ),
+        ),
+        body: Column(
+          children: [
+            TextButton(onPressed: () {}, child: Text('Add Car')),
+            Expanded(
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: cars.length,
+                    physics: ClampingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return CarCard(car: cars[index]);
+                    }))
+          ],
+        ));
+  }
+}
 
 class CarCard extends StatefulWidget {
   final Car car;
@@ -66,7 +118,11 @@ class _CarCardState extends State<CarCard> {
                           fontWeight: FontWeight.w500,
                         ),
                   ),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward))
+                  Container(
+                      child: Row(children: [
+                    GestureDetector(child: Icon(Icons.edit), onTap: () {}),
+                    GestureDetector(child: Icon(Icons.delete), onTap: () {})
+                  ]))
                 ],
               ),
             ],
