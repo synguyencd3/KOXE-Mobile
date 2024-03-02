@@ -10,14 +10,16 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  late final TextEditingController _email;
+  late final TextEditingController _name;
+  late final TextEditingController _username;
   late final TextEditingController _password;
   late final TextEditingController _confirmPassword;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    _email = TextEditingController();
+    _name = TextEditingController();
+    _username = TextEditingController();
     _password = TextEditingController();
     _confirmPassword = TextEditingController();
     super.initState();
@@ -25,7 +27,8 @@ class _RegisterState extends State<Register> {
 
   @override
   void dispose() {
-    _email.dispose();
+    _name.dispose();
+    _username.dispose();
     _password.dispose();
     _confirmPassword.dispose();
     super.dispose();
@@ -55,9 +58,13 @@ class _RegisterState extends State<Register> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                emailField(email: _email),
+                nameField(name: _name),
+                usernameField(username: _username),
                 passwordField(password: _password),
-                ConfirmPasswordField(confirmPassword: _confirmPassword, password: _password,),
+                ConfirmPasswordField(
+                  confirmPassword: _confirmPassword,
+                  password: _password,
+                ),
                 Button(
                     name: 'register',
                     callback: () {
@@ -72,13 +79,13 @@ class _RegisterState extends State<Register> {
   }
 }
 
-class emailField extends StatelessWidget {
-  const emailField({
+class nameField extends StatelessWidget {
+  const nameField({
     super.key,
-    required TextEditingController email,
-  }) : _email = email;
+    required TextEditingController name,
+  }) : _name = name;
 
-  final TextEditingController _email;
+  final TextEditingController _name;
 
   @override
   Widget build(BuildContext context) {
@@ -86,18 +93,44 @@ class emailField extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
       child: TextFormField(
         validator: (email) {
-          if (email == null) return 'Please enter email';
-          RegExp exp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-          if (!exp.hasMatch(email)) {
-            return 'Please enter email';
-          } else
-            return null;
+          if (email == "") return 'Please enter your name';
+          return null;
         },
-        controller: _email,
+        controller: _name,
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          labelText: 'Enter Email',
+          labelText: 'Full Name',
+          labelStyle: FlutterFlowTheme.of(context).labelMedium,
+          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+        ),
+      ),
+    );
+  }
+}
+
+class usernameField extends StatelessWidget {
+  const usernameField({
+    super.key,
+    required TextEditingController username,
+  }) : _username = username;
+
+  final TextEditingController _username;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+      child: TextFormField(
+        validator: (username) {
+          if (username == "") return 'Please enter username';
+            return null;
+        },
+        controller: _username,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(7))),
+          labelText: 'Username',
           labelStyle: FlutterFlowTheme.of(context).labelMedium,
           hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
@@ -128,7 +161,7 @@ class passwordField extends StatelessWidget {
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          hintText: 'Enter Password',
+          hintText: 'Password',
           labelStyle: FlutterFlowTheme.of(context).labelMedium,
           hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
@@ -142,7 +175,8 @@ class ConfirmPasswordField extends StatelessWidget {
     super.key,
     required TextEditingController confirmPassword,
     required TextEditingController password,
-  }) : _password=password,_confirmPassword = confirmPassword;
+  })  : _password = password,
+        _confirmPassword = confirmPassword;
 
   final TextEditingController _confirmPassword;
   final TextEditingController _password;
@@ -155,7 +189,7 @@ class ConfirmPasswordField extends StatelessWidget {
         validator: (confirmation) {
           print(confirmation);
           print(_password.text);
-          return (confirmation== _password.text)
+          return (confirmation == _password.text)
               ? null
               : "Confirm password should match password";
         },

@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late final TextEditingController _email;
+  late final TextEditingController _username;
   late final TextEditingController _password;
   bool isAPIcallProcess = false;
 
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     LoginRequest model =
-        LoginRequest(email: _email.text, password: _password.text);
+        LoginRequest(email: _username.text, password: _password.text);
 
     APIService.login(model).then((response) => {
           if (response)
@@ -55,14 +55,14 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    _email = TextEditingController();
+    _username = TextEditingController();
     _password = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    _email.dispose();
+    _username.dispose();
     _password.dispose();
     super.dispose();
   }
@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         padding: EdgeInsets.all(15),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          emailField(email: _email),
+          emailField(username: _username),
           passwordField(password: _password),
           Button(name: 'Login', callback: Login),
           Padding(
@@ -150,21 +150,21 @@ class Button extends StatelessWidget {
 class emailField extends StatelessWidget {
   const emailField({
     super.key,
-    required TextEditingController email,
-  }) : _email = email;
+    required TextEditingController username,
+  }) : _username = username;
 
-  final TextEditingController _email;
+  final TextEditingController _username;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
       child: TextField(
-        controller: _email,
+        controller: _username,
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          labelText: 'Enter Email',
+          labelText: 'Username',
           labelStyle: FlutterFlowTheme.of(context).labelMedium,
           hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
@@ -191,7 +191,7 @@ class passwordField extends StatelessWidget {
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          hintText: 'Enter Password',
+          hintText: 'Password',
           labelStyle: FlutterFlowTheme.of(context).labelMedium,
           hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
