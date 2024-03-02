@@ -86,8 +86,20 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         padding: EdgeInsets.all(15),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          //Input Field
           emailField(username: _username),
           passwordField(password: _password),
+
+          //Forgot Password Text
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [Text('Forgot Password?')],
+            ),
+          ),
+
+          //Button
           Button(name: 'Login', callback: Login),
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
@@ -96,11 +108,26 @@ class _LoginPageState extends State<LoginPage> {
               style: FlutterFlowTheme.of(context).bodyMedium,
             ),
           ),
+
           Button(
-            name: 'Register',
+            width: 230,
+            name: 'Sign in with Google',
             callback: () {
               Navigator.pushNamed(context, '/register');
             },
+          ),
+
+          Button(
+            width: 230,
+            name: 'Sign in with Facebook',
+            callback: () {
+              Navigator.pushNamed(context, '/register');
+            },
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Dont't have an account? Sign up"),
           ),
         ]),
       ),
@@ -111,9 +138,11 @@ class _LoginPageState extends State<LoginPage> {
 class Button extends StatelessWidget {
   final String name;
   final VoidCallback callback;
+  final double? width;
 
   const Button({
     super.key,
+    this.width,
     required this.name,
     required this.callback,
   });
@@ -127,6 +156,7 @@ class Button extends StatelessWidget {
         onPressed: callback,
         text: '$name',
         options: FFButtonOptions(
+          width: width,
           height: 40,
           padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
           iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),

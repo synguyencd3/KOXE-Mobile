@@ -71,7 +71,35 @@ class _RegisterState extends State<Register> {
                       if (_formKey.currentState!.validate()) {
                         print('registered');
                       }
-                    })
+                    }),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                  child: Text(
+                    'Or',
+                    style: FlutterFlowTheme.of(context).bodyMedium,
+                  ),
+                ),
+                Button(
+                  width: 230,
+                  name: 'Sign in with Google',
+                  callback: () {
+                    Navigator.pushNamed(context, '/register');
+                  },
+                ),
+                Button(
+                  width: 230,
+                  name: 'Sign in with Facebook',
+                  callback: () {
+                    Navigator.pushNamed(context, '/register');
+                  },
+                ),
+                 Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                  child: Text(
+                    'Have an account? Log in',
+                    style: FlutterFlowTheme.of(context).bodyMedium,
+                  ),
+                ),
               ],
             ),
           ),
@@ -90,7 +118,7 @@ class nameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+      padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
       child: TextFormField(
         validator: (email) {
           if (email == "") return 'Please enter your name';
@@ -120,11 +148,11 @@ class usernameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+      padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
       child: TextFormField(
         validator: (username) {
           if (username == "") return 'Please enter username';
-            return null;
+          return null;
         },
         controller: _username,
         decoration: InputDecoration(
@@ -150,7 +178,7 @@ class passwordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+      padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
       child: TextFormField(
         validator: (value) {
           if (value == "") return "Please type a password";
@@ -184,7 +212,7 @@ class ConfirmPasswordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+      padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
       child: TextFormField(
         validator: (confirmation) {
           print(confirmation);
@@ -210,9 +238,11 @@ class ConfirmPasswordField extends StatelessWidget {
 class Button extends StatelessWidget {
   final String name;
   final VoidCallback callback;
+  final double? width;
 
   const Button({
     super.key,
+    this.width,
     required this.name,
     required this.callback,
   });
@@ -227,6 +257,7 @@ class Button extends StatelessWidget {
         text: '$name',
         options: FFButtonOptions(
           height: 40,
+          width: width,
           padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
           iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
           color: FlutterFlowTheme.of(context).primary,
