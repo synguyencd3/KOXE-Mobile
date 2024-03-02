@@ -4,7 +4,7 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/widgets/news_card.dart';
 
-import '../model/news_model.dart';
+import '../model/articles_model.dart';
 
 class NewsBoard extends StatefulWidget {
   const NewsBoard({super.key});
@@ -14,7 +14,7 @@ class NewsBoard extends StatefulWidget {
 }
 
 class _NewsBoardState extends State<NewsBoard> {
-  List<NewsResponse> article = [];
+  List<Articles> article = [];
   @override
   void initState() {
     super.initState();
@@ -22,7 +22,7 @@ class _NewsBoardState extends State<NewsBoard> {
   }
 
   Future<void> getNews() async {
-    var list = await APIService.getNews();
+    var list = await APIService.getArticles();
     setState(() {
       article = list;
     });

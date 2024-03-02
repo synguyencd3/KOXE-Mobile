@@ -1,15 +1,15 @@
-List<NewsResponse> newsFromJson(dynamic str) =>
-    List<NewsResponse>.from((str).map((x) => NewsResponse.fromJson(x)));
+List<Articles> articlesFromJson(dynamic str) =>
+    List<Articles>.from((str).map((x) => Articles.fromJson(x)));
 
-class NewsResponse {
+class Articles {
   late final String? title;
   late final String? description;
   late final String? url;
   late final String? imageUrl;
 
-  NewsResponse({this.title, this.description, this.imageUrl, this.url});
+  Articles({this.title, this.description, this.imageUrl, this.url});
 
-  NewsResponse.fromJson(Map<String, dynamic> json) {
+  Articles.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     description = json['description'];
     imageUrl = json['urlToImage'];

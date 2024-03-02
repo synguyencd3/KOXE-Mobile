@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile/model/login_request_model.dart';
 import 'package:mobile/model/login_response_model.dart';
-import 'package:mobile/model/news_model.dart';
+import 'package:mobile/model/articles_model.dart';
 import 'package:mobile/model/register_response_model.dart';
 import 'package:mobile/services/shared_service.dart';
 
@@ -56,7 +56,7 @@ class APIService {
     return registerResponseJson(response.body);
   }
 
-  static Future<List<NewsResponse>> getNews() async {
+  static Future<List<Articles>> getArticles() async {
     final Map<String, String> param = <String, String>{
       'q': 'f1',
       'language': 'en',
@@ -70,7 +70,7 @@ class APIService {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      return newsFromJson(data['articles']);
+      return articlesFromJson(data['articles']);
     }
     return [];
   }
