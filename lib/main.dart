@@ -5,8 +5,9 @@ import 'package:mobile/pages/news.dart';
 import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';
 import 'package:mobile/widgets/introduction_car.dart';
-import 'package:mobile/widgets/home.dart';
-
+import 'package:mobile/pages/manage.dart';
+import 'package:mobile/pages/message.dart';
+import 'package:mobile/pages/notification.dart';
 void main() {
   runApp(MaterialApp(
     title: 'Flutter Demo',
@@ -22,6 +23,9 @@ void main() {
       '/news': (context) => NewsBoard(),
       '/listing/manage': (context) => CarsListing(),
       '/listing': (context) => IntroCar(),
+      '/manage': (context) => Manage(),
+      '/message': (context) => Message(),
+      '/notification': (context) => Noti(),
     },
   ));
 }

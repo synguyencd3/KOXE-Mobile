@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:mobile/widgets/car_card.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/modules/car.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
@@ -66,7 +64,8 @@ class _CarCardState extends State<CarCard> {
                           fontWeight: FontWeight.w500,
                         ),
                   ),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward))
+                  IconButton(onPressed: () {
+                  }, icon: Icon(Icons.arrow_forward))
                 ],
               ),
             ],
