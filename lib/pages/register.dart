@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
@@ -52,12 +53,15 @@ class _RegisterState extends State<Register> {
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsets.all(40),
           child: Form(
             key: _formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 50,
+                ),
                 nameField(name: _name),
                 usernameField(username: _username),
                 passwordField(password: _password),
@@ -93,11 +97,29 @@ class _RegisterState extends State<Register> {
                     Navigator.pushNamed(context, '/register');
                   },
                 ),
-                 Padding(
+                Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
-                  child: Text(
-                    'Have an account? Log in',
-                    style: FlutterFlowTheme.of(context).bodyMedium,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Have an account?',
+                        style: FlutterFlowTheme.of(context).bodyMedium,
+                      ),
+                      SizedBox(
+                        width: 1,
+                      ),
+                      GestureDetector(
+                        child: Text(
+                          ' Login',
+                          style: TextStyle(color: Colors.blue[400]),
+                          
+                        ),
+                        onTap: () {
+                          Navigator.popAndPushNamed(context, '/login');
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],

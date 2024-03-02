@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
@@ -84,8 +85,12 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(15),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        padding: EdgeInsets.all(40),
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          SizedBox(
+            height: 50,
+          ),
+
           //Input Field
           emailField(username: _username),
           passwordField(password: _password),
@@ -126,8 +131,25 @@ class _LoginPageState extends State<LoginPage> {
           ),
 
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("Dont't have an account? Sign up"),
+            padding: EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Dont't have an account?"),
+                const SizedBox(
+                  width: 2,
+                ),
+                GestureDetector(
+                  child: Text(
+                    "Sign up",
+                    style: TextStyle(color: Colors.blue[400]),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/register');
+                  },
+                ),
+              ],
+            ),
           ),
         ]),
       ),
