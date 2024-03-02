@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/modules/car.dart';
 import 'package:mobile/widgets/car_card.dart';
-import 'package:mobile/widgets/bottom_bar.dart';
 
 class IntroCar extends StatefulWidget {
   const IntroCar({Key? key}) : super(key: key);
