@@ -9,7 +9,7 @@ LoginResponse loginResponseJson(String str) =>
 
 class LoginResponse {
   late final String status;
-  late final dynamic user;
+  late final UserModel user;
   late final String accessToken;
   late final String message;
 
@@ -21,7 +21,7 @@ class LoginResponse {
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    user = json['user']; //userJson(json['user']);
+    user = UserModel.fromJson(json['user']); //userJson(json['user']);
     accessToken = json['accessToken'];
     status = json['status'];
   }

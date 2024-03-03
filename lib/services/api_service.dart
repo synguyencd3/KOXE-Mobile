@@ -31,8 +31,8 @@ class APIService {
     print(jsonDecode(response.body));
     var responsemodel = loginResponseJson(response.body);
     if (responsemodel.status == "success") {
-      // Shared
-      await SharedService.setLoginDetails(loginResponseJson(response.body));
+      // API ko chạy trên nền web đc, uncomment khi chạy emulator
+      //await SharedService.setLoginDetails(loginResponseJson(response.body));
       return true;
     } else {
       return false;
