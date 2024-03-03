@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:mobile/model/register_request_model.dart';
+import 'package:mobile/services/api_service.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -16,6 +18,7 @@ class _RegisterState extends State<Register> {
   late final TextEditingController _password;
   late final TextEditingController _confirmPassword;
   final _formKey = GlobalKey<FormState>();
+  bool isAPIcallProcess = false;
 
   @override
   void initState() {
@@ -33,6 +36,20 @@ class _RegisterState extends State<Register> {
     _password.dispose();
     _confirmPassword.dispose();
     super.dispose();
+  }
+
+  void Register() {
+    setState(() {
+      isAPIcallProcess = true;
+    });
+
+    RegisterRequest model = RegisterRequest(
+        username: _username.text, password: _password.text, name: _name.text);
+
+    APIService.register(model).then((response) {
+      print(response.message);
+      print(response.status);
+    });
   }
 
   @override
@@ -73,7 +90,7 @@ class _RegisterState extends State<Register> {
                     name: 'register',
                     callback: () {
                       if (_formKey.currentState!.validate()) {
-                        print('registered');
+                        Register();
                       }
                     }),
                 Padding(
@@ -113,7 +130,6 @@ class _RegisterState extends State<Register> {
                         child: Text(
                           ' Login',
                           style: TextStyle(color: Colors.blue[400]),
-                          
                         ),
                         onTap: () {
                           Navigator.popAndPushNamed(context, '/login');

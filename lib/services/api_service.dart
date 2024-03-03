@@ -17,9 +17,9 @@ class APIService {
       'Content-Type': 'application/json',
     };
 
-    var url = Uri.https(Config.apiURL, Config.loginAPI);
+    var url = Uri.http(Config.apiURL, Config.loginAPI);
 
-    print(requestHeaders);
+    //print(requestHeaders);
     print(jsonEncode(model.toJson()));
 
     var response = await client.post(
@@ -28,12 +28,11 @@ class APIService {
       body: jsonEncode(model.toJson()),
     );
 
-    print(response.statusCode);
-    print(loginResponseJson(response.body).message);
-    print(loginResponseJson(response.body).data);
-    if (response.statusCode == 200) {
+    print(jsonDecode(response.body));
+    var responsemodel = loginResponseJson(response.body);
+    if (responsemodel.status == "success") {
       // Shared
-      //await SharedService.setLoginDetails(loginResponseJson(response.body));
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
       return true;
     } else {
       return false;

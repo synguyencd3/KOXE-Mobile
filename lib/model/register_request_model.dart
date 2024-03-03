@@ -8,7 +8,7 @@ class RegisterRequest {
   late final String username;
   late final String password;
 
-  RegisterRequest({required this.username, required this.password});
+  RegisterRequest({required this.username, required this.password, required this.name});
 
   RegisterRequest.fromJson(Map<String, dynamic> json) {
     name = json['fullname'];
