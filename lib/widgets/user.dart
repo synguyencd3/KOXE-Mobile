@@ -63,7 +63,7 @@ class _UserState extends State<User> {
             title: 'Thông tin cá nhân',
             icon: Icons.person,
             onTap: () {
-              print('Tap');
+             Navigator.pushNamed(context, '/user_info');
             }),
         text_card(
             title: 'Mời bạn bè',

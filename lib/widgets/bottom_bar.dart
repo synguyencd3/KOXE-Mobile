@@ -29,8 +29,8 @@ class _BottomBarState extends State<BottomBar> {
           label: 'Car',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications),
-          label: 'Notifications',
+          icon: Icon(Icons.calendar_today),
+          label: 'Appointment',
         ),
         BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
         BottomNavigationBarItem(
