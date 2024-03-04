@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/model/login_request_model.dart';
 import 'package:mobile/model/login_response_model.dart';
@@ -32,7 +33,7 @@ class APIService {
     var responsemodel = loginResponseJson(response.body);
     if (responsemodel.status == "success") {
       // API ko chạy trên nền web đc, uncomment khi chạy emulator
-      //await SharedService.setLoginDetails(loginResponseJson(response.body));
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
       return true;
     } else {
       return false;
@@ -72,5 +73,26 @@ class APIService {
       return articlesFromJson(data['articles']);
     }
     return [];
+  }
+
+  static Future<bool> googleSignIn() async {
+          const List<String> scopes = <String>[
+        'email',
+        'https://www.googleapis.com/auth/contacts.readonly',
+      ];
+
+      GoogleSignIn _googleSignIn = GoogleSignIn(
+        // Optional clientId
+        //clientId: Config.client_id,
+        scopes: scopes,
+      );
+  
+        try {
+          await _googleSignIn.signIn();
+        } catch (error) {
+          print(error);
+          return false;
+        }
+  return true;
   }
 }
