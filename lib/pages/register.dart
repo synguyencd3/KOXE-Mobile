@@ -55,6 +55,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primary,
@@ -69,76 +70,78 @@ class _RegisterState extends State<Register> {
             ),
           ),
         ),
-        body: Padding(
-          padding: EdgeInsets.all(40),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 50,
-                ),
-                nameField(name: _name),
-                usernameField(username: _username),
-                passwordField(password: _password),
-                ConfirmPasswordField(
-                  confirmPassword: _confirmPassword,
-                  password: _password,
-                ),
-                Button(
-                    name: 'register',
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(40),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 50,
+                  ),
+                  nameField(name: _name),
+                  usernameField(username: _username),
+                  passwordField(password: _password),
+                  ConfirmPasswordField(
+                    confirmPassword: _confirmPassword,
+                    password: _password,
+                  ),
+                  Button(
+                      name: 'register',
+                      callback: () {
+                        if (_formKey.currentState!.validate()) {
+                          Register();
+                        }
+                      }),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                    child: Text(
+                      'Or',
+                      style: FlutterFlowTheme.of(context).bodyMedium,
+                    ),
+                  ),
+                  Button(
+                    width: 230,
+                    name: 'Sign in with Google',
                     callback: () {
-                      if (_formKey.currentState!.validate()) {
-                        Register();
-                      }
-                    }),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
-                  child: Text(
-                    'Or',
-                    style: FlutterFlowTheme.of(context).bodyMedium,
+                      Navigator.pushNamed(context, '/register');
+                    },
                   ),
-                ),
-                Button(
-                  width: 230,
-                  name: 'Sign in with Google',
-                  callback: () {
-                    Navigator.pushNamed(context, '/register');
-                  },
-                ),
-                Button(
-                  width: 230,
-                  name: 'Sign in with Facebook',
-                  callback: () {
-                    Navigator.pushNamed(context, '/register');
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Have an account?',
-                        style: FlutterFlowTheme.of(context).bodyMedium,
-                      ),
-                      SizedBox(
-                        width: 1,
-                      ),
-                      GestureDetector(
-                        child: Text(
-                          ' Login',
-                          style: TextStyle(color: Colors.blue[400]),
+                  Button(
+                    width: 230,
+                    name: 'Sign in with Facebook',
+                    callback: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Have an account?',
+                          style: FlutterFlowTheme.of(context).bodyMedium,
                         ),
-                        onTap: () {
-                          Navigator.popAndPushNamed(context, '/login');
-                        },
-                      ),
-                    ],
+                        SizedBox(
+                          width: 1,
+                        ),
+                        GestureDetector(
+                          child: Text(
+                            ' Login',
+                            style: TextStyle(color: Colors.blue[400]),
+                          ),
+                          onTap: () {
+                            Navigator.popAndPushNamed(context, '/login');
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ));

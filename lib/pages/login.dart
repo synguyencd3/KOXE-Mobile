@@ -54,6 +54,16 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
+  void googleSignIn() {
+    APIService.googleSignIn().then((success) => {
+      if (success) {Navigator.pushNamedAndRemoveUntil(
+                  context, '/mhome', (route) => false)}
+                  else {
+                    print("login failed")
+                  }
+    });
+  }
+
   @override
   void initState() {
     _username = TextEditingController();
@@ -71,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primary,
         title: Align(
@@ -84,74 +95,77 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.all(40),
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          SizedBox(
-            height: 50,
-          ),
-
-          //Input Field
-          emailField(username: _username),
-          passwordField(password: _password),
-
-          //Forgot Password Text
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [Text('Forgot Password?')],
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(40),
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            SizedBox(
+              height: 50,
             ),
-          ),
-
-          //Button
-          Button(name: 'Login', callback: Login),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
-            child: Text(
-              'Or',
-              style: FlutterFlowTheme.of(context).bodyMedium,
+        
+            //Input Field
+            emailField(username: _username),
+            passwordField(password: _password),
+        
+            //Forgot Password Text
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [Text('Forgot Password?')],
+              ),
             ),
-          ),
-
-          Button(
-            width: 230,
-            name: 'Sign in with Google',
-            callback: () {
-              Navigator.pushNamed(context, '/register');
-            },
-          ),
-
-          Button(
-            width: 230,
-            name: 'Sign in with Facebook',
-            callback: () {
-              Navigator.pushNamed(context, '/register');
-            },
-          ),
-
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Dont't have an account?"),
-                const SizedBox(
-                  width: 2,
-                ),
-                GestureDetector(
-                  child: Text(
-                    "Sign up",
-                    style: TextStyle(color: Colors.blue[400]),
+        
+            //Button
+            Button(name: 'Login', callback: Login),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+              child: Text(
+                'Or',
+                style: FlutterFlowTheme.of(context).bodyMedium,
+              ),
+            ),
+        
+            Button(
+              width: 230,
+              name: 'Sign in with Google',
+              callback: () {
+                //Navigator.pushNamed(context, '/register');
+                googleSignIn();
+              },
+            ),
+        
+            Button(
+              width: 230,
+              name: 'Sign in with Facebook',
+              callback: () {
+                Navigator.pushNamed(context, '/register');
+              },
+            ),
+        
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Dont't have an account?"),
+                  const SizedBox(
+                    width: 2,
                   ),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/register');
-                  },
-                ),
-              ],
+                  GestureDetector(
+                    child: Text(
+                      "Sign up",
+                      style: TextStyle(color: Colors.blue[400]),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }
