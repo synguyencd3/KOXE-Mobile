@@ -5,6 +5,13 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 //import 'firebase_options.dart';
+import 'dart:developer';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:mobile/model/login_request_model.dart';
+import 'package:mobile/services/api_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -44,18 +51,66 @@ class _LoginPageState extends State<LoginPage> {
         print('Wrong password provided for that user.');
       }
     }
+  late final TextEditingController _username;
+  late final TextEditingController _password;
+  bool isAPIcallProcess = false;
+
+  void Login() {
+    // final email = _email.text;
+    // final password = _password.text;
+    // var url = Uri.https('dummyjson.com','auth/login');
+    // var response = await http.post(url, body: {
+    //   'username': '$email',
+    //   'password': '$password'
+    // });
+    // var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+    // var token = decodedResponse['token'];
+    // if (token == null)
+    // {
+    //   print('wrong password or username');
+    // } else
+    // {
+    //   print('login success');
+    // }
+
+    setState(() {
+      isAPIcallProcess = true;
+    });
+
+    LoginRequest model =
+        LoginRequest(email: _username.text, password: _password.text);
+
+    APIService.login(model).then((response) => {
+          if (response)
+            {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/mhome', (route) => false)
+            }
+          else
+            {print("login failed")}
+        });
+  }
+
+  void googleSignIn() {
+    APIService.googleSignIn().then((success) => {
+      if (success) {Navigator.pushNamedAndRemoveUntil(
+                  context, '/mhome', (route) => false)}
+                  else {
+                    print("login failed")
+                  }
+    });
   }
 
   @override
   void initState() {
-    _email = TextEditingController();
+    _username = TextEditingController();
     _password = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    _email.dispose();
+    _username.dispose();
     _password.dispose();
     super.dispose();
   }
@@ -63,6 +118,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primary,
         title: Align(
@@ -76,26 +132,77 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.all(15),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          emailField(email: _email),
-          passwordField(password: _password),
-          Button(name: 'Login', callback: Login),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
-            child: Text(
-              'Or',
-              style: FlutterFlowTheme.of(context).bodyMedium,
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(40),
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            SizedBox(
+              height: 50,
             ),
-          ),
-          Button(
-            name: 'Register',
-            callback: () {
-              Navigator.pushNamed(context, '/register');
-            },
-          ),
-        ]),
+        
+            //Input Field
+            emailField(username: _username),
+            passwordField(password: _password),
+        
+            //Forgot Password Text
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [Text('Forgot Password?')],
+              ),
+            ),
+        
+            //Button
+            Button(name: 'Login', callback: Login),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+              child: Text(
+                'Or',
+                style: FlutterFlowTheme.of(context).bodyMedium,
+              ),
+            ),
+        
+            Button(
+              width: 230,
+              name: 'Sign in with Google',
+              callback: () {
+                //Navigator.pushNamed(context, '/register');
+                googleSignIn();
+              },
+            ),
+        
+            Button(
+              width: 230,
+              name: 'Sign in with Facebook',
+              callback: () {
+                Navigator.pushNamed(context, '/register');
+              },
+            ),
+        
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Dont't have an account?"),
+                  const SizedBox(
+                    width: 2,
+                  ),
+                  GestureDetector(
+                    child: Text(
+                      "Sign up",
+                      style: TextStyle(color: Colors.blue[400]),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ]),
+        ),
       ),
     );
   }
@@ -104,9 +211,11 @@ class _LoginPageState extends State<LoginPage> {
 class Button extends StatelessWidget {
   final String name;
   final VoidCallback callback;
+  final double? width;
 
   const Button({
     super.key,
+    this.width,
     required this.name,
     required this.callback,
   });
@@ -120,6 +229,7 @@ class Button extends StatelessWidget {
         onPressed: callback,
         text: '$name',
         options: FFButtonOptions(
+          width: width,
           height: 40,
           padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
           iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
@@ -143,21 +253,21 @@ class Button extends StatelessWidget {
 class emailField extends StatelessWidget {
   const emailField({
     super.key,
-    required TextEditingController email,
-  }) : _email = email;
+    required TextEditingController username,
+  }) : _username = username;
 
-  final TextEditingController _email;
+  final TextEditingController _username;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
       child: TextField(
-        controller: _email,
+        controller: _username,
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          labelText: 'Enter Email',
+          labelText: 'Username',
           labelStyle: FlutterFlowTheme.of(context).labelMedium,
           hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
@@ -184,7 +294,7 @@ class passwordField extends StatelessWidget {
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          hintText: 'Enter Password',
+          hintText: 'Password',
           labelStyle: FlutterFlowTheme.of(context).labelMedium,
           hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
