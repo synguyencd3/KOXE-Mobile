@@ -82,12 +82,14 @@ class APIService {
           const List<String> scopes = <String>[
         'email',
         'https://www.googleapis.com/auth/contacts.readonly',
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'openid'
       ];
 
 
       GoogleSignIn _googleSignIn = GoogleSignIn(
         // Optional clientId
-        //clientId: Config.client_id,
+        clientId: Config.client_id,
         scopes: scopes,
       );
       
@@ -96,9 +98,15 @@ class APIService {
       var googleAccount = await _googleSignIn.signIn();
        
       // obtain auth details
-      var gAuth = await googleAccount!.authentication; 
-  print(googleAccount);
+      var gAuth = await googleAccount!.authentication;
+
+      print("ID TOKEN:");
+      print(gAuth.idToken);
+      print("ACCESS TOKEN");
+      print(gAuth.accessToken);
+      print("GG ACCOUNT "); 
+      print(googleAccount);
   if (googleAccount == null) return false;
-  return true;
+  return false;
   }
 }

@@ -21,7 +21,7 @@ class LoginResponse {
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     message = json['msg'];
-    user = UserModel.fromJson(json['user']); //userJson(json['user']);
+    user = UserModel.fromJson(json['user']); 
     accessToken = json['accessToken'];
     status = json['status'];
   }

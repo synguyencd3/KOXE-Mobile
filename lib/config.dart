@@ -11,7 +11,7 @@ class Config {
   static const String apiKey = 'b019956a13da4697841c13223270901f';
 
   //Google API
-  static const String client_id = '146451497096-2hsg5onibmrolpvdlm3vq73qsq6bpufn.apps.googleusercontent.com';
+  static const String client_id = '146451497096-20opkm9vb1m2gtjq1pt203jq23mvi6tc.apps.googleusercontent.com';
   static const String client_secret = "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";
   static const String redirect_uri_androi = 'com.googleusercontent.apps.$client_id:/oauthredirect';
 }
