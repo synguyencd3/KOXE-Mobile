@@ -9,8 +9,8 @@ LoginResponse loginResponseJson(String str) =>
 
 class LoginResponse {
   late final String status;
-  late final UserModel user;
-  late final String accessToken;
+  late final UserModel? user;
+  late final String? accessToken;
   late final String message;
 
   LoginResponse(
@@ -20,7 +20,7 @@ class LoginResponse {
       required this.user});
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
+    message = json['msg'];
     user = UserModel.fromJson(json['user']); //userJson(json['user']);
     accessToken = json['accessToken'];
     status = json['status'];
@@ -28,7 +28,7 @@ class LoginResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
+    data['msg'] = this.message;
     data['user'] = this.user;
     data['accessToken'] = this.accessToken;
     data['status'] = this.status;

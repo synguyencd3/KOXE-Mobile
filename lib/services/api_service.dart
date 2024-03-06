@@ -16,11 +16,14 @@ class APIService {
   static Future<bool> login(LoginRequest model) async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
     };
 
     var url = Uri.http(Config.apiURL, Config.loginAPI);
 
-    //print(requestHeaders);
+    print(url);
+    print(requestHeaders);
     print(jsonEncode(model.toJson()));
 
     var response = await client.post(
@@ -28,7 +31,7 @@ class APIService {
       headers: requestHeaders,
       body: jsonEncode(model.toJson()),
     );
-
+    print('request success');
     print(jsonDecode(response.body));
     var responsemodel = loginResponseJson(response.body);
     if (responsemodel.status == "success") {
@@ -81,18 +84,21 @@ class APIService {
         'https://www.googleapis.com/auth/contacts.readonly',
       ];
 
+
       GoogleSignIn _googleSignIn = GoogleSignIn(
         // Optional clientId
         //clientId: Config.client_id,
         scopes: scopes,
       );
-  
-        try {
-          await _googleSignIn.signIn();
-        } catch (error) {
-          print(error);
-          return false;
-        }
+      
+
+      //begin sign in process
+      var googleAccount = await _googleSignIn.signIn();
+       
+      // obtain auth details
+      var gAuth = await googleAccount!.authentication; 
+  print(googleAccount);
+  if (googleAccount == null) return false;
   return true;
   }
 }
