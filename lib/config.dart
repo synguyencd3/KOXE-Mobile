@@ -3,6 +3,7 @@ class Config {
   static const String apiURL = "192.168.1.5:5000";
   static const String loginAPI = "auth/login"; 
   static const String registerAPI = "auth/register";
+  static const String callback = "auth/google/callback";
   static const String userprofileAPI = "/users/user-profile";
 
   //News API
@@ -13,5 +14,5 @@ class Config {
   //Google API
   static const String client_id = '146451497096-20opkm9vb1m2gtjq1pt203jq23mvi6tc.apps.googleusercontent.com';
   static const String client_secret = "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";
-  static const String redirect_uri_androi = 'com.googleusercontent.apps.$client_id:/oauthredirect';
+
 }

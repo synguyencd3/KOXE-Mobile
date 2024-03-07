@@ -97,16 +97,34 @@ class APIService {
       //begin sign in process
       var googleAccount = await _googleSignIn.signIn();
        
-      // obtain auth details
-      var gAuth = await googleAccount!.authentication;
+      if (googleAccount == null) return false;
+      if (googleAccount.serverAuthCode == null) return false;
 
-      print("ID TOKEN:");
-      print(gAuth.idToken);
-      print("ACCESS TOKEN");
-      print(gAuth.accessToken);
-      print("GG ACCOUNT "); 
-      print(googleAccount);
-  if (googleAccount == null) return false;
-  return false;
+       Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+    };
+
+    final Map<String, String?> param = <String, String?>{
+      'code': googleAccount.serverAuthCode
+    };
+
+    var url = Uri.http(Config.apiURL, Config.callback, param);
+    
+    var response = await client.get(
+      url,
+      headers: requestHeaders,
+    );
+    print('request success');
+    print(jsonDecode(response.body));
+    var responsemodel = loginResponseJson(response.body);
+    if (responsemodel.status == "success") {
+      // API ko chạy trên nền web đc, uncomment khi chạy emulator
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
+      return true;
+    } else {
+      return false;
+    }
   }
 }
