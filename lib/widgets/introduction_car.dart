@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/modules/car.dart';
+import 'package:mobile/model/car.dart';
 import 'package:mobile/widgets/car_card.dart';
 
 class IntroCar extends StatefulWidget {

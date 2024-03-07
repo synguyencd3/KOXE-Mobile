@@ -17,18 +17,17 @@ class NewsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Column(children: [
-        ClipRRect(
-          child: Image.network(imageUrl!)
-        ),
-        Align(
-          alignment: AlignmentDirectional(-1,0),
-          child: Column(children: [
-            Text(title!),
-            Text(description!)
-          ],),
-        )
-      ],),
+      child: Column(
+        children: [
+          ClipRRect(child: Image.network(imageUrl!)),
+          Align(
+            alignment: AlignmentDirectional(-1, 0),
+            child: Column(
+              children: [Text(title!), Text(description!)],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

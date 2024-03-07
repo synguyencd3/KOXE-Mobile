@@ -4,7 +4,7 @@ import 'package:mobile/pages/appointment.dart';
 import 'package:mobile/widgets/bottom_bar.dart';
 import 'package:mobile/widgets/introduction_car.dart';
 import 'package:mobile/widgets/home.dart';
-import 'package:mobile/modules/page.dart';
+import 'package:mobile/model/page.dart';
 import 'package:mobile/widgets/user.dart';
 import 'package:mobile/pages/notification.dart';
 import 'package:mobile/pages/message.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/modules/car.dart';
+import 'package:mobile/model/car.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
@@ -65,6 +65,7 @@ class _CarCardState extends State<CarCard> {
                         ),
                   ),
                   IconButton(onPressed: () {
+                    Navigator.pushNamed(context, '/car_detail');
                   }, icon: Icon(Icons.arrow_forward))
                 ],
               ),
