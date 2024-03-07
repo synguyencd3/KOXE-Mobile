@@ -19,7 +19,7 @@ class _ManageState extends State<Manage> {
             text_card(
                 title: 'Quản lý gói',
                 onTap: () {
-                  print('Tap');
+                 Navigator.pushNamed(context, '/package/manage');
                 }),
             text_card(
                 title: 'Quản lý người dùng',

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/text_card.dart';
 
+
 class UserInfo extends StatefulWidget {
   const UserInfo({super.key});
 
@@ -32,7 +33,7 @@ class _UserInfoState extends State<UserInfo> {
                 Container(
                   alignment: Alignment.center,
                   child: Text(
-                    'Nhấp vào để thay ảnh nền',
+                    'Nhấp vào để thay ảnh đại diện',
                     style: TextStyle(),
                   ),
                   color: Colors.black12,
@@ -73,10 +74,17 @@ class _UserInfoState extends State<UserInfo> {
                 print('Tap');
               }),
           text_card(
-              title: 'Liên kết',
-              onTap: () {
-                print('Tap');
-              }),
+            title: 'Liên kết mạng xã hội',
+            onTap: () {
+              Navigator.pushNamed(context, 'social');
+            },
+          ),
+          text_card(
+            title: 'Đổi mật khẩu',
+            onTap: () {
+
+            },
+          ),
         ]));
   }
 }

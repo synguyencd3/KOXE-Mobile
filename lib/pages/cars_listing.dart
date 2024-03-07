@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mobile/modules/car.dart';
+import 'package:mobile/model/car.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 class CarsListing extends StatefulWidget {
