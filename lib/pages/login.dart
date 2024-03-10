@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/model/login_request_model.dart';
 import 'package:mobile/services/api_service.dart';
-
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -56,6 +56,18 @@ class _LoginPageState extends State<LoginPage> {
 
   void googleSignIn() {
     APIService.googleSignIn().then((success) => {
+      if (success) {Navigator.pushNamedAndRemoveUntil(
+                  context, '/mhome', (route) => false)}
+                  else {
+                    print("login failed")
+                  }
+    });
+  }
+
+ 
+
+  void facebookSignIn() {
+     APIService.facebookSignIn().then((success) => {
       if (success) {Navigator.pushNamedAndRemoveUntil(
                   context, '/mhome', (route) => false)}
                   else {
@@ -139,7 +151,8 @@ class _LoginPageState extends State<LoginPage> {
               width: 230,
               name: 'Sign in with Facebook',
               callback: () {
-                Navigator.pushNamed(context, '/register');
+                //Navigator.pushNamed(context, '/register');
+                facebookSignIn();
               },
             ),
         

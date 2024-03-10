@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/model/login_request_model.dart';
@@ -6,7 +7,7 @@ import 'package:mobile/model/login_response_model.dart';
 import 'package:mobile/model/articles_model.dart';
 import 'package:mobile/model/register_response_model.dart';
 import 'package:mobile/services/shared_service.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb; 
 import '../config.dart';
 import '../model/register_request_model.dart';
 
@@ -126,5 +127,36 @@ class APIService {
     } else {
       return false;
     }
+  }
+
+  static Future<bool> facebookSignIn() async {
+    Map<String, dynamic?> userData;
+    bool checking = true;
+
+     if (kIsWeb) {
+    // initialiaze the facebook javascript SDK
+   await FacebookAuth.i.webAndDesktopInitialize(
+      appId: "312164338180427",
+      cookie: true,
+      xfbml: true,
+      version: "v15.0",
+    );
+  }
+
+    final LoginResult result = await FacebookAuth.instance.login();
+
+    if (result.status == LoginStatus.success) {
+      print(result.accessToken?.toJson());
+
+      final userData = await FacebookAuth.instance.getUserData();
+      print(userData);
+
+      return false;
+    } else {
+      print(result.status);
+      print(result.message);
+    }
+
+    return false;
   }
 }
