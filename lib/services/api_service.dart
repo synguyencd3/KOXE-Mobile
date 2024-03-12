@@ -89,7 +89,7 @@ class APIService {
 
       GoogleSignIn _googleSignIn = GoogleSignIn(
         // Optional clientId
-        clientId: Config.client_id,
+        //clientId: Config.client_id,
         scopes: scopes,
       );
       
