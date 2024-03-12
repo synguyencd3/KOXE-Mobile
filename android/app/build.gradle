@@ -58,6 +58,9 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders += [
+            'appAuthRedirectScheme': 'com.googleusercontent.apps.146451497096-2hsg5onibmrolpvdlm3vq73qsq6bpufn.apps.googleusercontent.com'
+        ]
     }
 
     // buildTypes {
@@ -73,4 +76,6 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+}

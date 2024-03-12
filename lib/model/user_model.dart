@@ -4,14 +4,14 @@ UserModel userJson(dynamic str) => UserModel.fromJson(json.decode(str));
 
 class UserModel {
   late final String id;
-  late final String username;
-  late final String fullname;
+  late final String? username;
+  late final String? fullname;
   late final String? gender;
   late final String? phone;
   late final String? email;
   late final String? address;
   late final String? avatar;
-  late final String role;
+  late final String? role;
 
   UserModel(
       {required this.id,
