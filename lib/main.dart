@@ -23,7 +23,7 @@ void main() {
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       useMaterial3: true,
     ),
-    initialRoute: '/login',
+    initialRoute: '/mhome',
     routes: {
       '/login': (context) => LoginPage(),
       '/register': (context) => Register(),
@@ -42,8 +42,6 @@ void main() {
       'social': (context) => Social(),
       '/setting': (context) => Setting(),
       '/package/manage': (context) => ManagePackage(),
-
-
     },
   ));
 }

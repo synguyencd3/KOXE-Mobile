@@ -7,6 +7,7 @@ class BuyPackage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   DateTime now = DateTime.now();
     return Scaffold(
       appBar: AppBar(
         title: Text('Thanh toán'),
@@ -16,8 +17,8 @@ class BuyPackage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Mã hóa đơn: 1'),
-            Text('Ngày mua: 2021-10-10'),
+            Text('Mã hóa đơn: 1', style: TextStyle(fontSize: 20,)),
+            Text('Ngày mua: ${now.day}-${now.month}-${now.year}', style: TextStyle(fontSize: 20),),
             Text(
               'Thông tin gói được mua',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

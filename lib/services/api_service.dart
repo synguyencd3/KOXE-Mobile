@@ -36,7 +36,7 @@ class APIService {
     var responsemodel = loginResponseJson(response.body);
     if (responsemodel.status == "success") {
       // API ko chạy trên nền web đc, uncomment khi chạy emulator
-      // await SharedService.setLoginDetails(loginResponseJson(response.body));
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
       return true;
     } else {
       return false;
@@ -101,4 +101,27 @@ class APIService {
   if (googleAccount == null) return false;
   return true;
   }
+  static Future<Map<String, dynamic>> getUserProfile() async {
+    // Kiểm tra xem cache có tồn tại không
+    bool isCached = await SharedService.isLoggedIn();
+    print(isCached);
+    if (isCached) {
+      // Lấy dữ liệu từ cache
+      LoginResponse? cachedLoginResponse = await SharedService.loginDetails();
+      if (cachedLoginResponse != null) {
+
+        // Dữ liệu đã được lấy từ cache thành công, bạn có thể sử dụng nó ở đây
+        // print(cachedLoginResponse.user);
+      return cachedLoginResponse.user!.toJson();
+      } else {
+        // Không thể lấy dữ liệu từ cache
+       return {};
+      }
+    } else {
+      // Cache không tồn tại
+    return {};
+    }
+  }
 }
+
+

@@ -1,16 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/text_card.dart';
-
+import 'package:mobile/services/api_service.dart';
 
 class UserInfo extends StatefulWidget {
-  const UserInfo({super.key});
+
 
   @override
   State<UserInfo> createState() => _UserInfoState();
 }
 
 class _UserInfoState extends State<UserInfo> {
+  Map<String,dynamic> userProfile={};
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserProfile();
+  }
+  Future<void> getUserProfile() async {
+    try {
+      Map<String, dynamic> profile = await APIService.getUserProfile();
+      print(profile);
+      setState(() {
+        userProfile = profile;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +46,7 @@ class _UserInfoState extends State<UserInfo> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage('assets/1.png'),
+                  backgroundImage: NetworkImage( userProfile['avatar'] ?? ''),
                 ),
                 Container(
                   alignment: Alignment.center,
@@ -44,32 +62,30 @@ class _UserInfoState extends State<UserInfo> {
             ),
           ),
           text_card(
-              title: 'Họ và tên',
-              trailingText: 'Nguyễn Văn A',
-              onTap: () {
-                print('Tap');
-              }),
+              title: 'Họ và tên', trailingText: userProfile['fullname'] ?? 'Chưa cập nhật', onTap: () {
+
+          }),
           text_card(
               title: 'Giới tính',
-              trailingText: 'Nguyễn Văn A',
+              trailingText: userProfile['gender'] == 1 ? 'Nam' : 'Nữ',
               onTap: () {
                 print('Tap');
               }),
           text_card(
               title: 'Số điện thoại',
-              trailingText: 'Nguyễn Văn A',
+              trailingText: userProfile['phone'] ?? 'Chưa cập nhật',
               onTap: () {
                 print('Tap');
               }),
           text_card(
               title: 'Địa chỉ',
-              trailingText: 'Nguyễn Văn A',
+              trailingText: userProfile['address'] ?? 'Chưa cập nhật',
               onTap: () {
                 print('Tap');
               }),
           text_card(
               title: 'Ngày sinh',
-              trailingText: 'Nguyễn Văn A',
+              trailingText: '12-20-2002',
               onTap: () {
                 print('Tap');
               }),
@@ -81,10 +97,10 @@ class _UserInfoState extends State<UserInfo> {
           ),
           text_card(
             title: 'Đổi mật khẩu',
-            onTap: () {
-
-            },
+            onTap: () {},
           ),
         ]));
   }
 }
+
+
