@@ -82,6 +82,8 @@ class APIService {
           const List<String> scopes = <String>[
         'email',
         'https://www.googleapis.com/auth/contacts.readonly',
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'openid'
       ];
 
 
@@ -95,11 +97,35 @@ class APIService {
       //begin sign in process
       var googleAccount = await _googleSignIn.signIn();
        
-      // obtain auth details
-      var gAuth = await googleAccount!.authentication; 
-  print(googleAccount);
-  if (googleAccount == null) return false;
-  return true;
+      if (googleAccount == null) return false;
+      if (googleAccount.serverAuthCode == null) return false;
+
+       Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+    };
+
+    final Map<String, String?> param = <String, String?>{
+      'code': googleAccount.serverAuthCode
+    };
+
+    var url = Uri.http(Config.apiURL, Config.callback, param);
+    
+    var response = await client.get(
+      url,
+      headers: requestHeaders,
+    );
+    print('request success');
+    print(jsonDecode(response.body));
+    var responsemodel = loginResponseJson(response.body);
+    if (responsemodel.status == "success") {
+      // API ko chạy trên nền web đc, uncomment khi chạy emulator
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
+      return true;
+    } else {
+      return false;
+    }
   }
   static Future<Map<String, dynamic>> getUserProfile() async {
     // Kiểm tra xem cache có tồn tại không
