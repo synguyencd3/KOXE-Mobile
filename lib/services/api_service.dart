@@ -9,6 +9,7 @@ import 'package:mobile/services/shared_service.dart';
 
 import '../config.dart';
 import '../model/register_request_model.dart';
+import 'package:mobile/model/user_model.dart';
 
 class APIService {
   static var client = http.Client();
@@ -36,7 +37,7 @@ class APIService {
     var responsemodel = loginResponseJson(response.body);
     if (responsemodel.status == "success") {
       // API ko chạy trên nền web đc, uncomment khi chạy emulator
-      // await SharedService.setLoginDetails(loginResponseJson(response.body));
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
       return true;
     } else {
       return false;
@@ -79,28 +80,26 @@ class APIService {
   }
 
   static Future<bool> googleSignIn() async {
-          const List<String> scopes = <String>[
-        'email',
-        'https://www.googleapis.com/auth/contacts.readonly',
-        'https://www.googleapis.com/auth/userinfo.profile',
-        'openid'
-      ];
+    const List<String> scopes = <String>[
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'openid'
+    ];
 
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      // Optional clientId
+      //clientId: Config.client_id,
+      scopes: scopes,
+    );
 
-      GoogleSignIn _googleSignIn = GoogleSignIn(
-        // Optional clientId
-        //clientId: Config.client_id,
-        scopes: scopes,
-      );
-      
+    //begin sign in process
+    var googleAccount = await _googleSignIn.signIn();
 
-      //begin sign in process
-      var googleAccount = await _googleSignIn.signIn();
-       
-      if (googleAccount == null) return false;
-      if (googleAccount.serverAuthCode == null) return false;
+    if (googleAccount == null) return false;
+    if (googleAccount.serverAuthCode == null) return false;
 
-       Map<String, String> requestHeaders = {
+    Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Accept': '*/*',
       'Access-Control-Allow-Origin': "*",
@@ -111,7 +110,7 @@ class APIService {
     };
 
     var url = Uri.http(Config.apiURL, Config.callback, param);
-    
+
     var response = await client.get(
       url,
       headers: requestHeaders,
@@ -126,5 +125,49 @@ class APIService {
     } else {
       return false;
     }
+  }
+
+  static Future<Map<String, dynamic>> getUserProfile() async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+      'Cookie': 'refreshToken=${loginDetails?.refreshToken}'
+    };
+    var url = Uri.http(Config.apiURL, Config.userprofileAPI);
+    var response = await client.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      print(response.body);
+      var data = jsonDecode(response.body);
+      var profileData = data['profile'];
+      return profileData;
+    } else {
+      return {};
+    }
+  }
+
+  static Future<bool> updateUserProfile(UserModel user) async {
+    var loginDetails = await SharedService.loginDetails();
+    var url = Uri.http(Config.apiURL, Config.userprofileAPI);
+
+    Map<String, dynamic> requestData = user.toJson();
+    print(requestData);
+
+    // Gửi yêu cầu PATCH với dữ liệu form data
+    var request = http.MultipartRequest('PATCH', url);
+    request.headers.addAll({
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+      'Cookie': 'refreshToken=${loginDetails?.refreshToken}'
+    });
+    requestData.forEach((key, value) {
+      if (value != null) {
+        request.fields[key] = value.toString();
+      }
+    });
+
+    // Gửi yêu cầu và nhận phản hồi từ API
+    var response = await request.send();
+
+    return response.statusCode == 200;
   }
 }

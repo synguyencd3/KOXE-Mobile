@@ -12,18 +12,22 @@ class LoginResponse {
   late final UserModel? user;
   late final String? accessToken;
   late final String message;
+  late final String refreshToken;
 
   LoginResponse(
       {required this.message,
       required this.status,
       required this.accessToken,
-      required this.user});
+      required this.user,
+      required this.refreshToken
+  });
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     message = json['msg'];
     user = UserModel.fromJson(json['user']); 
     accessToken = json['accessToken'];
     status = json['status'];
+    refreshToken = json['refreshToken'];
   }
 
   Map<String, dynamic> toJson() {
@@ -32,6 +36,7 @@ class LoginResponse {
     data['user'] = this.user?.toJson();
     data['accessToken'] = this.accessToken;
     data['status'] = this.status;
+    data['refreshToken'] = this.refreshToken;
     return data;
   }
 }
