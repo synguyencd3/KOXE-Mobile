@@ -27,7 +27,7 @@ class _CarCardState extends State<CarCard> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
                 child: Image.asset(
-                  widget.car.image,
+                  widget.car.image!,
                   height: 230,
                   width: double.infinity,
                 ),

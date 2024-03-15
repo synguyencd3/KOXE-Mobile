@@ -16,6 +16,9 @@ import 'package:mobile/pages/all_packages.dart';
 import 'package:mobile/pages/link_social.dart';
 import 'package:mobile/pages/setting.dart';
 import 'package:mobile/pages/manage_package.dart';
+import 'package:mobile/widgets/home.dart';
+import 'package:mobile/widgets/webView.dart';
+
 void main() {
   runApp(MaterialApp(
     title: 'Flutter Demo',
@@ -42,8 +45,7 @@ void main() {
       'social': (context) => Social(),
       '/setting': (context) => Setting(),
       '/package/manage': (context) => ManagePackage(),
-
-
+      '/fblogin': (context) => WebViewContainer()
     },
   ));
 }
