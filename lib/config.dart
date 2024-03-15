@@ -1,10 +1,11 @@
 class Config {
   static const String appName = "Salon oto";
-  static const String apiURL = "192.168.1.2:5000";
+  static const String apiURL = "192.168.1.9:5000";
   static const String loginAPI = "auth/login"; 
   static const String registerAPI = "auth/register";
   static const String callback = "auth/google/callback";
-  static const String userprofileAPI = "/users/user-profile";
+  static const String userprofileAPI = "/users/profile";
+  static const String getAllPackageAPI = "/packages";
 
   //News API
   static const String newsURL = 'newsapi.org';

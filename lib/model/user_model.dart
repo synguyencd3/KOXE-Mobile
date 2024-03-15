@@ -3,26 +3,28 @@ import 'dart:convert';
 UserModel userJson(dynamic str) => UserModel.fromJson(json.decode(str));
 
 class UserModel {
-  late final String id;
-  late final String? username;
-  late final String? fullname;
-  late final String? gender;
-  late final String? phone;
-  late final String? email;
-  late final String? address;
-  late final String? avatar;
-  late final String? role;
+    String? id;
+    String? username;
+    String? fullname;
+    String? gender;
+    String? phone;
+    String? email;
+    String? address;
+    String? avatar;
+    String? role;
+    String? date_of_birth;
 
   UserModel(
-      {required this.id,
-      required this.username,
-      required this.fullname,
+      { this.id,
+       this.username,
+       this.fullname,
       this.address,
       this.avatar,
       this.email,
       this.gender,
       this.phone,
-      required this.role});
+       this.role,
+      this.date_of_birth});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['user_id'];
@@ -34,6 +36,7 @@ class UserModel {
     address = json['address'];
     avatar = json['avatar'];
     role = json['role'];
+    date_of_birth = json['date_of_birth'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +50,7 @@ class UserModel {
     data['address'] = this.address;
     data['avatar'] = this.avatar;
     data['role'] = this.role;
+    data['date_of_birth'] = this.date_of_birth;
     return data;
   }
 }

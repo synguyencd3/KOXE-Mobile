@@ -16,6 +16,7 @@ import 'package:mobile/pages/all_packages.dart';
 import 'package:mobile/pages/link_social.dart';
 import 'package:mobile/pages/setting.dart';
 import 'package:mobile/pages/manage_package.dart';
+import 'package:mobile/pages/chat.dart';
 void main() {
   runApp(MaterialApp(
     title: 'Flutter Demo',
@@ -23,7 +24,7 @@ void main() {
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       useMaterial3: true,
     ),
-    initialRoute: '/mhome',
+    initialRoute: '/login',
     routes: {
       '/login': (context) => LoginPage(),
       '/register': (context) => Register(),
@@ -42,6 +43,8 @@ void main() {
       'social': (context) => Social(),
       '/setting': (context) => Setting(),
       '/package/manage': (context) => ManagePackage(),
+      '/chat': (context) => Chat(),
+
     },
   ));
 }
