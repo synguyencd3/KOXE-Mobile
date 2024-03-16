@@ -23,4 +23,23 @@ class CarsService {
     }
     return [];
   }
+
+  static Future<Car?> getDetail(String carId) async {
+
+       Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+    };
+
+    var url = Uri.http(Config.apiURL, '${Config.getCarsAPI}/$carId');
+
+    var response = await http.get(url);
+    
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return Car.fromJson(data); //carsFromJson(data['data']['cars']);
+    }
+    return null;
+  }
 }

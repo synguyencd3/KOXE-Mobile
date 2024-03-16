@@ -8,13 +8,31 @@ class Car {
   late final String? description;
   late final String? image;
   late final double? price;
-
+  late final String? brand;
+  late final String? origin;
+  late final String? model;
+  late final String? type;
+  late final int? capacity;
+  late final int? door;
+  late final int? seat;
+  late final int? kilometer;
+  late final int? gear;
+  
   Car({
     this.id,
     this.name,
     this.description,
     this.image,
     this.price,
+    this.brand,
+    this.capacity,
+    this.door,
+    this.gear,
+    this.kilometer,
+    this.model,
+    this.origin,
+    this.seat,
+    this.type
   });
 
   Car.fromJson(Map<String, dynamic> json) {
@@ -23,6 +41,7 @@ class Car {
     description = json['description'];
     image = 'assets/1.png';//json['image'];
     price = json['price'];
+    type = json['type'];
   } 
 
   Map<String, dynamic> tojson() {
@@ -32,6 +51,7 @@ class Car {
     data['description'] = this.description;
     data['image'] = this.image;
     data['price'] = this.price;
+    data['type'] = this.type;
     return data; 
   }
 }

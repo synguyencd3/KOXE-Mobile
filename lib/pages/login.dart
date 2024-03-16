@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     LoginRequest model =
-        LoginRequest(email: _username.text, password: _password.text);
+        LoginRequest(username: _username.text, password: _password.text);
 
     APIService.login(model).then((response) => {
           if (response)
