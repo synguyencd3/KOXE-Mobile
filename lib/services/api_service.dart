@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/model/login_request_model.dart';
@@ -10,6 +11,7 @@ import 'package:mobile/services/shared_service.dart';
 import '../config.dart';
 import '../model/register_request_model.dart';
 import 'package:mobile/model/user_model.dart';
+import 'package:http_parser/http_parser.dart';
 
 class APIService {
   static var client = http.Client();
@@ -161,13 +163,21 @@ class APIService {
     });
     requestData.forEach((key, value) {
       if (value != null) {
-        request.fields[key] = value.toString();
+        if (value is File) {
+          request.files.add(http.MultipartFile.fromBytes(
+            key,
+            value.readAsBytesSync(),
+            filename: 'avatar.jpg',
+            contentType: MediaType('image', 'jpeg'),
+          ));
+        } else {
+          request.fields[key] = value.toString();
+        }
       }
     });
 
     // Gửi yêu cầu và nhận phản hồi từ API
     var response = await request.send();
-
     return response.statusCode == 200;
   }
 }

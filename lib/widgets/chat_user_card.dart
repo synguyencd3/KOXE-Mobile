@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/main.dart';
 
 class ChatUserCard extends StatefulWidget {
-  //final ChatUser user;
+  //final ChatUserModel user;
   const ChatUserCard({super.key});
 
   @override

@@ -58,8 +58,16 @@ class _UserState extends State<User> {
         text_card(
             title: 'Thông tin cá nhân',
             icon: Icons.person,
-            onTap: () {
-              Navigator.pushNamed(context, '/user_info');
+            onTap: () async {
+              Navigator.pushNamed(context, '/user_info',
+                  arguments: userProfile);
+              final result = await Navigator.pushNamed(context, '/user_info',
+                  arguments: userProfile);
+              if (result == 'update') {
+                setState(() {
+                  getUserProfile();
+                });
+              }
             }),
         text_card(
             title: 'Mời bạn bè',

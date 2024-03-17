@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 UserModel userJson(dynamic str) => UserModel.fromJson(json.decode(str));
 
@@ -13,6 +14,7 @@ class UserModel {
     String? avatar;
     String? role;
     String? date_of_birth;
+    File? avatarFile;
 
   UserModel(
       { this.id,
@@ -48,7 +50,7 @@ class UserModel {
     data['phone'] = this.phone;
     data['email'] = this.email;
     data['address'] = this.address;
-    data['avatar'] = this.avatar;
+    data['avatar'] = this.avatarFile;
     data['role'] = this.role;
     data['date_of_birth'] = this.date_of_birth;
     return data;
