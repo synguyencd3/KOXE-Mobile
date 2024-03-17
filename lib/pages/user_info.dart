@@ -1,11 +1,17 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/text_card.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/model/user_model.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile/widgets/utils.dart';
+import 'package:image_picker/image_picker.dart';
 class UserInfo extends StatefulWidget {
   @override
   State<UserInfo> createState() => _UserInfoState();
@@ -13,6 +19,7 @@ class UserInfo extends StatefulWidget {
 
 class _UserInfoState extends State<UserInfo> {
   Map<String, dynamic> userProfile = {};
+  File? _image;
   late TextEditingController controller;
   @override
   void initState() {
@@ -48,7 +55,22 @@ class _UserInfoState extends State<UserInfo> {
     }
      bool success = await APIService.updateUserProfile(user);
   }
+  void selectImage() async {
+    File? imgFile = await pickImage(ImageSource.gallery);
+    if (imgFile != null) {
+      UserModel user = new UserModel();
+      user.avatarFile = imgFile; // Assign the File object directly
+      bool success = await APIService.updateUserProfile(user);
+      print(success);
+      if (success)
+        {
+          setState(() {
+            _image = imgFile;
+          });
 
+        }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     userProfile = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>? ?? {};
@@ -145,9 +167,15 @@ class _UserInfoState extends State<UserInfo> {
                   children: [
                     Stack(
                       children:[
+                     _image != null
+                        ? CircleAvatar(
+                        radius: 50,
+                        backgroundImage: FileImage(_image!),
+                      ) :
                         CircleAvatar(
                         radius: 50,
-                        backgroundImage: NetworkImage(userProfile['avatar'] != null
+                        backgroundImage:
+                        NetworkImage(userProfile['avatar'] != null
                             ? userProfile['avatar']
                             : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
                       ),
@@ -160,7 +188,7 @@ class _UserInfoState extends State<UserInfo> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: selectImage,
                             color: Colors.lightBlue,
                             icon: const Icon(Icons.add_a_photo),
                           ),
