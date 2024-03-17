@@ -43,7 +43,7 @@ void main() {
       'social': (context) => Social(),
       '/setting': (context) => Setting(),
       '/package/manage': (context) => ManagePackage(),
-      '/chat': (context) => Chat(),
+      '/chat': (context) => ChatPage(),
 
     },
   ));
