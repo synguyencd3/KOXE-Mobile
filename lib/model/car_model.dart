@@ -6,8 +6,8 @@ class Car {
   late final String? id;
   late final String? name;
   late final String? description;
-  late final String? image;
-  late final double? price;
+  late final List<String>? image;
+  late final int? price;
   late final String? brand;
   late final String? origin;
   late final String? model;
@@ -39,7 +39,7 @@ class Car {
     id = json['car_id'];
     name = json['name'];
     description = json['description'];
-    image = 'assets/1.png';//json['image'];
+    image = json['image'].cast<String>();
     price = json['price'];
     type = json['type'];
   } 

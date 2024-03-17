@@ -2,30 +2,31 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/car_model.dart';
+import 'package:mobile/model/salon_model.dart';
 
-class CarsService {
+class SalonsService {
   static var client = http.Client();
 
-  static Future<List<Car>> getAll() async {
+  static Future<List<Salon>> getAll() async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Accept': '*/*',
       'Access-Control-Allow-Origin': "*",
     };
 
-    var url = Uri.http(Config.apiURL, Config.getCarsAPI);
+    var url = Uri.http(Config.apiURL, Config.getSalonsAPI);
 
     var response = await http.get(url);
     
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data);
-      return carsFromJson(data['cars']['car']);
+      print(data['salons']['salons']);
+      return salonsFromJson(data['salons']['salons']);
     }
     return [];
   }
 
-  static Future<Car?> getDetail(String carId) async {
+  static Future<Car?> getDetail(String salonId) async {
 
        Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -33,7 +34,7 @@ class CarsService {
       'Access-Control-Allow-Origin': "*",
     };
 
-    var url = Uri.http(Config.apiURL, '${Config.getCarsAPI}/$carId');
+    var url = Uri.http(Config.apiURL, '${Config.getCarsAPI}/$salonId');
 
     var response = await http.get(url);
     

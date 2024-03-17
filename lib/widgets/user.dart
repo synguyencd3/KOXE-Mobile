@@ -91,8 +91,8 @@ class _UserState extends State<User> {
             title: 'Đăng xuất',
             icon: Icons.logout,
             onTap: () {
-              // Navigator.pushReplacementNamed(context, '/login');
               SharedService.logout(context);
+              //Navigator.pushReplacementNamed(context, '/login');
             }),
       ],
     );

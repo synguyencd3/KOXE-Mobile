@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/model/car.dart';
+import 'package:mobile/model/car_model.dart';
 import 'package:mobile/services/cars_service.dart';
 import 'package:mobile/widgets/car_card.dart';
 
@@ -15,19 +15,19 @@ class _CarState extends State<IntroCar> {
         id: '1',
         name: 'Toyota',
         description: 'Camry',
-        image: 'assets/1.png',
+        image: ['assets/1.png'],
         price: 20000000),
     Car(
         id: '2',
         name: 'Toyota',
         description: 'Camry',
-        image: 'assets/1.png',
+        image: ['assets/1.png'],
         price: 20000000),
     Car(
         id: '2',
         name: 'Toyota',
         description: 'Camry',
-        image: 'assets/1.png',
+        image: ['assets/1.png'],
         price: 20000000)
   ];
 

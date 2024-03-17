@@ -4,6 +4,7 @@ import 'package:mobile/pages/login.dart';
 import 'package:mobile/pages/news.dart';
 import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';
+import 'package:mobile/pages/salon_list.dart';
 import 'package:mobile/widgets/introduction_car.dart';
 import 'package:mobile/pages/manage.dart';
 import 'package:mobile/pages/message.dart';
@@ -48,7 +49,8 @@ void main() {
       '/package/manage': (context) => ManagePackage(),
       '/chat': (context) => ChatPage(),
 
-      '/fblogin': (context) => WebViewContainer()
+      '/fblogin': (context) => WebViewContainer(),
+      '/salons': (context) => SalonList()
     },
   ));
 }
