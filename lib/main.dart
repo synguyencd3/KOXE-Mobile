@@ -17,6 +17,9 @@ import 'package:mobile/pages/link_social.dart';
 import 'package:mobile/pages/setting.dart';
 import 'package:mobile/pages/manage_package.dart';
 import 'package:mobile/pages/chat.dart';
+import 'package:mobile/widgets/home.dart';
+import 'package:mobile/widgets/webView.dart';
+
 void main() {
   runApp(MaterialApp(
     title: 'Flutter Demo',
@@ -45,6 +48,7 @@ void main() {
       '/package/manage': (context) => ManagePackage(),
       '/chat': (context) => ChatPage(),
 
+      '/fblogin': (context) => WebViewContainer()
     },
   ));
 }

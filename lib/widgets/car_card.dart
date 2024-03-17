@@ -27,7 +27,7 @@ class _CarCardState extends State<CarCard> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
                 child: Image.asset(
-                  widget.car.image,
+                  widget.car.image!,
                   height: 230,
                   width: double.infinity,
                 ),
@@ -65,7 +65,9 @@ class _CarCardState extends State<CarCard> {
                         ),
                   ),
                   IconButton(onPressed: () {
-                    Navigator.pushNamed(context, '/car_detail');
+                    Navigator.pushNamed(context, '/car_detail', arguments: {
+                      'car': widget.car
+                    });
                   }, icon: Icon(Icons.arrow_forward))
                 ],
               ),

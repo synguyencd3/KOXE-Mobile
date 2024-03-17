@@ -3,9 +3,12 @@ class Config {
   static const String apiURL = "192.168.1.9:5000";
   static const String loginAPI = "auth/login"; 
   static const String registerAPI = "auth/register";
-  static const String callback = "auth/google/callback";
+  static const String facebookAPI = "auth/facebook";
+  static const String facebookCallback = "auth/facebook/callback";
+  static const String googleCallback = "auth/google/callback";
   static const String userprofileAPI = "/users/profile";
   static const String getAllPackageAPI = "/packages";
+  static const String getCarsAPI = "/cars";
 
   //News API
   static const String newsURL = 'newsapi.org';

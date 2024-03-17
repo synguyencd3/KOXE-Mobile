@@ -109,8 +109,8 @@ class APIService {
       'code': googleAccount.serverAuthCode
     };
 
-    var url = Uri.http(Config.apiURL, Config.callback, param);
-
+    var url = Uri.http(Config.apiURL, Config.googleCallback, param);
+    
     var response = await client.get(
       url,
       headers: requestHeaders,
