@@ -74,7 +74,7 @@ packages:
     source: hosted
     version: "1.0.1"
   carousel_slider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: carousel_slider
       sha256: "9c695cc963bf1d04a47bd6021f68befce8970bcd61d24938e1fb0918cf5d9c42"
@@ -241,7 +241,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutterflow_ui:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutterflow_ui
       sha256: e753338d1db0e5c8a8c16fcc9086c1938fc8a1eefec00291e47626394b3221c9

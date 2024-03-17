@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/widgets/text_card.dart';
 
 class User extends StatefulWidget {
@@ -58,7 +59,8 @@ class _UserState extends State<User> {
             title: 'Đăng xuất',
             icon: Icons.logout,
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/login');
+              SharedService.logout(context);
+              //Navigator.pushReplacementNamed(context, '/login');
             }),
       ],
     );

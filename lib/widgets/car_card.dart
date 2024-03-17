@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/model/car.dart';
+import 'package:mobile/model/car_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
@@ -26,8 +26,8 @@ class _CarCardState extends State<CarCard> {
             children: [
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
-                child: Image.asset(
-                  widget.car.image!,
+                child: Image.network(
+                  widget.car.image![0],
                   height: 230,
                   width: double.infinity,
                 ),
@@ -56,7 +56,7 @@ class _CarCardState extends State<CarCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Price: ${widget.car.price}',
+                    'Price: ${widget.car.price?.toInt()}',
                     style: FlutterFlowTheme.of(context).labelMedium.override(
                           fontFamily: 'Outfit',
                           color: Color(0xFF606A85),

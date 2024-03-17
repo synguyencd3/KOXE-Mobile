@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mobile/model/car.dart';
+import 'package:mobile/model/car_model.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/services/cars_service.dart';
 
@@ -93,7 +93,7 @@ class _CarCardState extends State<CarCard> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
                 child: Image.asset(
-                  widget.car.image!,
+                  widget.car.image![0],
                   height: 230,
                   width: double.infinity,
                 ),

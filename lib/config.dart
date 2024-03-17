@@ -8,6 +8,7 @@ class Config {
   static const String googleCallback = "auth/google/callback";
   static const String userprofileAPI = "/users/user-profile";
   static const String getCarsAPI = "/cars";
+  static const String getSalonsAPI = "/salons";
 
   //News API
   static const String newsURL = 'newsapi.org';
