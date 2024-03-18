@@ -7,7 +7,8 @@ const List<String> list = <String>[
 
 class DropdownMenuExample extends StatefulWidget {
 final double width;
-const DropdownMenuExample({Key? key, required this.width}) : super(key: key);
+final ValueNotifier<String?> valueNotifier;
+const DropdownMenuExample({Key? key, required this.width, required this.valueNotifier}) : super(key: key);
 
   @override
   State<DropdownMenuExample> createState() => _DropdownMenuExampleState();
@@ -26,6 +27,7 @@ class _DropdownMenuExampleState extends State<DropdownMenuExample> {
         setState(() {
           dropdownValue = value!;
         });
+        widget.valueNotifier.value = value!;
       },
       dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
         return DropdownMenuEntry<String>(value: value, label: value);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/Payment.dart';
 import 'package:mobile/pages/cars_listing.dart';
 import 'package:mobile/pages/login.dart';
 import 'package:mobile/pages/news.dart';
@@ -47,7 +48,7 @@ void main() {
       '/setting': (context) => Setting(),
       '/package/manage': (context) => ManagePackage(),
       '/fblogin': (context) => WebViewContainer(),
-      '/salons': (context) => SalonList()
+      '/salons': (context) => SalonList(),
     },
   ));
 }
