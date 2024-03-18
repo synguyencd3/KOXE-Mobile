@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/Payment.dart';
+import 'package:mobile/services/payment_service.dart';
 import 'package:mobile/widgets/dropdown.dart';
 import 'package:mobile/widgets/button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class BuyPackage extends StatelessWidget {
+class BuyPackage extends StatefulWidget {
   const BuyPackage({super.key});
+
+  @override
+  State<BuyPackage> createState() => _BuyPackageState();
+}
+
+class _BuyPackageState extends State<BuyPackage> {
+
+  final ValueNotifier<String?> dropDownNotifier = ValueNotifier(null);
+  
 
   @override
   Widget build(BuildContext context) {
@@ -113,13 +125,48 @@ class BuyPackage extends StatelessWidget {
             SizedBox(height: 20),
             DropdownMenuExample(
               width: 300,
+              valueNotifier: dropDownNotifier,
             ),
             Container(
               padding: EdgeInsets.all(10),
               alignment: Alignment.bottomRight,
               child: ButtonCustom(
-                onPressed: () {
-                  print('Thanh toán');
+                onPressed: () async {
+                 
+                 if (dropDownNotifier.value=="Thanh toán qua VNPay")
+                 {
+                        String? VNPayurl = await PaymentService.getVNPayURL();
+                        if (VNPayurl != null)
+                        {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PaymentWebView( url: VNPayurl,),
+                          ),
+                        );
+                        
+                        }
+                 }
+                 else 
+                 {
+                  String? ZaloPayURL = await PaymentService.getZaloPayURL();
+                  //print(ZaloPayURL);
+                        // if (ZaloPayURL!= null)
+                        // {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => PaymentWebView( url: ZaloPayURL),
+                        //   ),
+                        // );
+                        // }
+                  if (ZaloPayURL!= null) {
+                    if (await canLaunchUrl(Uri.parse(ZaloPayURL))) {
+                      await launchUrl(Uri.parse(ZaloPayURL),
+                      mode: LaunchMode.externalApplication);
+                      }
+                  }
+                 }
                 },
                 title: 'Thanh toán',
               ),

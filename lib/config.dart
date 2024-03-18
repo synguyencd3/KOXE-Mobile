@@ -11,6 +11,10 @@ class Config {
   static const String getCarsAPI = "/cars";
   static const String getSalonsAPI = "/salons";
 
+  //Payment
+  static const String VNPayAPI = "/payment/vnpay";
+  static const String ZaloPayAPI = "/payment/createOrder";
+
   //News API
   static const String newsURL = 'newsapi.org';
   static const String newsAPi = '/v2/everything';
