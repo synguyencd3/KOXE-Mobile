@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'dart:io';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +8,7 @@ import 'package:mobile/model/login_response_model.dart';
 import 'package:mobile/model/articles_model.dart';
 import 'package:mobile/model/register_response_model.dart';
 import 'package:mobile/services/shared_service.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb; 
 import '../config.dart';
 import '../model/register_request_model.dart';
 import 'package:mobile/model/user_model.dart';
@@ -117,6 +118,49 @@ class APIService {
       url,
       headers: requestHeaders,
     );
+    print('request success');
+    print(jsonDecode(response.body));
+    var responsemodel = loginResponseJson(response.body);
+    if (responsemodel.status == "success") {
+      // API ko chạy trên nền web đc, uncomment khi chạy emulator
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<bool> facebookSignIn() async {
+    Map<String, dynamic?> userData;
+    bool checking = true;
+
+     if (kIsWeb) {
+    // initialiaze the facebook javascript SDK
+      await FacebookAuth.i.webAndDesktopInitialize(
+          appId: "312164338180427",
+          cookie: true,
+          xfbml: true,
+          version: "v15.0",
+        );
+      }
+
+    final LoginResult result = await FacebookAuth.instance.login();
+
+    if (result.status != LoginStatus.success) 
+      return false;
+
+
+    var url = Uri.http(Config.apiURL, Config.facebookAPI);
+
+    String accessToken = result.accessToken?.toJson()['token'];
+    print(accessToken);
+    var response = await client.post(
+      url,
+      body: {
+        "accessToken" : accessToken
+      }
+    );
+
     print('request success');
     print(jsonDecode(response.body));
     var responsemodel = loginResponseJson(response.body);

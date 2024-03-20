@@ -58,6 +58,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        minSdkVersion 21
         manifestPlaceholders += [
             'appAuthRedirectScheme': 'com.googleusercontent.apps.146451497096-2hsg5onibmrolpvdlm3vq73qsq6bpufn.apps.googleusercontent.com'
         ]
@@ -78,4 +79,5 @@ flutter {
 
 dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
+    implementation 'com.facebook.android:facebook-login:latest.release'
 }

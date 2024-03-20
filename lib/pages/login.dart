@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/model/login_request_model.dart';
 import 'package:mobile/services/api_service.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:mobile/services/shared_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,23 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isAPIcallProcess = false;
 
   void Login() {
-    // final email = _email.text;
-    // final password = _password.text;
-    // var url = Uri.https('dummyjson.com','auth/login');
-    // var response = await http.post(url, body: {
-    //   'username': '$email',
-    //   'password': '$password'
-    // });
-    // var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-    // var token = decodedResponse['token'];
-    // if (token == null)
-    // {
-    //   print('wrong password or username');
-    // } else
-    // {
-    //   print('login success');
-    // }
-
+   
     setState(() {
       isAPIcallProcess = true;
     });
@@ -70,6 +55,16 @@ class _LoginPageState extends State<LoginPage> {
        Navigator.pushNamedAndRemoveUntil(
                   context, '/mhome', (route) => false);
     }
+  }
+
+  void facebookSignIn() {
+     APIService.facebookSignIn().then((success) => {
+      if (success) {Navigator.pushNamedAndRemoveUntil(
+                  context, '/mhome', (route) => false)}
+                  else {
+                    print("login failed")
+                  }
+    });
   }
 
   @override
@@ -148,7 +143,8 @@ class _LoginPageState extends State<LoginPage> {
               width: 230,
               name: 'Sign in with Facebook',
               callback: () {
-                Navigator.pushNamed(context, '/fblogin');
+                //Navigator.pushNamed(context, '/fblogin');
+                facebookSignIn();
               },
             ),
         
