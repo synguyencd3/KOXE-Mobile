@@ -135,28 +135,40 @@ class APIService {
 
      if (kIsWeb) {
     // initialiaze the facebook javascript SDK
-   await FacebookAuth.i.webAndDesktopInitialize(
-      appId: "312164338180427",
-      cookie: true,
-      xfbml: true,
-      version: "v15.0",
-    );
-  }
+      await FacebookAuth.i.webAndDesktopInitialize(
+          appId: "312164338180427",
+          cookie: true,
+          xfbml: true,
+          version: "v15.0",
+        );
+      }
 
     final LoginResult result = await FacebookAuth.instance.login();
 
-    if (result.status == LoginStatus.success) {
-      print(result.accessToken?.toJson());
-
-      final userData = await FacebookAuth.instance.getUserData();
-      print(userData);
-
+    if (result.status != LoginStatus.success) 
       return false;
-    } else {
-      print(result.status);
-      print(result.message);
-    }
 
-    return false;
+
+    var url = Uri.http(Config.apiURL, Config.facebookAPI);
+
+    String accessToken = result.accessToken?.toJson()['token'];
+    print(accessToken);
+    var response = await client.post(
+      url,
+      body: {
+        "accessToken" : accessToken
+      }
+    );
+
+    print('request success');
+    print(jsonDecode(response.body));
+    var responsemodel = loginResponseJson(response.body);
+    if (responsemodel.status == "success") {
+      // API ko chạy trên nền web đc, uncomment khi chạy emulator
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
+      return true;
+    } else {
+      return false;
+    }
   }
 }

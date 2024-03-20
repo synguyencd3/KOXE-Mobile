@@ -3,7 +3,7 @@ class Config {
   static const String apiURL = "192.168.1.5:5000";
   static const String loginAPI = "auth/login"; 
   static const String registerAPI = "auth/register";
-  static const String facebookAPI = "auth/facebook";
+  static const String facebookAPI = "auth/facebook-mobile";
   static const String facebookCallback = "auth/facebook/callback";
   static const String googleCallback = "auth/google/callback";
   static const String userprofileAPI = "/users/user-profile";

@@ -21,23 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isAPIcallProcess = false;
 
   void Login() {
-    // final email = _email.text;
-    // final password = _password.text;
-    // var url = Uri.https('dummyjson.com','auth/login');
-    // var response = await http.post(url, body: {
-    //   'username': '$email',
-    //   'password': '$password'
-    // });
-    // var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-    // var token = decodedResponse['token'];
-    // if (token == null)
-    // {
-    //   print('wrong password or username');
-    // } else
-    // {
-    //   print('login success');
-    // }
-
+   
     setState(() {
       isAPIcallProcess = true;
     });
@@ -72,20 +56,6 @@ class _LoginPageState extends State<LoginPage> {
                   context, '/mhome', (route) => false);
     }
   }
-
- 
-
-  void facebookSignIn() {
-     APIService.facebookSignIn().then((success) => {
-      if (success) {Navigator.pushNamedAndRemoveUntil(
-                  context, '/mhome', (route) => false)}
-                  else {
-                    print("login failed")
-                  }
-    });
-  }
-
- 
 
   void facebookSignIn() {
      APIService.facebookSignIn().then((success) => {
