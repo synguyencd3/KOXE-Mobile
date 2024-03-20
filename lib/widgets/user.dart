@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mobile/services/shared_service.dart';
+import 'package:mobile/widgets/text_card.dart';
 
 class User extends StatefulWidget {
   const User({super.key});
@@ -16,7 +19,7 @@ class _UserState extends State<User> {
         Center(
           child: CircleAvatar(
             radius: 50,
-            backgroundImage: AssetImage('assets/1.png'),
+            backgroundImage: AssetImage('assets/2.jpg'),
           ),
         ),
         SizedBox(height: 10),
@@ -27,27 +30,38 @@ class _UserState extends State<User> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        ListTile(
-          title: Text('Thông tin cá nhân'),
-          trailing: Icon(Icons.account_circle),
-        ),
-        Divider(
-          height: 1,
-        ),
-        ListTile(
-          title: Text('Mời bạn bè'),
-          trailing: Icon(Icons.person_add),
-        ),
-        Divider(
-          height: 1,
-        ),
-        ListTile(
-          title: Text('Đăng xuất'),
-          trailing: Icon(Icons.logout),
-        ),
-        Divider(
-          height: 1,
-        ),
+        SizedBox(height: 10),
+        text_card(
+            title: 'Thông tin cá nhân',
+            icon: Icons.person,
+            onTap: () {
+             Navigator.pushNamed(context, '/user_info');
+            }),
+        text_card(
+            title: 'Mời bạn bè',
+            icon: Icons.person_add,
+            onTap: () {
+              print('Tap');
+            }),
+        text_card(
+            title: 'Cài đặt',
+            icon: Icons.settings,
+            onTap: () {
+             Navigator.pushNamed(context, '/setting');
+            }),
+        text_card(
+            title: 'Quản lý',
+            icon: Icons.manage_accounts,
+            onTap: () {
+              Navigator.pushNamed(context, '/manage');
+            }),
+        text_card(
+            title: 'Đăng xuất',
+            icon: Icons.logout,
+            onTap: () {
+              SharedService.logout(context);
+              //Navigator.pushReplacementNamed(context, '/login');
+            }),
       ],
     );
   }

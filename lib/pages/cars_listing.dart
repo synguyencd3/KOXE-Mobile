@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mobile/modules/car.dart';
+import 'package:mobile/model/car_model.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:mobile/services/cars_service.dart';
 
 class CarsListing extends StatefulWidget {
   const CarsListing({Key? key}) : super(key: key);
@@ -11,25 +12,36 @@ class CarsListing extends StatefulWidget {
 
 class _CarState extends State<CarsListing> {
   List<Car> cars = [
-    Car(
-        id: 1,
-        name: 'Toyota',
-        description: 'Camry',
-        image: 'assets/1.png',
-        price: 20000000),
-    Car(
-        id: 2,
-        name: 'Toyota',
-        description: 'Camry',
-        image: 'assets/1.png',
-        price: 20000000),
-    Car(
-        id: 2,
-        name: 'Toyota',
-        description: 'Camry',
-        image: 'assets/1.png',
-        price: 20000000)
+    // Car(
+    //     id: '1',
+    //     name: 'Toyota',
+    //     description: 'Camry',
+    //     image: 'assets/1.png',
+    //     price: 20000000),
+    // Car(
+    //     id: '2',
+    //     name: 'Toyota',
+    //     description: 'Camry',
+    //     image: 'assets/1.png',
+    //     price: 20000000),
+    // Car(
+    //     id: '2',
+    //     name: 'Toyota',
+    //     description: 'Camry',
+    //     image: 'assets/1.png',
+    //     price: 20000000)
   ];
+  @override
+  void initState() {
+    super.initState();
+    getCars();
+  }
+  Future<void> getCars() async {
+    var list = await CarsService.getAll();
+    setState(() {
+      cars = list;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +93,7 @@ class _CarCardState extends State<CarCard> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
                 child: Image.asset(
-                  widget.car.image,
+                  widget.car.image![0],
                   height: 230,
                   width: double.infinity,
                 ),

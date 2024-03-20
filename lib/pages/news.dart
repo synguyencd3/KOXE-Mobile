@@ -33,7 +33,6 @@ class _NewsBoardState extends State<NewsBoard> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        automaticallyImplyLeading: false,
         title: Text(
           'News',
           style: FlutterFlowTheme.of(context).titleLarge,
