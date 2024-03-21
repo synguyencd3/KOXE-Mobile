@@ -1,6 +1,6 @@
 class Config {
   static const String appName = "Salon oto";
-  static const String apiURL = "192.168.1.9:5000";
+  static const String apiURL = "192.168.1.5:5000";
   static const String loginAPI = "auth/login"; 
   static const String registerAPI = "auth/register";
   static const String facebookAPI = "auth/facebook-mobile";
@@ -23,5 +23,6 @@ class Config {
   //Google API
   static const String client_id = '146451497096-20opkm9vb1m2gtjq1pt203jq23mvi6tc.apps.googleusercontent.com';
   static const String client_secret = "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";
+  static const String google_api_key = "AIzaSyBMl0xRys9OM2P3I-1WCzhmcBH4tP7mL3w";
 
 }

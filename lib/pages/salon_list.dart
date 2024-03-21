@@ -61,35 +61,40 @@ class SalonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        elevation: 4,
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(8),
-  ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ClipRRect(child: Image.network(salon.image!),
-              borderRadius: BorderRadius.circular(8),),
-            ),
-            Align(
-              alignment: AlignmentDirectional(-1, 0),
-              child: Column(
-                children: [Text(salon.name!, style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold
-                ),),
-                  SizedBox(height: 3),
-                 Padding(
-                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
-                   child: Text(salon.address!)
-              )],
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/salon_detail', arguments: {'salon': salon});
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          elevation: 4,
+        shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+        ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(child: Image.network(salon.image!),
+                borderRadius: BorderRadius.circular(8),),
               ),
-            )
-          ],
+              Align(
+                alignment: AlignmentDirectional(-1, 0),
+                child: Column(
+                  children: [Text(salon.name!, style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold
+                  ),),
+                    SizedBox(height: 3),
+                   Padding(
+                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                     child: Text(salon.address!)
+                )],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

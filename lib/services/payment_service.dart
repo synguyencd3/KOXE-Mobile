@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PaymentService {
    static var client = http.Client();

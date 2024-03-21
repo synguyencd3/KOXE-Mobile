@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/pages/Payment.dart';
 import 'package:mobile/pages/cars_listing.dart';
 import 'package:mobile/pages/login.dart';
@@ -21,6 +22,7 @@ import 'package:mobile/pages/manage_package.dart';
 import 'package:mobile/pages/chat.dart';
 import 'package:mobile/widgets/home.dart';
 import 'package:mobile/widgets/webView.dart';
+import 'package:mobile/pages/salon_detail.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -49,9 +51,9 @@ void main() {
       '/setting': (context) => Setting(),
       '/package/manage': (context) => ManagePackage(),
       '/chat': (context) => ChatPage(),
-
       '/fblogin': (context) => WebViewContainer(),
       '/salons': (context) => SalonList(),
+      '/salon_detail' : (context) => SalonDetail()
     },
   ));
 }

@@ -1,11 +1,7 @@
-import 'dart:developer';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/model/login_request_model.dart';
 import 'package:mobile/services/api_service.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:mobile/services/shared_service.dart';
 
 class LoginPage extends StatefulWidget {
