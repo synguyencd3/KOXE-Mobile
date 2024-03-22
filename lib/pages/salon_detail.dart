@@ -27,10 +27,10 @@ class _SalonDetailState extends State<SalonDetail> {
     super.initState();
      Future.delayed(Duration.zero, () {
       initSalon();
-    });
-    initMap().then((value) {
+      initMap().then((value) {
       moveCamera();
     },);
+    });
   
   }
 
@@ -42,12 +42,11 @@ class _SalonDetailState extends State<SalonDetail> {
  
 }
   Future<void> initMap() async {
-    //('Bradbourne Drive, Tilbrook, Milton Keynes MK7 8BJ');
     const String googelApiKey = Config.geocoding_api;
     final bool isDebugMode = true;  
     final api = GoogleGeocodingApi(googelApiKey, isLogged: isDebugMode);  
     final searchResults = await api.search(
-      'Bradbourne Drive, Tilbrook, Milton Keynes MK7 8BJ',
+      '${salon.address}',
       language: 'en',
     );
    final prettyAddress = searchResults.results.firstOrNull?.mapToPretty();
@@ -140,10 +139,7 @@ class _SalonDetailState extends State<SalonDetail> {
                 ),
         
             MarkdownBody(
-                data: 
-                '''# Markdown
----
-**Hello** World!''',
+                data: salon.introductionMarkdown ?? "" ,
                 selectable: true,
               ),
             ],)),

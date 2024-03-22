@@ -34,7 +34,7 @@ class Salon {
     phoneNumber = json['phoneNumber'];
     banner = json['banner'].cast<String>();
     introductionHtml = json['introductionHtml'];
-    introductionMarkdown = json['introductionMarkdown'];
+    json['introductionMarkdown']==null? introductionMarkdown = "null" :introductionMarkdown = json['introductionMarkdown'];
     //cars = json['cars'].cast<String>();
   }
 
