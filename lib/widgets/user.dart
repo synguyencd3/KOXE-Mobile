@@ -14,11 +14,13 @@ class User extends StatefulWidget {
 
 class _UserState extends State<User> {
   Map<String, dynamic> userProfile = {};
+  late TextEditingController controller;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    controller = TextEditingController();
     getUserProfile();
   }
 
@@ -36,6 +38,29 @@ class _UserState extends State<User> {
 
   @override
   Widget build(BuildContext context) {
+    // Hàm submit dialog
+    void submit()  async {
+      Navigator.of(context).pop(controller.text);
+      // giá trị đang được nhập sẽ là controller.text khi nhấn ok
+      controller.clear();
+    }
+    // Hàm mở popup dialog
+    Future<String?> openDialog() => showDialog<String>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Mời bạn bè'),
+          content: TextField(
+            autofocus: true,
+            decoration: InputDecoration(
+              hintText: 'Nhập email bạn bè',
+            ),
+            controller: controller,
+            onSubmitted: (_) => submit(),
+          ),
+          actions: [
+            TextButton(onPressed: ()=>submit(), child: Text('OK')),
+          ],
+        ));
     return Column(
       children: [
         Center(
@@ -72,9 +97,8 @@ class _UserState extends State<User> {
         text_card(
             title: 'Mời bạn bè',
             icon: Icons.person_add,
-            onTap: () {
-              print('Tap');
-            }),
+            onTap: openDialog,
+        ),
         text_card(
             title: 'Cài đặt',
             icon: Icons.settings,

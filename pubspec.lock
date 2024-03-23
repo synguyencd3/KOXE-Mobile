@@ -153,6 +153,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  dio:
+    dependency: transitive
+    description:
+      name: dio
+      sha256: "49af28382aefc53562459104f64d16b9dfd1e8ef68c862d5af436cc8356ce5a8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.4.1"
   emoji_flag_converter:
     dependency: transitive
     description:
@@ -416,6 +424,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.3"
+  google_geocoding_api:
+    dependency: "direct main"
+    description:
+      name: google_geocoding_api
+      sha256: "44dddfd94c8fdc408fc648f9402b0364ebd595f7a2914212ee831ce9c98c701b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   google_identity_services_web:
     dependency: transitive
     description:
