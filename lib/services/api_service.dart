@@ -17,6 +17,8 @@ import 'package:http_parser/http_parser.dart';
 class APIService {
   static var client = http.Client();
 
+  
+
   static Future<bool> login(LoginRequest model) async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',

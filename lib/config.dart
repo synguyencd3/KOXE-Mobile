@@ -12,8 +12,11 @@ class Config {
   static const String getSalonsAPI = "/salons";
 
   //Payment
-  static const String VNPayAPI = "/payment/vnpay";
+  static const String VNPayAPI = "/payment/create_payment_url";
   static const String ZaloPayAPI = "/payment/createOrder";
+
+  //Purchase
+  static const String Purchase = "/purchase";
 
   //News API
   static const String newsURL = 'newsapi.org';
@@ -25,5 +28,9 @@ class Config {
   static const String client_secret = "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";
   static const String google_api_key = "AIzaSyBMl0xRys9OM2P3I-1WCzhmcBH4tP7mL3w";
   static const String geocoding_api = "AIzaSyACOwKyJN5nUGEgXfli64bUMCuTcZPEY4A";
+
+  //Web url
+  static const String webURL = "http://localhost:3000";
+  static const String webVNPayCallback = '/payment/vnpay';
 
 }

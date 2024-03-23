@@ -12,11 +12,10 @@ class PackageService {
     var url = Uri.http(Config.apiURL, Config.getAllPackageAPI);
 
     var response = await http.get(url, headers: requestHeaders);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      var packagesData = data['data'];
-      print(packagesData['packages']);
+      var packagesData = data['packages'];
+      //print(packagesData['packages']);
       return packagesFromJson(packagesData['packages']);
     }
     return [];

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/package_model.dart';
 import 'package:mobile/services/package_service.dart';
+import 'package:mobile/services/payment_service.dart';
 
 class AllPackages extends StatefulWidget {
   const AllPackages({super.key});
@@ -11,19 +12,32 @@ class AllPackages extends StatefulWidget {
 
 class _AllPackagesState extends State<AllPackages> {
   List<PackageModel> packages = [];
+  late Set<String> purchasedSet;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAllPackages();
+    Future.delayed(Duration.zero, () {
+    getPurchased().then((value) {
+       getAllPackages();
+    });
+    });
+  }
+
+  Future<void> getPurchased() async {
+    var set = await PaymentService.getPurchasedSet();
+    setState(() {
+      purchasedSet = set;
+    });
+    print(purchasedSet);
   }
 
   Future<void> getAllPackages() async {
     try {
       List<PackageModel> packageAPI = await PackageService.getAllPackages();
       setState(() {
-        packages = packageAPI;
+        packages = packageAPI.where((element) => !purchasedSet.contains(element.id)).toList();
       });
     } catch (e) {
       print(e);
@@ -49,7 +63,8 @@ class _AllPackagesState extends State<AllPackages> {
               Column(
                 children: packages
                     .map(
-                      (e) => Card(
+                      (e) {
+                        return Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(
@@ -68,7 +83,7 @@ class _AllPackagesState extends State<AllPackages> {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.blue)),
                               Text('Giá: ${e.price}'),
-                              Text('Các tính năng:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              const Text('Các tính năng:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                               ListView(
                                 shrinkWrap: true,
                                 children: e.features
@@ -84,14 +99,17 @@ class _AllPackagesState extends State<AllPackages> {
                               Text(e.description),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/buy_package');
+                                  Navigator.pushNamed(context, '/buy_package', arguments: {
+                                    'package': e
+                                  });
                                 },
                                 child: Text('Mua'),
                               ),
                             ],
                           ),
                         ),
-                      ),
+                      );
+                      },
                     )
                     .toList(),
               ),
