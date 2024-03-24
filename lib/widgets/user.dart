@@ -42,6 +42,7 @@ class _UserState extends State<User> {
     void submit()  async {
       Navigator.of(context).pop(controller.text);
       // giá trị đang được nhập sẽ là controller.text khi nhấn ok
+      APIService.sendInvite(controller.text);
       controller.clear();
     }
     // Hàm mở popup dialog

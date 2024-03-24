@@ -17,8 +17,6 @@ import 'package:http_parser/http_parser.dart';
 class APIService {
   static var client = http.Client();
 
-  
-
   static Future<bool> login(LoginRequest model) async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -133,8 +131,6 @@ class APIService {
   }
 
   static Future<bool> facebookSignIn() async {
-    Map<String, dynamic?> userData;
-    bool checking = true;
 
      if (kIsWeb) {
     // initialiaze the facebook javascript SDK
@@ -225,5 +221,28 @@ class APIService {
     // Gửi yêu cầu và nhận phản hồi từ API
     var response = await request.send();
     return response.statusCode == 200;
+  }
+
+  static Future<bool> sendInvite(String email) async {
+
+    var url = Uri.http(Config.apiURL, Config.sendInvite);
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    final Map<String, String?> param = <String, String?>{
+      'email': email
+    };
+
+    var response = await client.post(url, headers: requestHeaders, body: jsonEncode(param));
+    print(response.body);
+    var data = jsonDecode(response.body);
+
+    if (data['status'] == "success") return true;
+    return false;
   }
 }

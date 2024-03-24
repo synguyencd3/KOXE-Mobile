@@ -57,16 +57,10 @@ class PaymentService {
       'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
-
     var url = Uri.http(Config.apiURL, Config.Purchase);
-
-  print("all purchased");
-
     var response = await client.get(url, headers: requestHeaders);
     var data =jsonDecode(response.body)['purchasedPackages'];
     var set=data.map((index) =>(index['package_id']));
-
-    print("---------------");
     return Set.from(set);
    }
 }
