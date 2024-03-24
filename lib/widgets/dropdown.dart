@@ -8,30 +8,37 @@ const List<String> list = <String>[
 class DropdownMenuExample extends StatefulWidget {
 final double width;
 final ValueNotifier<String?> valueNotifier;
-const DropdownMenuExample({Key? key, required this.width, required this.valueNotifier}) : super(key: key);
+final List<String> items;
+const DropdownMenuExample({Key? key, required this.width, required this.valueNotifier,  required this.items, }) : super(key: key);
 
   @override
   State<DropdownMenuExample> createState() => _DropdownMenuExampleState();
 }
 
 class _DropdownMenuExampleState extends State<DropdownMenuExample> {
-  String dropdownValue = list.first;
+  late String dropdownValue; // Thay đổi khai báo của dropdownValue
+
+  @override
+  void initState() {
+    super.initState();
+    dropdownValue = widget.items.first; // Sử dụng giá trị đầu tiên từ danh sách được truyền vào
+  }
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu<String>(
-      initialSelection: list.first,
+      initialSelection: dropdownValue,
       width: widget.width,
       onSelected: (String? value) {
-        // This is called when the user selects an item.
         setState(() {
           dropdownValue = value!;
         });
         widget.valueNotifier.value = value!;
       },
-      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+      dropdownMenuEntries: widget.items.map<DropdownMenuEntry<String>>((String value) {
         return DropdownMenuEntry<String>(value: value, label: value);
       }).toList(),
     );
   }
+
 }
