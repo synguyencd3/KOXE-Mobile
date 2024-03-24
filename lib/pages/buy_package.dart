@@ -18,7 +18,12 @@ class _BuyPackageState extends State<BuyPackage> {
   final ValueNotifier<String?> dropDownNotifier = ValueNotifier(null);
 
   late PackageModel package;
-  
+  List<String> list = <String>[
+    'Thanh toán qua VNPay',
+    'Thanh toán qua ZaloPay'
+  ];
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -145,6 +150,7 @@ class _BuyPackageState extends State<BuyPackage> {
               DropdownMenuExample(
                 width: 300,
                 valueNotifier: dropDownNotifier,
+                items: list,
               ),
               Container(
                 padding: EdgeInsets.all(10),

@@ -116,7 +116,27 @@ class _UserState extends State<User> {
             title: 'Đăng xuất',
             icon: Icons.logout,
             onTap: () {
-              SharedService.logout(context);
+              showDialog(context: context, builder: (context) {
+                return AlertDialog(
+                  content: Text('Bạn có chắc chắn muốn đăng xuất không?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Không'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        SharedService.logout(context);
+                      },
+                      child: Text('Có'),
+                    ),
+                  ],
+                );
+              });
+              //SharedService.logout(context);
               //Navigator.pushReplacementNamed(context, '/login');
             }),
       ],

@@ -37,14 +37,23 @@ class APIService {
     );
     print('request success');
     print(jsonDecode(response.body));
-    var responsemodel = loginResponseJson(response.body);
-    if (responsemodel.status == "success") {
+    var check = jsonDecode(response.body);
+    if (check['status'] == "success") {
+
       // API ko chạy trên nền web đc, uncomment khi chạy emulator
       await SharedService.setLoginDetails(loginResponseJson(response.body));
       return true;
     } else {
       return false;
-    }
+    };
+    // var responsemodel = loginResponseJson(response.body);
+    // if (responsemodel.status == "success") {
+    //   // API ko chạy trên nền web đc, uncomment khi chạy emulator
+    //   await SharedService.setLoginDetails(loginResponseJson(response.body));
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   }
 
   static Future<RegisterResponse> register(RegisterRequest model) async {

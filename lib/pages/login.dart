@@ -26,13 +26,29 @@ class _LoginPageState extends State<LoginPage> {
         LoginRequest(username: _username.text, password: _password.text);
 
     APIService.login(model).then((response) => {
+      print(response),
           if (response)
             {
               Navigator.pushNamedAndRemoveUntil(
                   context, '/mhome', (route) => false)
             }
           else
-            {print("login failed")}
+            {
+              showDialog(context: context, builder:
+                  (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Login Failed'),
+                  content: Text('Kiểm tra lại thông tin đăng nhập'),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('OK'))
+                  ],
+                );
+              })
+            }
         });
   }
 
