@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:typed_data';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/text_card.dart';
 import 'package:mobile/services/api_service.dart';
@@ -12,6 +10,7 @@ import 'package:mobile/model/user_model.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/widgets/utils.dart';
 import 'package:image_picker/image_picker.dart';
+
 class UserInfo extends StatefulWidget {
   @override
   State<UserInfo> createState() => _UserInfoState();
@@ -21,12 +20,14 @@ class _UserInfoState extends State<UserInfo> {
   Map<String, dynamic> userProfile = {};
   File? _image;
   late TextEditingController controller;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     controller = TextEditingController();
   }
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -35,7 +36,7 @@ class _UserInfoState extends State<UserInfo> {
   }
 
   Future<void> updateProfile(String prop) async {
-    UserModel user =  new UserModel();
+    UserModel user = new UserModel();
     print(controller.text);
     switch (prop) {
       case 'fullname':
@@ -53,8 +54,9 @@ class _UserInfoState extends State<UserInfo> {
       default:
         break;
     }
-     bool success = await APIService.updateUserProfile(user);
+    bool success = await APIService.updateUserProfile(user);
   }
+
   void selectImage() async {
     File? imgFile = await pickImage(ImageSource.gallery);
     if (imgFile != null) {
@@ -62,20 +64,21 @@ class _UserInfoState extends State<UserInfo> {
       user.avatarFile = imgFile; // Assign the File object directly
       bool success = await APIService.updateUserProfile(user);
       print(success);
-      if (success)
-        {
-          setState(() {
-            _image = imgFile;
-          });
-
-        }
+      if (success) {
+        setState(() {
+          _image = imgFile;
+        });
+      }
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    userProfile = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>? ?? {};
+    userProfile =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>? ??
+            {};
     print(userProfile);
-    void submit(String prop)  async {
+    void submit(String prop) async {
       Navigator.of(context).pop(controller.text);
       await updateProfile(prop);
       setState(() {
@@ -84,10 +87,10 @@ class _UserInfoState extends State<UserInfo> {
       controller.clear();
     }
 
-    Future<String?> openDialog(String prop) => showDialog<String>(
+    Future<String?> openDialog(String prop, String title) => showDialog<String>(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text(prop),
+              title: Text(title),
               content: TextField(
                 autofocus: true,
                 decoration: InputDecoration(
@@ -97,7 +100,7 @@ class _UserInfoState extends State<UserInfo> {
                 onSubmitted: (_) => submit(prop),
               ),
               actions: [
-                TextButton(onPressed: ()=>submit(prop), child: Text('OK')),
+                TextButton(onPressed: () => submit(prop), child: Text('OK')),
               ],
             ));
     Future<DateTime?> openDatePickerDialog(String prop) {
@@ -111,18 +114,19 @@ class _UserInfoState extends State<UserInfo> {
           setState(() {
             userProfile[prop] = pickedDate.toIso8601String();
           });
-          UserModel user =  new UserModel();
+          UserModel user = new UserModel();
           user.date_of_birth = pickedDate.toIso8601String();
           APIService.updateUserProfile(user);
         }
       });
     }
-    Future<String?> openGenderDialog(String prop) {
-      String? selectedGender = userProfile[prop];
+
+    Future<String?> openGenderDialog() {
+      String? selectedGender = userProfile['gender'];
       return showDialog<String>(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(prop),
+          title: Text('Giới tính'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <String>['Nam', 'Nữ', 'Khác'].map((String value) {
@@ -132,7 +136,7 @@ class _UserInfoState extends State<UserInfo> {
                 groupValue: selectedGender,
                 onChanged: (newValue) {
                   setState(() {
-                    userProfile[prop] = newValue;
+                    userProfile['gender'] = newValue;
                     selectedGender = newValue;
                   });
                   UserModel user = new UserModel();
@@ -146,6 +150,7 @@ class _UserInfoState extends State<UserInfo> {
         ),
       );
     }
+
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context, 'update');
@@ -165,20 +170,20 @@ class _UserInfoState extends State<UserInfo> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Stack(
-                      children:[
-                     _image != null
-                        ? CircleAvatar(
-                        radius: 50,
-                        backgroundImage: FileImage(_image!),
-                      ) :
-                        CircleAvatar(
-                        radius: 50,
-                        backgroundImage:
-                        NetworkImage(userProfile['avatar'] != null
-                            ? userProfile['avatar']
-                            : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
-                      ),
+                    Stack(children: [
+                      _image != null
+                          ? CircleAvatar(
+                              radius: 50,
+                              backgroundImage: FileImage(_image!),
+                            )
+                          : CircleAvatar(
+                              radius: 50,
+                              backgroundImage: NetworkImage(userProfile[
+                                          'avatar'] !=
+                                      null
+                                  ? userProfile['avatar']
+                                  : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
+                            ),
                       Positioned(
                         bottom: 0,
                         right: 0,
@@ -194,8 +199,7 @@ class _UserInfoState extends State<UserInfo> {
                           ),
                         ),
                       ),
-                      ]
-                    ),
+                    ]),
                   ],
                 ),
               ),
@@ -203,7 +207,7 @@ class _UserInfoState extends State<UserInfo> {
                   title: 'Họ và tên',
                   trailingText: userProfile['fullname'] ?? 'Chưa cập nhật',
                   onTap: () {
-                    openDialog('fullname');
+                    openDialog('fullname', 'Họ và tên');
                   }),
               text_card(
                   title: 'Giới tính',
@@ -211,24 +215,25 @@ class _UserInfoState extends State<UserInfo> {
                       ? userProfile['gender']
                       : 'Chưa cập nhật',
                   onTap: () {
-                openGenderDialog('gender');
+                    openGenderDialog();
                   }),
               text_card(
                   title: 'Số điện thoại',
                   trailingText: userProfile['phone'] ?? 'Chưa cập nhật',
                   onTap: () {
-                 openDialog('phone');
+                    openDialog('phone', 'Số điện thoại');
                   }),
               text_card(
                   title: 'Địa chỉ',
                   trailingText: userProfile['address'] ?? 'Chưa cập nhật',
                   onTap: () {
-                  openDialog('address');
+                    openDialog('address', 'Địa chỉ');
                   }),
               text_card(
                   title: 'Ngày sinh',
                   trailingText: userProfile['date_of_birth'] != null
-                      ? DateFormat('dd-MM-yyyy').format(DateFormat('dd-MM-yyyy').parse(userProfile['date_of_birth']))
+                      ? DateFormat('dd-MM-yyyy').format(DateFormat('dd-MM-yyyy')
+                          .parse(userProfile['date_of_birth']))
                       : 'Chưa cập nhật',
                   onTap: () {
                     openDatePickerDialog('date_of_birth');

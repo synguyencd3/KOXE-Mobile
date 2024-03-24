@@ -89,7 +89,7 @@ class _RegisterState extends State<Register> {
                     password: _password,
                   ),
                   Button(
-                      name: 'register',
+                      name: 'Register',
                       callback: () {
                         if (_formKey.currentState!.validate()) {
                           Register();
