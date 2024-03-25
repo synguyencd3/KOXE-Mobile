@@ -49,9 +49,13 @@ class _AppointmentCardState extends State<AppointmentCard> {
               leading: Icon(Icons.phone_rounded),
             ),
             ListTile(
-              title: Text(widget.appointment.accepted
-                  ? 'Đã xác nhận'
-                  : 'Chưa xác nhận'),
+              title: Text(
+                  widget.appointment.status == 0
+                      ? 'Đã xác nhận'
+                      : widget.appointment.status == 1
+                          ? 'Chưa xác nhận'
+                          : 'Đã hủy'
+              ),
               leading: Icon(Icons.check_circle),
             ),
             OutlinedButton(

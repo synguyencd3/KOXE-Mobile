@@ -33,7 +33,6 @@ with SingleTickerProviderStateMixin{
       setState(() {
         appointments = appointmentAPI;
       });
-      print(appointmentAPI[0].datetime);
     } catch (e) {
       print(e);
     }
@@ -64,7 +63,7 @@ with SingleTickerProviderStateMixin{
                   },
                 ),
                 ListView.builder(
-                  itemCount: 16,
+                  itemCount: appointments.length,
                   physics: BouncingScrollPhysics(),
                   padding: EdgeInsets.only(top: 1),
                   itemBuilder: (context, index) {
