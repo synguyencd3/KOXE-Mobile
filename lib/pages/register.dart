@@ -47,8 +47,24 @@ class _RegisterState extends State<Register> {
         username: _username.text, password: _password.text, name: _name.text);
 
     APIService.register(model).then((response) {
-      print(response.message);
-      print(response.status);
+      // print(response.message);
+      // print(response.status);
+      if (response.status == 'success') {
+        Navigator.pushNamed(context, '/login');
+        showDialog(context: context, builder:
+            (BuildContext context) {
+          return AlertDialog(
+            title: Text('Đăng ký thành công!'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'))
+            ],
+          );
+        });
+      }
     });
   }
 
