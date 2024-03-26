@@ -27,4 +27,17 @@ class AppointmentService{
     return [];
   }
 
+  static Future<bool> createAppointment(AppointmentModel appointment) async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.createAppointmentAPI);
+
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode(appointment.toJson()));
+    var data = jsonDecode(response.body);
+    return data['status']=='success';
+    }
 }

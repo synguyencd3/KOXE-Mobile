@@ -6,6 +6,8 @@ import 'package:mobile/widgets/dropdown.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/model/salon_model.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:mobile/services/appointment_service.dart';
+import 'package:mobile/model/appointment_model.dart';
 
 class CreateAppoint extends StatefulWidget {
   const CreateAppoint({super.key});
@@ -16,19 +18,29 @@ class CreateAppoint extends StatefulWidget {
 
 class _CreateAppointState extends State<CreateAppoint> {
   List<Salon> salons = [];
+  Map<String, String> salonNameToId = {};
+  late TextEditingController controller;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    controller = TextEditingController();
     getSalons();
-  }
 
+  }
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    controller.dispose();
+    super.dispose();
+  }
   Future<void> getSalons() async {
     var list = await SalonsService.getAll();
     print(list);
     setState(() {
       salons = list;
+      salonNameToId = {for (var salon in salons) salon.name!: salon.salonId!};
     });
   }
 
@@ -174,7 +186,9 @@ class _CreateAppointState extends State<CreateAppoint> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
                           decoration: BoxDecoration(
-                              color: timeFormat=='AM' ? Colors.grey.shade500 : Colors.grey.shade800,
+                              color: timeFormat == 'AM'
+                                  ? Colors.grey.shade500
+                                  : Colors.grey.shade800,
                               border: Border.all(color: Colors.grey)),
                           child: Text(
                             'AM',
@@ -193,7 +207,9 @@ class _CreateAppointState extends State<CreateAppoint> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 20),
                           decoration: BoxDecoration(
-                              color: timeFormat=='PM' ? Colors.grey.shade500 : Colors.grey.shade800,
+                              color: timeFormat == 'PM'
+                                  ? Colors.grey.shade500
+                                  : Colors.grey.shade800,
                               border: Border.all(color: Colors.grey)),
                           child: Text(
                             'PM',
@@ -218,12 +234,32 @@ class _CreateAppointState extends State<CreateAppoint> {
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
               ),
+              controller: controller,
             ),
             SizedBox(height: 10),
             Container(
               alignment: Alignment.center,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  String? selectedSalonId = salonNameToId[dropDownNotifier.value];
+                  // print('Selected salon ID: $selectedSalonId');
+                  var result = await AppointmentService.createAppointment(
+                      AppointmentModel(
+                        salon: selectedSalonId!,
+                        datetime: today.toString(),
+                        description: controller.text,
+                        ));
+                  print(result);
+                  if (result)
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Tạo lịch hẹn thành công'),
+                          backgroundColor: Colors.green,
+                        )
+                      );
+                    }
+                },
                 child: Text('Tạo lịch hẹn'),
               ),
             ),
