@@ -1,6 +1,6 @@
 class Config {
   static const String appName = "Salon oto";
-  static const String apiURL = "192.168.1.9:5000";
+  static const String apiURL = "192.168.1.5:5000";
   static const String loginAPI = "auth/login"; 
   static const String registerAPI = "auth/register";
   static const String facebookAPI = "auth/facebook-mobile";
@@ -36,4 +36,8 @@ class Config {
   static const String webURL = "http://localhost:3000";
   static const String webVNPayCallback = '/payment/vnpay';
 
+
+  //KeyMap
+
+  static const KeyMap ="salon"; //key map phải có trong purchase để có thể sử dụng quản lí salon
 }

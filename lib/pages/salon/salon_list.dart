@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/salon_service.dart';
 
-
-import '../model/articles_model.dart';
-import '../model/salon_model.dart';
+import '../../model/salon_model.dart';
 
 class SalonList extends StatefulWidget {
   const SalonList({super.key});
