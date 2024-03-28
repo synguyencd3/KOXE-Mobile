@@ -14,7 +14,7 @@ class AppointmentCard extends StatefulWidget {
 class _AppointmentCardState extends State<AppointmentCard> {
   @override
   Widget build(BuildContext context) {
-    int daysDifference = DateTime.now().difference(DateTime.parse(widget.appointment.datetime)).inDays;
+    int daysDifference = DateTime.parse(widget.appointment.datetime).difference(DateTime.now()).inDays;
     DateTime appointmentDateTime = DateTime.parse(widget.appointment.datetime);
     String appointmentDate = '${appointmentDateTime.day}/${appointmentDateTime.month}/${appointmentDateTime.year}';
     String appointmentTime = '${appointmentDateTime.hour.toString().padLeft(2,'0')}:${appointmentDateTime.minute.toString().padLeft(2,'0')}';
@@ -26,6 +26,12 @@ class _AppointmentCardState extends State<AppointmentCard> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            daysDifference < 0
+                ? Text(
+                    'Lịch hẹn đã qua',
+                    style: TextStyle(fontWeight: FontWeight.w200),
+                  )
+                :
             Text(
               'Thời gian còn lại  $daysDifference ngày',
               style: TextStyle(fontWeight: FontWeight.w200),
@@ -49,11 +55,24 @@ class _AppointmentCardState extends State<AppointmentCard> {
               leading: Icon(Icons.phone_rounded),
             ),
             ListTile(
-              title: Text(widget.appointment.accepted
-                  ? 'Đã xác nhận'
-                  : 'Chưa xác nhận'),
+              title: Text(
+                  widget.appointment.status == 0
+                      ? 'Chưa chấp nhận'
+                      : widget.appointment.status == 1
+                          ? 'Đã chấp nhận'
+                          : 'Bị từ chối',
+                style: TextStyle(color: widget.appointment.status == 0
+                    ? Colors.yellow[900]
+                    : widget.appointment.status == 1
+                    ? Colors.green
+                    : Colors.red
+                ),
+              ),
               leading: Icon(Icons.check_circle),
             ),
+            daysDifference< 0
+                ? Container()
+                :
             OutlinedButton(
                 onPressed: () {},
                 child: Text('Điều chỉnh lịch hẹn'),
