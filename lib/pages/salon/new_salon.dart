@@ -1,14 +1,37 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:image_picker/image_picker.dart';
 
 class NewSalon extends StatefulWidget {
   const NewSalon({super.key});
+
+  static const String type = 'create';
 
   @override
   State<NewSalon> createState() => _NewSalonState();
 }
 
 class _NewSalonState extends State<NewSalon> {
+  List<File>? image;
+ List<XFile>? pickedFile;
+  final picker = ImagePicker();
+
+  Future<void> pickImage() async {
+    pickedFile =  await picker.pickMultiImage();
+    if (pickedFile !=null) {
+      setState(() {
+        //image = File(pickedFile!.path);
+        image = pickedFile!.map((e) => File(e.path)).toList();
+        print(image);
+      });
+    }
+    
+  }
+
+  TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +50,6 @@ class _NewSalonState extends State<NewSalon> {
         child: SingleChildScrollView(
           child: Column(children: [
 
-
             TextFormField(
               decoration: InputDecoration(labelText: 'Tên salon',
               enabledBorder: OutlineInputBorder(
@@ -35,7 +57,7 @@ class _NewSalonState extends State<NewSalon> {
               ),
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: Color(0xFF6F61EF),
+                  //  color: Color(0xFF6F61EF),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -51,7 +73,7 @@ class _NewSalonState extends State<NewSalon> {
               ),
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: Color(0xFF6F61EF),
+                   // color: Color(0xFF6F61EF),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -68,7 +90,7 @@ class _NewSalonState extends State<NewSalon> {
               ),
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: Color(0xFF6F61EF),
+                   // color: Color(0xFF6F61EF),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -85,13 +107,124 @@ class _NewSalonState extends State<NewSalon> {
               ),
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: Color(0xFF6F61EF),
+                    // color: Color(0xFF6F61EF),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-            )
+            ),
+
+            SizedBox(height: 20),
+
+            TextFormField(
+          autofocus: true,
+          obscureText: false,
+          decoration: InputDecoration(
+            hintText: 'Giới thiệu',
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            
+            contentPadding: EdgeInsetsDirectional.fromSTEB(16, 24, 16, 12),
+          ),
+          style: FlutterFlowTheme.of(context).bodyMedium.override(
+                fontFamily: 'Plus Jakarta Sans',
+                color: Color(0xFF15161E),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+          maxLines: 16,
+          minLines: 6,
+        ),
+
+        SizedBox( height: 20,),
+
+        GestureDetector(
+          onTap: () => pickImage(),
+          child: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+          child: Container(
+            width: double.infinity,
+            constraints: BoxConstraints(
+              maxWidth: 500,
+            ),
+            decoration: BoxDecoration(
+              //color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                //color: Color(0xFFE5E7EB),
+                width: 1,
+              ),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Icon(
+                    Icons.add_a_photo_rounded,
+                    size: 32,
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                    child: Text(
+                      'Chọn hình ảnh',
+                      textAlign: TextAlign.center,
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Plus Jakarta Sans',
+                            color: Color(0xFF15161E),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+          ),
+        ),
+
+        SizedBox(height: 20),
+
+        Container(
+          width: double.infinity,
+          child: pickedFile==null
+          ? const Text('Vui lòng chọn ảnh')
+          : Text('${pickedFile!.length} ảnh đã chọn')
+        ), 
+
+        SizedBox(height: 20),
+        
+        Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
+          child: FFButtonWidget(text: "Tạo salon", onPressed: () {}, options: 
+            FFButtonOptions(
+            height: 40,
+            width: 200,
+            padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+            iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+            color: FlutterFlowTheme.of(context).primary,
+            textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                  fontFamily: 'Readex Pro',
+                  color: Colors.white,
+                ),
+            elevation: 3,
+            borderSide: BorderSide(
+              color: Colors.transparent,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          ),
+        )
 
           ],),
         ),
