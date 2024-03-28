@@ -78,4 +78,25 @@ class PaymentService {
     print(set);
     return Set.from(set);
    }
+
+   static Future<Set<String>> getKeySet() async {
+    var LoginInfo = await SharedService.loginDetails();
+      Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    var url = Uri.http(Config.apiURL, Config.Purchase);
+    var response = await client.get(url, headers: requestHeaders);
+    var data =jsonDecode(response.body)['purchasedPackages'];
+    var features=packagesFromJson(data).map((index) =>(index.features));
+  
+    List<String?> keyMaps = [];
+    features.forEach( (i) {
+       i?.forEach((e) {keyMaps.add(e.keyMap);});
+    });
+
+    return Set.from(keyMaps);
+   }
 }

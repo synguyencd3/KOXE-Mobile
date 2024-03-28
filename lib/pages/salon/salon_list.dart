@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:mobile/config.dart';
+import 'package:mobile/services/payment_service.dart';
 import 'package:mobile/services/salon_service.dart';
 
 import '../../model/salon_model.dart';
@@ -13,10 +15,20 @@ class SalonList extends StatefulWidget {
 
 class _SalonListState extends State<SalonList> {
   List<Salon> salons = [];
+  Set<String> keySet = Set();
   @override
   void initState() {
     super.initState();
-    getSalons(); 
+    getSalons();
+    getKeyMaps(); 
+  }
+
+  Future<void> getKeyMaps() async {
+    var set = await PaymentService.getKeySet();
+    print(set);
+    setState(() {
+      keySet = set;
+    });
   }
 
   Future<void> getSalons() async {
@@ -37,12 +49,20 @@ class _SalonListState extends State<SalonList> {
           style: FlutterFlowTheme.of(context).titleLarge,
         ),
       ),
-      body: ListView.builder(
-          itemCount: salons.length,
-          itemBuilder: (context, index) {
-            return SalonCard(
-                salon: salons[index]);
-          }),
+      body: Column(
+        children: [
+          keySet.contains(Config.KeyMap) ?
+          TextButton(onPressed: () {}, child: Text('Your salon')): SizedBox(height: 20) ,
+          Expanded(
+            child: ListView.builder(
+                itemCount: salons.length,
+                itemBuilder: (context, index) {
+                  return SalonCard(
+                      salon: salons[index]);
+                }),
+          ),
+        ],
+      ),
     );
   }
 }

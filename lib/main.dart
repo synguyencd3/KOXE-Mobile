@@ -32,7 +32,7 @@ void main() {
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       useMaterial3: true,
     ),
-    initialRoute:  '/new_salon',//'/login',
+    initialRoute: '/login',
     routes: {
       '/login': (context) => LoginPage(),
       '/register': (context) => Register(),
