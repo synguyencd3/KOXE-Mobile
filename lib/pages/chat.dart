@@ -5,6 +5,8 @@ import 'package:uuid/uuid.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:mobile/model/chat_model.dart';
+import 'package:mobile/services/chat_service.dart';
 class ChatPage extends StatefulWidget {
   //final ChatUserModel user;
   const ChatPage({super.key});
@@ -18,8 +20,21 @@ class _ChatState extends State<ChatPage> {
   final _user = const types.User(
     id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
   );
-
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getMessages();
+  }
+  Future<void> getMessages() async {
+  List<ChatModel> chatAPI = await ChatService.getChatById('d639c44a-3e09-493a-bbc8-e8480c66321e');
+  print(chatAPI[0].message);
+  for (int i = 0; i < chatAPI.length; i++) {
+    final createAt = DateTime.parse(chatAPI[i].createdAt);
+    final message = types.TextMessage( author: _user, createdAt:createAt.millisecondsSinceEpoch, id: const Uuid().v4(), text: chatAPI[i].message, );
+    _addMessage(message);
+  }
+}
   @override
   Widget build(BuildContext context) {
     return SafeArea(

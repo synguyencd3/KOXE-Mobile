@@ -1,9 +1,12 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/appointment_card.dart';
 import '../widgets/create_appointment.dart';
 import 'package:mobile/services/appointment_service.dart';
 import 'package:mobile/model/appointment_model.dart';
+import 'package:mobile/pages/loading.dart';
 
 class Appointment extends StatefulWidget {
   const Appointment({super.key});
@@ -33,7 +36,7 @@ class _AppointmentState extends State<Appointment>
       // Check if the 'Lịch hẹn' tab is selected
       if (_tabController.index == 0) {
         // Call setState to rebuild the widget
-          getAllAppointments();
+        getAllAppointments();
       }
     });
   }
@@ -42,18 +45,20 @@ class _AppointmentState extends State<Appointment>
     try {
       List<AppointmentModel> appointmentAPI = await AppointmentService.getAll();
       print(appointmentAPI[0].datetime);
-      setState(() {
-        appointmentsCurrent = [];
-        appointmentsHistory = [];
-        for (var appointment in appointmentAPI) {
-          int daysDifference = DateTime.parse(appointment.datetime).difference(DateTime.now()).inDays;
-          if (daysDifference > 0) {
-            appointmentsCurrent.add(appointment);
-          } else {
-            appointmentsHistory.add(appointment);
-          }
+      //setState(() {
+      appointmentsCurrent = [];
+      appointmentsHistory = [];
+      for (var appointment in appointmentAPI) {
+        int daysDifference = DateTime.parse(appointment.datetime)
+            .difference(DateTime.now())
+            .inDays;
+        if (daysDifference >= 0) {
+          appointmentsCurrent.add(appointment);
+        } else {
+          appointmentsHistory.add(appointment);
         }
-      });
+      }
+      //});
     } catch (e) {
       print(e);
     }
@@ -77,33 +82,47 @@ class _AppointmentState extends State<Appointment>
             controller: _tabController,
           ),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                appointmentsCurrent.isEmpty
-                    ? Center(
-                        child: Text('Bạn không có cuộc hẹn nào',
-                            style: TextStyle(fontSize: 20)),
-                      )
-                    : ListView.builder(
-                        itemCount: appointmentsCurrent.length,
-                        physics: BouncingScrollPhysics(),
-                        padding: EdgeInsets.only(top: 1),
-                        itemBuilder: (context, index) {
-                          return AppointmentCard(
-                              appointment: appointmentsCurrent[index]);
-                        },
-                      ),
-                ListView.builder(
-                  itemCount: appointmentsHistory.length,
-                  physics: BouncingScrollPhysics(),
-                  padding: EdgeInsets.only(top: 1),
-                  itemBuilder: (context, index) {
-                    return AppointmentCard(appointment: appointmentsHistory[index]);
-                  },
-                ),
-                CreateAppoint(),
-              ],
+            child: FutureBuilder(
+              future: getAllAppointments(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Loading();
+                } else {
+                  return TabBarView(
+                    controller: _tabController,
+                    children: [
+                      appointmentsCurrent.isEmpty
+                          ? Center(
+                              child: Text('Bạn không có cuộc hẹn nào',
+                                  style: TextStyle(fontSize: 20)),
+                            )
+                          : ListView.builder(
+                              itemCount: appointmentsCurrent.length,
+                              physics: BouncingScrollPhysics(),
+                              padding: EdgeInsets.only(top: 1),
+                              itemBuilder: (context, index) {
+                                return AppointmentCard(
+                                    appointment: appointmentsCurrent[index]);
+                              }),
+                      appointmentsHistory.isEmpty
+                          ? Center(
+                              child: Text('Bạn không có cuộc hẹn nào',
+                                  style: TextStyle(fontSize: 20)),
+                            )
+                          : ListView.builder(
+                              itemCount: appointmentsHistory.length,
+                              physics: BouncingScrollPhysics(),
+                              padding: EdgeInsets.only(top: 1),
+                              itemBuilder: (context, index) {
+                                return AppointmentCard(
+                                    appointment: appointmentsHistory[index]);
+                              },
+                            ),
+                      CreateAppoint(),
+                    ],
+                  );
+                }
+              },
             ),
           ),
         ],
