@@ -9,8 +9,9 @@ class Config {
   static const String userprofileAPI = "/users/profile";
   static const String getAllPackageAPI = "/packages";
   static const String getCarsAPI = "/cars";
-  static const String getSalonsAPI = "/salons";
+  static const String SalonsAPI = "/salons";
   static const String sendInvite = "auth/invite";
+  static const String mySalon = "salons/my-salon";
 
   //Appointment
   static const String getAppointmentsAPI = "/appointment/get-appoint-user";

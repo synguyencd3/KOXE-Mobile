@@ -55,7 +55,8 @@ void main() {
       '/fblogin': (context) => WebViewContainer(),
       '/salons': (context) => SalonList(),
       '/salon_detail' : (context) => SalonDetail(),
-      '/new_salon': (context) => NewSalon()
+      '/new_salon': (context) => NewSalon(),
+      '/my_salon': (context) =>  MySalon()
     },
   ));
 }

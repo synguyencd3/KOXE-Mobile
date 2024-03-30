@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile/model/salon_model.dart';
+import 'package:mobile/services/salon_service.dart';
 
 class NewSalon extends StatefulWidget {
   const NewSalon({super.key});
@@ -19,19 +22,35 @@ class _NewSalonState extends State<NewSalon> {
  List<XFile>? pickedFile;
   final picker = ImagePicker();
 
+  late final TextEditingController _name  = TextEditingController(); 
+  late final TextEditingController _address  = TextEditingController();
+  late final TextEditingController _phonenumber  = TextEditingController();
+  late final TextEditingController _email  = TextEditingController();
+  late final TextEditingController _description  = TextEditingController();
+
   Future<void> pickImage() async {
     pickedFile =  await picker.pickMultiImage();
     if (pickedFile !=null) {
       setState(() {
-        //image = File(pickedFile!.path);
         image = pickedFile!.map((e) => File(e.path)).toList();
         print(image);
       });
     }
-    
   }
 
-  TextEditingController _controller = TextEditingController();
+  void NewSalon() {
+    Salon salon = Salon(name: _name.text, 
+                        address: _address.text, 
+                        introductionMarkdown: _description.text,
+                        phoneNumber: _phonenumber.text, 
+                        email: _email.text,
+                        banner: pickedFile?.map((e) => e.path).toList());
+    
+    SalonsService.NewSalon(salon);
+  }
+
+
+  //TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +70,7 @@ class _NewSalonState extends State<NewSalon> {
           child: Column(children: [
 
             TextFormField(
+              controller: _name,
               decoration: InputDecoration(labelText: 'Tên salon',
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12)
@@ -67,6 +87,7 @@ class _NewSalonState extends State<NewSalon> {
             SizedBox(height: 20),
 
             TextFormField(
+              controller: _address,
               decoration: InputDecoration(labelText: 'Địa chỉ salon',
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12)
@@ -84,6 +105,7 @@ class _NewSalonState extends State<NewSalon> {
             SizedBox(height: 20),
 
             TextFormField(
+              controller: _phonenumber,
               decoration: InputDecoration(labelText: 'Số điện thoại',
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12)
@@ -101,6 +123,7 @@ class _NewSalonState extends State<NewSalon> {
             SizedBox(height: 20),
 
             TextFormField(
+              controller: _email,
               decoration: InputDecoration(labelText: 'Email',
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12)
@@ -118,6 +141,7 @@ class _NewSalonState extends State<NewSalon> {
             SizedBox(height: 20),
 
             TextFormField(
+              controller: _description,
           autofocus: true,
           obscureText: false,
           decoration: InputDecoration(
@@ -205,7 +229,9 @@ class _NewSalonState extends State<NewSalon> {
         
         Padding(
           padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
-          child: FFButtonWidget(text: "Tạo salon", onPressed: () {}, options: 
+          child: FFButtonWidget(text: "Tạo salon", onPressed: () {
+            NewSalon();
+          }, options: 
             FFButtonOptions(
             height: 40,
             width: 200,
