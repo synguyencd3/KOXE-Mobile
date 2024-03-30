@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/model/salon_model.dart';
+import 'package:mobile/services/shared_service.dart';
 
 class SalonsService {
   static var client = http.Client();
@@ -27,7 +28,6 @@ class SalonsService {
   }
 
   static Future<Car?> getDetail(String salonId) async {
-
        Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Accept': '*/*',
@@ -43,5 +43,28 @@ class SalonsService {
       return Car.fromJson(data); //carsFromJson(data['data']['cars']);
     }
     return null;
+  }
+  static Future<String> isSalon()  async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+    var url = Uri.http(Config.apiURL, Config.getIsSalonAPI);
+
+    var response = await http.get(url, headers: requestHeaders);
+    var responseData = jsonDecode(response.body);
+    print(responseData);
+    if (responseData['status'] == 'success') {
+     if (responseData['salonId'] == null){
+       return '';
+     } else {
+       return responseData['salonId'];
+     }
+    }
+    else
+      {
+        return '';
+      }
   }
 }

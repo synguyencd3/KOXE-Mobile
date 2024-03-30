@@ -190,7 +190,7 @@ class APIService {
     var url = Uri.http(Config.apiURL, Config.userprofileAPI);
     var response = await client.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
-      print(response.body);
+      //print(response.body);
       var data = jsonDecode(response.body);
       var profileData = data['profile'];
       return profileData;

@@ -7,6 +7,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:mobile/model/chat_model.dart';
 import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/salon_service.dart';
+import 'package:mobile/socket/socket_manager.dart';
+import 'package:mobile/services/api_service.dart';
 class ChatPage extends StatefulWidget {
   //final ChatUserModel user;
   const ChatPage({super.key});
@@ -21,11 +24,21 @@ class _ChatState extends State<ChatPage> {
     id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
   );
 @override
-  void initState() {
+  void initState()  {
     // TODO: implement initState
     super.initState();
-    getMessages();
+    callAPI();
   }
+  Future<void> callAPI() async {
+    await getMessages();
+    String salonId = await SalonsService.isSalon();
+    Map<String,dynamic> userProfile = await APIService.getUserProfile();
+    print(userProfile['user_id']);
+    await SocketManager.initSocket(userProfile['user_id'], salonId);
+    print(SocketManager.isConnected());
+
+  }
+
   Future<void> getMessages() async {
   List<ChatModel> chatAPI = await ChatService.getChatById('d639c44a-3e09-493a-bbc8-e8480c66321e');
   print(chatAPI[0].message);
