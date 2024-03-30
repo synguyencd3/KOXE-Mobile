@@ -32,7 +32,10 @@ class _PaymentWebViewState extends State<PaymentWebView> {
      onPageFinished: (String url) {
         if (url.toLowerCase().contains(Config.webURL))
           {
-            if (url.toLowerCase().contains('success')) print("purchased");
+            if (url.toLowerCase().contains('success'))
+            {
+              Navigator.popUntil(context, ModalRoute.withName('/mhome'));
+            }
             if (url.toLowerCase().contains('failed')) print(" failed purchase");
           } 
       },

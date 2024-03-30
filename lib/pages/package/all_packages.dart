@@ -27,6 +27,7 @@ class _AllPackagesState extends State<AllPackages> {
 
   Future<void> getPurchased() async {
     var set = await PaymentService.getPurchasedSet();
+    
     setState(() {
       purchasedSet = set;
     });

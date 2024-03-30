@@ -1,6 +1,6 @@
 class Config {
   static const String appName = "Salon oto";
-  static const String apiURL = "192.168.1.12:5000";
+  static const String apiURL = "192.168.1.5:5000";
   static const String loginAPI = "auth/login"; 
   static const String registerAPI = "auth/register";
   static const String facebookAPI = "auth/facebook-mobile";
@@ -9,14 +9,14 @@ class Config {
   static const String userprofileAPI = "/users/profile";
   static const String getAllPackageAPI = "/packages";
   static const String getCarsAPI = "/cars";
-  static const String getSalonsAPI = "/salons";
-  static const String getIsSalonAPI = "/salons/salonId";
+  static const String SalonsAPI = "/salons";
   static const String sendInvite = "auth/invite";
-  static const String getChatsAPI = "/messages";
+  static const String mySalon = "salons/my-salon";
 
   //Appointment
   static const String getAppointmentsAPI = "/appointment/get-appoint-user";
   static const String createAppointmentAPI ="/appointment/create-appointment";
+  static const String refreshToken = "auth/refresh";
 
   //Payment
   static const String VNPayAPI = "/payment/create_payment_url";
@@ -40,4 +40,8 @@ class Config {
   static const String webURL = "http://localhost:3000";
   static const String webVNPayCallback = '/payment/vnpay';
 
+
+  //KeyMap
+
+  static const KeyMap ="salon"; //key map phải có trong purchase để có thể sử dụng quản lí salon
 }

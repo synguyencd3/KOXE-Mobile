@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'package:mobile/services/api_service.dart';
+import 'package:mobile/config.dart';
+import 'package:mobile/services/payment_service.dart';
 import 'package:mobile/services/salon_service.dart';
 
-
-import '../model/articles_model.dart';
-import '../model/salon_model.dart';
+import '../../model/salon_model.dart';
 
 class SalonList extends StatefulWidget {
   const SalonList({super.key});
@@ -17,10 +15,20 @@ class SalonList extends StatefulWidget {
 
 class _SalonListState extends State<SalonList> {
   List<Salon> salons = [];
+  Set<String> keySet = Set();
   @override
   void initState() {
     super.initState();
-    getSalons(); 
+    getSalons();
+    getKeyMaps(); 
+  }
+
+  Future<void> getKeyMaps() async {
+    var set = await PaymentService.getKeySet();
+    print(set);
+    setState(() {
+      keySet = set;
+    });
   }
 
   Future<void> getSalons() async {
@@ -41,15 +49,68 @@ class _SalonListState extends State<SalonList> {
           style: FlutterFlowTheme.of(context).titleLarge,
         ),
       ),
-      body: ListView.builder(
-          itemCount: salons.length,
-          itemBuilder: (context, index) {
-            return SalonCard(
-                salon: salons[index]);
-          }),
+      body: Column(
+        children: [
+          keySet.contains(Config.KeyMap) ?
+          TextButton(onPressed: () { Navigator.pushNamed(context, '/my_salon');}, child: const Text('Your salon')): const SizedBox(height: 20) ,
+          Expanded(
+            child: ListView.builder(
+                itemCount: salons.length,
+                itemBuilder: (context, index) {
+                  return SalonCard(
+                      salon: salons[index]);
+                }),
+          ),
+        ],
+      ),
     );
   }
 }
+
+class MySalon extends StatefulWidget {
+  const MySalon({super.key});
+
+  @override
+  State<MySalon> createState() => _MySalonState();
+}
+
+class _MySalonState extends State<MySalon> {
+
+  Salon? MySalon;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getMySalon();
+  }
+
+  Future<void> getMySalon() async {
+    var data = await SalonsService.getMySalon();
+    print(data?.salonId);
+    setState(() {
+      MySalon = data;
+    });
+  }
+  @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          title: Text(
+            'Salons',
+            style: FlutterFlowTheme.of(context).titleLarge,
+          ),
+        ),
+        body: Column(
+          children: [
+            MySalon !=null ?
+            SalonCard(salon: MySalon!):  TextButton(onPressed: () { Navigator.pushNamed(context, '/new_salon');}, child: const Text('Thêm mới')),
+          ],
+        ),
+      );
+    }
+  }
 
 
 class SalonCard extends StatelessWidget {

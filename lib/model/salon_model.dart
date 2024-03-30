@@ -29,10 +29,10 @@ class Salon {
     salonId=json['salon_id'];
     json['name']==null? name='null':name = json['name'];
     json['address']==null? address="null":address = json['address'];
-    image = json['image'];
+    json['image'] == null? image="null" :image = json['image'];
     email = json['email'];
     phoneNumber = json['phoneNumber'];
-    banner = json['banner'].cast<String>();
+    json['banner'] == null? banner=null:banner = json['banner'].cast<String>();
     introductionHtml = json['introductionHtml'];
     json['introductionMarkdown']==null? introductionMarkdown = "null" :introductionMarkdown = json['introductionMarkdown'];
     //cars = json['cars'].cast<String>();

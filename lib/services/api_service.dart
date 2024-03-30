@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'dart:io';
@@ -8,7 +9,8 @@ import 'package:mobile/model/login_response_model.dart';
 import 'package:mobile/model/articles_model.dart';
 import 'package:mobile/model/register_response_model.dart';
 import 'package:mobile/services/shared_service.dart';
-import 'package:flutter/foundation.dart' show kIsWeb; 
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:retry/retry.dart'; 
 import '../config.dart';
 import '../model/register_request_model.dart';
 import 'package:mobile/model/user_model.dart';
@@ -16,6 +18,29 @@ import 'package:http_parser/http_parser.dart';
 
 class APIService {
   static var client = http.Client();
+
+  static Future<void> refreshToken() async {
+    var loginDetails = await SharedService.loginDetails();
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+      'Cookie': 'refreshToken=${loginDetails?.refreshToken}'
+    };
+
+    var url = Uri.http(Config.apiURL, Config.refreshToken);
+
+    final response = await retry(
+      () => http.post(url).timeout(Duration(seconds: 5)),
+      retryIf: (e) => e is SocketException || e is TimeoutException,
+    );
+    var data = jsonDecode(response.body);
+    if (data['status']=="failed") return;
+    print("refresh token");
+    loginDetails?.accessToken=data['accessToken'];
+    loginDetails?.refreshToken=data['refreshToken'];
+    SharedService.setLoginDetails(loginDetails!);
+  }
 
   static Future<bool> login(LoginRequest model) async {
     Map<String, String> requestHeaders = {
