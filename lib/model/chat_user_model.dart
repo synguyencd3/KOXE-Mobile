@@ -7,6 +7,7 @@ class ChatUserModel {
   final String? image;
   late String? lastMessage = '';
   late String? createdAt = '';
+  late bool? isOnline = false;
 
   ChatUserModel({
     required this.id,
