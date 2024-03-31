@@ -7,16 +7,14 @@ import 'package:mobile/config.dart';
 class SocketManager {
   static IO.Socket? _socket;
   static StreamController<Map<String,dynamic>> _messageController =StreamController.broadcast();
-
   static Stream<Map<String,dynamic>> get messageStream => _messageController.stream;
 
-  static Future<void> initSocket(String userId, String salonId) async {
+
+  static Future<void> initSocket(String userId, String salonId, Function callback) async {
     if (_socket != null && _socket!.connected) {
-      print('abc');
       _socket!.disconnect();
     }
     if (salonId == '') {
-      print('xyz');
       _socket = IO.io(
           'http://' + Config.apiURL,
           IO.OptionBuilder().setTransports(['websocket']).setQuery({
@@ -32,10 +30,12 @@ class SocketManager {
     }
     _socket!.connect();
     print('connected');
+  ;
     _socket!.on('newMessage', (data) {
-      //print(jsonEncode(data));
-      //print(data.runtimeType);
       _messageController.add(data);
+    });
+    _socket!.on('getOnlineUsers', (data) {
+      callback(data);
     });
   }
 
@@ -45,9 +45,4 @@ class SocketManager {
     print('disconnect');
   }
 
-  static void getOnlineUser() async {
-    _socket!.on('getOnlineUsers', (data) {
-      print(data);
-    });
-  }
 }

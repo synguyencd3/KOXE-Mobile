@@ -48,15 +48,31 @@ class _MessageState extends State<Message> {
 
   @override
   void dispose() {
-    SocketManager.disconnectSocket();
     _messageSubscription!.cancel();
+    SocketManager.disconnectSocket();
     super.dispose();
   }
 
   Future<void> initSocket() async {
     final Map<String, dynamic> userProfile = await APIService.getUserProfile();
     String salonId = await SalonsService.isSalon();
-    await SocketManager.initSocket(userProfile['user_id'], salonId);
+    await SocketManager.initSocket(userProfile['user_id'], salonId, (data) {
+      print(data);
+     for (var user in users)
+       {
+         for (var status in data)
+           {
+             if (user.id == status)
+               {
+                   user.isOnline = true;
+               }
+             else
+               {
+                 user.isOnline = false;
+               }
+           }
+       }
+    });
   }
 
   Future<void> getAllUsers() async {

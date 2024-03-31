@@ -38,6 +38,7 @@ class _ChatState extends State<ChatPage> {
           id: user?.id ?? '',
         );
       }
+      print(user?.isOnline);
       callAPI();
     });
     _messageSubscription = SocketManager.messageStream.listen((data) {
@@ -50,6 +51,7 @@ class _ChatState extends State<ChatPage> {
       );
       _addMessage(messageReceive);
     });
+
   }
 
   @override
@@ -271,7 +273,9 @@ class _ChatState extends State<ChatPage> {
                 IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    Navigator.pop(context);
+                    var textMessage = _messages[0] as types.TextMessage;
+                    var messageText = textMessage.text;
+                    Navigator.pop(context,messageText);
                   },
                 ),
                 CircleAvatar(
@@ -292,12 +296,17 @@ class _ChatState extends State<ChatPage> {
                       ),
                     ),
                     Text(
-                      'Đang hoạt động',
+                      user?.isOnline == true ? 'Đang hoạt động': 'Không hoạt động',
                       style: TextStyle(
                         fontSize: 12,
                       ),
                     ),
                   ],
+                ),
+                Expanded(child: Container()),
+                Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Icon(Icons.video_call_rounded, size: 30,),
                 ),
               ],
             );
