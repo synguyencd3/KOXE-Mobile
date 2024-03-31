@@ -110,4 +110,27 @@ class SalonsService {
     print(responseString);
     return false;
   }
+  static Future<String> isSalon()  async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+    var url = Uri.http(Config.apiURL, Config.getIsSalonAPI);
+
+    var response = await http.get(url, headers: requestHeaders);
+    var responseData = jsonDecode(response.body);
+    print(responseData);
+    if (responseData['status'] == 'success') {
+      if (responseData['salonId'] == null){
+        return '';
+      } else {
+        return responseData['salonId'];
+      }
+    }
+    else
+    {
+      return '';
+    }
+  }
 }
