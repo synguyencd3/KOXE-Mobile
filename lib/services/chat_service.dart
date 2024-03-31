@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/chat_model.dart';
 import 'package:mobile/services/shared_service.dart';
+import 'package:mobile/model/chat_user_model.dart';
 
 class ChatService {
   static var client = http.Client();
@@ -16,11 +17,37 @@ class ChatService {
 
     var response = await http.get(url, headers: requestHeaders);
 
-    print(response.body);
+    //print(response.body);
     var data = jsonDecode(response.body);
     if (data['status'] == 'success') {
       return chatsFromJson(data['messages']);
     }
     return [];
   }
+  static Future<List<ChatUserModel>> getAllChatedUsers() async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+    var url = Uri.http(Config.apiURL, Config.getAllChatUsersAPI);
+    var response = await http.get(url, headers: requestHeaders);
+    print(response.body);
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'success') {
+      return chatUserFromJson(data['chattingUsers']);
+    }
+    return [];
+  }
+  static Future<bool> sendMessage(String message, String userId) async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+    var url = Uri.http(Config.apiURL, '${Config.sendMessageAPI}/$userId');
+    var response = await http.post(url, headers: requestHeaders, body: {
+      'message': message,
+    });
+    print(response.body);
+    return true;
+}
 }

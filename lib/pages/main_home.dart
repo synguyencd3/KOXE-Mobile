@@ -7,7 +7,7 @@ import 'package:mobile/widgets/home.dart';
 import 'package:mobile/model/page.dart';
 import 'package:mobile/widgets/user.dart';
 import 'package:mobile/pages/notification.dart';
-import 'package:mobile/pages/message.dart';
+import 'package:mobile/pages/chat/list_chat_users.dart';
 
 class MainHome extends StatefulWidget {
   const MainHome({super.key});
