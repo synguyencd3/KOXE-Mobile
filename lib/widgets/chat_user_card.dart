@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/chat_user_model.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile/services/salon_service.dart';
 
 class ChatUserCard extends StatefulWidget {
   final ChatUserModel user;

@@ -4,9 +4,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile/config.dart';
+import 'package:mobile/model/chat_user_model.dart';
 import 'package:mobile/model/salon_model.dart';
 import 'package:google_geocoding_api/google_geocoding_api.dart';
 import 'package:google_geocoding_api/src/utils/pretty_address_mapper.dart';
+import 'package:mobile/widgets/button.dart';
 
 class SalonDetail extends StatefulWidget {
   const SalonDetail({super.key});
@@ -125,8 +127,15 @@ class _SalonDetailState extends State<SalonDetail> {
                ListTile(
                     title: Text('Địa chỉ', style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('${salon.address}', style: TextStyle(color: Colors.grey[800], fontSize: 16)),
-                  ),  
-        
+                  ),
+
+              ButtonCustom(onPressed: (){
+                //print(salon.userId);
+                ChatUserModel chatUser =  ChatUserModel(id: salon.salonId ?? '', name: salon.name ??'', image: salon.image);
+                Navigator.pushNamed(context, '/chat', arguments: chatUser);
+              }, title: 'Nhắn tin với salon ngay',),
+
+            SizedBox(height: 10),
             Divider(height: 5),      
             Container(
                   width: double.infinity,

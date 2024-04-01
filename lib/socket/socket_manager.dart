@@ -41,8 +41,12 @@ class SocketManager {
 
   // disconnect socket
   static void disconnectSocket() {
-    _socket!.disconnect();
-    print('disconnect');
+    if (_socket != null && _socket!.connected) {
+      _socket!.disconnect();
+    }
+  }
+  static bool isSocketConnected() {
+    return _socket!.connected;
   }
 
 }
