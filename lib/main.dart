@@ -26,40 +26,55 @@ import 'package:mobile/widgets/webView.dart';
 import 'package:mobile/pages/salon/salon_detail.dart';
 
 void main() {
-  runApp(MaterialApp(
-    title: 'Flutter Demo',
-    theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      useMaterial3: true,
-    ),
-    initialRoute: '/login',
-    routes: {
-      '/login': (context) => LoginPage(),
-      '/register': (context) => Register(),
-      '/mhome': (context) => MainHome(),
-      '/news': (context) => NewsBoard(),
-      '/listing/manage': (context) => CarsListing(),
-      '/listing': (context) => IntroCar(),
-      '/manage': (context) => Manage(),
-      '/message': (context) => Message(),
-      '/notification': (context) => Noti(),
-      '/user_info': (context) => UserInfo(),
-      '/appointment': (context) => Appointment(),
-      '/car_detail': (context) => CarDetail(),
-      '/buy_package': (context) => BuyPackage(),
-      '/packages': (context) => AllPackages(),
-      'social': (context) => Social(),
-      '/setting': (context) => Setting(),
-      '/package/manage': (context) => ManagePackage(),
-      '/chat': (context) => ChatPage(),
-      '/fblogin': (context) => WebViewContainer(),
-      '/salons': (context) => SalonList(),
-      '/salon_detail' : (context) => SalonDetail(),
-      '/new_salon': (context) => NewSalon(),
-      '/my_salon': (context) =>  MySalon()
-    },
-  ));
+  runApp(MyApp());
 }
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => LoginPage(),
+        '/register': (context) => Register(),
+        '/mhome': (context) => MainHome(),
+        '/news': (context) => NewsBoard(),
+        '/listing/manage': (context) => CarsListing(),
+        '/listing': (context) => IntroCar(),
+        '/manage': (context) => Manage(),
+        '/message': (context) => Message(),
+        '/notification': (context) => Noti(),
+        '/user_info': (context) => UserInfo(),
+        '/appointment': (context) => Appointment(),
+        '/car_detail': (context) => CarDetail(),
+        '/buy_package': (context) => BuyPackage(),
+        '/packages': (context) => AllPackages(),
+        'social': (context) => Social(),
+        '/setting': (context) => Setting(),
+        '/package/manage': (context) => ManagePackage(),
+        '/chat': (context) => ChatPage(),
+        '/fblogin': (context) => WebViewContainer(),
+        '/salons': (context) => SalonList(),
+        '/salon_detail' : (context) => SalonDetail(),
+        '/new_salon': (context) => NewSalon(),
+        '/my_salon': (context) =>  MySalon()
+      },
+    );
+  }
+}
+
 
 
 

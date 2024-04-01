@@ -9,6 +9,7 @@ class ChatService {
   static var client = http.Client();
 
   static Future<List<ChatModel>> getChatById(String id) async {
+    //print(id);
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
@@ -17,7 +18,7 @@ class ChatService {
 
     var response = await http.get(url, headers: requestHeaders);
 
-    //print(response.body);
+    //(response.body);
     var data = jsonDecode(response.body);
     if (data['status'] == 'success') {
       return chatsFromJson(data['messages']);

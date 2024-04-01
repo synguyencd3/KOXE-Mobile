@@ -11,6 +11,7 @@ class Salon {
   List<String>? banner;
   String? introductionHtml;
   String? introductionMarkdown;
+  String? userId;
   //List<String>? cars;
 
   Salon(
@@ -23,10 +24,12 @@ class Salon {
       this.banner,
       this.introductionHtml,
       this.introductionMarkdown,
+        this.userId,
       /*this.cars*/});
 
   Salon.fromJson(Map<String, dynamic> json) {
     salonId=json['salon_id'];
+    userId = json['user_id'];
     json['name']==null? name='null':name = json['name'];
     json['address']==null? address="null":address = json['address'];
     json['image'] == null? image="null" :image = json['image'];

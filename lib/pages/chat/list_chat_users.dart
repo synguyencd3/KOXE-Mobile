@@ -31,7 +31,6 @@ class _MessageState extends State<Message> {
     // TODO: implement initState
     super.initState();
     getAllUsers();
-    initSocket();
     _messageSubscription = SocketManager.messageStream.listen((data) {
       // Parse the message and create a types.Message object
     for (var user in users){
@@ -43,35 +42,6 @@ class _MessageState extends State<Message> {
         break;
       }
     }
-    });
-  }
-
-  @override
-  void dispose() {
-    _messageSubscription!.cancel();
-    SocketManager.disconnectSocket();
-    super.dispose();
-  }
-
-  Future<void> initSocket() async {
-    final Map<String, dynamic> userProfile = await APIService.getUserProfile();
-    String salonId = await SalonsService.isSalon();
-    await SocketManager.initSocket(userProfile['user_id'], salonId, (data) {
-      print(data);
-     for (var user in users)
-       {
-         for (var status in data)
-           {
-             if (user.id == status)
-               {
-                   user.isOnline = true;
-               }
-             else
-               {
-                 user.isOnline = false;
-               }
-           }
-       }
     });
   }
 

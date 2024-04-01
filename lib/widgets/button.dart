@@ -7,15 +7,18 @@ class ButtonCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
-      style: FilledButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
+    return Container(
+      width: double.infinity,
+      child: FilledButton(
+        style: FilledButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          padding: EdgeInsets.all(20),
         ),
-        padding: EdgeInsets.all(20),
+        onPressed: onPressed != null ? () => onPressed!() : null,
+        child: Text(title ?? 'Button'),
       ),
-      onPressed: onPressed != null ? () => onPressed!() : null,
-      child: Text(title ?? 'Button'),
     );
     ;
   }

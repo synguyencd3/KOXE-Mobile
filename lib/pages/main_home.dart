@@ -8,6 +8,9 @@ import 'package:mobile/model/page.dart';
 import 'package:mobile/widgets/user.dart';
 import 'package:mobile/pages/notification.dart';
 import 'package:mobile/pages/chat/list_chat_users.dart';
+import 'package:mobile/socket/socket_manager.dart';
+import 'package:mobile/services/api_service.dart';
+import 'package:mobile/services/salon_service.dart';
 
 class MainHome extends StatefulWidget {
   const MainHome({super.key});
@@ -25,7 +28,19 @@ class _MainHomeState extends State<MainHome> {
     PageModule(page: User(), label: 'Tài khoản'),
   ];
   int _currentIndex = 0;
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initSocket();
+  }
+  Future<void> initSocket() async {
+    final Map<String, dynamic> userProfile = await APIService.getUserProfile();
+    String salonId = await SalonsService.isSalon();
+    await SocketManager.initSocket(userProfile['user_id'], salonId, (data) {
+      print(data);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

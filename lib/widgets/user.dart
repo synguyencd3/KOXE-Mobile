@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/services/shared_service.dart';
+import 'package:mobile/socket/socket_manager.dart';
 import 'package:mobile/widgets/text_card.dart';
 import 'package:mobile/services/api_service.dart';
 
@@ -129,6 +130,7 @@ class _UserState extends State<User> {
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
+                        SocketManager.disconnectSocket();
                         SharedService.logout(context);
                       },
                       child: Text('Có'),

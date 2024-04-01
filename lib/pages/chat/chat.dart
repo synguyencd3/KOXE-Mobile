@@ -12,6 +12,7 @@ import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/socket/socket_manager.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/model/chat_user_model.dart';
+import 'package:mobile/services/salon_service.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -38,9 +39,10 @@ class _ChatState extends State<ChatPage> {
           id: user?.id ?? '',
         );
       }
-      print(user?.isOnline);
+      //print(user?.isOnline);
       callAPI();
     });
+    initSocket();
     _messageSubscription = SocketManager.messageStream.listen((data) {
       // Parse the message and create a types.Message object
       final messageReceive = types.TextMessage(
@@ -51,7 +53,25 @@ class _ChatState extends State<ChatPage> {
       );
       _addMessage(messageReceive);
     });
+  }
 
+  Future<void> initSocket() async {
+    String salonId = await SalonsService.isSalon();
+    await SocketManager.initSocket(_sender.id, salonId, (data) {
+      print(data);
+      for (var idData in data) {
+        if (user?.id == idData) {
+          if (mounted)
+            {
+              setState(() {
+                user?.isOnline = true;
+              });
+            }
+
+          break;
+        }
+      }
+    });
   }
 
   @override
@@ -67,16 +87,25 @@ class _ChatState extends State<ChatPage> {
 
   Future<void> getUserInfo() async {
     final Map<String, dynamic> userProfile = await APIService.getUserProfile();
-    _sender = types.User(
-      id: userProfile['user_id'],
-    );
+    String salonId = await SalonsService.isSalon();
+    if (salonId != '') {
+      _sender = types.User(
+        id: salonId,
+      );
+    } else {
+      _sender = types.User(
+        id: userProfile['user_id'],
+      );
+    }
   }
 
   Future<void> getMessages() async {
+    //print(user!.id);
     List<ChatModel> chatAPI = await ChatService.getChatById(user!.id);
     //print(chatAPI[0].message);
-    //print(_sender.id);
+    print(_sender.id);
     for (int i = 0; i < chatAPI.length; i++) {
+      print(chatAPI[i].sender);
       final createAt = DateTime.parse(chatAPI[i].createdAt);
       if (chatAPI[i].sender == _sender.id) {
         final message = types.TextMessage(
@@ -273,9 +302,11 @@ class _ChatState extends State<ChatPage> {
                 IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    var textMessage = _messages[0] as types.TextMessage;
-                    var messageText = textMessage.text;
-                    Navigator.pop(context,messageText);
+                    if (_messages.isNotEmpty) {
+                      var textMessage = _messages[0] as types.TextMessage;
+                      var messageText = textMessage.text;
+                      Navigator.pop(context, messageText);
+                    }
                   },
                 ),
                 CircleAvatar(
@@ -296,7 +327,9 @@ class _ChatState extends State<ChatPage> {
                       ),
                     ),
                     Text(
-                      user?.isOnline == true ? 'Đang hoạt động': 'Không hoạt động',
+                      user?.isOnline == true
+                          ? 'Đang hoạt động'
+                          : 'Không hoạt động',
                       style: TextStyle(
                         fontSize: 12,
                       ),
@@ -306,7 +339,10 @@ class _ChatState extends State<ChatPage> {
                 Expanded(child: Container()),
                 Padding(
                   padding: EdgeInsets.only(right: 10),
-                  child: Icon(Icons.video_call_rounded, size: 30,),
+                  child: Icon(
+                    Icons.video_call_rounded,
+                    size: 30,
+                  ),
                 ),
               ],
             );
