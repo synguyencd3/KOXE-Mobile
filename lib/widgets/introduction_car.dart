@@ -10,26 +10,7 @@ class IntroCar extends StatefulWidget {
 }
 
 class _CarState extends State<IntroCar> {
-  List<Car> cars = [
-    Car(
-        id: '1',
-        name: 'Toyota',
-        description: 'Camry',
-        image: ['assets/1.png'],
-        price: 20000000),
-    Car(
-        id: '2',
-        name: 'Toyota',
-        description: 'Camry',
-        image: ['assets/1.png'],
-        price: 20000000),
-    Car(
-        id: '2',
-        name: 'Toyota',
-        description: 'Camry',
-        image: ['assets/1.png'],
-        price: 20000000)
-  ];
+  List<Car> cars = [];
 
    @override
   void initState() {

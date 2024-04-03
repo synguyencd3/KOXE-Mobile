@@ -8,12 +8,13 @@ import 'package:mobile/widgets/introduction_car.dart';
 import 'package:mobile/widgets/home.dart';
 import 'package:mobile/model/page.dart';
 import 'package:mobile/widgets/user.dart';
-import 'package:mobile/pages/notification.dart';
 import 'package:mobile/pages/chat/list_chat_users.dart';
 import 'package:mobile/socket/socket_manager.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:mobile/services/notification_service.dart';
+import 'package:mobile/model/notification_model.dart';
 
 class MainHome extends StatefulWidget {
   const MainHome({super.key});
@@ -33,12 +34,14 @@ class _MainHomeState extends State<MainHome> {
   int _currentIndex = 0;
   int _count = 0;
   StreamSubscription? _notificationSubscription;
+  final List<NotificationModel> notifications = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initSocket();
+    getAllNotification();
     _notificationSubscription = SocketManager.notificationStream.listen((data) {
       print(data);
       setState(() {
@@ -58,6 +61,30 @@ class _MainHomeState extends State<MainHome> {
       print(data);
     });
   }
+  Future<void> getAllNotification() async {
+    String salonId = await SalonsService.isSalon();
+    int count = 0;
+    List<NotificationModel> notificationAPI = [];
+    if (salonId == '')
+    {
+      notificationAPI = await NotificationService.getAllNotification();
+    }
+    else
+    {
+      notificationAPI = await NotificationService.getAllNotificationSalon(salonId);
+    }
+    if (notificationAPI.isNotEmpty) {
+      for (var item in notificationAPI) {
+        if (item.isRead == false) {
+          count++;
+        }
+      }
+      setState(() {
+        notifications.addAll(notificationAPI);
+        _count = count;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +95,12 @@ class _MainHomeState extends State<MainHome> {
           children: [
             Text(pages[_currentIndex].label),
             GestureDetector(
-              child: badges.Badge(
+              child: _count> 0 ? badges.Badge(
                 badgeAnimation: badges.BadgeAnimation.fade(),
-                  badgeContent: Text(_count.toString()), child: Icon(Icons.notifications, size: 30)),
+                  badgeContent: Text(_count.toString()), child: Icon(Icons.notifications, size: 30))
+              : Icon(Icons.notifications, size: 30),
               onTap: () {
-                Navigator.pushNamed(context, '/notification');
+                Navigator.pushNamed(context, '/notification' , arguments: notifications);
                 setState(() {
                   _count = 0;
                 });

@@ -1,39 +1,41 @@
 List<Car> carsFromJson(dynamic str) =>
     List<Car>.from((str).map((x) => Car.fromJson(x)));
 
-
 class Car {
-  late final String? id;
-  late final String? name;
-  late final String? description;
-  late final List<String>? image;
-  late final int? price;
-  late final String? brand;
-  late final String? origin;
-  late final String? model;
-  late final String? type;
-  late final int? capacity;
-  late final int? door;
-  late final int? seat;
-  late final int? kilometer;
-  late final int? gear;
-  
-  Car({
-    this.id,
-    this.name,
-    this.description,
-    this.image,
-    this.price,
-    this.brand,
-    this.capacity,
-    this.door,
-    this.gear,
-    this.kilometer,
-    this.model,
-    this.origin,
-    this.seat,
-    this.type
-  });
+  String? id;
+  String? name;
+  String? description;
+  List<String>? image;
+  int? price;
+  String? brand;
+  String? origin;
+  String? model;
+  String? type;
+  int? capacity;
+  int? door;
+  int? seat;
+  int? kilometer;
+  String? gear;
+  String? mfg;
+  String? outColor;
+
+  Car(
+      {this.id,
+      this.name,
+      this.description,
+      this.image,
+      this.price,
+      this.brand,
+      this.capacity,
+      this.door,
+      this.gear,
+      this.kilometer,
+      this.model,
+      this.origin,
+      this.seat,
+      this.type,
+      this.mfg,
+      this.outColor});
 
   Car.fromJson(Map<String, dynamic> json) {
     id = json['car_id'];
@@ -42,7 +44,17 @@ class Car {
     image = json['image'].cast<String>();
     price = json['price'];
     type = json['type'];
-  } 
+    origin = json['origin'];
+    model = json['model'];
+    brand = json['brand'];
+    capacity = json['capacity'];
+    door = json['door'];
+    seat = json['seat'];
+    kilometer = json['kilometer'];
+    gear = json['gear'];
+    mfg = json['mfg'];
+    outColor = json['outColor'];
+  }
 
   Map<String, dynamic> tojson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -52,6 +64,6 @@ class Car {
     data['image'] = this.image;
     data['price'] = this.price;
     data['type'] = this.type;
-    return data; 
+    return data;
   }
 }
