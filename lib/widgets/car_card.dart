@@ -34,7 +34,7 @@ class _CarCardState extends State<CarCard> {
               ),
               SizedBox(height: 10),
               Text(
-                'Name: ${widget.car.name}',
+                'Tên xe: ${widget.car.name}',
                 style: FlutterFlowTheme.of(context).bodyLarge.override(
                       fontFamily: 'Plus Jakarta Sans',
                       color: Color(0xFF15161E),
@@ -44,7 +44,7 @@ class _CarCardState extends State<CarCard> {
               ),
               SizedBox(height: 10),
               Text(
-                'Description: ${widget.car.description}',
+                'Mô tả: ${widget.car.description}',
                 style: FlutterFlowTheme.of(context).labelMedium.override(
                       fontFamily: 'Outfit',
                       color: Color(0xFF606A85),
@@ -56,7 +56,7 @@ class _CarCardState extends State<CarCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Price: ${widget.car.price?.toInt()}',
+                    'Giá: ${widget.car.price?.toInt()}',
                     style: FlutterFlowTheme.of(context).labelMedium.override(
                           fontFamily: 'Outfit',
                           color: Color(0xFF606A85),

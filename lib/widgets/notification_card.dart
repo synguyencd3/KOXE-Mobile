@@ -32,10 +32,10 @@ class _NotificationCardState extends State<NotificationCard> {
                 title: Text(widget.notification.description, maxLines: 3, style: TextStyle(fontWeight: FontWeight.bold),),
                 subtitle: Text(widget.notification.createAt,maxLines: 1,style: TextStyle(fontSize: 12),),
                 onTap: () async {
-                  await NotificationService.markAsRead(widget.notification.id);
                   String salonId = await SalonsService.isSalon();
                   if (salonId == '')
                     {
+                      await NotificationService.markAsRead(widget.notification.id);
                       setState(() {
                         widget.notification.isRead = true;
                       });

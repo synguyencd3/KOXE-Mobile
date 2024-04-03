@@ -15,26 +15,21 @@ class _NotiState extends State<Noti> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAllNotification();
   }
-
-  Future<void> getAllNotification() async {
-    String salonId = await SalonsService.isSalon();
-    List<NotificationModel> notificationAPI = [];
-    if (salonId == '')
-      {
-        notificationAPI = await NotificationService.getAllNotification();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (ModalRoute.of(context)!.settings.arguments != null) {
+      List<NotificationModel> notificationsArgument = ModalRoute.of(context)!.settings.arguments as List<NotificationModel>;
+      if (notificationsArgument.isNotEmpty) {
+        setState(() {
+          notifications.addAll(notificationsArgument);
+        });
       }
-    else
-      {
-        notificationAPI = await NotificationService.getAllNotificationSalon(salonId);
-      }
-    if (notificationAPI.isNotEmpty) {
-      setState(() {
-        notifications.addAll(notificationAPI);
-      });
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
