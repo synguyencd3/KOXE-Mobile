@@ -25,7 +25,7 @@ class Salon {
       this.banner,
       this.introductionHtml,
       this.introductionMarkdown,
-        this.userId,
+      this.userId,
       /*this.cars*/});
 
   Salon.fromJson(Map<String, dynamic> json) {

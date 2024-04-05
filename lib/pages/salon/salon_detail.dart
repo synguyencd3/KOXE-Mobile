@@ -85,6 +85,7 @@ class _SalonDetailState extends State<SalonDetail> {
   Future<void> initCar() async {
     print(salon.salonId);
     List<Car>? data = await SalonsService.getDetail(salon.salonId ?? '');
+    print("length " + data!.length.toString());
     setState(() {
       salon.cars = data;
     });
@@ -199,7 +200,7 @@ class _SalonDetailState extends State<SalonDetail> {
                 ),
               ),
             ),
-            salon.cars?[0]!= null ? CarCard(car: salon.cars![0]) : Loading(),
+            salon.cars!.length > 0 ? CarCard(car: salon.cars![0]) : Loading(),
             TextButton.icon(
               onPressed: () {
                 print(salon.cars?.length);
