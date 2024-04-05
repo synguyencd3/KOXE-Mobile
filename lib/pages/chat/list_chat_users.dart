@@ -51,22 +51,38 @@ class _MessageState extends State<Message> {
       sender: '1',
       receiver: '2',
       message: 'Hello',
-      createdAt: '12:00 PM',
+      createdAt: '2024-04-05 09:57:00'
     );
     // add each userid from usersApi to function getMessages
     for (var user in usersAPI) {
-      lastMessageApi = await getMessages(user.id);
-      user.lastMessage = lastMessageApi.message;
-      user.createdAt = lastMessageApi.createdAt;
+     bool isGetMessage = await getMessages(user.id);
+     if (isGetMessage)
+       {
+         user.lastMessage = lastMessage.message;
+         user.createdAt = lastMessage.createdAt;
+       }
+     else
+       {
+         user.lastMessage = '';
+         user.createdAt = '';
+       }
+
     }
     setState(() {
       users.addAll(usersAPI);
     });
   }
 
-  Future<ChatModel> getMessages(String userId) async {
+  Future<bool> getMessages(String userId) async {
     List<ChatModel> chatAPI = await ChatService.getChatById(userId);
-    return chatAPI[chatAPI.length - 1];
+    if (chatAPI.isEmpty){
+      return false;
+    }
+    setState(() {
+      lastMessage.message = chatAPI.last.message;
+      lastMessage.createdAt = chatAPI.last.createdAt;
+    });
+    return true;
   }
 
   @override

@@ -106,7 +106,7 @@ class _ChatState extends State<ChatPage> {
     print(_sender.id);
     for (int i = 0; i < chatAPI.length; i++) {
       print(chatAPI[i].sender);
-      final createAt = DateTime.parse(chatAPI[i].createdAt);
+      final createAt = DateTime.parse(chatAPI[i].createdAt ?? DateTime.now().toString());
       if (chatAPI[i].sender == _sender.id) {
         final message = types.TextMessage(
           author: _sender,
