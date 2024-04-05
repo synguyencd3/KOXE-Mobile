@@ -40,20 +40,20 @@ class _CarDetailState extends State<CarDetail> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // CarouselSlider(
-            //   options: CarouselOptions(height: 200.0),
-            //   items: car.image != null ? car.image!.map((i) {
-            //     return Builder(
-            //       builder: (BuildContext context) {
-            //         return Container(
-            //             width: MediaQuery.of(context).size.width,
-            //             margin: EdgeInsets.symmetric(horizontal: 5.0),
-            //             decoration: BoxDecoration(color: Colors.amber),
-            //             child: Image.network(i ?? '' , fit: BoxFit.cover, width: double.infinity, height: 200.0,));
-            //       },
-            //     );
-            //   }).toList() : [],
-            // ),
+            CarouselSlider(
+              options: CarouselOptions(height: 200.0),
+              items: car.image != null ? car.image!.map((i) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(color: Colors.amber),
+                        child: Image.network(i ?? '' , fit: BoxFit.cover, width: double.infinity, height: 200.0,));
+                  },
+                );
+              }).toList() : [],
+            ),
             Text(
               '${car.name}',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
