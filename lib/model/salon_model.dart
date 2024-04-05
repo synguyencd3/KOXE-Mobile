@@ -1,3 +1,4 @@
+import 'package:mobile/model/car_model.dart';
 List<Salon> salonsFromJson(dynamic str) =>
     List<Salon>.from((str).map((x) => Salon.fromJson(x)));
 
@@ -12,7 +13,7 @@ class Salon {
   String? introductionHtml;
   String? introductionMarkdown;
   String? userId;
-  //List<String>? cars;
+  List<Car>? cars;
 
   Salon(
       {this.salonId,

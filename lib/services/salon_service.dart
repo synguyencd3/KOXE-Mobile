@@ -31,8 +31,7 @@ class SalonsService {
     return [];
   }
 
-  static Future<Car?> getDetail(String salonId) async {
-    await APIService.refreshToken();
+  static Future<List<Car>?> getDetail(String salonId) async {
     var LoginInfo = await SharedService.loginDetails();
        Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -41,13 +40,14 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, '${Config.getCarsAPI}/$salonId');
+    var url = Uri.http(Config.apiURL, '${Config.SalonsAPI}/$salonId');
 
     var response = await http.get(url, headers: requestHeaders);
-    
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      return Car.fromJson(data); //carsFromJson(data['data']['cars']);
+      //print(data);
+      return carsFromJson(data['salon']['cars']);
     }
     return null;
   }

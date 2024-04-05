@@ -20,11 +20,19 @@ class ChatService {
 
     var response = await http.get(url, headers: requestHeaders);
 
-    //(response.body);
+    print(response.body);
     var data = jsonDecode(response.body);
-    if (data['status'] == 'success') {
-      return chatsFromJson(data['messages']);
-    }
+    if (response.body != '[]')
+      {
+        if (data['status'] == 'success') {
+          return chatsFromJson(data['messages']);
+        }
+      }
+    else
+      {
+        print('def');
+      }
+
     return [];
   }
   static Future<List<ChatUserModel>> getAllChatedUsers() async {

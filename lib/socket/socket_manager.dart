@@ -8,6 +8,8 @@ class SocketManager {
   static IO.Socket? _socket;
   static StreamController<Map<String,dynamic>> _messageController =StreamController.broadcast();
   static Stream<Map<String,dynamic>> get messageStream => _messageController.stream;
+  static StreamController<String> _notificationController =StreamController.broadcast();
+  static Stream<String> get notificationStream => _notificationController.stream;
 
 
   static Future<void> initSocket(String userId, String salonId, Function callback) async {
@@ -33,6 +35,10 @@ class SocketManager {
   ;
     _socket!.on('newMessage', (data) {
       _messageController.add(data);
+    });
+    _socket!.on('notification', (data) {
+      _notificationController.add(data);
+      //print(data);
     });
     _socket!.on('getOnlineUsers', (data) {
       callback(data);

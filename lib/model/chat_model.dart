@@ -4,10 +4,10 @@ List<ChatModel> chatsFromJson(dynamic str) =>
 class ChatModel{
   final String sender;
   final String receiver;
-  final String message;
-  final String createdAt;
+  late  String message;
+  late  String? createdAt;
 
-  ChatModel({required this.sender, required this.receiver, required this.message, required this.createdAt});
+  ChatModel({required this.sender, required this.receiver, required this.message, this.createdAt});
 
   ChatModel.fromJson(Map<String, dynamic> json)
       : sender = json['senderId'],
