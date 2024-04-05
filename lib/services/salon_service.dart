@@ -11,6 +11,7 @@ class SalonsService {
   static var client = http.Client();
 
   static Future<List<Salon>> getAll() async {
+    await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -25,13 +26,13 @@ class SalonsService {
     
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data['salons']['salons']);
       return salonsFromJson(data['salons']['salons']);
     }
     return [];
   }
 
   static Future<Car?> getDetail(String salonId) async {
+    await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
        Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ class SalonsService {
   }
 
   static Future<Salon?> getMySalon() async {
-    APIService.refreshToken();
+    await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
      Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -66,7 +67,7 @@ class SalonsService {
     var response = await http.get(url, headers: requestHeaders);
      if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data['salon']);
+
       var salon = Salon.fromJson(data['salon']);
       return salon;
     }
@@ -74,6 +75,7 @@ class SalonsService {
   }
 
   static Future<bool?> NewSalon(Salon model) async {
+    await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
     var url = Uri.http(Config.apiURL, Config.SalonsAPI);
      Map<String, String> requestHeaders = {
@@ -107,10 +109,11 @@ class SalonsService {
 
     var responseData = await response.stream.toBytes();
     var responseString = String.fromCharCodes(responseData);
-    print(responseString);
+
     return false;
   }
   static Future<String> isSalon()  async {
+    await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -120,7 +123,7 @@ class SalonsService {
 
     var response = await http.get(url, headers: requestHeaders);
     var responseData = jsonDecode(response.body);
-    print(responseData);
+
     if (responseData['status'] == 'success') {
       if (responseData['salonId'] == null){
         return '';

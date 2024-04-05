@@ -19,27 +19,59 @@ import 'package:http_parser/http_parser.dart';
 class APIService {
   static var client = http.Client();
 
+  static bool refreshing = false;
+
   static Future<void> refreshToken() async {
-    var loginDetails = await SharedService.loginDetails();
+    if (refreshing==true) {
+      print('is on refresh');
+      return;
+    }
+    refreshing = true;
+    try {
+      var loginDetails = await SharedService.loginDetails();
+      var updateTime = await SharedService.updatedTime();
+      if (updateTime!.add(const Duration(minutes: 15)).isAfter(DateTime.now())) 
+      {
+      print("Token still fresh");
+      return;
+      }
 
-    Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${loginDetails?.accessToken}',
-      'Cookie': 'refreshToken=${loginDetails?.refreshToken}'
-    };
+      Map<String, String> requestHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${loginDetails?.accessToken}',
+        'Cookie': 'refreshToken=${loginDetails?.refreshToken}'
+      };
 
-    var url = Uri.http(Config.apiURL, Config.refreshToken);
-
-    final response = await retry(
-      () => http.post(url).timeout(Duration(seconds: 5)),
-      retryIf: (e) => e is SocketException || e is TimeoutException,
-    );
-    var data = jsonDecode(response.body);
-    if (data['status']=="failed") return;
-    print("refresh token");
-    loginDetails?.accessToken=data['accessToken'];
-    loginDetails?.refreshToken=data['refreshToken'];
-    SharedService.setLoginDetails(loginDetails!);
+      var url = Uri.http(Config.apiURL, Config.refreshToken);
+      print("request new token");
+      // final response = await retry(
+      //   () => http.post(url, headers: requestHeaders).timeout(Duration(seconds: 5)),
+      //   retryIf: (e) => e is SocketException || e is TimeoutException,
+      // );
+      var response = await client.post(url, headers: requestHeaders);
+      var data = jsonDecode(response.body);
+      print(data);
+      if (data['status']=="failed") 
+      {
+        return;
+      }
+      print("refresh token");
+      loginDetails?.accessToken=data['accessToken'];
+      loginDetails?.refreshToken=data['refreshToken'];
+      print('update cache');
+      SharedService.setLoginDetails(loginDetails!);
+      SharedService.updateTime();
+      print("token refreshed");
+    }
+    catch (e)
+    {
+      print(e);
+    }
+    finally 
+    {
+      print("reset flag");
+      refreshing = false;
+    }
   }
 
   static Future<bool> login(LoginRequest model) async {
@@ -51,17 +83,11 @@ class APIService {
 
     var url = Uri.http(Config.apiURL, Config.loginAPI);
 
-    print(url);
-    print(requestHeaders);
-    print(jsonEncode(model.toJson()));
-
     var response = await client.post(
       url,
       headers: requestHeaders,
       body: jsonEncode(model.toJson()),
     );
-    print('request success');
-    print(jsonDecode(response.body));
     var check = jsonDecode(response.body);
     if (check['status'] == "success") {
 
@@ -152,8 +178,6 @@ class APIService {
       url,
       headers: requestHeaders,
     );
-    print('request success');
-    print(jsonDecode(response.body));
     var responsemodel = loginResponseJson(response.body);
     if (responsemodel.status == "success") {
       // API ko chạy trên nền web đc, uncomment khi chạy emulator
@@ -206,6 +230,7 @@ class APIService {
   }
 
   static Future<Map<String, dynamic>> getUserProfile() async {
+    await refreshToken();
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -225,6 +250,7 @@ class APIService {
   }
 
   static Future<bool> updateUserProfile(UserModel user) async {
+    await refreshToken();
     var loginDetails = await SharedService.loginDetails();
     var url = Uri.http(Config.apiURL, Config.userprofileAPI);
 
@@ -258,7 +284,7 @@ class APIService {
   }
 
   static Future<bool> sendInvite(String email) async {
-
+    await refreshToken();
     var url = Uri.http(Config.apiURL, Config.sendInvite);
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {

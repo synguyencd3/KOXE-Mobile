@@ -37,8 +37,6 @@ class _SalonDetailState extends State<SalonDetail> {
   }
 
   Future<void> moveCamera() async {
-    print("moving camera");
-    print(sourceLocation);
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: sourceLocation,  zoom: 17)));
  

@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
         LoginRequest(username: _username.text, password: _password.text);
 
     APIService.login(model).then((response) => {
-      print(response),
           if (response)
             {
               Navigator.pushNamedAndRemoveUntil(

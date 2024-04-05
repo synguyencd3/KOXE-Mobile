@@ -27,11 +27,27 @@ class SharedService {
     }
   }
 
+  static Future<DateTime?> updatedTime() async {
+     var isKeyExist =
+        await APICacheManager().isAPICacheKeyExist("update_time");
+
+    if (isKeyExist) {
+      var cacheData = await APICacheManager().getCacheData("update_time");
+      return DateTime.parse(cacheData.syncData);
+    }
+  }
+
+  static Future<void> updateTime() async {
+     APICacheDBModel cacheDBModel = APICacheDBModel(
+        key: "update_time", syncData: DateTime.now().toString());
+    await APICacheManager().addCacheData(cacheDBModel);
+  }
+
   static Future<void> setLoginDetails(LoginResponse model) async {
     APICacheDBModel cacheDBModel = APICacheDBModel(
         key: "login_details", syncData: jsonEncode(model.toJson()));
-
     await APICacheManager().addCacheData(cacheDBModel);
+    await updateTime();
   }
 
   static Future<void> logout(BuildContext context) async {

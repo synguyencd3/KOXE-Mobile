@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/appointment_model.dart';
+import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/shared_service.dart';
 
 class AppointmentService{
   static var client = http.Client();
 
   static Future<List<AppointmentModel>> getAll() async {
+    await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -28,6 +30,7 @@ class AppointmentService{
   }
 
   static Future<bool> createAppointment(AppointmentModel appointment) async {
+    await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',

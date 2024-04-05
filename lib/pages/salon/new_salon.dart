@@ -33,7 +33,6 @@ class _NewSalonState extends State<NewSalon> {
     if (pickedFile !=null) {
       setState(() {
         image = pickedFile!.map((e) => File(e.path)).toList();
-        print(image);
       });
     }
   }

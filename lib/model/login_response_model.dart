@@ -8,11 +8,11 @@ LoginResponse loginResponseJson(String str) =>
     LoginResponse.fromJson(json.decode(str));
 
 class LoginResponse {
-  late final String status;
-  late final UserModel? user;
-  late final String? accessToken;
-  late final String message;
-  late final String refreshToken;
+  late String status;
+  late UserModel? user;
+  late String accessToken;
+  late String message;
+  late String refreshToken;
 
   LoginResponse(
       {required this.message,

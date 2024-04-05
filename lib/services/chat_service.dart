@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/chat_model.dart';
+import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/model/chat_user_model.dart';
 
@@ -9,6 +10,7 @@ class ChatService {
   static var client = http.Client();
 
   static Future<List<ChatModel>> getChatById(String id) async {
+    await APIService.refreshToken();
     //print(id);
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
@@ -26,6 +28,7 @@ class ChatService {
     return [];
   }
   static Future<List<ChatUserModel>> getAllChatedUsers() async {
+    await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',

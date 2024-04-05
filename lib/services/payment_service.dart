@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/purchased_package.dart';
+import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:http_retry/http_retry.dart';
 
@@ -23,7 +24,7 @@ class PaymentService {
 
 
    static Future<String?> getVNPayURL(String packageId) async {
-
+    await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
     'Content-Type': 'application/json',
@@ -31,8 +32,7 @@ class PaymentService {
     'Access-Control-Allow-Origin': "*",
     HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
-    print(packageId);
-    print(LoginInfo?.accessToken);
+
 
     final Map<String, String> param = <String, String>{
     'package_id': packageId,
@@ -43,7 +43,6 @@ class PaymentService {
 
 
     var response = await client.post(url, headers: requestHeaders, body: jsonEncode(param));
-    print(response.body);
     if (jsonDecode(response.body)['status']=="failed")
     {
       return "";
@@ -64,6 +63,7 @@ class PaymentService {
    }
 
    static Future<Set<String>> getPurchasedSet() async {
+    await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
       Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -80,6 +80,7 @@ class PaymentService {
    }
 
    static Future<Set<String>> getKeySet() async {
+    await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
       Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',

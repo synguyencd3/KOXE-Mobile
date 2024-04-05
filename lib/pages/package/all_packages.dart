@@ -31,7 +31,6 @@ class _AllPackagesState extends State<AllPackages> {
     setState(() {
       purchasedSet = set;
     });
-    print(purchasedSet);
   }
 
   Future<void> getAllPackages() async {
