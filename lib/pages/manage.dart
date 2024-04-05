@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/text_card.dart';
+import 'package:mobile/services/salon_service.dart';
+
+import '../model/car_model.dart';
 
 class Manage extends StatefulWidget {
   @override
@@ -7,6 +10,23 @@ class Manage extends StatefulWidget {
 }
 
 class _ManageState extends State<Manage> {
+  List<Car> cars = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      getMySalon();
+    });
+  }
+
+  void getMySalon() async {
+    var salon = await SalonsService.getMySalon();
+    //print(salon!.cars?[0].description);
+    setState(() {
+      cars = salon!.cars!;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +54,7 @@ class _ManageState extends State<Manage> {
             text_card(
                 title: 'Quản lý xe',
                 onTap: () {
-                Navigator.pushNamed(context, '/listing/manage');
+                Navigator.pushNamed(context, '/listing/manage',arguments: cars);
                 }),
             text_card(
                 title: 'Quản lý lịch hẹn',
