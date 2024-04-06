@@ -354,8 +354,8 @@ class _ChatState extends State<ChatPage> {
                       resourceID: "zegouikit_call", //You need to use the resourceID that you created in the subsequent steps. Please continue reading this document.
                       invitees: [
                           ZegoUIKitUser(
-                            id: 'synguyencd4',
-                            name: 'synguyencd4'
+                            id: user!.username!,
+                            name: user!.username!
                           ),
                         ],
                   ) ,
