@@ -4,6 +4,7 @@ List<ChatUserModel> chatUserFromJson(dynamic str) =>
 class ChatUserModel {
   final String id;
   final String name;
+  final String? username;
   final String? image;
   late String? lastMessage = '';
   late String? createdAt = '';
@@ -13,6 +14,7 @@ class ChatUserModel {
   ChatUserModel({
     required this.id,
     required this.name,
+    this.username,
     this.image,
     this.lastMessage,
     this.salonId,
@@ -22,11 +24,13 @@ class ChatUserModel {
       : id = json['id'],
         name = json['name'],
         lastMessage = '',
-        image = json['image'];
+        image = json['image'],
+        username = json['username'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
         'image': image,
+        'username': username
       };
 }
