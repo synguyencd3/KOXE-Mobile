@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+//import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/services/salon_service.dart';
@@ -55,12 +55,12 @@ class _NewSalonState extends State<NewSalon> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Thêm salon',
-                  style: FlutterFlowTheme.of(context).titleLarge.override(
-                  fontFamily: 'Outfit',
-                  color: Color(0xFF15161E),
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500,
-                ),
+                //   style: FlutterFlowTheme.of(context).titleLarge.override(
+                //   fontFamily: 'Outfit',
+                //   color: Color(0xFF15161E),
+                //   fontSize: 22,
+                //   fontWeight: FontWeight.w500,
+                // ),
         ),
       ),
       body: Padding(
@@ -157,12 +157,12 @@ class _NewSalonState extends State<NewSalon> {
             
             contentPadding: EdgeInsetsDirectional.fromSTEB(16, 24, 16, 12),
           ),
-          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                fontFamily: 'Plus Jakarta Sans',
-                color: Color(0xFF15161E),
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+          // style: FlutterFlowTheme.of(context).bodyMedium.override(
+          //       fontFamily: 'Plus Jakarta Sans',
+          //       color: Color(0xFF15161E),
+          //       fontSize: 14,
+          //       fontWeight: FontWeight.w500,
+          //     ),
           maxLines: 16,
           minLines: 6,
         ),
@@ -200,12 +200,12 @@ class _NewSalonState extends State<NewSalon> {
                     child: Text(
                       'Chọn hình ảnh',
                       textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Plus Jakarta Sans',
-                            color: Color(0xFF15161E),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      // style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      //       fontFamily: 'Plus Jakarta Sans',
+                      //       color: Color(0xFF15161E),
+                      //       fontSize: 14,
+                      //       fontWeight: FontWeight.w500,
+                      //     ),
                     ),
                   ),
                 ],
@@ -228,27 +228,30 @@ class _NewSalonState extends State<NewSalon> {
         
         Padding(
           padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
-          child: FFButtonWidget(text: "Tạo salon", onPressed: () {
+          child: OutlinedButton(child: Text('tạo salon'), onPressed: () {
             NewSalon();
-          }, options: 
-            FFButtonOptions(
-            height: 40,
-            width: 200,
-            padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
-            iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-            color: FlutterFlowTheme.of(context).primary,
-            textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                  fontFamily: 'Readex Pro',
-                  color: Colors.white,
-                ),
-            elevation: 3,
-            borderSide: BorderSide(
-              color: Colors.transparent,
-              width: 1,
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          ),
+          } ,),
+          // child: FFButtonWidget(text: "Tạo salon", onPressed: () {
+          //   NewSalon();
+          // }, options: 
+          //   FFButtonOptions(
+          //   height: 40,
+          //   width: 200,
+          //   padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+          //   iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+          //   color: FlutterFlowTheme.of(context).primary,
+          //   textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+          //         fontFamily: 'Readex Pro',
+          //         color: Colors.white,
+          //       ),
+          //   elevation: 3,
+          //   borderSide: BorderSide(
+          //     color: Colors.transparent,
+          //     width: 1,
+          //   ),
+          //   borderRadius: BorderRadius.circular(8),
+          // ),
+          // ),
         )
 
           ],),

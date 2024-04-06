@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/config.dart';
 import 'package:mobile/pages/appointment.dart';
+import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/widgets/bottom_bar.dart';
 import 'package:mobile/widgets/introduction_car.dart';
 import 'package:mobile/widgets/home.dart';
@@ -15,6 +17,8 @@ import 'package:mobile/services/salon_service.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:mobile/services/notification_service.dart';
 import 'package:mobile/model/notification_model.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 class MainHome extends StatefulWidget {
   const MainHome({super.key});
@@ -38,9 +42,9 @@ class _MainHomeState extends State<MainHome> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initSocket();
+    initCallService();
     getAllNotification();
     _notificationSubscription = SocketManager.notificationStream.listen((data) {
       print(data);
@@ -53,6 +57,21 @@ class _MainHomeState extends State<MainHome> {
   void dispose() {
     super.dispose();
     _notificationSubscription?.cancel();
+  }
+
+  void initCallService() async {
+
+    var userLogin = await SharedService.loginDetails();
+    print(userLogin?.user?.id);
+    print(userLogin?.user?.username);
+    print('initing');
+    ZegoUIKitPrebuiltCallInvitationService().init(
+    appID: Config.zegoAppID /*input your AppID*/,
+    appSign: Config.zegoAppSign /*input your AppSign*/,
+    userID: userLogin != null ? userLogin.user!.username! : 'undefined' ,
+    userName: userLogin != null ? userLogin.user!.username! : 'undefined' ,
+    plugins: [ZegoUIKitSignalingPlugin()],
+  );
   }
   Future<void> initSocket() async {
     final Map<String, dynamic> userProfile = await APIService.getUserProfile();

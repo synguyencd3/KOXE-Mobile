@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/pages/Payment.dart';
+import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
 import 'package:mobile/pages/login.dart';
 import 'package:mobile/pages/news.dart';
@@ -24,13 +25,28 @@ import 'package:mobile/pages/chat/chat.dart';
 import 'package:mobile/widgets/home.dart';
 import 'package:mobile/widgets/webView.dart';
 import 'package:mobile/pages/salon/salon_detail.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
-void main() {
-  runApp(MyApp());
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+
+  ZegoUIKit().initLog().then((value) {
+    ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
+      [ZegoUIKitSignalingPlugin()],
+    );
+
+      runApp(MyApp(navigatorKey: navigatorKey));
+   });
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final GlobalKey<NavigatorState> navigatorKey;
+  const MyApp({Key? key, required this.navigatorKey}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -40,6 +56,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: widget.navigatorKey,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -69,7 +86,8 @@ class _MyAppState extends State<MyApp> {
         '/salons': (context) => SalonList(),
         '/salon_detail' : (context) => SalonDetail(),
         '/new_salon': (context) => NewSalon(),
-        '/my_salon': (context) =>  MySalon()
+        '/my_salon': (context) =>  MySalon(),
+        '/call_page': (context) => CallPage(callID: '111'),
       },
     );
   }

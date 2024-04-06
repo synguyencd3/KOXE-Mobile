@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+//import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/model/register_request_model.dart';
 import 'package:mobile/services/api_service.dart';
 
@@ -72,17 +72,17 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+       // backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primary,
+         // backgroundColor: FlutterFlowTheme.of(context).primary,
           title: Align(
             child: Text(
               'REGISTER',
-              style: FlutterFlowTheme.of(context).headlineMedium.override(
-                    fontFamily: 'Outfit',
-                    color: Colors.white,
-                    fontSize: 22,
-                  ),
+              // style: FlutterFlowTheme.of(context).headlineMedium.override(
+              //       fontFamily: 'Outfit',
+              //       color: Colors.white,
+              //       fontSize: 22,
+              //     ),
             ),
           ),
         ),
@@ -115,7 +115,7 @@ class _RegisterState extends State<Register> {
                     padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
                     child: Text(
                       'Or',
-                      style: FlutterFlowTheme.of(context).bodyMedium,
+                    //  style: FlutterFlowTheme.of(context).bodyMedium,
                     ),
                   ),
                   Button(
@@ -139,7 +139,7 @@ class _RegisterState extends State<Register> {
                       children: [
                         Text(
                           'Have an account?',
-                          style: FlutterFlowTheme.of(context).bodyMedium,
+                        //  style: FlutterFlowTheme.of(context).bodyMedium,
                         ),
                         SizedBox(
                           width: 1,
@@ -186,8 +186,8 @@ class nameField extends StatelessWidget {
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
           labelText: 'Full Name',
-          labelStyle: FlutterFlowTheme.of(context).labelMedium,
-          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+         // labelStyle: FlutterFlowTheme.of(context).labelMedium,
+        //  hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
       ),
     );
@@ -216,8 +216,8 @@ class usernameField extends StatelessWidget {
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
           labelText: 'Username',
-          labelStyle: FlutterFlowTheme.of(context).labelMedium,
-          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+       //   labelStyle: FlutterFlowTheme.of(context).labelMedium,
+        //  hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
       ),
     );
@@ -247,8 +247,8 @@ class passwordField extends StatelessWidget {
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
           hintText: 'Password',
-          labelStyle: FlutterFlowTheme.of(context).labelMedium,
-          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+       //   labelStyle: FlutterFlowTheme.of(context).labelMedium,
+       //   hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
       ),
     );
@@ -284,8 +284,8 @@ class ConfirmPasswordField extends StatelessWidget {
           border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(7))),
           hintText: 'Confirm Password',
-          labelStyle: FlutterFlowTheme.of(context).labelMedium,
-          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+      //    labelStyle: FlutterFlowTheme.of(context).labelMedium,
+       //   hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
       ),
     );
@@ -308,27 +308,26 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
-      child: FFButtonWidget(
-        showLoadingIndicator: false,
+      child: OutlinedButton(
         onPressed: callback,
-        text: '$name',
-        options: FFButtonOptions(
-          height: 40,
-          width: width,
-          padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
-          iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-          color: FlutterFlowTheme.of(context).primary,
-          textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                fontFamily: 'Readex Pro',
-                color: Colors.white,
-              ),
-          elevation: 3,
-          borderSide: BorderSide(
-            color: Colors.transparent,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
+        child: Text('$name'),
+        // options: FFButtonOptions(
+        //   height: 40,
+        //   width: width,
+        //   padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+        //   iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+        //   color: FlutterFlowTheme.of(context).primary,
+        //   textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+        //         fontFamily: 'Readex Pro',
+        //         color: Colors.white,
+        //       ),
+        //   elevation: 3,
+        //   borderSide: BorderSide(
+        //     color: Colors.transparent,
+        //     width: 1,
+        //   ),
+        //   borderRadius: BorderRadius.circular(8),
+        // ),
       ),
     );
   }

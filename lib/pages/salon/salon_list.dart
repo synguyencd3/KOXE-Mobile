@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+//import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/config.dart';
 import 'package:mobile/services/payment_service.dart';
 import 'package:mobile/services/salon_service.dart';
@@ -43,10 +43,10 @@ class _SalonListState extends State<SalonList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+     //   backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         title: Text(
           'Salons',
-          style: FlutterFlowTheme.of(context).titleLarge,
+        //  style: FlutterFlowTheme.of(context).titleLarge,
         ),
       ),
       body: Column(
@@ -96,10 +96,10 @@ class _MySalonState extends State<MySalon> {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        //  backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           title: Text(
             'Salons',
-            style: FlutterFlowTheme.of(context).titleLarge,
+           // style: FlutterFlowTheme.of(context).titleLarge,
           ),
         ),
         body: Column(
