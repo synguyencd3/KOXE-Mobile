@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+//import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/widgets/news_card.dart';
 
@@ -32,10 +32,10 @@ class _NewsBoardState extends State<NewsBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        //backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         title: Text(
           'News',
-          style: FlutterFlowTheme.of(context).titleLarge,
+          //style: FlutterFlowTheme.of(context).titleLarge,
         ),
       ),
       body: ListView.builder(

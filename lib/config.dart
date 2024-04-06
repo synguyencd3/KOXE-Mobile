@@ -58,4 +58,8 @@ static const String getNotificationAPI = "/notification/get-notification-user";
 static const String markAsReadAPI = "/notification/read-notification-user";
 static const String getNotificationSalonAPI = "/notification/get-notification-admin";
 static const String markAsReadSalonAPI = "/notification/read-notification-admin";
+
+//Zego 
+static const int zegoAppID = 52749659;
+static const String zegoAppSign = '686508249a354437ee8f22ad801b016981d3d62206cff615804d23559dc1eb99';
 }

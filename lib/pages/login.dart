@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+//import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/model/login_request_model.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/shared_service.dart';
@@ -98,15 +98,15 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primary,
+       // backgroundColor: FlutterFlowTheme.of(context).primary,
         title: Align(
           child: Text(
             'LOGIN',
-            style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  fontFamily: 'Outfit',
-                  color: Colors.white,
-                  fontSize: 22,
-                ),
+            // style: FlutterFlowTheme.of(context).headlineMedium.override(
+            //       fontFamily: 'Outfit',
+            //       color: Colors.white,
+            //       fontSize: 22,
+            //     ),
           ),
         ),
       ),
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
               child: Text(
                 'Or',
-                style: FlutterFlowTheme.of(context).bodyMedium,
+               // style: FlutterFlowTheme.of(context).bodyMedium,
               ),
             ),
         
@@ -203,27 +203,28 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
-      child: FFButtonWidget(
-        showLoadingIndicator: false,
+      child: OutlinedButton(
+        //showLoadingIndicator: false,
         onPressed: callback,
-        text: '$name',
-        options: FFButtonOptions(
-          width: width,
-          height: 40,
-          padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
-          iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-          color: FlutterFlowTheme.of(context).primary,
-          textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                fontFamily: 'Readex Pro',
-                color: Colors.white,
-              ),
-          elevation: 3,
-          borderSide: BorderSide(
-            color: Colors.transparent,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
+        child: Text('$name'),
+        //text: '$name',
+        // options: FFButtonOptions(
+        //   width: width,
+        //   height: 40,
+        //   padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+        //   iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+        //   color: FlutterFlowTheme.of(context).primary,
+        //   textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+        //         fontFamily: 'Readex Pro',
+        //         color: Colors.white,
+        //       ),
+        //   elevation: 3,
+        //   borderSide: BorderSide(
+        //     color: Colors.transparent,
+        //     width: 1,
+        //   ),
+        //   borderRadius: BorderRadius.circular(8),
+        // ),
       ),
     );
   }
@@ -247,8 +248,8 @@ class emailField extends StatelessWidget {
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
           labelText: 'Username',
-          labelStyle: FlutterFlowTheme.of(context).labelMedium,
-          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+         // labelStyle: FlutterFlowTheme.of(context).labelMedium,
+         // hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
       ),
     );
@@ -274,8 +275,8 @@ class passwordField extends StatelessWidget {
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
           hintText: 'Password',
-          labelStyle: FlutterFlowTheme.of(context).labelMedium,
-          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+         // labelStyle: FlutterFlowTheme.of(context).labelMedium,
+//hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
       ),
     );

@@ -13,6 +13,7 @@ import 'package:mobile/socket/socket_manager.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/model/chat_user_model.dart';
 import 'package:mobile/services/salon_service.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -337,13 +338,27 @@ class _ChatState extends State<ChatPage> {
                   ],
                 ),
                 Expanded(child: Container()),
-                Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: Icon(
-                    Icons.video_call_rounded,
-                    size: 30,
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.only(right: 10),
+                //   // child: GestureDetector(
+                //   //   onTap: () {Navigator.pushNamed(context, '/call_page');},
+                //   //   child: Icon(
+                //   //     Icons.video_call_rounded,
+                //   //     size: 30,
+                //   //   ),
+                //   // ),
+                // ),
+                ZegoSendCallInvitationButton(
+                  iconSize: Size.fromHeight(40),
+                      isVideoCall: true,
+                      resourceID: "zegouikit_call", //You need to use the resourceID that you created in the subsequent steps. Please continue reading this document.
+                      invitees: [
+                          ZegoUIKitUser(
+                            id: 'synguyencd4',
+                            name: 'synguyencd4'
+                          ),
+                        ],
+                  ) ,
               ],
             );
           }
