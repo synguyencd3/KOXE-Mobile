@@ -23,7 +23,7 @@ class SalonsService {
     var url = Uri.http(Config.apiURL, Config.SalonsAPI);
 
     var response = await http.get(url, headers: requestHeaders);
-    
+    print(response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       return salonsFromJson(data['salons']['salons']);
@@ -43,7 +43,6 @@ class SalonsService {
     var url = Uri.http(Config.apiURL, '${Config.SalonsAPI}/$salonId');
 
     var response = await http.get(url, headers: requestHeaders);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       //print(data);

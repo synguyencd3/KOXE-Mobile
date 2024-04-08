@@ -68,8 +68,8 @@ class _MainHomeState extends State<MainHome> {
     ZegoUIKitPrebuiltCallInvitationService().init(
     appID: Config.zegoAppID /*input your AppID*/,
     appSign: Config.zegoAppSign /*input your AppSign*/,
-    userID: userLogin != null ? userLogin.user!.username! : 'undefined' ,
-    userName: userLogin != null ? userLogin.user!.username! : 'undefined' ,
+    userID: userLogin != null ? userLogin.user!.id!.substring(0,8) : 'undefined' ,
+    userName: userLogin != null ? userLogin.user!.fullname! : 'undefined' ,
     plugins: [ZegoUIKitSignalingPlugin()],
   );
   }
