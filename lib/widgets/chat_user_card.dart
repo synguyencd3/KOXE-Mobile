@@ -14,43 +14,51 @@ class ChatUserCard extends StatefulWidget {
 
 class _ChatUserCardState extends State<ChatUserCard> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (widget.user.createdAt == '') {
-      return Container();
-    } else {
-      DateTime createdAt = DateTime.parse(widget.user.createdAt ?? '');
-      String formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(createdAt);
-      return Card(
-          margin: EdgeInsets.symmetric(vertical: 1, horizontal: 1),
-          elevation: 0.5,
-          child: InkWell(
-            onTap: () {},
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(widget.user.image ??
-                        'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
-                  ),
-                  title: Text(widget.user.name,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  subtitle: Text(
-                    widget.user.lastMessage ?? '',
-                    maxLines: 1,
-                  ),
-                  trailing: Text(formattedDate),
-                  onTap: () async {
-                    var result = await Navigator.pushNamed(context, '/chat',
-                        arguments: widget.user);
-                    if (result != null) {
+    return Card(
+        margin: EdgeInsets.symmetric(vertical: 1, horizontal: 1),
+        color: widget.user.message?.status != null
+            ? widget.user.message!.status
+                ? Colors.white
+                : Colors.grey[300]
+            : Colors.white,
+        elevation: 0.5,
+        child: InkWell(
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(widget.user.image ??
+                      'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
+                ),
+                title: Text(widget.user.name,
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                subtitle: Text(
+                  ((widget.user.message?.sender != '' ? widget.user.message?.sender ?? '' + ': ': ''))  + (widget.user.message?.message ?? ''),
+                  maxLines: 1,
+                ),
+                trailing: Text(widget.user.message?.createdAt != null
+                    ? widget.user.message!.createdAt
+                    : ''),
+                onTap: () async {
+                  var result = await Navigator.pushNamed(context, '/chat',
+                      arguments: widget.user);
+                  if (result =='rebuild')
+                    {
                       setState(() {
-                        widget.user.lastMessage = result as String?;
+                        print('rebuild');
+                        widget.user.message!.status = true;
                       });
                     }
-                  }),
-            ),
-          ));
-    }
+                }),
+          ),
+        ));
   }
 }

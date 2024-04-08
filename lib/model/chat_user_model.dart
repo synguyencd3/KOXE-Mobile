@@ -1,3 +1,4 @@
+import 'package:mobile/model/message_model.dart';
 List<ChatUserModel> chatUserFromJson(dynamic str) =>
     List<ChatUserModel>.from((str).map((x) => ChatUserModel.fromJson(x)));
 
@@ -6,8 +7,7 @@ class ChatUserModel {
   final String name;
   final String? username;
   final String? image;
-  late String? lastMessage = '';
-  late String? createdAt = '';
+  final MessaageModel? message;
   late bool? isOnline = false;
   late String? salonId = '';
 
@@ -16,14 +16,16 @@ class ChatUserModel {
     required this.name,
     this.username,
     this.image,
-    this.lastMessage,
+    this.message,
     this.salonId,
   });
 
   ChatUserModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
-        lastMessage = '',
+      message = json['message'] != null
+          ? MessaageModel.fromJson(json['message'])
+          : null,
         image = json['image'],
         username = json['username'];
 

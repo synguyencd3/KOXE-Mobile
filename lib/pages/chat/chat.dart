@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -68,7 +69,6 @@ class _ChatState extends State<ChatPage> {
                 user?.isOnline = true;
               });
             }
-
           break;
         }
       }
@@ -106,7 +106,7 @@ class _ChatState extends State<ChatPage> {
     //print(chatAPI[0].message);
     print(_sender.id);
     for (int i = 0; i < chatAPI.length; i++) {
-      print(chatAPI[i].sender);
+      //print(chatAPI[i].sender);
       final createAt = DateTime.parse(chatAPI[i].createdAt ?? DateTime.now().toString());
       if (chatAPI[i].sender == _sender.id) {
         final message = types.TextMessage(
@@ -267,7 +267,7 @@ class _ChatState extends State<ChatPage> {
                 IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context,'rebuild');
                   },
                 ),
                 CircleAvatar(
@@ -303,11 +303,7 @@ class _ChatState extends State<ChatPage> {
                 IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    if (_messages.isNotEmpty) {
-                      var textMessage = _messages[0] as types.TextMessage;
-                      var messageText = textMessage.text;
-                      Navigator.pop(context, messageText);
-                    }
+                      Navigator.pop(context, 'rebuild');
                   },
                 ),
                 CircleAvatar(
@@ -348,6 +344,14 @@ class _ChatState extends State<ChatPage> {
                 //   //   ),
                 //   // ),
                 // ),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(context, '/create_appointment', arguments: user);
+
+                  },
+                  child: CircleAvatar(
+                      child: Icon(Icons.event)),
+                ),
                 ZegoSendCallInvitationButton(
                   iconSize: Size.fromHeight(40),
                       isVideoCall: true,

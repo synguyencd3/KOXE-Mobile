@@ -14,7 +14,7 @@ import 'package:mobile/pages/manage.dart';
 import 'package:mobile/pages/chat/list_chat_users.dart';
 import 'package:mobile/pages/notification.dart';
 import 'package:mobile/pages/user_info.dart';
-import 'package:mobile/pages/appointment.dart';
+import 'package:mobile/pages/appointment/appointment.dart';
 import 'package:mobile/pages/car/car_detail.dart';
 import 'package:mobile/pages/package/buy_package.dart';
 import 'package:mobile/pages/package/all_packages.dart';
@@ -27,6 +27,7 @@ import 'package:mobile/widgets/webView.dart';
 import 'package:mobile/pages/salon/salon_detail.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
+import 'package:mobile/pages/appointment/create_appointment.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -88,6 +89,7 @@ class _MyAppState extends State<MyApp> {
         '/new_salon': (context) => NewSalon(),
         '/my_salon': (context) =>  MySalon(),
         '/call_page': (context) => CallPage(callID: '111'),
+        '/create_appointment': (context) => CreateAppoint(),
       },
     );
   }
