@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/config.dart';
-import 'package:mobile/pages/appointment.dart';
+import 'package:mobile/pages/appointment/appointment.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/widgets/bottom_bar.dart';
 import 'package:mobile/widgets/introduction_car.dart';

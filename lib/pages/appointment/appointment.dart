@@ -1,9 +1,7 @@
-import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/appointment_card.dart';
-import '../widgets/create_appointment.dart';
 import 'package:mobile/services/appointment_service.dart';
 import 'package:mobile/model/appointment_model.dart';
 import 'package:mobile/pages/loading.dart';
@@ -20,7 +18,6 @@ class _AppointmentState extends State<Appointment>
   final List<Tab> tabs = <Tab>[
     Tab(text: 'Lịch hẹn'),
     Tab(text: 'Lịch sử'),
-    Tab(text: 'Tạo lịch hẹn')
   ];
   List<AppointmentModel> appointmentsCurrent = [];
   List<AppointmentModel> appointmentsHistory = [];
@@ -118,7 +115,6 @@ class _AppointmentState extends State<Appointment>
                                     appointment: appointmentsHistory[index]);
                               },
                             ),
-                      CreateAppoint(),
                     ],
                   );
                 }

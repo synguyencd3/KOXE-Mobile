@@ -3,11 +3,11 @@ List<PackageModel> packagesFromJson(dynamic str) =>
 str == null ? [] :
     List<PackageModel>.from((str).map((x) => PackageModel.fromJson(x)));
 class PackageModel {
-  final String id;
-  final String name;
-  final String description;
-  final int price;
-  final List<FeatureModel> features;
+  late  String id;
+  late String name;
+  late  String description;
+  late  int price;
+  late  List<FeatureModel> features;
   PackageModel({
     required this.id,
     required this.name,

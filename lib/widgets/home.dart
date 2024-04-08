@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/services/package_service.dart';
+import 'package:mobile/model/package_model.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -9,7 +13,30 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late PackageModel firstPackage = PackageModel(
+    name: '',
+    price: 400000,
+    description: '',
+    id: '',
+    features: [],
+  );
+
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAllPackages();
+  }
+
+  Future<void> getAllPackages() async {
+    List<PackageModel> packages = await PackageService.getAllPackages();
+    Future.delayed(Duration(seconds: 0), () {
+      setState(() {
+        firstPackage = packages[0];
+      });
+    });
+  }
+
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -18,7 +45,9 @@ class _HomeState extends State<Home> {
           NewsPadding(),
           SalonPadding(),
           SizedBox(height: 10),
-          ServiceCard(),
+          ServiceCard(
+            package: firstPackage,
+          ),
         ],
       ),
     );
@@ -117,8 +146,7 @@ class SalonPadding extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               SizedBox(height: 20),
-              Text(
-                  'Tưng bừng khai trương Mercedes Bình Tân'),
+              Text('Tưng bừng khai trương Mercedes Bình Tân'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -139,10 +167,22 @@ class SalonPadding extends StatelessWidget {
   }
 }
 
-class ServiceCard extends StatelessWidget {
-  const ServiceCard({
-    super.key,
-  });
+class ServiceCard extends StatefulWidget {
+  final PackageModel package;
+
+  const ServiceCard({super.key, required this.package});
+
+  @override
+  State<ServiceCard> createState() => _ServiceCardState();
+}
+
+class _ServiceCardState extends State<ServiceCard> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.package.features.length);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,8 +195,7 @@ class ServiceCard extends StatelessWidget {
             Container(
               child: Text(
                 'Các gói dịch vụ',
-                style:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               alignment: Alignment.topLeft,
             ),
@@ -173,12 +212,11 @@ class ServiceCard extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text(
-                      'Gói CRM01',
+                      '${widget.package.name}',
                       style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold),
+                          color: Colors.blue, fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text('400.000đ/năm'),
+                    subtitle: Text('Giá: ${widget.package.price}'),
                     trailing: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/buy_package');
@@ -186,25 +224,17 @@ class ServiceCard extends StatelessWidget {
                       child: Text('Mua ngay'),
                     ),
                   ),
-                  ListTile(
-                    title: Text(
-                      'Tích hợp facebook',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    leading: Icon(
-                      Icons.circle,
-                      size: 14,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Mô tả tiếp theo',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    leading: Icon(
-                      Icons.circle,
-                      size: 14,
-                    ),
+                  widget.package.features.length == 0
+                  ? ListTile(
+                    title: Text('Không có dịch vụ nào'),
+                  ):
+                  Column(
+                    children: widget.package.features
+                        .map((feature) => ListTile(
+                              title: Text(feature.name),
+                             leading: Icon(Icons.check),
+                            ))
+                        .toList(),
                   ),
                 ],
               ),
