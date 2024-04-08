@@ -201,6 +201,7 @@ class _SalonDetailState extends State<SalonDetail> {
               ),
             ),
             salon.cars!.length > 0 ? CarCard(car: salon.cars![0]) : Loading(),
+            salon.cars!.length > 0 ?
             TextButton.icon(
               onPressed: () {
                 print(salon.cars?.length);
@@ -208,7 +209,7 @@ class _SalonDetailState extends State<SalonDetail> {
               },
               label: Text('Xem tất cả'),
               icon: Icon(Icons.arrow_forward),
-            ),
+            ) : SizedBox(height: 5,),
             Divider(height: 5),
             Padding(
               padding: EdgeInsets.all(8.0),

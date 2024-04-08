@@ -39,7 +39,7 @@ class Salon {
     json['banner'] == null? banner=null:banner = json['banner'].cast<String>();
     introductionHtml = json['introductionHtml'];
     json['introductionMarkdown']==null? introductionMarkdown = "null" :introductionMarkdown = json['introductionMarkdown'];
-    cars = carsFromJson(json['cars']);
+    json['cars'] == null ? [] :cars = carsFromJson(json['cars']);
   }
 
   Map<String, dynamic> toJson() {

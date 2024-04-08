@@ -30,7 +30,7 @@ class _CarState extends State<CarsListing> {
     return Scaffold(
         appBar: AppBar(
           //backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          automaticallyImplyLeading: false,
+          //automaticallyImplyLeading: false,
           title: Text(
             'Xe của salon',
          //   style: FlutterFlowTheme.of(context).titleLarge,
