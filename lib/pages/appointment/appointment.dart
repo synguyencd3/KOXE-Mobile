@@ -1,10 +1,10 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/appointment_card.dart';
 import 'package:mobile/services/appointment_service.dart';
 import 'package:mobile/model/appointment_model.dart';
 import 'package:mobile/pages/loading.dart';
+import 'package:mobile/services/salon_service.dart';
 
 class Appointment extends StatefulWidget {
   const Appointment({super.key});
@@ -22,11 +22,13 @@ class _AppointmentState extends State<Appointment>
   List<AppointmentModel> appointmentsCurrent = [];
   List<AppointmentModel> appointmentsHistory = [];
   late final TabController _tabController;
+  String salonId = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    isSalon();
     _tabController = TabController(length: tabs.length, vsync: this);
     getAllAppointments();
     _tabController.addListener(() {
@@ -38,24 +40,36 @@ class _AppointmentState extends State<Appointment>
     });
   }
 
+  Future<void> isSalon() async {
+    String isSalon = await SalonsService.isSalon();
+    setState(() {
+      salonId = isSalon;
+    });
+  }
+
   Future<void> getAllAppointments() async {
     try {
-      List<AppointmentModel> appointmentAPI = await AppointmentService.getAll();
+      List<AppointmentModel> appointmentAPI;
+      if (salonId == '') {
+        appointmentAPI = await AppointmentService.getAll();
+      } else {
+        appointmentAPI =
+            await AppointmentService.getAllSalonAppointments(salonId);
+      }
       print(appointmentAPI[0].datetime);
-      //setState(() {
       appointmentsCurrent = [];
       appointmentsHistory = [];
       for (var appointment in appointmentAPI) {
-        int daysDifference = DateTime.parse(appointment.datetime)
+        int daysDifference = appointment.datetime
             .difference(DateTime.now())
-            .inDays;
-        if (daysDifference >= 0) {
+            .inDays ;
+        appointment.dayDiff = daysDifference + 1;
+        if (appointment.dayDiff >= 0) {
           appointmentsCurrent.add(appointment);
         } else {
           appointmentsHistory.add(appointment);
         }
       }
-      //});
     } catch (e) {
       print(e);
     }
@@ -99,7 +113,7 @@ class _AppointmentState extends State<Appointment>
                               padding: EdgeInsets.only(top: 1),
                               itemBuilder: (context, index) {
                                 return AppointmentCard(
-                                    appointment: appointmentsCurrent[index]);
+                                    appointment: appointmentsCurrent[index], isSalon: salonId);
                               }),
                       appointmentsHistory.isEmpty
                           ? Center(
@@ -112,7 +126,7 @@ class _AppointmentState extends State<Appointment>
                               padding: EdgeInsets.only(top: 1),
                               itemBuilder: (context, index) {
                                 return AppointmentCard(
-                                    appointment: appointmentsHistory[index]);
+                                    appointment: appointmentsHistory[index], isSalon: salonId);
                               },
                             ),
                     ],

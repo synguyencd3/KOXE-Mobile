@@ -1,6 +1,6 @@
 class Config {
   static const String appName = "Salon oto";
-  static const String apiURL = "192.168.1.5:5000";
+  static const String apiURL = "192.168.1.2:5000";
   static const String loginAPI = "auth/login";
   static const String registerAPI = "auth/register";
   static const String facebookAPI = "auth/facebook-mobile";
@@ -18,6 +18,8 @@ class Config {
   static const String getAppointmentsAPI = "/appointment/get-appoint-user";
   static const String createAppointmentAPI = "/appointment/create-appointment";
   static const String refreshToken = "auth/refresh";
+  static const String getSalonAppointmentsApi = "/appointment/get-appoint-admin";
+  static const String updateSalonAppointmentApi = "/appointment/update-one-admin";
 
   //Payment
   static const String VNPayAPI = "/payment/create_payment_url";

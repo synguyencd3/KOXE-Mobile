@@ -49,7 +49,7 @@ class _CreateAppointState extends State<CreateAppoint> {
   DateTime today = DateTime.now();
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    print(selectedDay);
+    //print(selectedDay);
     setState(() {
       today = selectedDay;
     });
@@ -115,11 +115,11 @@ class _CreateAppointState extends State<CreateAppoint> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     NumberPicker(
                       minValue: 0,
-                      maxValue: 12,
+                      maxValue: 23,
                       value: hour,
                       zeroPad: true,
                       infiniteLoop: true,
@@ -169,57 +169,12 @@ class _CreateAppointState extends State<CreateAppoint> {
                             bottom: BorderSide(color: Colors.white)),
                       ),
                     ),
-                    Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              timeFormat = 'AM';
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            decoration: BoxDecoration(
-                                color: timeFormat == 'AM'
-                                    ? Colors.grey.shade500
-                                    : Colors.grey.shade800,
-                                border: Border.all(color: Colors.grey)),
-                            child: Text(
-                              'AM',
-                              style: TextStyle(color: Colors.white, fontSize: 25),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              timeFormat = 'PM';
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            decoration: BoxDecoration(
-                                color: timeFormat == 'PM'
-                                    ? Colors.grey.shade500
-                                    : Colors.grey.shade800,
-                                border: Border.all(color: Colors.grey)),
-                            child: Text(
-                              'PM',
-                              style: TextStyle(color: Colors.white, fontSize: 25),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
                   ],
                 ),
               ),
               SizedBox(height: 10),
               Text(
-                'Mô tả',
+                'Bạn đặt lịch hẹn để làm gì?',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
@@ -236,11 +191,11 @@ class _CreateAppointState extends State<CreateAppoint> {
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   onPressed: () async {
-                  print(user.id);
+                    print(today.add(Duration(hours: hour, minutes: minute)));
                     var result = await AppointmentService.createAppointment(
                         AppointmentModel(
-                          salon: user.id ?? '',
-                          datetime: today.toString(),
+                          salon: user.id,
+                          datetime: today.add(Duration(hours: hour, minutes: minute)),
                           description: controller.text,
                           ));
                     print(result);
