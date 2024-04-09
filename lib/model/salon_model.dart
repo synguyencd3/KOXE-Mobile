@@ -13,7 +13,7 @@ class Salon {
   String? introductionHtml;
   String? introductionMarkdown;
   String? userId;
-  List<Car>? cars;
+  List<Car> cars = <Car>[];
 
   Salon(
       {this.salonId,
