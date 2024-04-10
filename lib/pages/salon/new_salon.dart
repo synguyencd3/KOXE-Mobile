@@ -46,7 +46,12 @@ class _NewSalonState extends State<NewSalon> {
                         email: _email.text,
                         banner: pickedFile?.map((e) => e.path).toList());
     
-    SalonsService.NewSalon(salon);
+    SalonsService.NewSalon(salon).then((value) {
+      if (value==true)
+      {
+        Navigator.pop(context);
+      }
+    });
   }
 
     void EditSalon() {
@@ -57,7 +62,12 @@ class _NewSalonState extends State<NewSalon> {
                         email: _email.text,
                         banner: pickedFile?.map((e) => e.path).toList());
     
-    SalonsService.EditSalon(salonForm, salon!.salonId!);
+    SalonsService.EditSalon(salonForm, salon!.salonId!).then((value) {
+      if (value==true)
+        {
+          Navigator.popUntil(context, ModalRoute.withName('/salons'));
+        }
+    });
   }
 
 

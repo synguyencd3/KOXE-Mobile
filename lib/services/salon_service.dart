@@ -107,7 +107,8 @@ class SalonsService {
     var response = await request.send();
     var responseData = await response.stream.toBytes();
     var responseString = String.fromCharCodes(responseData);
-    print(responseString);
+    var data = jsonDecode(responseString);
+    if (data['status'] == 'success') return true;
     return false;
   }
 
@@ -150,7 +151,8 @@ class SalonsService {
     var response = await request.send();
     var responseData = await response.stream.toBytes();
     var responseString = String.fromCharCodes(responseData);
-    print(responseString);
+    var data = jsonDecode(responseString);
+    if (data['status'] == 'success') return true;
     return false;
   }
 

@@ -56,7 +56,7 @@ class _SalonListState extends State<SalonList> {
       body: Column(
         children: [
           keySet.contains(Config.SalonKeyMap) ?
-          TextButton(onPressed: () { Navigator.pushNamed(context, '/my_salon');}, child: const Text('Your salon')): const SizedBox(height: 20) ,
+          TextButton(onPressed: () { Navigator.pushNamed(context, '/my_salon').then((value) {getSalons();});}, child: const Text('Your salon')): const SizedBox(height: 20) ,
           Expanded(
             child: ListView.builder(
                 itemCount: salons.length,
@@ -118,7 +118,7 @@ class _MySalonState extends State<MySalon> {
     }
   }
 
-class MySalonCard extends StatelessWidget {
+class MySalonCard extends StatefulWidget {
    const MySalonCard(
       {super.key,
       required this.salon});
@@ -126,10 +126,15 @@ class MySalonCard extends StatelessWidget {
   final Salon salon;
 
   @override
+  State<MySalonCard> createState() => _MySalonCardState();
+}
+
+class _MySalonCardState extends State<MySalonCard> {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/salon_detail', arguments: {'salon': salon});
+        Navigator.pushNamed(context, '/salon_detail', arguments: {'salon': widget.salon});
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -142,27 +147,29 @@ class MySalonCard extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(child: Image.network(salon.image!),
+                child: ClipRRect(child: Image.network(widget.salon.image!),
                 borderRadius: BorderRadius.circular(8),),
               ),
               Align(
                 alignment: AlignmentDirectional(-1, 0),
                 child: Column(
-                  children: [Text(salon.name!, style: TextStyle(
+                  children: [Text(widget.salon.name!, style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold
                   ),),
                     SizedBox(height: 3),
                    Padding(
                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
-                     child: Text(salon.address!)
+                     child: Text(widget.salon.address!)
                 ),
                  Padding(
                       padding: const EdgeInsets.fromLTRB(50, 0, 50, 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                          OutlinedButton(onPressed: () {  Navigator.pushNamed(context, '/new_salon', arguments: {'salon': salon}); }, child: Text('Edit')),
+                          OutlinedButton(onPressed: () {
+                            Navigator.pushNamed(context, '/new_salon', arguments: {'salon': widget.salon});
+                            }, child: Text('Edit')),
                           OutlinedButton(onPressed: () {}, child: Text('Delete')),
                         ],),
                  )
