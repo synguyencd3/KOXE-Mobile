@@ -130,11 +130,34 @@ class MySalonCard extends StatefulWidget {
 }
 
 class _MySalonCardState extends State<MySalonCard> {
+
+  late Salon salon;
+
+  Future<void> getMySalon() async {
+    var data = await SalonsService.getMySalon();
+    //print(data?.salonId);
+    setState(() {
+      salon = data!;
+    });
+  }
+
+  void init(){
+    salon =widget.salon;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/salon_detail', arguments: {'salon': widget.salon});
+        Navigator.pushNamed(context, '/salon_detail', arguments: {'salon': salon});
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -147,20 +170,20 @@ class _MySalonCardState extends State<MySalonCard> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(child: Image.network(widget.salon.image!),
+                child: ClipRRect(child: Image.network(salon.image!),
                 borderRadius: BorderRadius.circular(8),),
               ),
               Align(
                 alignment: AlignmentDirectional(-1, 0),
                 child: Column(
-                  children: [Text(widget.salon.name!, style: TextStyle(
+                  children: [Text(salon.name!, style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold
                   ),),
                     SizedBox(height: 3),
                    Padding(
                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
-                     child: Text(widget.salon.address!)
+                     child: Text(salon.address!)
                 ),
                  Padding(
                       padding: const EdgeInsets.fromLTRB(50, 0, 50, 10),
@@ -168,7 +191,7 @@ class _MySalonCardState extends State<MySalonCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                           OutlinedButton(onPressed: () {
-                            Navigator.pushNamed(context, '/new_salon', arguments: {'salon': widget.salon});
+                            Navigator.pushNamed(context, '/new_salon', arguments: {'salon': salon}).then((value) {getMySalon();});
                             }, child: Text('Edit')),
                           OutlinedButton(onPressed: () {}, child: Text('Delete')),
                         ],),

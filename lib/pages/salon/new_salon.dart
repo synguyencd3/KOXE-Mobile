@@ -65,7 +65,8 @@ class _NewSalonState extends State<NewSalon> {
     SalonsService.EditSalon(salonForm, salon!.salonId!).then((value) {
       if (value==true)
         {
-          Navigator.popUntil(context, ModalRoute.withName('/salons'));
+         // Navigator.popUntil(context, ModalRoute.withName('/salons'));
+          Navigator.pop(context);
         }
     });
   }
