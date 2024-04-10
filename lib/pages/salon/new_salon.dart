@@ -21,6 +21,7 @@ class _NewSalonState extends State<NewSalon> {
   List<File>? image;
  List<XFile>? pickedFile;
   final picker = ImagePicker();
+  Salon? salon;
 
   late final TextEditingController _name  = TextEditingController(); 
   late final TextEditingController _address  = TextEditingController();
@@ -47,6 +48,41 @@ class _NewSalonState extends State<NewSalon> {
     
     SalonsService.NewSalon(salon);
   }
+
+    void EditSalon() {
+    Salon salonForm = Salon(name: _name.text, 
+                        address: _address.text, 
+                        introductionMarkdown: _description.text,
+                        phoneNumber: _phonenumber.text, 
+                        email: _email.text,
+                        banner: pickedFile?.map((e) => e.path).toList());
+    
+    SalonsService.EditSalon(salonForm, salon!.salonId!);
+  }
+
+
+  void initSalon() {
+  var data = ModalRoute.of(context)!.settings.arguments as Map;
+  setState(() {
+    salon = data['salon'];
+  });
+  _name.text = salon?.name ?? "";
+  _address.text = salon?.address ?? "";
+  _description.text = salon?.introductionMarkdown ?? "";
+  _phonenumber.text = salon?.phoneNumber ?? "";
+  _email.text = salon?.email ?? "";
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      initSalon();
+    }); 
+    
+  }
+
 
 
   //TextEditingController _controller = TextEditingController();
@@ -226,11 +262,13 @@ class _NewSalonState extends State<NewSalon> {
 
         SizedBox(height: 20),
         
+        salon == null?
         Padding(
           padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
           child: OutlinedButton(child: Text('tạo salon'), onPressed: () {
             NewSalon();
           } ,),
+          
           // child: FFButtonWidget(text: "Tạo salon", onPressed: () {
           //   NewSalon();
           // }, options: 
@@ -252,7 +290,15 @@ class _NewSalonState extends State<NewSalon> {
           //   borderRadius: BorderRadius.circular(8),
           // ),
           // ),
+        ) :
+
+              Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
+          child: OutlinedButton(child: Text('thay đổi'), onPressed: () {
+            EditSalon();
+          } ,),
         )
+
 
           ],),
         ),

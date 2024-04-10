@@ -23,6 +23,10 @@ class _SalonListState extends State<SalonList> {
     getKeyMaps(); 
   }
 
+  Future<void> deleteSalon() async {
+
+  }
+
   Future<void> getKeyMaps() async {
     var set = await PaymentService.getKeySet();
     print(set);
@@ -51,7 +55,7 @@ class _SalonListState extends State<SalonList> {
       ),
       body: Column(
         children: [
-          keySet.contains(Config.KeyMap) ?
+          keySet.contains(Config.SalonKeyMap) ?
           TextButton(onPressed: () { Navigator.pushNamed(context, '/my_salon');}, child: const Text('Your salon')): const SizedBox(height: 20) ,
           Expanded(
             child: ListView.builder(
@@ -105,12 +109,73 @@ class _MySalonState extends State<MySalon> {
         body: Column(
           children: [
             MySalon !=null ?
-            SalonCard(salon: MySalon!):  TextButton(onPressed: () { Navigator.pushNamed(context, '/new_salon');}, child: const Text('Thêm mới')),
+            MySalonCard(salon: MySalon!)
+            
+            :  TextButton(onPressed: () { Navigator.pushNamed(context, '/new_salon');}, child: const Text('Thêm mới')),
           ],
         ),
       );
     }
   }
+
+class MySalonCard extends StatelessWidget {
+   const MySalonCard(
+      {super.key,
+      required this.salon});
+
+  final Salon salon;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/salon_detail', arguments: {'salon': salon});
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          elevation: 4,
+        shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+        ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(child: Image.network(salon.image!),
+                borderRadius: BorderRadius.circular(8),),
+              ),
+              Align(
+                alignment: AlignmentDirectional(-1, 0),
+                child: Column(
+                  children: [Text(salon.name!, style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold
+                  ),),
+                    SizedBox(height: 3),
+                   Padding(
+                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                     child: Text(salon.address!)
+                ),
+                 Padding(
+                      padding: const EdgeInsets.fromLTRB(50, 0, 50, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                          OutlinedButton(onPressed: () {  Navigator.pushNamed(context, '/new_salon', arguments: {'salon': salon}); }, child: Text('Edit')),
+                          OutlinedButton(onPressed: () {}, child: Text('Delete')),
+                        ],),
+                 )
+                ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 
 class SalonCard extends StatelessWidget {

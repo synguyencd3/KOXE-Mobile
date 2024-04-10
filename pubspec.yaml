@@ -34,7 +34,7 @@ dependencies:
   api_cache_manager: ^1.0.2
   google_sign_in: ^6.2.1
   flutter_facebook_auth: ^6.0.4
-  webview_flutter:
+  webview_flutter: ^4.7.0
   webview_flutter_web: 
   #flutterflow_ui: 
   carousel_slider: 4.2.1

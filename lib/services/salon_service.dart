@@ -105,12 +105,57 @@ class SalonsService {
       },);
     }
     var response = await request.send();
-
     var responseData = await response.stream.toBytes();
     var responseString = String.fromCharCodes(responseData);
-
+    print(responseString);
     return false;
   }
+
+  static Future<bool?> DeleteSalon(String id) async {
+
+  }
+
+  static Future<bool?> EditSalon(Salon model, String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    var url = Uri.http(Config.apiURL, '${Config.SalonsAPI}/$id');
+    print(url.toString());
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var param = model.toJson();
+
+    var request = http.MultipartRequest("PATCH", url);
+    request.headers.addAll(requestHeaders);
+    request.fields['name'] = param['name'];
+    request.fields['addess'] = param['address'];
+    request.fields['email'] = param['email'];
+    request.fields['phoneNumber'] = param['phoneNumber'];
+    request.fields['introductionMarkdown'] = param['introductionMarkdown'];
+
+    if (model.banner !=null)
+    {
+      var image = await http.MultipartFile.fromPath("image", model.banner!.first);
+      request.files.add(image);
+      model.banner?.forEach((element) async {
+        request.files.add(
+            await http.MultipartFile.fromPath("banner", element)
+        );
+      },);
+    }
+    var response = await request.send();
+    var responseData = await response.stream.toBytes();
+    var responseString = String.fromCharCodes(responseData);
+    print(responseString);
+    return false;
+  }
+
+
+
   static Future<String> isSalon()  async {
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();

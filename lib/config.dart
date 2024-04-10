@@ -45,8 +45,8 @@ class Config {
 
   //KeyMap
 
-  static const KeyMap =
-      "salon"; //key map phải có trong purchase để có thể sử dụng quản lí salon
+  static const SalonKeyMap =
+      "f1"; //key map phải có trong purchase để có thể sử dụng quản lí salon
 
 //Chap API
   static const String getChatsAPI = "/messages";
