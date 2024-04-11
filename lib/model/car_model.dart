@@ -41,7 +41,7 @@ class Car {
     id = json['car_id'];
     name = json['name'];
     description = json['description'];
-    image = json['image'].cast<String>();
+    json['image'] == null? image= ["null"]: image=json['image'].cast<String>();
     price = json['price'];
     type = json['type'];
     origin = json['origin'];
