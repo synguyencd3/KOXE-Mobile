@@ -10,8 +10,25 @@ class Social extends StatefulWidget {
 }
 
 class _SocialState extends State<Social> {
+  Map<String, dynamic> userProfile = {};
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () {
+     getProfile();
+    });
+  }
 
-
+  void getProfile() {
+    var data = ModalRoute.of(context)!.settings.arguments as Map;
+    if (data.isNotEmpty)
+    {
+      setState(() {
+        userProfile = data['profile'];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +40,7 @@ class _SocialState extends State<Social> {
       body: Column(
         children: [
           SizedBox(height: 10),
-          ListTile(
+          userProfile["google"] == null ? ListTile(
             leading: CircleAvatar(
               backgroundImage: AssetImage('assets/google.png'),
             ),
@@ -35,9 +52,9 @@ class _SocialState extends State<Social> {
                 if (value) Navigator.pop(context);
               });
             },
-          ),
+          ) : SizedBox(height: 0,) ,
           SizedBox(height: 10),
-          ListTile(
+          userProfile["facebook"] == null ? ListTile(
             leading: CircleAvatar(
               backgroundImage: AssetImage('assets/facebook.png'),
             ),
@@ -49,7 +66,7 @@ class _SocialState extends State<Social> {
                 if (value) Navigator.pop(context);
               });
             },
-          ),
+          ) : SizedBox(height: 0,),
         ],
       ),
     );
