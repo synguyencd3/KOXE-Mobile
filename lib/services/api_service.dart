@@ -228,8 +228,8 @@ class APIService {
       url,
       headers: requestHeaders,
     );
-    var responsemodel = loginResponseJson(response.body);
-    if (responsemodel.status == "success") {
+    print(response.body);
+    if (jsonDecode(response.body)['status'] == "success") {
       return true;
     } else {
       return false;
@@ -282,9 +282,6 @@ class APIService {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
@@ -307,7 +304,7 @@ class APIService {
     var url = Uri.http(Config.apiURL, Config.facebookAPI);
 
     String accessToken = result.accessToken?.toJson()['token'];
-    print(accessToken);
+    print("fb token:"+accessToken);
     var response = await client.post(
         url,
         body: {
@@ -316,10 +313,8 @@ class APIService {
         headers: requestHeaders
     );
 
-    print('request success');
-    print(jsonDecode(response.body));
-    var responsemodel = loginResponseJson(response.body);
-    if (responsemodel.status == "success") {
+    print(response.body);
+    if (jsonDecode(response.body)['status'] == "success") {
       return true;
     } else {
       return false;

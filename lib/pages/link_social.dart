@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile/services/api_service.dart';
 
 class Social extends StatefulWidget {
   const Social({super.key});
@@ -29,7 +30,10 @@ class _SocialState extends State<Social> {
             title: Text('Google'),
             trailing: Icon(Icons.arrow_forward),
             onTap: () {
-              print('Tap');
+              //print('Tap');
+              APIService.googleLinkIn().then((value) {
+                if (value) Navigator.pop(context);
+              });
             },
           ),
           SizedBox(height: 10),
@@ -40,7 +44,10 @@ class _SocialState extends State<Social> {
             title: Text('Facebook'),
             trailing: Icon(Icons.arrow_forward),
             onTap: () {
-              print('Tap');
+              //print('Tap');
+              APIService.facebookLinkIn().then((value) {
+                if (value) Navigator.pop(context);
+              });
             },
           ),
         ],
