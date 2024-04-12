@@ -26,11 +26,14 @@ class _CarCardState extends State<CarCard> {
             children: [
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
-                child: Image.network(
-                  widget.car.image![0],
-                  height: 230,
-                  width: double.infinity,
-                ),
+                child:
+                    (widget.car.image != null && widget.car.image!.isNotEmpty)
+                        ? Image.network(
+                            widget.car.image![0],
+                            height: 230,
+                            width: double.infinity,
+                          )
+                        : Container(),
               ),
               SizedBox(height: 10),
               Text(
@@ -64,11 +67,12 @@ class _CarCardState extends State<CarCard> {
                     //       fontWeight: FontWeight.w500,
                     //     ),
                   ),
-                  IconButton(onPressed: () {
-                    Navigator.pushNamed(context, '/car_detail', arguments: {
-                      'car': widget.car
-                    });
-                  }, icon: Icon(Icons.arrow_forward))
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/car_detail',
+                            arguments: {'car': widget.car});
+                      },
+                      icon: Icon(Icons.arrow_forward))
                 ],
               ),
             ],

@@ -43,4 +43,59 @@ class AppointmentService{
     var data = jsonDecode(response.body);
     return data['status']=='success';
     }
+  static Future<List<AppointmentModel>> getAllSalonAppointments(String salonId) async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.getSalonAppointmentsApi);
+
+    var response = await http.post(url, headers: requestHeaders,body: jsonEncode({'salonId': salonId}) );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      //print(data);
+      return appointmentsFromJson(data['appointments']);
+    }
+    print('error');
+    return [];
+  }
+  static Future<AppointmentModel> getAppointmentById(String salonId, String appointmentId) async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+  print(appointmentId);
+    var url = Uri.http(Config.apiURL, Config.getSalonAppointmentsApi);
+
+    var response = await http.post(url, headers: requestHeaders,body: jsonEncode({'salonId': salonId, 'id': appointmentId}) );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      return AppointmentModel.fromJson(data['appointments'][0]);
+    }
+    print('error');
+    return AppointmentModel(id: '', status: 0, salon: '', description: '', datetime: DateTime.now());
+  }
+  static Future<bool> updateSalonAppointment(String salonId,String? appointmentId, int status) async {
+    //status: 0 - chưa chấp nhận | status: 1 - đã được chấp nhận| status: 2 - bị salon từ chối gặp
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.updateSalonAppointmentApi);
+
+    var response = await http.patch(url, headers: requestHeaders, body: jsonEncode({'id': appointmentId, 'status': status, 'salonId': salonId}));
+    var data = jsonDecode(response.body);
+    return data['status']=='success';
+  }
 }

@@ -15,13 +15,20 @@ class _CarState extends State<IntroCar> {
    @override
   void initState() {
     super.initState();
-    getCars();
+    Future.delayed(Duration.zero, () {
+      getCars();
+    });
+
   }
   Future<void> getCars() async {
     var list = await CarsService.getAll();
-    setState(() {
-      cars = list;
-    });
+    if (mounted)
+      {
+        setState(() {
+          cars = list;
+        });
+      }
+
   }
 
   @override

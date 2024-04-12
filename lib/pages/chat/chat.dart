@@ -41,7 +41,6 @@ class _ChatState extends State<ChatPage> {
           id: user?.id ?? '',
         );
       }
-      //print(user?.isOnline);
       callAPI();
     });
     initSocket();
