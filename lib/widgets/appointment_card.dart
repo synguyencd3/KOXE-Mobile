@@ -122,7 +122,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             },
                             child: Row(
                               children: [
-                                Icon(Icons.check_circle),
+                                Icon(Icons.do_not_disturb_on_rounded),
                                 SizedBox(width: 10),
                                 Text('Từ chối'),
                               ],
