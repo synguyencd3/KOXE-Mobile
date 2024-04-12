@@ -1,6 +1,6 @@
-
 List<AppointmentModel> appointmentsFromJson(dynamic str) =>
     List<AppointmentModel>.from((str).map((x) => AppointmentModel.fromJson(x)));
+
 class AppointmentModel {
   final String? description;
   final DateTime datetime;
@@ -8,14 +8,17 @@ class AppointmentModel {
   final String? id;
   final String salon;
   late int dayDiff;
+  late String carId;
 
   AppointmentModel({
-     this.description,
+    this.description,
     required this.datetime,
     this.status,
     this.id,
     required this.salon,
+    this.carId = '',
   });
+
   AppointmentModel.fromJson(Map<String, dynamic> json)
       : description = json['description'],
         datetime = DateTime.parse(json['date']),
@@ -26,6 +29,7 @@ class AppointmentModel {
   Map<String, dynamic> toJson() => {
         'description': description,
         'date': datetime.toString(),
+        'carId': carId,
         'salonId': salon,
-  };
+      };
 }

@@ -52,9 +52,6 @@ class _NotificationCardState extends State<NotificationCard> {
               } else {
                 await NotificationService.markAsReadSalon(
                     widget.notification.id, salonId);
-                setState(() {
-                  widget.notification.isRead = true;
-                });
                 if (widget.notification.types == 'appointment') {
                   AppointmentModel appointment =
                       await AppointmentService.getAppointmentById(
@@ -78,7 +75,11 @@ class _NotificationCardState extends State<NotificationCard> {
                           ));
                     },
                   );
+
                 }
+                setState(() {
+                  widget.notification.isRead = true;
+                });
               }
             }),
       ),

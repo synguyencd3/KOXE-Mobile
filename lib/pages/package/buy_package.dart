@@ -15,7 +15,7 @@ class BuyPackage extends StatefulWidget {
 
 class _BuyPackageState extends State<BuyPackage> {
 
-  final ValueNotifier<String?> dropDownNotifier = ValueNotifier(null);
+  final ValueNotifier<String?> dropDownNotifier = ValueNotifier('Thanh toán qua VNPay');
 
   late PackageModel package;
   List<String> list = <String>[

@@ -6,6 +6,10 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:mobile/services/appointment_service.dart';
 import 'package:mobile/model/appointment_model.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:mobile/services/salon_service.dart';
+import 'package:mobile/model/car_model.dart';
+import 'package:mobile/widgets/car_card.dart';
 
 class CreateAppoint extends StatefulWidget {
   const CreateAppoint({super.key});
@@ -19,9 +23,15 @@ class _CreateAppointState extends State<CreateAppoint> {
   late TextEditingController controller;
   ChatUserModel user = ChatUserModel(
     name: '',
-   id: '',
+    id: '',
   );
-
+  DateTime today = DateTime.now();
+  var hour = 0;
+  var minute = 0;
+  var timeFormat = 'AM';
+  List<Car>? cars = [];
+  String selectedCar = '';
+  CarouselController carouselController = CarouselController();
 
   @override
   void initState() {
@@ -30,23 +40,33 @@ class _CreateAppointState extends State<CreateAppoint> {
     controller = TextEditingController();
     Future.delayed(Duration.zero, () {
       getSalon();
+      getCars();
     });
-
   }
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     controller.dispose();
     super.dispose();
   }
+
   Future<void> getSalon() async {
-    ChatUserModel userApi = ModalRoute.of(context)!.settings.arguments as ChatUserModel;
+    ChatUserModel userApi = ModalRoute
+        .of(context)!
+        .settings
+        .arguments as ChatUserModel;
     setState(() {
       user = userApi;
     });
   }
 
-  DateTime today = DateTime.now();
+  Future<void> getCars() async {
+    List<Car>? carsApi = await SalonsService.getDetail(user.id);
+    setState(() {
+      cars = carsApi;
+    });
+  }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     //print(selectedDay);
@@ -55,9 +75,6 @@ class _CreateAppointState extends State<CreateAppoint> {
     });
   }
 
-  var hour = 0;
-  var minute = 0;
-  var timeFormat = 'AM';
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +126,8 @@ class _CreateAppointState extends State<CreateAppoint> {
               ),
               SizedBox(height: 10),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
                   color: Colors.black87,
                   borderRadius: BorderRadius.circular(10),
@@ -173,6 +191,18 @@ class _CreateAppointState extends State<CreateAppoint> {
                 ),
               ),
               SizedBox(height: 10),
+              CarouselSlider(
+                carouselController: carouselController,
+                options: CarouselOptions(height: 450.0, onPageChanged:(index,reason){
+                  setState(() {
+                    selectedCar = cars![index].id!;
+                  });
+                } ),
+                items: cars!.length>0 ? cars?.map((car) {
+                  return CarCard(car: car);
+                }).toList() : [],
+              ),
+              SizedBox(height: 10),
               Text(
                 'Bạn đặt lịch hẹn để làm gì?',
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -191,25 +221,26 @@ class _CreateAppointState extends State<CreateAppoint> {
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   onPressed: () async {
-                    print(today.add(Duration(hours: hour, minutes: minute)));
+                    print(selectedCar);
                     var result = await AppointmentService.createAppointment(
                         AppointmentModel(
                           salon: user.id,
-                          datetime: today.add(Duration(hours: hour, minutes: minute)),
+                          carId: selectedCar,
+                          datetime: today.add(Duration(
+                              hours: hour, minutes: minute)),
                           description: controller.text,
-                          ));
+                        ));
                     print(result);
-                    if (result)
-                      {
-                        ScaffoldMessenger.of(context).showSnackBar(
+                    if (result) {
+                      ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Tạo lịch hẹn thành công'),
                             backgroundColor: Colors.green,
                           )
-                        );
-                        Navigator.pop(context);
-                      }
-                   },
+                      );
+                      Navigator.pop(context);
+                    }
+                  },
                   child: Text('Tạo lịch hẹn'),
                 ),
               ),

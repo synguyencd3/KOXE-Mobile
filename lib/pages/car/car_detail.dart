@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:mobile/widgets/button.dart';
 
 class CarDetail extends StatefulWidget {
   @override
@@ -141,21 +142,27 @@ class _CarDetailState extends State<CarDetail> {
         
                   Divider(height: 5),
                   Container(
-                    width: double.infinity,
                     child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                        "Mô tả",
-                        style:
-                            TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                        textAlign: TextAlign.left,
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Mô tả",
+                            style:
+                                TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          Text(
+                            '${car.description}',
+                            style: TextStyle(color: Colors.grey[800], fontSize: 16),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Text(
-                    '${car.description}',
-                    style: TextStyle(color: Colors.grey[800], fontSize: 16),
-                  ),
+                  ButtonCustom(onPressed: (){
+                   // Navigator.pushNamed(context, '/create_appointment', arguments: {'car': car});
+                  }, title: 'Đặt lịch hẹn để xem xe này',),
                 ],
               ),
             ),
