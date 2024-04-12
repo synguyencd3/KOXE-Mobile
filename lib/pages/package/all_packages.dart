@@ -101,7 +101,7 @@ class _AllPackagesState extends State<AllPackages> {
                                 onPressed: () {
                                   Navigator.pushNamed(context, '/buy_package', arguments: {
                                     'package': e
-                                  });
+                                  }).then((value) {getAllPackages();});
                                 },
                                 child: Text('Mua'),
                               ),

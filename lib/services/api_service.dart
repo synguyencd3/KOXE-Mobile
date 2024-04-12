@@ -8,6 +8,7 @@ import 'package:mobile/model/login_request_model.dart';
 import 'package:mobile/model/login_response_model.dart';
 import 'package:mobile/model/articles_model.dart';
 import 'package:mobile/model/register_response_model.dart';
+import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:retry/retry.dart'; 
@@ -20,6 +21,8 @@ class APIService {
   static var client = http.Client();
 
   static bool refreshing = false;
+
+
 
   static Future<void> refreshToken() async {
     if (refreshing==true) {
@@ -188,6 +191,53 @@ class APIService {
     }
   }
 
+  static Future<bool> googleLinkIn() async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    const List<String> scopes = <String>[
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'openid'
+    ];
+
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      // Optional clientId
+      //clientId: Config.client_id,
+      scopes: scopes,
+    );
+
+    //begin sign in process
+    var googleAccount = await _googleSignIn.signIn();
+
+    if (googleAccount == null) return false;
+    if (googleAccount.serverAuthCode == null) return false;
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    final Map<String, String?> param = <String, String?>{
+      'code': googleAccount.serverAuthCode
+    };
+
+    var url = Uri.http(Config.apiURL, Config.googleCallback, param);
+
+    var response = await client.get(
+      url,
+      headers: requestHeaders,
+    );
+    print(response.body);
+    if (jsonDecode(response.body)['status'] == "success") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   static Future<bool> facebookSignIn() async {
 
      if (kIsWeb) {
@@ -223,6 +273,50 @@ class APIService {
     if (responsemodel.status == "success") {
       // API ko chạy trên nền web đc, uncomment khi chạy emulator
       await SharedService.setLoginDetails(loginResponseJson(response.body));
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<bool> facebookLinkIn() async {
+
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    if (kIsWeb) {
+      // initialiaze the facebook javascript SDK
+      await FacebookAuth.i.webAndDesktopInitialize(
+        appId: "312164338180427",
+        cookie: true,
+        xfbml: true,
+        version: "v15.0",
+      );
+    }
+
+    final LoginResult result = await FacebookAuth.instance.login();
+
+    if (result.status != LoginStatus.success)
+      return false;
+
+
+    var url = Uri.http(Config.apiURL, Config.facebookAPI);
+
+    String accessToken = result.accessToken?.toJson()['token'];
+    print("fb token:"+accessToken);
+    var response = await client.post(
+        url,
+        body: {
+          "accessToken" : accessToken
+        },
+        headers: requestHeaders
+    );
+
+    print(response.body);
+    if (jsonDecode(response.body)['status'] == "success") {
       return true;
     } else {
       return false;
@@ -294,8 +388,11 @@ class APIService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
+    var salon = await SalonsService.isSalon();
+    print(salon);
     final Map<String, String?> param = <String, String?>{
-      'email': email
+      'email': email,
+      'salonId': salon
     };
 
     var response = await client.post(url, headers: requestHeaders, body: jsonEncode(param));

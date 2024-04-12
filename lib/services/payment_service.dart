@@ -91,6 +91,7 @@ class PaymentService {
     var url = Uri.http(Config.apiURL, Config.Purchase);
     var response = await client.get(url, headers: requestHeaders);
     var data =jsonDecode(response.body)['purchasedPackages'];
+    print(response.body);
     var features=packagesFromJson(data).map((index) =>(index.features));
   
     List<String?> keyMaps = [];

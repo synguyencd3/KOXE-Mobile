@@ -11,7 +11,7 @@ class Config {
   static const String getCarsAPI = "/cars";
   static const String SalonsAPI = "/salons";
   static const String getIsSalonAPI = "salons/salonId";
-  static const String sendInvite = "auth/invite";
+  static const String sendInvite = "salons/invite";
   static const String mySalon = "salons/my-salon";
 
   //Appointment
@@ -47,8 +47,8 @@ class Config {
 
   //KeyMap
 
-  static const KeyMap =
-      "salon"; //key map phải có trong purchase để có thể sử dụng quản lí salon
+  static const SalonKeyMap =
+      "f1"; //key map phải có trong purchase để có thể sử dụng quản lí salon
 
 //Chap API
   static const String getChatsAPI = "/messages";
