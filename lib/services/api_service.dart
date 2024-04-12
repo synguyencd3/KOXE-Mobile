@@ -194,6 +194,10 @@ class APIService {
   static Future<bool> googleLinkIn() async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
+    final googleCurrentUser =
+        GoogleSignIn().currentUser ?? await GoogleSignIn().signIn();
+    if (googleCurrentUser != null)
+      await GoogleSignIn().disconnect();
     const List<String> scopes = <String>[
       'email',
       'https://www.googleapis.com/auth/contacts.readonly',
