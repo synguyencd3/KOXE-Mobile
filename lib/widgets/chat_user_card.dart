@@ -41,7 +41,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 subtitle: Text(
-                  ((widget.user.message?.sender != '' ? widget.user.message?.sender ?? '' + ': ': ''))  + (widget.user.message?.message ?? ''),
+                  ((widget.user.message?.sender != '' ? widget.user.message!.sender + ': ' : ''))  + (widget.user.message?.message ?? ''),
                   maxLines: 1,
                 ),
                 trailing: Text(widget.user.message?.createdAt != null

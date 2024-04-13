@@ -43,6 +43,9 @@ class _CreateAppointState extends State<CreateAppoint> {
       getCars();
     });
   }
+  int findCarIndex(String carId) {
+    return cars!.indexWhere((car) => car.id == carId);
+  }
 
   @override
   void dispose() {
@@ -63,6 +66,11 @@ class _CreateAppointState extends State<CreateAppoint> {
 
   Future<void> getCars() async {
     List<Car>? carsApi = await SalonsService.getDetail(user.id);
+    if (user.carId !='' &&  carsApi!.isNotEmpty) {
+      int initialPage = carsApi.indexWhere((car) => car.id == user.carId);
+      //print(initialPage);
+      carouselController.animateToPage(initialPage);
+    }
     setState(() {
       cars = carsApi;
     });
@@ -193,7 +201,7 @@ class _CreateAppointState extends State<CreateAppoint> {
               SizedBox(height: 10),
               CarouselSlider(
                 carouselController: carouselController,
-                options: CarouselOptions(height: 450.0, onPageChanged:(index,reason){
+                options: CarouselOptions(viewportFraction:1.0, height: 450.0, onPageChanged:(index,reason){
                   setState(() {
                     selectedCar = cars![index].id!;
                   });

@@ -46,7 +46,7 @@ class _MainHomeState extends State<MainHome> {
     initSocket();
     initCallService();
     getAllNotification();
-    _notificationSubscription = SocketManager.notificationStream.listen((data) {
+    _notificationSubscription = SocketManager().notificationStream.listen((data) {
       print(data);
       setState(() {
         _count++;
@@ -76,7 +76,7 @@ class _MainHomeState extends State<MainHome> {
   Future<void> initSocket() async {
     final Map<String, dynamic> userProfile = await APIService.getUserProfile();
     String salonId = await SalonsService.isSalon();
-    await SocketManager.initSocket(userProfile['user_id'], salonId, (data) {
+    await SocketManager().initSocket(userProfile['user_id'], salonId, (data) {
       print(data);
     });
   }
