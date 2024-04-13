@@ -38,7 +38,8 @@ class CarsService {
     
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      return Car.fromJson(data); //carsFromJson(data['data']['cars']);
+      //print(data['car']);
+      return Car.fromJson(data['car']); //carsFromJson(data['data']['cars']);
     }
     return null;
   }

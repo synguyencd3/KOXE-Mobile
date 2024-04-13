@@ -1,3 +1,4 @@
+import 'package:mobile/model/car_of_salon_model.dart';
 List<Car> carsFromJson(dynamic str) =>
     List<Car>.from((str).map((x) => Car.fromJson(x)));
 
@@ -18,6 +19,7 @@ class Car {
   String? gear;
   String? mfg;
   String? outColor;
+  CarSalon? salon;
 
   Car(
       {this.id,
@@ -35,7 +37,8 @@ class Car {
       this.seat,
       this.type,
       this.mfg,
-      this.outColor});
+      this.outColor,
+      this.salon});
 
   Car.fromJson(Map<String, dynamic> json) {
     id = json['car_id'];
@@ -54,6 +57,7 @@ class Car {
     gear = json['gear'];
     mfg = json['mfg'];
     outColor = json['outColor'];
+    salon = json['salon'] != null ? CarSalon.fromJson(json['salon']): null;
   }
 
   Map<String, dynamic> tojson() {

@@ -204,7 +204,7 @@ class _SalonDetailState extends State<SalonDetail> {
             salon.cars.length > 0 ?
             TextButton.icon(
               onPressed: () {
-                print(salon.cars.length);
+                //print(salon.cars.length);
                 Navigator.pushNamed(context, '/listing/manage', arguments: salon.cars);
               },
               label: Text('Xem tất cả'),

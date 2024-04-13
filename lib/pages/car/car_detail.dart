@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:mobile/model/chat_model.dart';
+import 'package:mobile/model/chat_user_model.dart';
 import 'package:mobile/widgets/button.dart';
+import 'package:mobile/services/cars_service.dart';
 
 class CarDetail extends StatefulWidget {
   @override
@@ -160,8 +163,12 @@ class _CarDetailState extends State<CarDetail> {
                       ),
                     ),
                   ),
-                  ButtonCustom(onPressed: (){
-                   // Navigator.pushNamed(context, '/create_appointment', arguments: {'car': car});
+                  ButtonCustom(onPressed: () async {
+                    print(car.id);
+                    Car? carDetail = await CarsService.getDetail(car.id ?? '');
+                    print(carDetail?.salon?.salonId ?? '');
+                    ChatUserModel user = ChatUserModel(id: carDetail?.salon?.salonId ?? '', name: carDetail?.salon?.name ?? '', carId: car.id );
+                    Navigator.pushNamed(context, '/create_appointment', arguments: user);
                   }, title: 'Đặt lịch hẹn để xem xe này',),
                 ],
               ),

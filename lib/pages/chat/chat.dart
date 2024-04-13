@@ -34,17 +34,18 @@ class _ChatState extends State<ChatPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      user = ModalRoute.of(context)?.settings.arguments as ChatUserModel?;
-      if (user != null) {
+    Future.delayed(Duration.zero, () {
+      ChatUserModel? userApi = ModalRoute.of(context)?.settings.arguments as ChatUserModel?;
+      setState(() {
+        user = userApi;
         _receiver = types.User(
           id: user?.id ?? '',
         );
-      }
+      });
       callAPI();
     });
-    initSocket();
-    _messageSubscription = SocketManager.messageStream.listen((data) {
+    _messageSubscription = SocketManager().messageStream.listen((data) {
+      print(data);
       // Parse the message and create a types.Message object
       final messageReceive = types.TextMessage(
         author: _receiver,
@@ -55,29 +56,11 @@ class _ChatState extends State<ChatPage> {
       _addMessage(messageReceive);
     });
   }
-
-  Future<void> initSocket() async {
-    String salonId = await SalonsService.isSalon();
-    await SocketManager.initSocket(_sender.id, salonId, (data) {
-      print(data);
-      for (var idData in data) {
-        if (user?.id == idData) {
-          if (mounted)
-            {
-              setState(() {
-                user?.isOnline = true;
-              });
-            }
-          break;
-        }
-      }
-    });
-  }
-
   @override
   void dispose() {
     super.dispose();
-    _messageSubscription!.cancel();
+    _messageSubscription?.cancel();
+    print('abc');
   }
 
   Future<void> callAPI() async {
