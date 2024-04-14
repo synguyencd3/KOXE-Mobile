@@ -50,10 +50,19 @@ class Employee {
     facebook = json['facebook'];
     google = json['google'];
     aso = json['aso'];
-    try {permissions = json['permissions'].cast<String>();}
-        catch (e) {
-      permissions = [];
-        }
+    print(json["permissions"]);
+    permissions = permission(json["permissions"]);
+  }
+
+  List<String> permission(Map<String, dynamic> permissionMap){
+    List<String> output = [];
+    for (MapEntry<String, dynamic> entries in permissionMap.entries)
+      {
+        var Category= entries.key; //chưa dử dụng tới
+        Map<String, dynamic> CategoryPermission = entries.value;
+         CategoryPermission.forEach((key, value) {output.add(key);});
+      }
+    return output;
   }
 
   Map<String, dynamic> toJson() {
@@ -76,3 +85,5 @@ class Employee {
     return data;
   }
 }
+
+

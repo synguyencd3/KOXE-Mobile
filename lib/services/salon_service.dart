@@ -208,4 +208,28 @@ class SalonsService {
     }
     return [];
   }
+
+  static Future<bool> setPermission(List<String> permissions, String id) async {
+    await APIService.refreshToken();
+    String mySalon = await isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.Permission);
+
+    var response = await http.post(url, headers: requestHeaders, body: {
+      "salonId": mySalon,
+      "permission": permissions.toString(),
+      "userId": id
+    });
+    if (response.statusCode == 200) {
+      print(response.body);
+      return true;
+    }
+    return false;
+  }
 }

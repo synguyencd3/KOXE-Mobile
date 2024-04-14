@@ -171,6 +171,12 @@ class _AdminPageState extends State<AdminPage> {
                         onPressed: () {
                           print(user.fullname);
                           print(user.permissions);
+                          SalonsService.setPermission(user.permissions!, user.userId!);
+                          Navigator.pop(context);},
+                      ),
+                      TextButton(
+                        child: Text('Cancel'),
+                        onPressed: () {
                           Navigator.pop(context);},
                       ),
                     ],
