@@ -132,7 +132,7 @@ class _UserState extends State<User> {
                       onPressed: () {
                         ZegoUIKitPrebuiltCallInvitationService().uninit();
                         Navigator.pop(context);
-                        SocketManager.disconnectSocket();
+                        SocketManager().disconnectSocket();
                         SharedService.logout(context);
                       },
                       child: Text('Có'),

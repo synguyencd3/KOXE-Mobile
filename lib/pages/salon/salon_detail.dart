@@ -103,7 +103,7 @@ class _SalonDetailState extends State<SalonDetail> {
           children: [
             CarouselSlider(
               options: CarouselOptions(height: 200.0),
-              items: salon.banner != null
+              items: salon.banner!.isNotEmpty
                   ? salon.banner!.map((i) {
                       return Builder(
                         builder: (BuildContext context) {
@@ -200,11 +200,11 @@ class _SalonDetailState extends State<SalonDetail> {
                 ),
               ),
             ),
-            salon.cars!.length > 0 ? CarCard(car: salon.cars![0]) : Loading(),
-            salon.cars!.length > 0 ?
+            salon.cars.length > 0 ? CarCard(car: salon.cars[0]) : Loading(),
+            salon.cars.length > 0 ?
             TextButton.icon(
               onPressed: () {
-                print(salon.cars?.length);
+                //print(salon.cars.length);
                 Navigator.pushNamed(context, '/listing/manage', arguments: salon.cars);
               },
               label: Text('Xem tất cả'),

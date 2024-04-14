@@ -9,7 +9,8 @@ class ChatUserModel {
   final String? image;
   final MessaageModel? message;
   late bool? isOnline = false;
-  late String? salonId = '';
+  late String? carId='';
+
 
   ChatUserModel({
     required this.id,
@@ -17,7 +18,7 @@ class ChatUserModel {
     this.username,
     this.image,
     this.message,
-    this.salonId,
+    this.carId,
   });
 
   ChatUserModel.fromJson(Map<String, dynamic> json)

@@ -5,14 +5,31 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:mobile/config.dart';
 
 class SocketManager {
-  static IO.Socket? _socket;
-  static StreamController<Map<String,dynamic>> _messageController =StreamController.broadcast();
-  static Stream<Map<String,dynamic>> get messageStream => _messageController.stream;
-  static StreamController<String> _notificationController =StreamController.broadcast();
-  static Stream<String> get notificationStream => _notificationController.stream;
+  static final SocketManager _singleton = SocketManager._internal();
 
+  factory SocketManager() {
+    return _singleton;
+  }
 
-  static Future<void> initSocket(String userId, String salonId, Function callback) async {
+  SocketManager._internal();
+
+  IO.Socket? _socket;
+  StreamController<Map<String, dynamic>> _messageController =
+      StreamController.broadcast();
+
+  Stream<Map<String, dynamic>> get messageStream => _messageController.stream;
+  StreamController<String> _notificationController =
+      StreamController.broadcast();
+
+  Stream<String> get notificationStream => _notificationController.stream;
+
+  StreamController<List<dynamic>> _onlineUsersController =
+      StreamController.broadcast();
+
+  Stream<List<dynamic>> get onlineUsersStream => _onlineUsersController.stream;
+
+  Future<void> initSocket(
+      String userId, String salonId, Function callback) async {
     if (_socket != null && _socket!.connected) {
       _socket!.disconnect();
     }
@@ -32,8 +49,9 @@ class SocketManager {
     }
     _socket!.connect();
     print('connected');
-  ;
+    ;
     _socket!.on('newMessage', (data) {
+      //print(data);
       _messageController.add(data);
     });
     _socket!.on('notification', (data) {
@@ -41,18 +59,34 @@ class SocketManager {
       //print(data);
     });
     _socket!.on('getOnlineUsers', (data) {
-      callback(data);
+      List<String> onlineUsers = [];
+      for (var user in data) {
+        onlineUsers.add(user.toString());
+      }
+      _onlineUsersController.add(onlineUsers);
+      print(onlineUsers);
     });
   }
 
   // disconnect socket
-  static void disconnectSocket() {
+  void disconnectSocket() {
     if (_socket != null && _socket!.connected) {
       _socket!.disconnect();
+      if (!_messageController.isClosed) {
+        print('abc');
+        _messageController.close();
+      }
+      if (!_notificationController.isClosed) {
+        _notificationController.close();
+      }
+      if (!_onlineUsersController.isClosed) {
+        _onlineUsersController.close();
+      }
+
     }
   }
-  static bool isSocketConnected() {
+
+  bool isSocketConnected() {
     return _socket!.connected;
   }
-
 }

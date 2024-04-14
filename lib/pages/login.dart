@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 //import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/model/login_request_model.dart';
 import 'package:mobile/services/api_service.dart';
@@ -17,7 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   bool isAPIcallProcess = false;
 
   void Login() {
-   
     setState(() {
       isAPIcallProcess = true;
     });
@@ -33,49 +33,53 @@ class _LoginPageState extends State<LoginPage> {
             }
           else
             {
-              showDialog(context: context, builder:
-                  (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Login Failed'),
-                  content: Text('Kiểm tra lại thông tin đăng nhập'),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('OK'))
-                  ],
-                );
-              })
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Login Failed'),
+                      content: Text('Kiểm tra lại thông tin đăng nhập'),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('OK'))
+                      ],
+                    );
+                  })
             }
         });
   }
 
   void googleSignIn() {
     APIService.googleSignIn().then((success) => {
-      if (success) {Navigator.pushNamedAndRemoveUntil(
-                  context, '/mhome', (route) => false)}
-                  else {
-                    print("login failed")
-                  }
-    });
+          if (success)
+            {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/mhome', (route) => false)
+            }
+          else
+            {print("login failed")}
+        });
   }
 
   void IsLoggedIn() async {
     if (await SharedService.isLoggedIn()) {
-       Navigator.pushNamedAndRemoveUntil(
-                  context, '/mhome', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, '/mhome', (route) => false);
     }
   }
 
   void facebookSignIn() {
-     APIService.facebookSignIn().then((success) => {
-      if (success) {Navigator.pushNamedAndRemoveUntil(
-                  context, '/mhome', (route) => false)}
-                  else {
-                    print("login failed")
-                  }
-    });
+    APIService.facebookSignIn().then((success) => {
+          if (success)
+            {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/mhome', (route) => false)
+            }
+          else
+            {print("login failed")}
+        });
   }
 
   @override
@@ -98,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-       // backgroundColor: FlutterFlowTheme.of(context).primary,
+        // backgroundColor: FlutterFlowTheme.of(context).primary,
         title: Align(
           child: Text(
             'LOGIN',
@@ -117,11 +121,11 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 50,
             ),
-        
+
             //Input Field
             emailField(username: _username),
             passwordField(password: _password),
-        
+
             //Forgot Password Text
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -130,17 +134,17 @@ class _LoginPageState extends State<LoginPage> {
                 children: [Text('Forgot Password?')],
               ),
             ),
-        
+
             //Button
             Button(name: 'Login', callback: Login),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
               child: Text(
                 'Or',
-               // style: FlutterFlowTheme.of(context).bodyMedium,
+                // style: FlutterFlowTheme.of(context).bodyMedium,
               ),
             ),
-        
+
             Button(
               width: 230,
               name: 'Sign in with Google',
@@ -149,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                 googleSignIn();
               },
             ),
-        
+
             Button(
               width: 230,
               name: 'Sign in with Facebook',
@@ -158,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                 facebookSignIn();
               },
             ),
-        
+
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Row(
@@ -248,8 +252,8 @@ class emailField extends StatelessWidget {
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
           labelText: 'Username',
-         // labelStyle: FlutterFlowTheme.of(context).labelMedium,
-         // hintStyle: FlutterFlowTheme.of(context).labelMedium,
+          // labelStyle: FlutterFlowTheme.of(context).labelMedium,
+          // hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
       ),
     );
@@ -275,7 +279,7 @@ class passwordField extends StatelessWidget {
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
           hintText: 'Password',
-         // labelStyle: FlutterFlowTheme.of(context).labelMedium,
+          // labelStyle: FlutterFlowTheme.of(context).labelMedium,
 //hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
       ),

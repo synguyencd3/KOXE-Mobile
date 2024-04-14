@@ -44,6 +44,9 @@ class ChatService {
     var url = Uri.http(Config.apiURL, Config.getAllChatUsersAPI);
     var response = await http.get(url, headers: requestHeaders);
     print(response.body);
+    if (response.body == '[]') {
+      return [];
+    }
     var data = jsonDecode(response.body);
     if (data['status'] == 'success') {
       return chatUserFromJson(data['chattingUsers']);

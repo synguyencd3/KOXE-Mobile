@@ -14,7 +14,7 @@ class ButtonCustom extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(15),
         ),
         onPressed: onPressed != null ? () => onPressed!() : null,
         child: Text(title ?? 'Button'),

@@ -15,17 +15,16 @@ class _NotiState extends State<Noti> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Future.delayed(Duration.zero, () {
+      getNotifications();
+    });
   }
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (ModalRoute.of(context)!.settings.arguments != null) {
-      List<NotificationModel> notificationsArgument = ModalRoute.of(context)!.settings.arguments as List<NotificationModel>;
-      if (notificationsArgument.isNotEmpty) {
-        setState(() {
-          notifications.addAll(notificationsArgument);
-        });
-      }
+  Future<void> getNotifications() async {
+    List<NotificationModel> notificationsArgument = ModalRoute.of(context)!.settings.arguments as List<NotificationModel>;
+    if (notificationsArgument.isNotEmpty) {
+      setState(() {
+        notifications.addAll(notificationsArgument);
+      });
     }
   }
 

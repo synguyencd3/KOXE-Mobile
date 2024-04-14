@@ -67,5 +67,23 @@ static Future<void> markAsRead(String id) async {
     print('error');
     return [];
   }
+  static Future<void> markAsReadSalon(String id, String salonId) async {
+    print(id);
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.markAsReadSalonAPI);
+
+    var response = await http.patch(url, headers: requestHeaders, body: jsonEncode({'id': id, 'salonId': salonId}));
+
+    if (response.statusCode == 200) {
+      print('Mark as read');
+    } else {
+      print('error');
+    }
+  }
 
 }

@@ -10,3 +10,4 @@ Future<File?> pickImage(ImageSource source) async {
   print('No image selected.');
   return null;
 }
+

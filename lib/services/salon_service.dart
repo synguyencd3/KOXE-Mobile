@@ -163,6 +163,7 @@ class SalonsService {
   static Future<String> isSalon()  async {
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
+    //print('access token ${loginDetails?.accessToken}');
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
@@ -183,6 +184,21 @@ class SalonsService {
     {
       return '';
     }
+  }
+  static Future<bool> acceptInvite(String token) async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+    var url = Uri.http(Config.apiURL, Config.acceptInviteAPI);
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({'token': token}));
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
   }
 
   static Future<List<Employee>> getEmployees() async {
