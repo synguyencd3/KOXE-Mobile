@@ -7,6 +7,8 @@ import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/shared_service.dart';
 
+import '../model/employee_model.dart';
+
 class SalonsService {
   static var client = http.Client();
 
@@ -181,5 +183,29 @@ class SalonsService {
     {
       return '';
     }
+  }
+
+  static Future<List<Employee>> getEmployees() async {
+    await APIService.refreshToken();
+    String mySalon = await isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.getEmployees);
+
+    var response = await http.post(url, headers: requestHeaders, body: {
+      "salonId": mySalon
+    });
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      //print(data);
+      var employees = employeesFromJson(data['salonDb']['employees']);
+      return employees;
+    }
+    return [];
   }
 }

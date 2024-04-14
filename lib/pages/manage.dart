@@ -44,7 +44,7 @@ class _ManageState extends State<Manage> {
             text_card(
                 title: 'Quản lý người dùng',
                 onTap: () {
-                  print('Tap');
+                  Navigator.pushNamed(context, '/employee_management');
                 }),
             text_card(
                 title: 'Quản lý đơn vị liên kết',
