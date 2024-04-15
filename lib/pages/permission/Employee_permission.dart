@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/services/salon_service.dart';
@@ -40,7 +42,7 @@ class _AdminPageState extends State<AdminPage> {
   Future<void> getEmployees() async {
     var data = await SalonsService.getEmployees();
     setState(() {
-      users =data;
+      users =data.where((element) => element.permissions!.contains("OWNER")==false).toList();
       users.forEach((element) {print(element.permissions);});
     });
   }
@@ -170,7 +172,7 @@ class _AdminPageState extends State<AdminPage> {
                         child: Text('Done'),
                         onPressed: () {
                           print(user.fullname);
-                          print(user.permissions);
+                          print(jsonEncode(user.permissions));
                           SalonsService.setPermission(user.permissions!, user.userId!);
                           Navigator.pop(context);},
                       ),

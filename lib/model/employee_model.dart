@@ -51,14 +51,15 @@ class Employee {
     google = json['google'];
     aso = json['aso'];
     print(json["permissions"]);
-    permissions = permission(json["permissions"]);
+    json["permissions"] == null ? permissions = <String>[] : permissions = permission(json["permissions"]);
   }
 
   List<String> permission(Map<String, dynamic> permissionMap){
+    if (permissionMap == null) return <String>[];
     List<String> output = [];
     for (MapEntry<String, dynamic> entries in permissionMap.entries)
       {
-        var Category= entries.key; //chưa dử dụng tới
+      //  var Category= entries.key; //chưa dử dụng tới
         Map<String, dynamic> CategoryPermission = entries.value;
          CategoryPermission.forEach((key, value) {output.add(key);});
       }

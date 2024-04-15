@@ -237,11 +237,19 @@ class SalonsService {
 
     var url = Uri.http(Config.apiURL, Config.Permission);
 
-    var response = await http.post(url, headers: requestHeaders, body: {
-      "salonId": mySalon,
-      "permission": permissions.toString(),
-      "userId": id
-    });
+    String formatted= "";
+    permissions.forEach((element) {formatted+=element+',';});
+    if (formatted != null && formatted.length > 0) {
+      formatted = formatted.substring(0, formatted.length - 1);
+    }
+    print(formatted);
+
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['salonId'] = mySalon;
+    data['permission'] = formatted;
+    data['userId'] = id;
+
+    var response = await http.post(url, headers: requestHeaders, body: data);
     if (response.statusCode == 200) {
       print(response.body);
       return true;
