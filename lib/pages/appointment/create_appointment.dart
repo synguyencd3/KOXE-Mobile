@@ -32,6 +32,7 @@ class _CreateAppointState extends State<CreateAppoint> {
   List<Car>? cars = [];
   String selectedCar = '';
   CarouselController carouselController = CarouselController();
+  List<bool> isSelected = [true, false, false];
 
   @override
   void initState() {
@@ -113,7 +114,7 @@ class _CreateAppointState extends State<CreateAppoint> {
                   color: Colors.grey[200],
                   padding: const EdgeInsets.all(8.0),
                   child: TableCalendar(
-                    firstDay: DateTime.utc(2010, 10, 16),
+                    firstDay: DateTime.now(),
                     lastDay: DateTime.utc(2030, 3, 14),
                     focusedDay: today,
                     headerStyle: HeaderStyle(
@@ -133,71 +134,96 @@ class _CreateAppointState extends State<CreateAppoint> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.black87,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    NumberPicker(
-                      minValue: 0,
-                      maxValue: 23,
-                      value: hour,
-                      zeroPad: true,
-                      infiniteLoop: true,
-                      itemWidth: 80,
-                      itemHeight: 60,
-                      onChanged: (value) {
-                        setState(() {
-                          hour = value;
-                        });
-                      },
-                      textStyle: TextStyle(color: Colors.grey, fontSize: 20),
-                      selectedTextStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                            top: BorderSide(color: Colors.white),
-                            bottom: BorderSide(color: Colors.white)),
-                      ),
-                    ),
-
-                    // Add a NumberPicker for minutes
-                    NumberPicker(
-                      minValue: 0,
-                      maxValue: 59,
-                      value: minute,
-                      zeroPad: true,
-                      infiniteLoop: true,
-                      itemWidth: 80,
-                      itemHeight: 60,
-                      onChanged: (value) {
-                        setState(() {
-                          minute = value;
-                        });
-                      },
-                      textStyle: TextStyle(color: Colors.grey, fontSize: 20),
-                      selectedTextStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                            top: BorderSide(color: Colors.white),
-                            bottom: BorderSide(color: Colors.white)),
-                      ),
-                    ),
-                  ],
-                ),
+              Wrap(
+                spacing: 20,
+                runSpacing: 20,
+                children: [
+                  ToggleButtons(
+                    isSelected: isSelected,
+                    onPressed: (int index) {
+                      setState(() {
+                        for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
+                          if (buttonIndex == index) {
+                            isSelected[buttonIndex] = true;
+                          } else {
+                            isSelected[buttonIndex] = false;
+                          }
+                        }
+                      });
+                    },
+                    children: const <Widget>[
+                      Icon(Icons.ac_unit),
+                      Icon(Icons.call),
+                      Icon(Icons.cake),
+                    ],
+                  ),
+                ],
               ),
+              // Container(
+              //   padding: const EdgeInsets.symmetric(
+              //       horizontal: 20, vertical: 10),
+              //   decoration: BoxDecoration(
+              //     color: Colors.black87,
+              //     borderRadius: BorderRadius.circular(10),
+              //   ),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     children: [
+              //       NumberPicker(
+              //         minValue: 0,
+              //         maxValue: 23,
+              //         value: hour,
+              //         zeroPad: true,
+              //         infiniteLoop: true,
+              //         itemWidth: 80,
+              //         itemHeight: 60,
+              //         onChanged: (value) {
+              //           setState(() {
+              //             hour = value;
+              //           });
+              //         },
+              //         textStyle: TextStyle(color: Colors.grey, fontSize: 20),
+              //         selectedTextStyle: TextStyle(
+              //           color: Colors.white,
+              //           fontSize: 20,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //         decoration: BoxDecoration(
+              //           border: Border(
+              //               top: BorderSide(color: Colors.white),
+              //               bottom: BorderSide(color: Colors.white)),
+              //         ),
+              //       ),
+              //
+              //       // Add a NumberPicker for minutes
+              //       NumberPicker(
+              //         minValue: 0,
+              //         maxValue: 59,
+              //         value: minute,
+              //         zeroPad: true,
+              //         infiniteLoop: true,
+              //         itemWidth: 80,
+              //         itemHeight: 60,
+              //         onChanged: (value) {
+              //           setState(() {
+              //             minute = value;
+              //           });
+              //         },
+              //         textStyle: TextStyle(color: Colors.grey, fontSize: 20),
+              //         selectedTextStyle: TextStyle(
+              //           color: Colors.white,
+              //           fontSize: 20,
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //         decoration: BoxDecoration(
+              //           border: Border(
+              //               top: BorderSide(color: Colors.white),
+              //               bottom: BorderSide(color: Colors.white)),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(height: 10),
               CarouselSlider(
                 carouselController: carouselController,
