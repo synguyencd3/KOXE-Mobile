@@ -12,7 +12,7 @@ class Car {
   String? origin;
   String? model;
   String? type;
-  int? capacity;
+  num? capacity;
   int? door;
   int? seat;
   int? kilometer;

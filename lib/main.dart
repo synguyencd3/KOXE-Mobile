@@ -4,7 +4,8 @@ import 'package:mobile/pages/Payment.dart';
 import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
 import 'package:mobile/pages/login.dart';
-import 'package:mobile/pages/news.dart';
+import 'package:mobile/pages/news/news.dart';
+import 'package:mobile/pages/permission/Employee_permission.dart';
 import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';
 import 'package:mobile/pages/salon/new_salon.dart';
@@ -90,6 +91,7 @@ class _MyAppState extends State<MyApp> {
         '/my_salon': (context) =>  MySalon(),
         '/call_page': (context) => CallPage(callID: '111'),
         '/create_appointment': (context) => CreateAppoint(),
+        '/employee_management' : (context) => AdminPage()
       },
     );
   }

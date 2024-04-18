@@ -1,6 +1,6 @@
 class Config {
   static const String appName = "Salon oto";
-  static const String apiURL = "192.168.1.31:5000";
+  static const String apiURL = "192.168.1.5:5000";
   static const String loginAPI = "auth/login";
   static const String registerAPI = "auth/register";
   static const String facebookAPI = "auth/facebook-mobile";
@@ -9,11 +9,16 @@ class Config {
   static const String userprofileAPI = "/users/profile";
   static const String getAllPackageAPI = "/packages";
   static const String getCarsAPI = "/cars";
+
+
+  //Salon
   static const String SalonsAPI = "/salons";
   static const String getIsSalonAPI = "salons/salonId";
   static const String sendInvite = "salons/invite";
   static const String acceptInviteAPI = "salons/verifyInviteUser";
   static const String mySalon = "salons/my-salon";
+  static const String getEmployees = "salons/user";
+  static const String Permission = "/salons/permission";
 
   //Appointment
   static const String getAppointmentsAPI = "/appointment/get-appoint-user";
@@ -33,6 +38,8 @@ class Config {
   static const String newsURL = 'newsapi.org';
   static const String newsAPi = '/v2/everything';
   static const String apiKey = 'b019956a13da4697841c13223270901f';
+  static const String news = "https://crawl-data-pink.vercel.app/articles";
+  
 
   //Google API
   static const String client_id =

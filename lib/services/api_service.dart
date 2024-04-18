@@ -134,7 +134,8 @@ class APIService {
       'apiKey': Config.apiKey
     };
 
-    var url = Uri.https(Config.newsURL, Config.newsAPi, param);
+    //var url = Uri.https(Config.newsURL, Config.newsAPi, param);
+    var url = Uri.parse(Config.news);
 
     var response = await http.get(url);
 
@@ -194,6 +195,10 @@ class APIService {
   static Future<bool> googleLinkIn() async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
+    final googleCurrentUser =
+        GoogleSignIn().currentUser ?? await GoogleSignIn().signIn();
+    if (googleCurrentUser != null)
+      await GoogleSignIn().disconnect();
     const List<String> scopes = <String>[
       'email',
       'https://www.googleapis.com/auth/contacts.readonly',
@@ -229,6 +234,40 @@ class APIService {
     var response = await client.get(
       url,
       headers: requestHeaders,
+    );
+    print(response.body);
+    if (jsonDecode(response.body)['status'] == "success") {
+      await updateEmail(googleAccount.email);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<bool> updateEmail(String email) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    if (email == "" )
+      {
+        var data = await getUserProfile();
+        email = data['google'];
+        print(email);
+      }
+    print(LoginInfo?.accessToken);
+
+    Map<String, String> requestHeaders = {
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.userprofileAPI);
+    var response = await client.patch(
+        url,
+        headers: requestHeaders,
+        body: {
+          "email" : email
+        }
     );
     print(response.body);
     if (jsonDecode(response.body)['status'] == "success") {

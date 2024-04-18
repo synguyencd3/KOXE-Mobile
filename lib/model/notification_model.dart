@@ -19,6 +19,6 @@ class NotificationModel {
         avatar = json['avatar'],
         id = json['id'],
         types = json['types'],
-        data = json['data'],
+        data = json['data'] ?? "",
         createAt = DateTime.parse(json['create_at']);
 }

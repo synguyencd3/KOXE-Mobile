@@ -25,6 +25,7 @@ class _UserInfoState extends State<UserInfo> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    APIService.updateEmail("");
     controller = TextEditingController();
   }
 
