@@ -8,7 +8,7 @@ class NotificationModel {
   final String avatar;
   final String id;
   final String types;
-  final String data;
+  final String? data;
   late int isAccepted=0 ;
 
   NotificationModel({this.description,required this.createAt, required this.isRead,required this.avatar, required this.id , required this.types , required this.data});

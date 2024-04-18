@@ -67,7 +67,7 @@ class _NotificationCardState extends State<NotificationCard> {
                     if (widget.notification.types == 'appointment') {
                       AppointmentModel appointment =
                           await AppointmentService.getAppointmentById(
-                              salonId, widget.notification.data);
+                              salonId, widget.notification.data ?? '');
                       appointment.dayDiff = appointment.datetime
                               .difference(DateTime.now())
                               .inDays +
@@ -101,7 +101,7 @@ class _NotificationCardState extends State<NotificationCard> {
                       FilledButton(
                         onPressed: () async {
                           bool check = await SalonsService.acceptInvite(
-                              widget.notification.data);
+                              widget.notification.data ?? '');
                           if (check) {
                             await NotificationService.markAsRead(
                                 widget.notification.id);

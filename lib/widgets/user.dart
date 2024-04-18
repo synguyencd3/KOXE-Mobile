@@ -66,6 +66,7 @@ class _UserState extends State<User> {
         ));
     return Column(
       children: [
+        SizedBox(height: 20),
         Center(
           child: CircleAvatar(
             radius: 50,
