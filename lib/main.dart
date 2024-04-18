@@ -4,7 +4,7 @@ import 'package:mobile/pages/Payment.dart';
 import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
 import 'package:mobile/pages/login.dart';
-import 'package:mobile/pages/news.dart';
+import 'package:mobile/pages/news/news.dart';
 import 'package:mobile/pages/permission/Employee_permission.dart';
 import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';

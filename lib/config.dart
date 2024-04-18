@@ -38,6 +38,8 @@ class Config {
   static const String newsURL = 'newsapi.org';
   static const String newsAPi = '/v2/everything';
   static const String apiKey = 'b019956a13da4697841c13223270901f';
+  static const String news = "https://crawl-data-pink.vercel.app/articles";
+  
 
   //Google API
   static const String client_id =

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 //import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/services/api_service.dart';
+import 'package:mobile/services/news_service.dart';
 import 'package:mobile/widgets/news_card.dart';
 
-import '../model/articles_model.dart';
+import '../../model/articles_model.dart';
 
 class NewsBoard extends StatefulWidget {
   const NewsBoard({super.key});
@@ -22,7 +23,7 @@ class _NewsBoardState extends State<NewsBoard> {
   }
 
   Future<void> getNews() async {
-    var list = await APIService.getArticles();
+    var list = await NewsService.getArticles();
     setState(() {
       article = list;
     });
@@ -43,9 +44,9 @@ class _NewsBoardState extends State<NewsBoard> {
           itemBuilder: (context, index) {
             return NewsCard(
                 title: article[index].title,
-                description: article[index].description,
-                url: article[index].url,
-                imageUrl: article[index].imageUrl);
+                description: article[index].summary,
+                id: article[index].id,
+                imageUrl: article[index].thumbnail);
           }),
     );
   }
