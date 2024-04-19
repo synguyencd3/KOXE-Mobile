@@ -50,11 +50,26 @@ class SocketManager {
     _socket!.connect();
     print('connected');
     ;
+    if (_messageController.isClosed)
+    {
+      _messageController = StreamController.broadcast();
+    }
+    if (_notificationController.isClosed)
+    {
+      _notificationController = StreamController.broadcast();
+    }
+    if (_onlineUsersController.isClosed)
+    {
+      _onlineUsersController = StreamController.broadcast();
+    }
     _socket!.on('newMessage', (data) {
       //print(data);
       _messageController.add(data);
     });
     _socket!.on('notification', (data) {
+      if (_notificationController.isClosed) {
+       print('abc');
+      }
       _notificationController.add(data);
       //print(data);
     });
@@ -66,6 +81,7 @@ class SocketManager {
       _onlineUsersController.add(onlineUsers);
       print(onlineUsers);
     });
+
   }
 
   // disconnect socket
@@ -73,7 +89,6 @@ class SocketManager {
     if (_socket != null && _socket!.connected) {
       _socket!.disconnect();
       if (!_messageController.isClosed) {
-        print('abc');
         _messageController.close();
       }
       if (!_notificationController.isClosed) {

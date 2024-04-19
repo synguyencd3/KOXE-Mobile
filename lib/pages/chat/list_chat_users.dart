@@ -55,14 +55,19 @@ class _MessageState extends State<Message> {
   @override
   Widget build(BuildContext context) {
     return users.isNotEmpty
-        ? ListView.builder(
-            itemCount: users.length,
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.only(top: 1),
-            itemBuilder: (context, index) {
-              return ChatUserCard(user: users[index]);
-            },
-          )
+        ? StreamBuilder(
+          stream: SocketManager().messageStream,
+          builder: (context, snapshot) {
+            return ListView.builder(
+                itemCount: users.length,
+                physics: BouncingScrollPhysics(),
+                padding: EdgeInsets.only(top: 1),
+                itemBuilder: (context, index) {
+                  return ChatUserCard(user: users[index]);
+                },
+              );
+          }
+        )
         : Center(child: Text('Không có tin nhắn nào'));
   }
 }
