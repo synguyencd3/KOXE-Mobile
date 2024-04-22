@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 //import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/news_service.dart';
-import 'package:mobile/widgets/news_card.dart';
+import 'package:mobile/pages/news/news_card.dart';
 
 import '../../model/articles_model.dart';
 
