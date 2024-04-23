@@ -64,20 +64,24 @@ class WarrantyService {
     var LoginInfo = await SharedService.loginDetails();
     String mySalon = await SalonsService.isSalon();
     Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
+     // 'Accept': '*/*',
+      //'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
     var url = Uri.http(Config.apiURL, Config.updateWarranty);
-    var reqBody = model.toJson();
-    reqBody['warranty_id'] = id;
-    var response = await http.patch(url, headers: requestHeaders, body: {
-      "salonId": mySalon,
-      "newWarranty" : jsonEncode(reqBody)
-    });
+    var modelJson = model.toJson();
+    modelJson['warranty_id'] = id;
+    Map<String, dynamic> reqBody ={
+    "salonId": mySalon,
+    "newWarranty" : modelJson
+  };
+   // print(jsonEncode(reqBody));
+    var temp = jsonEncode(reqBody);
+    print(temp.toString());
+    var response = await http.patch(url, headers: requestHeaders, body: jsonEncode(reqBody));
     var responseData = jsonDecode(response.body);
+    print(responseData);
     if (responseData['status'] == 'success') {
       return true;
     }
@@ -89,9 +93,9 @@ class WarrantyService {
     var LoginInfo = await SharedService.loginDetails();
     String mySalon = await SalonsService.isSalon();
     Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
+     // 'Content-Type': 'application/json',
+     // 'Accept': '*/*',
+     // 'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 

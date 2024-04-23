@@ -27,6 +27,10 @@ class _WarrantyState extends State<WarrantyList> {
       warranties = list;
     });
   }
+
+  Future<void> deleteWarranty(String id) async {
+    WarrantyService.DeleteWarranty(id).then((value) {getWarrantiess();});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +46,7 @@ class _WarrantyState extends State<WarrantyList> {
           mainAxisSize: MainAxisSize.max,
           children: [
             TextButton(onPressed: () {
-              Navigator.pushNamed(context, '/warranty_form');
+              Navigator.pushNamed(context, '/warranty_form').then((value) {getWarrantiess();});
             }, child: Text('Add Warranty')),
             Expanded(
                 child: ListView.builder(
@@ -53,16 +57,18 @@ class _WarrantyState extends State<WarrantyList> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.all(10),
-                          child: WarrantyCard(warranty: warranties[index]));
-                    }))
+                          child: WarrantyCard(warranty: warranties[index], delete: deleteWarranty,));
+                    })),
           ],
         ));
   }
 }
 
 class WarrantyCard extends StatelessWidget {
-  const WarrantyCard({super.key, required this.warranty});
+  const WarrantyCard({super.key, required this.warranty, required this.delete});
   final Warranty warranty;
+
+  final Function delete;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +90,21 @@ class WarrantyCard extends StatelessWidget {
                   child: Text('${warranty.limitKilometer} Km đầu tiên trong vòng ${warranty.months} tháng')),
               Align(
                 alignment: AlignmentDirectional(-1,0),
-                  child: Text('${warranty.policy}'))
+                  child: Text('${warranty.policy}')),
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 0, 50, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    OutlinedButton(onPressed: () {
+                      Navigator.pushNamed(context, '/warranty_form', arguments: {'warranty': warranty});
+                    }, child: Text('Edit')),
+                    OutlinedButton(onPressed: () {
+                      delete(warranty.warrantyId);
+                    }, child: Text('Delete')),
+                  ],),
+              )
             ],
                 ),
           ),

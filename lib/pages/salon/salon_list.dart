@@ -88,7 +88,23 @@ class _MySalonState extends State<MySalon> {
 
   Future<void> deleteSalon(String id) async {
     SalonsService.DeleteSalon(id).then((value) {
-      getMySalon();
+      if (value!)
+        {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Xóa thành thông'),
+                backgroundColor: Colors.green,
+              )
+          );
+          getMySalon();
+          return;
+        }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+            backgroundColor: Colors.red,
+          )
+      );
     });
   }
 
@@ -197,7 +213,7 @@ class _MySalonCardState extends State<MySalonCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                           OutlinedButton(onPressed: () {
-                            Navigator.pushNamed(context, '/new_salon', arguments: {'salon': salon}).then((value) {getMySalon();});
+                            Navigator.pushNamed(context, '/new_salon', arguments: {'salon': salon}).then((value) {getMySalon();}).then((value)  {getMySalon();});
                             }, child: Text('Edit')),
                           OutlinedButton(onPressed: () {
                             widget.deletefunc(salon.salonId);

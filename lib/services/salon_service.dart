@@ -117,17 +117,21 @@ class SalonsService {
   static Future<bool?> DeleteSalon(String id) async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
-    //String mySalon = await isSalon();
+    String mySalon = await isSalon();
     Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
+      //'Content-Type': 'application/json',
+      //'Accept': '*/*',
+      //'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
     var url = Uri.http(Config.apiURL, "${Config.SalonsAPI}/$id");
 
-    var response = await http.delete(url, headers: requestHeaders);
+    var response = await http.delete(url, headers: requestHeaders, body: {
+      "salonId" : mySalon
+    });
+    print(mySalon);
+    print(response.body);
     var data = jsonDecode(response.body);
     if (data['status'] == 'success') return true;
     return false;

@@ -72,6 +72,13 @@ class _WarrantyFormState extends State<WarrantyForm> {
             )
         );
         Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+              backgroundColor: Colors.red,
+            )
+        );
       }
     });
   }
@@ -94,6 +101,15 @@ class _WarrantyFormState extends State<WarrantyForm> {
         );
         Navigator.pop(context);
       }
+      else
+        {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+                backgroundColor: Colors.red,
+              )
+          );
+        }
     });
   }
 
