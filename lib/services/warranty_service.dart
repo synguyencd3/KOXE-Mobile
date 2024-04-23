@@ -47,7 +47,7 @@ class WarrantyService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.createwarranty);
+    var url = Uri.http(Config.apiURL, Config.createWarranty);
     var reqBody = model.toJson();
     reqBody['salonId'] = mySalon;
     print(jsonEncode(reqBody));
@@ -56,6 +56,53 @@ class WarrantyService {
     if (responseData['status'] == 'success') {
       return true;
     }
+    return false;
+  }
+
+  static Future<bool?> updateWarranty(Warranty model, String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    String mySalon = await SalonsService.isSalon();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.updateWarranty);
+    var reqBody = model.toJson();
+    reqBody['warranty_id'] = id;
+    var response = await http.patch(url, headers: requestHeaders, body: {
+      "salonId": mySalon,
+      "newWarranty" : jsonEncode(reqBody)
+    });
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool?> DeleteWarranty(String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    String mySalon = await SalonsService.isSalon();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.deleteWarranty);
+
+    var response = await http.delete(url, headers: requestHeaders, body: {
+      'salonId' : mySalon,
+      'warrantyId' : id
+    });
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'success') return true;
     return false;
   }
 

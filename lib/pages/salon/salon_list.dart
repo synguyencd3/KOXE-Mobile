@@ -23,9 +23,6 @@ class _SalonListState extends State<SalonList> {
     getKeyMaps(); 
   }
 
-  Future<void> deleteSalon() async {
-
-  }
 
   Future<void> getKeyMaps() async {
     var set = await PaymentService.getKeySet();
@@ -89,6 +86,12 @@ class _MySalonState extends State<MySalon> {
     getMySalon();
   }
 
+  Future<void> deleteSalon(String id) async {
+    SalonsService.DeleteSalon(id).then((value) {
+      getMySalon();
+    });
+  }
+
   Future<void> getMySalon() async {
     var data = await SalonsService.getMySalon();
     print(data?.salonId);
@@ -109,7 +112,8 @@ class _MySalonState extends State<MySalon> {
         body: Column(
           children: [
             MySalon !=null ?
-            MySalonCard(salon: MySalon!)
+            MySalonCard(salon: MySalon!,
+            deletefunc: deleteSalon)
             
             :  TextButton(onPressed: () { Navigator.pushNamed(context, '/new_salon');}, child: const Text('Thêm mới')),
           ],
@@ -121,9 +125,11 @@ class _MySalonState extends State<MySalon> {
 class MySalonCard extends StatefulWidget {
    const MySalonCard(
       {super.key,
-      required this.salon});
+      required this.salon,
+      required this.deletefunc});
 
   final Salon salon;
+  final Function deletefunc;
 
   @override
   State<MySalonCard> createState() => _MySalonCardState();
@@ -193,7 +199,9 @@ class _MySalonCardState extends State<MySalonCard> {
                           OutlinedButton(onPressed: () {
                             Navigator.pushNamed(context, '/new_salon', arguments: {'salon': salon}).then((value) {getMySalon();});
                             }, child: Text('Edit')),
-                          OutlinedButton(onPressed: () {}, child: Text('Delete')),
+                          OutlinedButton(onPressed: () {
+                            widget.deletefunc(salon.salonId);
+                          }, child: Text('Delete')),
                         ],),
                  )
                 ],

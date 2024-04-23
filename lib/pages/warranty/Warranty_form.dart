@@ -3,23 +3,7 @@ import 'package:mobile/services/warranty_service.dart';
 
 import '../../model/warranty_model.dart';
 
-// class CarObject {
-//   String? name;
-//   int? limitKilometers;
-//   int? months;
-//   String? policy;
-//   String? note;
-//   Car? selectedCar;
-//
-//   CarObject({
-//     this.name,
-//     this.limitKilometers,
-//     this.months,
-//     this.policy,
-//     this.note,
-//     this.selectedCar,
-//   });
-// }
+
 
 class Car {
   String? name;
@@ -48,6 +32,49 @@ class _WarrantyFormState extends State<WarrantyForm> {
   late final _policy= TextEditingController();
  // late final _note = TextEditingController();
   Car? _selectedCar;
+
+  Warranty? warranty;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      initWarranty();
+    }); 
+  }
+
+  void initWarranty() {
+  var data = ModalRoute.of(context)!.settings.arguments as Map;
+  setState(() {
+    warranty = data['warranty'];
+  });
+  _name.text = warranty?.name ?? "";
+  _limitKilometers.text = warranty?.limitKilometer.toString() ?? "";
+  _months.text = warranty?.months.toString() ?? "";
+  _policy.text = warranty?.policy ?? "";
+  //_email.text = salon?.email ?? "";
+  }
+
+  void updateWarranty() async {
+    Warranty warrantyForm = Warranty(
+      name: _name.text,
+      limitKilometer: int.parse(_limitKilometers.text),
+      months: int.parse(_months.text),
+      policy: _policy.text
+    );
+    WarrantyService.updateWarranty(warrantyForm, warranty!.warrantyId!).then((value) {
+      if (value!) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('chỉnh sửa thành công'),
+              backgroundColor: Colors.green,
+            )
+        );
+        Navigator.pop(context);
+      }
+    });
+  }
 
   void NewWarranty() async {
     Warranty model = Warranty(
@@ -157,20 +184,32 @@ class _WarrantyFormState extends State<WarrantyForm> {
                     return null;
                   },
                 ),
+                warranty == null ?
                 TextButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
         
                       NewWarranty();
-
-        
                       // Clear the form
                       _formKey.currentState!.reset();
                     }
                   },
                   child: Text('Submit'),
-                ),
+                ) :
+                TextButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+        
+                      updateWarranty();
+                      // Clear the form
+                      _formKey.currentState!.reset();
+                    }
+                  },
+                  child: Text('Change'),
+                )
+                ,
               ],
             ),
           ),
@@ -180,8 +219,3 @@ class _WarrantyFormState extends State<WarrantyForm> {
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: WarrantyForm(),
-  ));
-}

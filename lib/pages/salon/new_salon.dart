@@ -91,7 +91,6 @@ class _NewSalonState extends State<NewSalon> {
     Future.delayed(Duration.zero, () {
       initSalon();
     }); 
-    
   }
 
 

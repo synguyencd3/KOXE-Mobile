@@ -42,7 +42,10 @@ class Config {
 
   //Warranty
   static const String warranty  = "/warranty";
-  static const String createwarranty = '/warranty/create';
+  static const String createWarranty = '/warranty/create';
+  static const String updateWarranty = '/warranty/update';
+  static const String deleteWarranty = '/warranty/delete';
+
 
   //Google API
   static const String client_id =
