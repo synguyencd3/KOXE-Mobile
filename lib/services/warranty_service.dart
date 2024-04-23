@@ -64,8 +64,7 @@ class WarrantyService {
     var LoginInfo = await SharedService.loginDetails();
     String mySalon = await SalonsService.isSalon();
     Map<String, String> requestHeaders = {
-     // 'Accept': '*/*',
-      //'Access-Control-Allow-Origin': "*",
+      HttpHeaders.contentTypeHeader: 'application/json',
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
