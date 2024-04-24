@@ -10,6 +10,8 @@ import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';
 import 'package:mobile/pages/salon/new_salon.dart';
 import 'package:mobile/pages/salon/salon_list.dart';
+import 'package:mobile/pages/warranty/Warranty_form.dart';
+import 'package:mobile/pages/warranty/warranty_list.dart';
 import 'package:mobile/widgets/introduction_car.dart';
 import 'package:mobile/pages/manage.dart';
 import 'package:mobile/pages/chat/list_chat_users.dart';
@@ -94,6 +96,8 @@ class _MyAppState extends State<MyApp> {
         '/create_appointment': (context) => CreateAppoint(),
         '/employee_management' : (context) => AdminPage(),
         '/warranty_manage' : (context) => WarrantyManage(),
+        '/warranty_list' : (context) => WarrantyList(),
+        '/warranty_form' : (context) => WarrantyForm()
       },
     );
   }

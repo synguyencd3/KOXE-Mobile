@@ -49,6 +49,12 @@ class _NewSalonState extends State<NewSalon> {
     SalonsService.NewSalon(salon).then((value) {
       if (value==true)
       {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Tạo thành công'),
+              backgroundColor: Colors.green,
+            )
+        );
         Navigator.pop(context);
       }
     });
@@ -65,7 +71,12 @@ class _NewSalonState extends State<NewSalon> {
     SalonsService.EditSalon(salonForm, salon!.salonId!).then((value) {
       if (value==true)
         {
-         // Navigator.popUntil(context, ModalRoute.withName('/salons'));
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Chỉnh sửa thành công'),
+                backgroundColor: Colors.green,
+              )
+          );
           Navigator.pop(context);
         }
     });
@@ -91,7 +102,6 @@ class _NewSalonState extends State<NewSalon> {
     Future.delayed(Duration.zero, () {
       initSalon();
     }); 
-    
   }
 
 

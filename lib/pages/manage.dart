@@ -64,7 +64,7 @@ class _ManageState extends State<Manage> {
             text_card(
                 title: 'Quản lý bảo hành',
                 onTap: () {
-                  print('Tap');
+                  Navigator.pushNamed(context, '/warranty_list');
                 }),
             text_card(
                 title: 'Quản lý bảo dưỡng',

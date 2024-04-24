@@ -39,7 +39,13 @@ class Config {
   static const String newsAPi = '/v2/everything';
   static const String apiKey = 'b019956a13da4697841c13223270901f';
   static const String news = "https://crawl-data-pink.vercel.app/articles";
-  
+
+  //Warranty
+  static const String warranty  = "/warranty";
+  static const String createWarranty = '/warranty/create';
+  static const String updateWarranty = '/warranty/update';
+  static const String deleteWarranty = '/warranty/delete';
+
 
   //Google API
   static const String client_id =
