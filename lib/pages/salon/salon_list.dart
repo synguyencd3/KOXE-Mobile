@@ -5,6 +5,7 @@ import 'package:mobile/services/payment_service.dart';
 import 'package:mobile/services/salon_service.dart';
 
 import '../../model/salon_model.dart';
+import '../loading.dart';
 
 class SalonList extends StatefulWidget {
   const SalonList({super.key});
@@ -16,6 +17,7 @@ class SalonList extends StatefulWidget {
 class _SalonListState extends State<SalonList> {
   List<Salon> salons = [];
   Set<String> keySet = Set();
+  bool isCalling = false;
   @override
   void initState() {
     super.initState();
@@ -37,6 +39,7 @@ class _SalonListState extends State<SalonList> {
     print(list);
     setState(() {
       salons = list;
+      isCalling = true;
     });
   }
 
@@ -55,7 +58,7 @@ class _SalonListState extends State<SalonList> {
           keySet.contains(Config.SalonKeyMap) ?
           TextButton(onPressed: () { Navigator.pushNamed(context, '/my_salon').then((value) {getSalons();});}, child: const Text('Your salon')): const SizedBox(height: 20) ,
           Expanded(
-            child: ListView.builder(
+            child: salons.isEmpty && !isCalling ? Loading() :ListView.builder(
                 itemCount: salons.length,
                 itemBuilder: (context, index) {
                   return SalonCard(

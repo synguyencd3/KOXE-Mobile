@@ -11,11 +11,11 @@ class invoiceStat {
   String? phone;
   String? licensePlate;
   String? carName;
-  Null? limitKilometer;
-  Null? months;
-  Null? policy;
-  List<String>? maintenanceServices;
-  Null? accessories;
+ // Null? limitKilometer;
+ // Null? months;
+ // Null? policy;
+ // List<String>? maintenanceServices;
+  //Null? accessories;
   //Seller? seller;
 
   invoiceStat(
@@ -29,11 +29,11 @@ class invoiceStat {
       this.phone,
       this.licensePlate,
       this.carName,
-      this.limitKilometer,
-      this.months,
-      this.policy,
-      this.maintenanceServices,
-      this.accessories,
+     // this.limitKilometer,
+     // this.months,
+      //this.policy,
+      //this.maintenanceServices,
+      //this.accessories,
       });
 
   invoiceStat.fromJson(Map<String, dynamic> json) {
@@ -47,11 +47,11 @@ class invoiceStat {
     phone = json['phone'];
     licensePlate = json['licensePlate'];
     carName = json['carName'];
-    limitKilometer = json['limit_kilometer'];
-    months = json['months'];
-    policy = json['policy'];
-    maintenanceServices = json['maintenanceServices'].cast<String>();
-    accessories = json['accessories'];
+   // limitKilometer = json['limit_kilometer'];
+   // months = json['months'];
+   // policy = json['policy'];
+    //maintenanceServices = json['maintenanceServices'];
+   // accessories = json['accessories'];
   }
 
   Map<String, dynamic> toJson() {
@@ -66,11 +66,11 @@ class invoiceStat {
     data['phone'] = this.phone;
     data['licensePlate'] = this.licensePlate;
     data['carName'] = this.carName;
-    data['limit_kilometer'] = this.limitKilometer;
-    data['months'] = this.months;
-    data['policy'] = this.policy;
-    data['maintenanceServices'] = this.maintenanceServices;
-    data['accessories'] = this.accessories;
+   // data['limit_kilometer'] = this.limitKilometer;
+  //  data['months'] = this.months;
+   // data['policy'] = this.policy;
+    //data['maintenanceServices'] = this.maintenanceServices;
+   // data['accessories'] = this.accessories;
     return data;
   }
 }

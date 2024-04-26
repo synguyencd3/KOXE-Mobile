@@ -79,7 +79,7 @@ class _ManageState extends State<Manage> {
             text_card(
                 title: 'Báo cáo doanh thu',
                 onTap: () {
-                  print('Tap');
+                  Navigator.pushNamed(context, '/statistic');
                 }),
           ],
         ));

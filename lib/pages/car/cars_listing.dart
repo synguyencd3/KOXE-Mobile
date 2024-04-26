@@ -4,6 +4,8 @@ import 'package:mobile/model/car_model.dart';
 //import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/widgets/car_card.dart';
 
+import '../loading.dart';
+
 class CarsListing extends StatefulWidget {
   const CarsListing({Key? key}) : super(key: key);
   @override
@@ -12,6 +14,7 @@ class CarsListing extends StatefulWidget {
 
 class _CarState extends State<CarsListing> {
   List<Car> cars = [];
+  bool isCalling = false;
   @override
   void initState() {
     super.initState();
@@ -23,6 +26,7 @@ class _CarState extends State<CarsListing> {
     List<Car> list = ModalRoute.of(context)!.settings.arguments as List<Car>;
     setState(() {
       cars = list;
+      isCalling =true;
     });
   }
   @override
@@ -39,7 +43,7 @@ class _CarState extends State<CarsListing> {
         body: Column(
           children: [
             Expanded(
-                child: ListView.builder(
+                child:cars.isEmpty && !isCalling ? Loading(): ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     itemCount: cars.length,

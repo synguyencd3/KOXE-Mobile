@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/services/statistic_service.dart';
+
+import '../loading.dart';
 
 var dataMap = <String, dynamic>{
   'Toyota Corolla': [12,2412043],
@@ -7,7 +10,28 @@ var dataMap = <String, dynamic>{
 };
 
 
-class CarInvoicePage extends StatelessWidget {
+class Statistic extends StatefulWidget {
+  @override
+  State<Statistic> createState() => _StatisticState();
+}
+
+class _StatisticState extends State<Statistic> {
+  late Map<String, Map<String, dynamic>> invoicesMap= {};
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getStat();
+  }
+
+  void getStat() async {
+    var data = await StatisticService.getStatistic("2024-04-21");
+    print(data['maintenances']);
+    setState(() {
+      invoicesMap=data;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,9 +41,13 @@ class CarInvoicePage extends StatelessWidget {
       body: Column(
         children: [
           Text('Bảo dưỡng'),
+          invoicesMap.isEmpty ? Padding(
+            padding: const EdgeInsets.all(30),
+            child: Loading(),
+          ) :
           Padding(
             padding: EdgeInsets.all(16.0),
-            child: DataTable(
+            child:  DataTable(
               columns: const <DataColumn>[
             DataColumn(
               label: Expanded(
@@ -46,7 +74,7 @@ class CarInvoicePage extends StatelessWidget {
               ),
             ),
           ],
-           rows: dataMap.entries.map( (e) => DataRow(
+           rows: invoicesMap['maintenances']!.entries.map((e) => DataRow(
             cells: <DataCell>[
               DataCell(Text(e.key)),
               DataCell(Text('${e.value[0]}')),
@@ -56,6 +84,10 @@ class CarInvoicePage extends StatelessWidget {
            ).toList(),),
           ),
           Text('Doanh số'),
+          invoicesMap.isEmpty ? Padding(
+            padding: const EdgeInsets.all(30),
+            child: Loading(),
+          ) :
           DataTable(
               columns: const <DataColumn>[
             DataColumn(
@@ -83,14 +115,14 @@ class CarInvoicePage extends StatelessWidget {
               ),
             ),
           ],
-           rows: dataMap.entries.map( (e) => DataRow(
+           rows: invoicesMap['buyCars']!.entries.map( (e) => DataRow(
             cells: <DataCell>[
               DataCell(Text(e.key)),
               DataCell(Text('${e.value[0]}')),
               DataCell(Text('${e.value[1]}'))
             ]
            )
-           ).toList(),),        
+           ).toList(),),
         ],
       ),
     );

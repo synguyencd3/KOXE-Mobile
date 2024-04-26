@@ -12,6 +12,7 @@ class AllPackages extends StatefulWidget {
 
 class _AllPackagesState extends State<AllPackages> {
   List<PackageModel> packages = [];
+  bool isCalling=false;
   late Set<String> purchasedSet;
 
   @override

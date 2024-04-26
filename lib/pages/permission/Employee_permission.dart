@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/services/salon_service.dart';
 
 import '../../model/employee_model.dart';
+import '../loading.dart';
 
 class AdminPage extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   List<Employee> users = [];
+  bool isCalling = false;
 
   void addEmployee(Employee user) {
     setState(() {
@@ -44,6 +46,7 @@ class _AdminPageState extends State<AdminPage> {
     setState(() {
       users =data.where((element) => element.permissions!.contains("OWNER")==false).toList();
       users.forEach((element) {print(element.permissions);});
+      isCalling = true;
     });
   }
 
@@ -53,141 +56,144 @@ class _AdminPageState extends State<AdminPage> {
       appBar: AppBar(
         title: Text('User Administration'),
       ),
-      body: ListView.builder(
-        itemCount: users.length,
-        itemBuilder: (context, index) {
-          final user = users[index];
+      body: users.isEmpty && !isCalling ? Loading() : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: users.length,
+          itemBuilder: (context, index) {
+            final user = users[index];
 
-          return GestureDetector(
-            child: ListTile(
-              title: Text(user.fullname!),
-              subtitle: Text("permission"),
-              trailing: IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => removeEmployee(user),
+            return GestureDetector(
+              child: ListTile(
+                title: Text(user.fullname!),
+                subtitle: Text("permission"),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => removeEmployee(user),
+                ),
               ),
-            ),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                   return AlertDialog(
-                    title: Text('Phân quyền '),
-                    content: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(user.fullname!),
-                          SizedBox(height: 16),
-                          Text('Các quyền:'),
-                          for (MapEntry<String, String> entries in {
-                            'Nhân viên': 'EMP',
-                            'Salon': 'SL',
-                            'Xe': 'CAR',
-                            'Lịch hẹn': 'APM',
-                            'Bảo hành': 'WRT',
-                            'Bảo dưỡng': 'MT',
-                            'Thông báo': 'NTF'
-                          }.entries)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(entries.key),
-                                StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
-                                    return CheckboxListTile(
-                                      title: Text('Create'),
-                                      value: user.permissions?.contains('C_${entries.value}'),
-                                       onChanged: (value) {
-                                        setState(() {
-                                          if (value!) {
-                                            user.permissions?.add('C_${entries.value}');
-                                          } else {
-                                            user.permissions?.remove('C_${entries.value}');
-                                          }
-                                        });
-                                      },
-                                    );
-                                  }
-                                ),
-                                StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
-                                    return CheckboxListTile(
-                                      title: Text('Read'),
-                                       value:  user.permissions?.contains('R_${entries.value}'),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          if (value!) {
-                                            user.permissions?.add('R_${entries.value}');
-                                          } else {
-                                            user.permissions?.remove('R_${entries.value}');
-                                          }
-                                        });
-                                       },
-                                    );
-                                  }
-                                ),
-                                StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
-                                    return CheckboxListTile(
-                                      title: Text('Update'),
-                                       value:user.permissions?.contains('U_${entries.value}'),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          if (value!) {
-                                            user.permissions?.add('U_${entries.value}');
-                                          } else {
-                                            user.permissions?.remove('U_${entries.value}');
-                                          }
-                                        });
-                                      },
-                                    );
-                                  }
-                                ),
-                                StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
-                                    return CheckboxListTile(
-                                      title: Text('Delete'),
-                                      value: user.permissions?.contains('D_${entries.value}'),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          if (value!) {
-                                            user.permissions?.add('D_${entries.value}');
-                                          } else {
-                                            user.permissions?.remove('D_${entries.value}');
-                                          }
-                                        });
-                                      },
-                                    );
-                                  }
-                                ),
-                                SizedBox(height: 16),
-                              ],
-                            ),
-                        ],
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                     return AlertDialog(
+                      title: Text('Phân quyền '),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(user.fullname!),
+                            SizedBox(height: 16),
+                            Text('Các quyền:'),
+                            for (MapEntry<String, String> entries in {
+                              'Nhân viên': 'EMP',
+                              'Salon': 'SL',
+                              'Xe': 'CAR',
+                              'Lịch hẹn': 'APM',
+                              'Bảo hành': 'WRT',
+                              'Bảo dưỡng': 'MT',
+                              'Thông báo': 'NTF'
+                            }.entries)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(entries.key),
+                                  StatefulBuilder(
+                                    builder: (BuildContext context, StateSetter setState) {
+                                      return CheckboxListTile(
+                                        title: Text('Create'),
+                                        value: user.permissions?.contains('C_${entries.value}'),
+                                         onChanged: (value) {
+                                          setState(() {
+                                            if (value!) {
+                                              user.permissions?.add('C_${entries.value}');
+                                            } else {
+                                              user.permissions?.remove('C_${entries.value}');
+                                            }
+                                          });
+                                        },
+                                      );
+                                    }
+                                  ),
+                                  StatefulBuilder(
+                                    builder: (BuildContext context, StateSetter setState) {
+                                      return CheckboxListTile(
+                                        title: Text('Read'),
+                                         value:  user.permissions?.contains('R_${entries.value}'),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (value!) {
+                                              user.permissions?.add('R_${entries.value}');
+                                            } else {
+                                              user.permissions?.remove('R_${entries.value}');
+                                            }
+                                          });
+                                         },
+                                      );
+                                    }
+                                  ),
+                                  StatefulBuilder(
+                                    builder: (BuildContext context, StateSetter setState) {
+                                      return CheckboxListTile(
+                                        title: Text('Update'),
+                                         value:user.permissions?.contains('U_${entries.value}'),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (value!) {
+                                              user.permissions?.add('U_${entries.value}');
+                                            } else {
+                                              user.permissions?.remove('U_${entries.value}');
+                                            }
+                                          });
+                                        },
+                                      );
+                                    }
+                                  ),
+                                  StatefulBuilder(
+                                    builder: (BuildContext context, StateSetter setState) {
+                                      return CheckboxListTile(
+                                        title: Text('Delete'),
+                                        value: user.permissions?.contains('D_${entries.value}'),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (value!) {
+                                              user.permissions?.add('D_${entries.value}');
+                                            } else {
+                                              user.permissions?.remove('D_${entries.value}');
+                                            }
+                                          });
+                                        },
+                                      );
+                                    }
+                                  ),
+                                  SizedBox(height: 16),
+                                ],
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
-                    actions: [
-                      TextButton(
-                        child: Text('Done'),
-                        onPressed: () {
-                          print(user.fullname);
-                          print(jsonEncode(user.permissions));
-                          SalonsService.setPermission(user.permissions!, user.userId!);
-                          Navigator.pop(context);},
-                      ),
-                      TextButton(
-                        child: Text('Cancel'),
-                        onPressed: () {
-                          Navigator.pop(context);},
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          );
-        },
+                      actions: [
+                        TextButton(
+                          child: Text('Done'),
+                          onPressed: () {
+                            print(user.fullname);
+                            print(jsonEncode(user.permissions));
+                            SalonsService.setPermission(user.permissions!, user.userId!);
+                            Navigator.pop(context);},
+                        ),
+                        TextButton(
+                          child: Text('Cancel'),
+                          onPressed: () {
+                            Navigator.pop(context);},
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
 
     );
