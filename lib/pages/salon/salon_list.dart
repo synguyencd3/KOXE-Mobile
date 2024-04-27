@@ -5,6 +5,7 @@ import 'package:mobile/services/payment_service.dart';
 import 'package:mobile/services/salon_service.dart';
 
 import '../../model/salon_model.dart';
+import '../loading.dart';
 
 class SalonList extends StatefulWidget {
   const SalonList({super.key});
@@ -16,6 +17,7 @@ class SalonList extends StatefulWidget {
 class _SalonListState extends State<SalonList> {
   List<Salon> salons = [];
   Set<String> keySet = Set();
+  bool isCalling = false;
   @override
   void initState() {
     super.initState();
@@ -23,9 +25,6 @@ class _SalonListState extends State<SalonList> {
     getKeyMaps(); 
   }
 
-  Future<void> deleteSalon() async {
-
-  }
 
   Future<void> getKeyMaps() async {
     var set = await PaymentService.getKeySet();
@@ -40,6 +39,7 @@ class _SalonListState extends State<SalonList> {
     print(list);
     setState(() {
       salons = list;
+      isCalling = true;
     });
   }
 
@@ -58,7 +58,7 @@ class _SalonListState extends State<SalonList> {
           keySet.contains(Config.SalonKeyMap) ?
           TextButton(onPressed: () { Navigator.pushNamed(context, '/my_salon').then((value) {getSalons();});}, child: const Text('Your salon')): const SizedBox(height: 20) ,
           Expanded(
-            child: ListView.builder(
+            child: salons.isEmpty && !isCalling ? Loading() :ListView.builder(
                 itemCount: salons.length,
                 itemBuilder: (context, index) {
                   return SalonCard(
@@ -89,6 +89,28 @@ class _MySalonState extends State<MySalon> {
     getMySalon();
   }
 
+  Future<void> deleteSalon(String id) async {
+    SalonsService.DeleteSalon(id).then((value) {
+      if (value!)
+        {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Xóa thành thông'),
+                backgroundColor: Colors.green,
+              )
+          );
+          getMySalon();
+          return;
+        }
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+            backgroundColor: Colors.red,
+          )
+      );
+    });
+  }
+
   Future<void> getMySalon() async {
     var data = await SalonsService.getMySalon();
     print(data?.salonId);
@@ -109,7 +131,8 @@ class _MySalonState extends State<MySalon> {
         body: Column(
           children: [
             MySalon !=null ?
-            MySalonCard(salon: MySalon!)
+            MySalonCard(salon: MySalon!,
+            deletefunc: deleteSalon)
             
             :  TextButton(onPressed: () { Navigator.pushNamed(context, '/new_salon');}, child: const Text('Thêm mới')),
           ],
@@ -121,9 +144,11 @@ class _MySalonState extends State<MySalon> {
 class MySalonCard extends StatefulWidget {
    const MySalonCard(
       {super.key,
-      required this.salon});
+      required this.salon,
+      required this.deletefunc});
 
   final Salon salon;
+  final Function deletefunc;
 
   @override
   State<MySalonCard> createState() => _MySalonCardState();
@@ -191,9 +216,11 @@ class _MySalonCardState extends State<MySalonCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                           OutlinedButton(onPressed: () {
-                            Navigator.pushNamed(context, '/new_salon', arguments: {'salon': salon}).then((value) {getMySalon();});
+                            Navigator.pushNamed(context, '/new_salon', arguments: {'salon': salon}).then((value) {getMySalon();}).then((value)  {getMySalon();});
                             }, child: Text('Edit')),
-                          OutlinedButton(onPressed: () {}, child: Text('Delete')),
+                          OutlinedButton(onPressed: () {
+                            widget.deletefunc(salon.salonId);
+                          }, child: Text('Delete')),
                         ],),
                  )
                 ],

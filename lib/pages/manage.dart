@@ -59,7 +59,7 @@ class _ManageState extends State<Manage> {
             text_card(
                 title: 'Quản lý bảo hành',
                 onTap: () {
-                  print('Tap');
+                  Navigator.pushNamed(context, '/warranty_list');
                 }),
             text_card(
                 title: 'Quản lý bảo dưỡng',
@@ -74,7 +74,7 @@ class _ManageState extends State<Manage> {
             text_card(
                 title: 'Báo cáo doanh thu',
                 onTap: () {
-                  print('Tap');
+                  Navigator.pushNamed(context, '/statistic');
                 }),
           ],
         ));

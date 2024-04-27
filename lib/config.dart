@@ -1,6 +1,6 @@
 class Config {
   static const String appName = "Salon oto";
-  static const String apiURL = "192.168.1.26:5000";
+  static const String apiURL = "192.168.1.31:5000";
   static const String loginAPI = "auth/login";
   static const String registerAPI = "auth/register";
   static const String facebookAPI = "auth/facebook-mobile";
@@ -39,7 +39,13 @@ class Config {
   static const String newsAPi = '/v2/everything';
   static const String apiKey = 'b019956a13da4697841c13223270901f';
   static const String news = "https://crawl-data-pink.vercel.app/articles";
-  
+
+  //Warranty
+  static const String warranty  = "/warranty";
+  static const String createWarranty = '/warranty/create';
+  static const String updateWarranty = '/warranty/update';
+  static const String deleteWarranty = '/warranty/delete';
+
 
   //Google API
   static const String client_id =
@@ -72,12 +78,15 @@ static const String markAsReadSalonAPI = "/notification/read-notification-admin"
 //Zego 
 static const int zegoAppID = 52749659;
 static const String zegoAppSign = '686508249a354437ee8f22ad801b016981d3d62206cff615804d23559dc1eb99';
+
+//statistic
+static const String statistic = "/invoice/statistics";
 //Maintaince API
-static const String getAllMaintaincesAPI = "maintenance/salon";
-static const String maintainceAPI = "/maintenance";
+  static const String getAllMaintaincesAPI = "maintenance/salon";
+  static const String maintainceAPI = "/maintenance";
 //Invoice API
-static const String invoiceAPI = "/invoice";
+  static const String invoiceAPI = "/invoice";
 // Accessory API
-static const String getSalonAccessoriesApi = "/accessory/salon";
-static const String accessoryAPI = "/accessory";
+  static const String getSalonAccessoriesApi = "/accessory/salon";
+  static const String accessoryAPI = "/accessory";
 }
