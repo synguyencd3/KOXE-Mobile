@@ -30,6 +30,8 @@ import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:mobile/pages/appointment/create_appointment.dart';
 import 'package:mobile/pages/warranty/warranty_manage.dart';
+import 'package:mobile/pages/maintaince/maintaince_manage.dart';
+import 'package:mobile/pages/accessory_manage.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -94,6 +96,8 @@ class _MyAppState extends State<MyApp> {
         '/create_appointment': (context) => CreateAppoint(),
         '/employee_management' : (context) => AdminPage(),
         '/warranty_manage' : (context) => WarrantyManage(),
+        '/maintaince_manage' : (context) => MaintainceManage(),
+        '/accessory_manage' : (context) => AccessoriesManage(),
       },
     );
   }

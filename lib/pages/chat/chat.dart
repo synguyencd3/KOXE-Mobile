@@ -29,13 +29,15 @@ class _ChatState extends State<ChatPage> {
   late types.User _sender = types.User(id: '');
   late types.User _receiver = types.User(id: '');
   StreamSubscription? _messageSubscription;
+  StreamSubscription? _onlineUsersSubscription;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
-      ChatUserModel? userApi = ModalRoute.of(context)?.settings.arguments as ChatUserModel?;
+      ChatUserModel? userApi =
+          ModalRoute.of(context)?.settings.arguments as ChatUserModel?;
       setState(() {
         user = userApi;
         _receiver = types.User(
@@ -43,6 +45,22 @@ class _ChatState extends State<ChatPage> {
         );
       });
       callAPI();
+      //initStatus();
+      List<dynamic> onlineUsers = SocketManager().onlineUsers;
+      print('userid: ${user?.id}');
+      for (var onlineUser in onlineUsers) {
+        print('onlineUsers: $onlineUser');
+        if (onlineUser == user?.id) {
+          setState(() {
+            user?.isOnline = true;
+          });
+          break;
+        } else {
+          setState(() {
+            user?.isOnline = false;
+          });
+        }
+      }
     });
     _messageSubscription = SocketManager().messageStream.listen((data) {
       print(data);
@@ -55,12 +73,29 @@ class _ChatState extends State<ChatPage> {
       );
       _addMessage(messageReceive);
     });
+
+    _onlineUsersSubscription =
+        SocketManager().onlineUsersStream.listen((event) {
+      print('event: $event');
+      for (int i = 0; i < event.length; i++) {
+        if (event[i] == user?.id) {
+          setState(() {
+            user?.isOnline = true;
+          });
+        } else {
+          setState(() {
+            user?.isOnline = false;
+          });
+        }
+      }
+    });
   }
+
   @override
   void dispose() {
     super.dispose();
     _messageSubscription?.cancel();
-    print('abc');
+    _onlineUsersSubscription?.cancel();
   }
 
   Future<void> callAPI() async {
@@ -89,7 +124,8 @@ class _ChatState extends State<ChatPage> {
     print(_sender.id);
     for (int i = 0; i < chatAPI.length; i++) {
       //print(chatAPI[i].sender);
-      final createAt = DateTime.parse(chatAPI[i].createdAt ?? DateTime.now().toString());
+      final createAt =
+          DateTime.parse(chatAPI[i].createdAt ?? DateTime.now().toString());
       if (chatAPI[i].sender == _sender.id) {
         final message = types.TextMessage(
           author: _sender,
@@ -249,7 +285,7 @@ class _ChatState extends State<ChatPage> {
                 IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    Navigator.pop(context,'rebuild');
+                    Navigator.pop(context, 'rebuild');
                   },
                 ),
                 CircleAvatar(
@@ -285,7 +321,7 @@ class _ChatState extends State<ChatPage> {
                 IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                      Navigator.pop(context, 'rebuild');
+                    Navigator.pop(context, 'rebuild');
                   },
                 ),
                 CircleAvatar(
@@ -327,24 +363,22 @@ class _ChatState extends State<ChatPage> {
                 //   // ),
                 // ),
                 GestureDetector(
-                  onTap: (){
-                    Navigator.pushNamed(context, '/create_appointment', arguments: user);
-
+                  onTap: () {
+                    Navigator.pushNamed(context, '/create_appointment',
+                        arguments: user);
                   },
-                  child: CircleAvatar(
-                      child: Icon(Icons.event)),
+                  child: CircleAvatar(child: Icon(Icons.event)),
                 ),
                 ZegoSendCallInvitationButton(
                   iconSize: Size.fromHeight(40),
-                      isVideoCall: true,
-                      resourceID: "zegouikit_call", //You need to use the resourceID that you created in the subsequent steps. Please continue reading this document.
-                      invitees: [
-                          ZegoUIKitUser(
-                            id: user!.id.substring(0,8),
-                            name: user!.name
-                          ),
-                        ],
-                  ) ,
+                  isVideoCall: true,
+                  resourceID: "zegouikit_call",
+                  //You need to use the resourceID that you created in the subsequent steps. Please continue reading this document.
+                  invitees: [
+                    ZegoUIKitUser(
+                        id: user!.id.substring(0, 8), name: user!.name),
+                  ],
+                ),
               ],
             );
           }
