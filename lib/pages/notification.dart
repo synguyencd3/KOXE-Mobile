@@ -14,7 +14,8 @@ class Noti extends StatefulWidget {
 }
 
 class _NotiState extends State<Noti> {
-  final List<NotificationModel> notifications = [];
+  late List<NotificationModel> notifications = [];
+  StreamSubscription? _notificationSubscription;
   @override
   void initState() {
     // TODO: implement initState
@@ -22,13 +23,16 @@ class _NotiState extends State<Noti> {
     Future.delayed(Duration.zero, () {
       getNotifications();
     });
+    _notificationSubscription = SocketManager().notificationStream.listen((data) {
+     getNotifications();
+    });
 
   }
   Future<void> getNotifications() async {
     List<NotificationModel> notificationsArgument = ModalRoute.of(context)!.settings.arguments as List<NotificationModel>;
     if (notificationsArgument.isNotEmpty) {
       setState(() {
-        notifications.addAll(notificationsArgument);
+        notifications= notificationsArgument;
       });
     }
   }
@@ -41,21 +45,14 @@ class _NotiState extends State<Noti> {
           title: Text('Thông báo'),
           backgroundColor: Colors.lightBlue,
         ),
-        body: StreamBuilder<Object>(
-          stream: SocketManager().notificationStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData)
-              {
-                getNotifications();
-              }
-            return ListView.builder(
+        body:
+             ListView.builder(
               physics: BouncingScrollPhysics(),
               itemCount: notifications.length,
               itemBuilder: (context, index) {
                 return NotificationCard(notification: notifications[index]);
               },
-            );
-          }
+
         ));
   }
 }

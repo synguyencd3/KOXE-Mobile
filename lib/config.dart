@@ -81,4 +81,12 @@ static const String zegoAppSign = '686508249a354437ee8f22ad801b016981d3d62206cff
 
 //statistic
 static const String statistic = "/invoice/statistics";
+//Maintaince API
+  static const String getAllMaintaincesAPI = "maintenance/salon";
+  static const String maintainceAPI = "/maintenance";
+//Invoice API
+  static const String invoiceAPI = "/invoice";
+// Accessory API
+  static const String getSalonAccessoriesApi = "/accessory/salon";
+  static const String accessoryAPI = "/accessory";
 }

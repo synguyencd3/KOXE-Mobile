@@ -32,7 +32,7 @@ class _CreateAppointState extends State<CreateAppoint> {
   List<Car>? cars = [];
   String selectedCar = '';
   CarouselController carouselController = CarouselController();
-  List<bool> isSelected = [true, false, false];
+  List<bool> isSelected = List.generate(16, (index) => false);
 
   @override
   void initState() {
@@ -44,6 +44,7 @@ class _CreateAppointState extends State<CreateAppoint> {
       getCars();
     });
   }
+
   int findCarIndex(String carId) {
     return cars!.indexWhere((car) => car.id == carId);
   }
@@ -56,10 +57,8 @@ class _CreateAppointState extends State<CreateAppoint> {
   }
 
   Future<void> getSalon() async {
-    ChatUserModel userApi = ModalRoute
-        .of(context)!
-        .settings
-        .arguments as ChatUserModel;
+    ChatUserModel userApi =
+        ModalRoute.of(context)!.settings.arguments as ChatUserModel;
     setState(() {
       user = userApi;
     });
@@ -67,7 +66,7 @@ class _CreateAppointState extends State<CreateAppoint> {
 
   Future<void> getCars() async {
     List<Car>? carsApi = await SalonsService.getDetail(user.id);
-    if (user.carId !='' &&  carsApi!.isNotEmpty) {
+    if (user.carId != '' && carsApi!.isNotEmpty) {
       int initialPage = carsApi.indexWhere((car) => car.id == user.carId);
       //print(initialPage);
       carouselController.animateToPage(initialPage);
@@ -83,7 +82,6 @@ class _CreateAppointState extends State<CreateAppoint> {
       today = selectedDay;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -134,107 +132,50 @@ class _CreateAppointState extends State<CreateAppoint> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              Wrap(
-                spacing: 20,
-                runSpacing: 20,
-                children: [
-                  ToggleButtons(
-                    isSelected: isSelected,
-                    onPressed: (int index) {
-                      setState(() {
-                        for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
-                          if (buttonIndex == index) {
-                            isSelected[buttonIndex] = true;
-                          } else {
-                            isSelected[buttonIndex] = false;
-                          }
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ToggleButtons(
+                  isSelected: isSelected,
+                  onPressed: (int index) {
+                    setState(() {
+                      for (int buttonIndex = 0;
+                          buttonIndex < isSelected.length;
+                          buttonIndex++) {
+                        if (buttonIndex == index) {
+                          isSelected[buttonIndex] = true;
+                          setState(() {
+                            hour = 7 + buttonIndex;
+                          });
+
+                        } else {
+                          isSelected[buttonIndex] = false;
                         }
-                      });
-                    },
-                    children: const <Widget>[
-                      Icon(Icons.ac_unit),
-                      Icon(Icons.call),
-                      Icon(Icons.cake),
-                    ],
-                  ),
-                ],
+                      }
+                    });
+                  },
+                  children: List<Widget>.generate(
+                      16, (index) => Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text((7 + index).toString() + ":00"),
+                      )),
+                ),
               ),
-              // Container(
-              //   padding: const EdgeInsets.symmetric(
-              //       horizontal: 20, vertical: 10),
-              //   decoration: BoxDecoration(
-              //     color: Colors.black87,
-              //     borderRadius: BorderRadius.circular(10),
-              //   ),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //     children: [
-              //       NumberPicker(
-              //         minValue: 0,
-              //         maxValue: 23,
-              //         value: hour,
-              //         zeroPad: true,
-              //         infiniteLoop: true,
-              //         itemWidth: 80,
-              //         itemHeight: 60,
-              //         onChanged: (value) {
-              //           setState(() {
-              //             hour = value;
-              //           });
-              //         },
-              //         textStyle: TextStyle(color: Colors.grey, fontSize: 20),
-              //         selectedTextStyle: TextStyle(
-              //           color: Colors.white,
-              //           fontSize: 20,
-              //           fontWeight: FontWeight.bold,
-              //         ),
-              //         decoration: BoxDecoration(
-              //           border: Border(
-              //               top: BorderSide(color: Colors.white),
-              //               bottom: BorderSide(color: Colors.white)),
-              //         ),
-              //       ),
-              //
-              //       // Add a NumberPicker for minutes
-              //       NumberPicker(
-              //         minValue: 0,
-              //         maxValue: 59,
-              //         value: minute,
-              //         zeroPad: true,
-              //         infiniteLoop: true,
-              //         itemWidth: 80,
-              //         itemHeight: 60,
-              //         onChanged: (value) {
-              //           setState(() {
-              //             minute = value;
-              //           });
-              //         },
-              //         textStyle: TextStyle(color: Colors.grey, fontSize: 20),
-              //         selectedTextStyle: TextStyle(
-              //           color: Colors.white,
-              //           fontSize: 20,
-              //           fontWeight: FontWeight.bold,
-              //         ),
-              //         decoration: BoxDecoration(
-              //           border: Border(
-              //               top: BorderSide(color: Colors.white),
-              //               bottom: BorderSide(color: Colors.white)),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               SizedBox(height: 10),
               CarouselSlider(
                 carouselController: carouselController,
-                options: CarouselOptions(viewportFraction:1.0, height: 450.0, onPageChanged:(index,reason){
-                  setState(() {
-                    selectedCar = cars![index].id!;
-                  });
-                } ),
-                items: cars!.length>0 ? cars?.map((car) {
-                  return CarCard(car: car);
-                }).toList() : [],
+                options: CarouselOptions(
+                    viewportFraction: 1.0,
+                    height: 450.0,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        selectedCar = cars![index].id!;
+                      });
+                    }),
+                items: cars!.length > 0
+                    ? cars?.map((car) {
+                        return CarCard(car: car);
+                      }).toList()
+                    : [],
               ),
               SizedBox(height: 10),
               Text(
@@ -258,20 +199,18 @@ class _CreateAppointState extends State<CreateAppoint> {
                     print(selectedCar);
                     var result = await AppointmentService.createAppointment(
                         AppointmentModel(
-                          salon: user.id,
-                          carId: selectedCar,
-                          datetime: today.add(Duration(
-                              hours: hour, minutes: minute)),
-                          description: controller.text,
-                        ));
+                      salon: user.id,
+                      carId: selectedCar,
+                      datetime:
+                          today.add(Duration(hours: hour, minutes: minute)),
+                      description: controller.text,
+                    ));
                     print(result);
                     if (result) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Tạo lịch hẹn thành công'),
-                            backgroundColor: Colors.green,
-                          )
-                      );
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Tạo lịch hẹn thành công'),
+                        backgroundColor: Colors.green,
+                      ));
                       Navigator.pop(context);
                     }
                   },
