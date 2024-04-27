@@ -18,6 +18,7 @@ class invoiceStat {
   //Null? accessories;
   //Seller? seller;
 
+
   invoiceStat(
       {this.invoiceId,
       this.type,

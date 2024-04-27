@@ -16,7 +16,7 @@ class ChatService {
     Map<String, String> requestHeaders = {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
-    var url = Uri.http(Config.apiURL, '${Config.getChatsAPI}/$id');
+    var url = Uri.https(Config.apiURL, '${Config.getChatsAPI}/$id');
 
     var response = await http.get(url, headers: requestHeaders);
 
@@ -41,7 +41,7 @@ class ChatService {
     Map<String, String> requestHeaders = {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
-    var url = Uri.http(Config.apiURL, Config.getAllChatUsersAPI);
+    var url = Uri.https(Config.apiURL, Config.getAllChatUsersAPI);
     var response = await http.get(url, headers: requestHeaders);
     print(response.body);
     if (response.body == '[]') {
@@ -58,7 +58,7 @@ class ChatService {
     Map<String, String> requestHeaders = {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
-    var url = Uri.http(Config.apiURL, '${Config.sendMessageAPI}/$userId');
+    var url = Uri.https(Config.apiURL, '${Config.sendMessageAPI}/$userId');
     var response = await http.post(url, headers: requestHeaders, body: {
       'message': message,
     });
