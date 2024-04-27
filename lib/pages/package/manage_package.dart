@@ -33,7 +33,7 @@ class _ManagePackageState extends State<ManagePackage> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                //crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text('Gói 1',
                       style: TextStyle(
@@ -45,15 +45,13 @@ class _ManagePackageState extends State<ManagePackage> {
                   Text('Mô tả'),
                   SizedBox(height: 10,),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ButtonCustom(onPressed: (){}, title: 'Gia hạn gói'),
                       ButtonCustom(onPressed: (){}, title: 'Nâng cấp gói'),
                       ButtonCustom(onPressed: (){}, title: 'Hủy gói'),
                     ],
                   ),
-
-
                 ],
               ),
             ),

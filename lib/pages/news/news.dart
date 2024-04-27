@@ -6,6 +6,7 @@ import 'package:mobile/services/news_service.dart';
 import 'package:mobile/pages/news/news_card.dart';
 
 import '../../model/articles_model.dart';
+import '../loading.dart';
 
 class NewsBoard extends StatefulWidget {
   const NewsBoard({super.key});
@@ -16,6 +17,7 @@ class NewsBoard extends StatefulWidget {
 
 class _NewsBoardState extends State<NewsBoard> {
   List<Articles> article = [];
+  bool isCalling = false;
   @override
   void initState() {
     super.initState();
@@ -26,6 +28,7 @@ class _NewsBoardState extends State<NewsBoard> {
     var list = await NewsService.getArticles();
     setState(() {
       article = list;
+      isCalling =true;
     });
   }
 
@@ -39,7 +42,7 @@ class _NewsBoardState extends State<NewsBoard> {
           //style: FlutterFlowTheme.of(context).titleLarge,
         ),
       ),
-      body: ListView.builder(
+      body: article.isEmpty && !isCalling ? Loading() : ListView.builder(
           itemCount: article.length,
           itemBuilder: (context, index) {
             return NewsCard(

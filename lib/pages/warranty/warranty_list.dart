@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile/pages/loading.dart';
 
 
 import '../../model/warranty_model.dart';
@@ -14,6 +15,7 @@ class WarrantyList extends StatefulWidget {
 
 class _WarrantyState extends State<WarrantyList> {
   List<Warranty> warranties = [];
+  bool isCalling = false;
   @override
   void initState() {
     super.initState();
@@ -25,6 +27,7 @@ class _WarrantyState extends State<WarrantyList> {
     //print(list);
     setState(() {
       warranties = list;
+      isCalling = true;
     });
   }
 
@@ -49,7 +52,7 @@ class _WarrantyState extends State<WarrantyList> {
               Navigator.pushNamed(context, '/warranty_form').then((value) {getWarrantiess();});
             }, child: Text('Add Warranty')),
             Expanded(
-                child: ListView.builder(
+                child: warranties.isEmpty && !isCalling ? Loading(): ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     itemCount: warranties.length,
