@@ -13,7 +13,7 @@ class CarsService {
       'Access-Control-Allow-Origin': "*",
     };
 
-    var url = Uri.http(Config.apiURL, Config.getCarsAPI);
+    var url = Uri.https(Config.apiURL, Config.getCarsAPI);
 
     var response = await http.get(url);
     
@@ -32,7 +32,7 @@ class CarsService {
       'Access-Control-Allow-Origin': "*",
     };
 
-    var url = Uri.http(Config.apiURL, '${Config.getCarsAPI}/$carId');
+    var url = Uri.https(Config.apiURL, '${Config.getCarsAPI}/$carId');
 
     var response = await http.get(url);
     

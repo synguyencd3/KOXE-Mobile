@@ -16,7 +16,7 @@ class NotificationService{
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.getNotificationAPI);
+    var url = Uri.https(Config.apiURL, Config.getNotificationAPI);
 
     var response = await http.post(url, headers: requestHeaders);
 
@@ -37,7 +37,7 @@ static Future<void> markAsRead(String id) async {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.markAsReadAPI);
+    var url = Uri.https(Config.apiURL, Config.markAsReadAPI);
 
     var response = await http.patch(url, headers: requestHeaders, body: jsonEncode({'id': id}));
 
@@ -55,7 +55,7 @@ static Future<void> markAsRead(String id) async {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.getNotificationSalonAPI);
+    var url = Uri.https(Config.apiURL, Config.getNotificationSalonAPI);
 
     var response = await http.post(url, headers: requestHeaders,  body: jsonEncode({'salonId': salonId}));
 
@@ -75,7 +75,7 @@ static Future<void> markAsRead(String id) async {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.markAsReadSalonAPI);
+    var url = Uri.https(Config.apiURL, Config.markAsReadSalonAPI);
 
     var response = await http.patch(url, headers: requestHeaders, body: jsonEncode({'id': id, 'salonId': salonId}));
 

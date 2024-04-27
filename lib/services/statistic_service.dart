@@ -20,20 +20,20 @@ class StatisticService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.statistic,);
+    var url = Uri.https(Config.apiURL, Config.statistic,);
 
     var response = await http.post(url,headers: requestHeaders, body: jsonEncode({
       "salonId": mySalon,
       "fromDate": fromDate
     }));
-  print(mySalon);
     var map= <String, Map<String, dynamic>>{};
     
     var responseData = jsonDecode(response.body);
-    print(responseData);
+    print(responseData['year']);
     if (responseData['status'] == 'success') {
      map['maintenances'] = getTableList(invoiceStatFromJson(responseData["maintenances"]["invoiceDb"]));
      map['buyCars'] = getTableList(invoiceStatFromJson(responseData["buyCars"]["invoiceDb"]));
+     map['yearly'] = getYearly(responseData['year']);
      return map;
     }
     return {};
@@ -65,7 +65,7 @@ class StatisticService {
       'Access-Control-Allow-Origin': "*",
     };
 
-    var url = Uri.http(Config.apiURL, '${Config.getCarsAPI}/$carId');
+    var url = Uri.https(Config.apiURL, '${Config.getCarsAPI}/$carId');
 
     var response = await http.get(url);
     
@@ -76,5 +76,12 @@ class StatisticService {
     }
     return null;
   }
+
+  static Map<String, int> getYearly(Map<String, dynamic> yearlyStat) {
+    Map<String, int>map = {};
+    yearlyStat.entries.forEach((element) {map['${element.value['value']}'] =element.value['total'];});
+    return map;
+  }
+
 
 }

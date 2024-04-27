@@ -22,7 +22,7 @@ class SalonsService {
        HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.SalonsAPI);
+    var url = Uri.https(Config.apiURL, Config.SalonsAPI);
 
     var response = await http.get(url, headers: requestHeaders);
     print(response.body);
@@ -42,7 +42,7 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, '${Config.SalonsAPI}/$salonId');
+    var url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$salonId');
 
     var response = await http.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
@@ -63,7 +63,7 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.mySalon);
+    var url = Uri.https(Config.apiURL, Config.mySalon);
 
     var response = await http.get(url, headers: requestHeaders);
      if (response.statusCode == 200) {
@@ -78,7 +78,7 @@ class SalonsService {
   static Future<bool?> NewSalon(Salon model) async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
-    var url = Uri.http(Config.apiURL, Config.SalonsAPI);
+    var url = Uri.https(Config.apiURL, Config.SalonsAPI);
      Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Accept': '*/*',
@@ -125,7 +125,7 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, "${Config.SalonsAPI}/$id");
+    var url = Uri.https(Config.apiURL, "${Config.SalonsAPI}/$id");
 
     var response = await http.delete(url, headers: requestHeaders, body: {
       "salonId" : mySalon
@@ -140,7 +140,7 @@ class SalonsService {
   static Future<bool?> EditSalon(Salon model, String id) async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
-    var url = Uri.http(Config.apiURL, '${Config.SalonsAPI}/$id');
+    var url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$id');
     print(url.toString());
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -187,7 +187,7 @@ class SalonsService {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
-    var url = Uri.http(Config.apiURL, Config.getIsSalonAPI);
+    var url = Uri.https(Config.apiURL, Config.getIsSalonAPI);
 
     var response = await http.get(url, headers: requestHeaders);
     var responseData = jsonDecode(response.body);
@@ -211,7 +211,7 @@ class SalonsService {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
-    var url = Uri.http(Config.apiURL, Config.acceptInviteAPI);
+    var url = Uri.https(Config.apiURL, Config.acceptInviteAPI);
     var response = await http.post(url, headers: requestHeaders, body: jsonEncode({'token': token}));
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == 'success') {
@@ -230,7 +230,7 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.getEmployees);
+    var url = Uri.https(Config.apiURL, Config.getEmployees);
 
     var response = await http.post(url, headers: requestHeaders, body: {
       "salonId": mySalon
@@ -254,7 +254,7 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.Permission);
+    var url = Uri.https(Config.apiURL, Config.Permission);
 
 
     final Map<String, dynamic> data = new Map<String, dynamic>();

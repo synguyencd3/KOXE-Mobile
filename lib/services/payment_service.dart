@@ -39,7 +39,7 @@ class PaymentService {
     'months': 1.toString()
     };
 
-    var url = Uri.http(Config.apiURL, Config.VNPayAPI, param);
+    var url = Uri.https(Config.apiURL, Config.VNPayAPI, param);
 
 
     var response = await client.post(url, headers: requestHeaders, body: jsonEncode(param));
@@ -53,7 +53,7 @@ class PaymentService {
    }
 
    static Future<String?> getZaloPayURL() async {
-      var url = Uri.http(Config.apiURL, Config.ZaloPayAPI);
+      var url = Uri.https(Config.apiURL, Config.ZaloPayAPI);
 
 
       var response = await client.post(url);
@@ -71,7 +71,7 @@ class PaymentService {
       'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
-    var url = Uri.http(Config.apiURL, Config.Purchase);
+    var url = Uri.https(Config.apiURL, Config.Purchase);
     var response = await client.get(url, headers: requestHeaders);
     var data =jsonDecode(response.body)['purchasedPackages'];
     var set=data.map((index) =>(index['package_id']));
@@ -88,7 +88,7 @@ class PaymentService {
       'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
-    var url = Uri.http(Config.apiURL, Config.Purchase);
+    var url = Uri.https(Config.apiURL, Config.Purchase);
     var response = await client.get(url, headers: requestHeaders);
     var data =jsonDecode(response.body)['purchasedPackages'];
     print(response.body);
