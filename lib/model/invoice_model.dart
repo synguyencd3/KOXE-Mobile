@@ -1,3 +1,4 @@
+import 'package:mobile/model/accessory_request_model.dart';
 import 'package:mobile/model/maintaince_request_model.dart';
 import 'package:mobile/model/maintaince_model.dart';
 import 'package:mobile/model/accessory_model.dart';
@@ -16,6 +17,7 @@ class InvoiceModel {
   String? note;
   String licensePlate;
   List<MaintainceRequestModel>? services;
+  List<AccessoryRequestModel>? accessoriesRequest;
   List<AccessoryModel>? accessories;
   late List<MaintainceModel> maintainces = [];
 
@@ -30,6 +32,7 @@ class InvoiceModel {
     this.note,
     required this.licensePlate,
     required this.services,
+    this.accessoriesRequest,
   });
 
   InvoiceModel.fromJson(Map<String, dynamic> json)
@@ -40,10 +43,10 @@ class InvoiceModel {
         email = json['email'],
         phone = json['phone'],
         note = json['note'],
-        maintainces = List<MaintainceModel>.from(
-            json['maintenanceServices'].map((x) => MaintainceModel.fromJson(x))),
+        maintainces = List<MaintainceModel>.from(json['maintenanceServices']
+            .map((x) => MaintainceModel.fromJson(x))),
         licensePlate = json['licensePlate'],
-  accessories = List<AccessoryModel>.from(
+        accessories = List<AccessoryModel>.from(
             json['accessories'].map((x) => AccessoryModel.fromJson(x))),
         carName = json['carName'];
 
@@ -57,5 +60,6 @@ class InvoiceModel {
         'note': note,
         'licensePlate': licensePlate,
         'services': services!.map((e) => e.toJson()).toList(),
+        'accessories': accessoriesRequest!.map((e) => e.toJson()).toList(),
       };
 }

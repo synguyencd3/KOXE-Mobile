@@ -19,7 +19,7 @@ class InvoiceService{
 
     var url = Uri.http(Config.apiURL, Config.invoiceAPI);
     var response = await http.get(url, headers: requestHeaders);
-    print(response.body);
+    //print(response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       if (data['invoices'] == '[]')

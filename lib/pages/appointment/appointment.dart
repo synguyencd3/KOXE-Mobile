@@ -28,9 +28,12 @@ class _AppointmentState extends State<Appointment>
   void initState() {
     // TODO: implement initState
     super.initState();
-    isSalon();
+
     _tabController = TabController(length: tabs.length, vsync: this);
-    getAllAppointments();
+    Future.delayed(Duration.zero, () {
+      isSalon();
+      getAllAppointments();
+    });
     _tabController.addListener(() {
       // Check if the 'Lịch hẹn' tab is selected
       if (_tabController.index == 0) {
