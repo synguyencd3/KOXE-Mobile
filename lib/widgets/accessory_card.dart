@@ -121,11 +121,11 @@ class _AccessoryCardState extends State<AccessoryCard> {
       child: Column(
         children: [
           ListTile(
-            title: Text('Tên phụ kiện: ' + widget.accessory.name , style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20)),
+            title: Text('Tên phụ kiện: ' + (widget.accessory.name ?? '') , style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20)),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Nhà sản xuất: ' + widget.accessory.manufacturer, style: TextStyle(fontSize: 16),),
+                Text('Nhà sản xuất: ' + (widget.accessory.manufacturer ?? ''), style: TextStyle(fontSize: 16),),
                 Text('Giá: ' + widget.accessory.price.toString(), style: TextStyle(fontSize: 16),),
               ],
             ),

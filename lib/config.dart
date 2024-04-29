@@ -1,6 +1,6 @@
 class Config {
   static const String appName = "Salon oto";
-  static const String apiURL = "server-graduation-thesis-1.onrender.com";//"192.168.1.31:5000";
+  static const String apiURL = "192.168.1.26:5000";
   static const String loginAPI = "auth/login";
   static const String registerAPI = "auth/register";
   static const String facebookAPI = "auth/facebook-mobile";
@@ -26,6 +26,7 @@ class Config {
   static const String refreshToken = "auth/refresh";
   static const String getSalonAppointmentsApi = "/appointment/get-appoint-admin";
   static const String updateSalonAppointmentApi = "/appointment/update-one-admin";
+  static const String getBusyCarApi = "/appointment/get-busy-car";
 
   //Payment
   static const String VNPayAPI = "/payment/create_payment_url";

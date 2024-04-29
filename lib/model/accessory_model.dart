@@ -3,15 +3,15 @@ List<AccessoryModel> accessoriesFromJson(dynamic str) =>
 
 class AccessoryModel {
    String? id;
-final String name;
-final String manufacturer;
-final int price;
+final String? name;
+final String? manufacturer;
+final int? price;
 
   AccessoryModel({
      this.id,
-    required this.name,
-    required this.manufacturer,
-    required this.price,
+     this.name,
+     this.manufacturer,
+     this.price,
   });
 
   AccessoryModel.fromJson(Map<String, dynamic> json)
@@ -21,6 +21,7 @@ final int price;
         price = json['price'];
 
   Map<String, dynamic> toJson() => {
+        'accessory_id': id,
         'name': name,
         'manufacturer': manufacturer,
         'price': price,

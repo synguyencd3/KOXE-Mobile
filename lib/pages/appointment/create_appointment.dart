@@ -11,6 +11,8 @@ import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/widgets/car_card.dart';
 
+import '../../model/time_busy_model.dart';
+
 class CreateAppoint extends StatefulWidget {
   const CreateAppoint({super.key});
 
@@ -33,6 +35,7 @@ class _CreateAppointState extends State<CreateAppoint> {
   String selectedCar = '';
   CarouselController carouselController = CarouselController();
   List<bool> isSelected = List.generate(16, (index) => false);
+  late List<TimeBusyModel> timeBusy = [];
 
   @override
   void initState() {
@@ -42,11 +45,16 @@ class _CreateAppointState extends State<CreateAppoint> {
     Future.delayed(Duration.zero, () {
       getSalon();
       getCars();
+      getTimeBusy();
     });
   }
 
-  int findCarIndex(String carId) {
-    return cars!.indexWhere((car) => car.id == carId);
+  Future<void> getTimeBusy() async {
+    print('get time busy' + user.carId!);
+    List<TimeBusyModel> timeBusyApi = await AppointmentService.getBusyCar(user.id, user.carId ?? '');
+    setState(() {
+      timeBusy = timeBusyApi;
+    });
   }
 
   @override
@@ -73,6 +81,10 @@ class _CreateAppointState extends State<CreateAppoint> {
     }
     setState(() {
       cars = carsApi;
+      if (user.carId == '')
+        {
+          user.carId = cars![0].id;
+        }
     });
   }
 
@@ -112,7 +124,7 @@ class _CreateAppointState extends State<CreateAppoint> {
                   color: Colors.grey[200],
                   padding: const EdgeInsets.all(8.0),
                   child: TableCalendar(
-                    firstDay: DateTime.now(),
+                    firstDay: DateTime.now() ,
                     lastDay: DateTime.utc(2030, 3, 14),
                     focusedDay: today,
                     headerStyle: HeaderStyle(
@@ -137,27 +149,30 @@ class _CreateAppointState extends State<CreateAppoint> {
                 child: ToggleButtons(
                   isSelected: isSelected,
                   onPressed: (int index) {
-                    setState(() {
-                      for (int buttonIndex = 0;
+                    if (index!=2)
+                      {
+                        setState(() {
+                          for (int buttonIndex = 0;
                           buttonIndex < isSelected.length;
                           buttonIndex++) {
-                        if (buttonIndex == index) {
-                          isSelected[buttonIndex] = true;
-                          setState(() {
-                            hour = 7 + buttonIndex;
-                          });
-
-                        } else {
-                          isSelected[buttonIndex] = false;
-                        }
+                            if (buttonIndex == index) {
+                              isSelected[buttonIndex] = true;
+                              setState(() {
+                                hour = 7 + buttonIndex;
+                              });
+                            } else {
+                              isSelected[buttonIndex] = false;
+                            }
+                          }
+                        });
                       }
-                    });
                   },
                   children: List<Widget>.generate(
-                      16, (index) => Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text((7 + index).toString() + ":00"),
-                      )),
+                      16,
+                      (index) => Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text((7 + index).toString() + ":00"),
+                          )),
                 ),
               ),
               SizedBox(height: 10),
@@ -197,12 +212,14 @@ class _CreateAppointState extends State<CreateAppoint> {
                 child: ElevatedButton(
                   onPressed: () async {
                     print(selectedCar);
+                    DateTime combined = DateTime(
+                        today.year, today.month, today.day, hour, minute);
+                    print(combined);
                     var result = await AppointmentService.createAppointment(
                         AppointmentModel(
                       salon: user.id,
                       carId: selectedCar,
-                      datetime:
-                          today.add(Duration(hours: hour, minutes: minute)),
+                      datetime: combined,
                       description: controller.text,
                     ));
                     print(result);

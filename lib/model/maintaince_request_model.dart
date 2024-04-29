@@ -1,6 +1,6 @@
 
 class MaintainceRequestModel {
-  late String id;
+  final String id;
   //late int quantity;
 
   MaintainceRequestModel({

@@ -24,7 +24,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime appointmentDateTime = widget.appointment.datetime;
+    DateTime appointmentDateTime = widget.appointment.datetime.toLocal();
     String appointmentDate =
         '${appointmentDateTime.day}/${appointmentDateTime.month}/${appointmentDateTime.year}';
     String formattedHour = appointmentDateTime.hour.toString().padLeft(2, '0');
@@ -61,8 +61,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
               leading: Icon(Icons.location_pin),
             ),
             ListTile(
-              title: Text('Số điện thoại'),
-              leading: Icon(Icons.phone_rounded),
+              title: Text(widget.appointment.car?.name ?? 'Không có xe'),
+              leading: Icon(Icons.car_crash),
             ),
             ListTile(
               title: Text(
