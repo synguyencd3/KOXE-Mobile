@@ -10,7 +10,7 @@ class PackageService {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = Uri.http(Config.apiURL, Config.getAllPackageAPI);
+    var url = Uri.https(Config.apiURL, Config.getAllPackageAPI);
 
     var response = await http.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {

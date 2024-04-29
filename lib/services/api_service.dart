@@ -45,7 +45,7 @@ class APIService {
         'Cookie': 'refreshToken=${loginDetails?.refreshToken}'
       };
 
-      var url = Uri.http(Config.apiURL, Config.refreshToken);
+      var url = Uri.https(Config.apiURL, Config.refreshToken);
       print("request new token");
       // final response = await retry(
       //   () => http.post(url, headers: requestHeaders).timeout(Duration(seconds: 5)),
@@ -84,7 +84,7 @@ class APIService {
       'Access-Control-Allow-Origin': "*",
     };
 
-    var url = Uri.http(Config.apiURL, Config.loginAPI);
+    var url = Uri.https(Config.apiURL, Config.loginAPI);
 
     var response = await client.post(
       url,
@@ -115,7 +115,7 @@ class APIService {
       'Content-Type': 'application/json',
     };
 
-    var url = Uri.http(Config.apiURL, Config.registerAPI);
+    var url = Uri.https(Config.apiURL, Config.registerAPI);
 
     var response = await client.post(
       url,
@@ -176,7 +176,7 @@ class APIService {
       'code': googleAccount.serverAuthCode
     };
 
-    var url = Uri.http(Config.apiURL, Config.googleCallback, param);
+    var url = Uri.https(Config.apiURL, Config.googleCallback, param);
     
     var response = await client.get(
       url,
@@ -229,7 +229,7 @@ class APIService {
       'code': googleAccount.serverAuthCode
     };
 
-    var url = Uri.http(Config.apiURL, Config.googleCallback, param);
+    var url = Uri.https(Config.apiURL, Config.googleCallback, param);
 
     var response = await client.get(
       url,
@@ -261,7 +261,7 @@ class APIService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.userprofileAPI);
+    var url = Uri.https(Config.apiURL, Config.userprofileAPI);
     var response = await client.patch(
         url,
         headers: requestHeaders,
@@ -295,7 +295,7 @@ class APIService {
       return false;
 
 
-    var url = Uri.http(Config.apiURL, Config.facebookAPI);
+    var url = Uri.https(Config.apiURL, Config.facebookAPI);
 
     String accessToken = result.accessToken?.toJson()['token'];
     print(accessToken);
@@ -342,7 +342,7 @@ class APIService {
       return false;
 
 
-    var url = Uri.http(Config.apiURL, Config.facebookAPI);
+    var url = Uri.https(Config.apiURL, Config.facebookAPI);
 
     String accessToken = result.accessToken?.toJson()['token'];
     print("fb token:"+accessToken);
@@ -370,7 +370,7 @@ class APIService {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
       'Cookie': 'refreshToken=${loginDetails?.refreshToken}'
     };
-    var url = Uri.http(Config.apiURL, Config.userprofileAPI);
+    var url = Uri.https(Config.apiURL, Config.userprofileAPI);
     var response = await client.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
       //print(response.body);
@@ -385,7 +385,7 @@ class APIService {
   static Future<bool> updateUserProfile(UserModel user) async {
     await refreshToken();
     var loginDetails = await SharedService.loginDetails();
-    var url = Uri.http(Config.apiURL, Config.userprofileAPI);
+    var url = Uri.https(Config.apiURL, Config.userprofileAPI);
 
     Map<String, dynamic> requestData = user.toJson();
     print(requestData);
@@ -418,7 +418,7 @@ class APIService {
 
   static Future<bool> sendInvite(String email) async {
     await refreshToken();
-    var url = Uri.http(Config.apiURL, Config.sendInvite);
+    var url = Uri.https(Config.apiURL, Config.sendInvite);
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',

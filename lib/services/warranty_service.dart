@@ -22,7 +22,7 @@ class WarrantyService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.warranty);
+    var url = Uri.https(Config.apiURL, Config.warranty);
 
     var response = await http.post(url, body: {
     'salonId': mySalon
@@ -47,7 +47,7 @@ class WarrantyService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.createWarranty);
+    var url = Uri.https(Config.apiURL, Config.createWarranty);
     var reqBody = model.toJson();
     reqBody['salonId'] = mySalon;
     print(jsonEncode(reqBody));
@@ -68,7 +68,7 @@ class WarrantyService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.updateWarranty);
+    var url = Uri.https(Config.apiURL, Config.updateWarranty);
     var modelJson = model.toJson();
     modelJson['warranty_id'] = id;
     Map<String, dynamic> reqBody ={
@@ -98,7 +98,7 @@ class WarrantyService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.deleteWarranty);
+    var url = Uri.https(Config.apiURL, Config.deleteWarranty);
 
     var response = await http.delete(url, headers: requestHeaders, body: {
       'salonId' : mySalon,
