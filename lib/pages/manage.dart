@@ -57,11 +57,6 @@ class _ManageState extends State<Manage> {
                 Navigator.pushNamed(context, '/listing/manage',arguments: cars);
                 }),
             text_card(
-                title: 'Quản lý lịch hẹn',
-                onTap: () {
-                  print('Tap');
-                }),
-            text_card(
                 title: 'Quản lý bảo hành',
                 onTap: () {
                   Navigator.pushNamed(context, '/warranty_list');
@@ -69,12 +64,12 @@ class _ManageState extends State<Manage> {
             text_card(
                 title: 'Quản lý bảo dưỡng',
                 onTap: () {
-                  print('Tap');
+                  Navigator.pushNamed(context, '/maintaince_manage');
                 }),
             text_card(
-                title: 'Quản lý kho',
+                title: 'Quản lý phụ tùng',
                 onTap: () {
-                  print('Tap');
+                 Navigator.pushNamed(context, '/accessory_manage');
                 }),
             text_card(
                 title: 'Báo cáo doanh thu',

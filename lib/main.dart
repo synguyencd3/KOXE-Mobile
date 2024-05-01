@@ -32,6 +32,10 @@ import 'package:mobile/pages/salon/salon_detail.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:mobile/pages/appointment/create_appointment.dart';
+import 'package:mobile/pages/warranty/warranty_manage.dart';
+import 'package:mobile/pages/maintaince/maintaince_manage.dart';
+import 'package:mobile/pages/accessory_manage.dart';
+import 'package:mobile/pages/user_manage.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -95,9 +99,13 @@ class _MyAppState extends State<MyApp> {
         '/call_page': (context) => CallPage(callID: '111'),
         '/create_appointment': (context) => CreateAppoint(),
         '/employee_management' : (context) => AdminPage(),
+        '/warranty_manage' : (context) => WarrantyManage(),
         '/warranty_list' : (context) => WarrantyList(),
         '/warranty_form' : (context) => WarrantyForm(),
-        '/statistic' : (context) => Statistic()
+        '/statistic' : (context) => Statistic(),
+        '/maintaince_manage' : (context) => MaintainceManage(),
+        '/accessory_manage' : (context) => AccessoriesManage(),
+        '/user_manage' : (context) => UserManage(),
       },
     );
   }

@@ -27,7 +27,7 @@ class SocketManager {
       StreamController.broadcast();
 
   Stream<List<dynamic>> get onlineUsersStream => _onlineUsersController.stream;
-
+  List<dynamic> onlineUsers = [];
   Future<void> initSocket(
       String userId, String salonId, Function callback) async {
     if (_socket != null && _socket!.connected) {
@@ -50,6 +50,18 @@ class SocketManager {
     _socket!.connect();
     print('connected');
     ;
+    if (_messageController.isClosed)
+    {
+      _messageController = StreamController.broadcast();
+    }
+    if (_notificationController.isClosed)
+    {
+      _notificationController = StreamController.broadcast();
+    }
+    if (_onlineUsersController.isClosed)
+    {
+      _onlineUsersController = StreamController.broadcast();
+    }
     _socket!.on('newMessage', (data) {
       //print(data);
       _messageController.add(data);
@@ -59,13 +71,11 @@ class SocketManager {
       //print(data);
     });
     _socket!.on('getOnlineUsers', (data) {
-      List<String> onlineUsers = [];
-      for (var user in data) {
-        onlineUsers.add(user.toString());
-      }
+     onlineUsers = data;
       _onlineUsersController.add(onlineUsers);
-      print(onlineUsers);
+      //print(onlineUsers);
     });
+
   }
 
   // disconnect socket
@@ -73,7 +83,6 @@ class SocketManager {
     if (_socket != null && _socket!.connected) {
       _socket!.disconnect();
       if (!_messageController.isClosed) {
-        print('abc');
         _messageController.close();
       }
       if (!_notificationController.isClosed) {

@@ -66,6 +66,7 @@ class _UserState extends State<User> {
         ));
     return Column(
       children: [
+        SizedBox(height: 20),
         Center(
           child: CircleAvatar(
             radius: 50,
@@ -113,6 +114,12 @@ class _UserState extends State<User> {
             icon: Icons.manage_accounts,
             onTap: () {
               Navigator.pushNamed(context, '/manage');
+            }),
+        text_card(
+            title: 'Xe của tôi',
+            icon: Icons.manage_accounts,
+            onTap: () {
+              Navigator.pushNamed(context, '/user_manage');
             }),
         text_card(
             title: 'Đăng xuất',

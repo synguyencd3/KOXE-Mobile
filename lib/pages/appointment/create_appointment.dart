@@ -11,6 +11,8 @@ import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/widgets/car_card.dart';
 
+import '../../model/time_busy_model.dart';
+
 class CreateAppoint extends StatefulWidget {
   const CreateAppoint({super.key});
 
@@ -32,6 +34,8 @@ class _CreateAppointState extends State<CreateAppoint> {
   List<Car>? cars = [];
   String selectedCar = '';
   CarouselController carouselController = CarouselController();
+  List<bool> isSelected = List.generate(16, (index) => false);
+  late List<TimeBusyModel> timeBusy = [];
 
   @override
   void initState() {
@@ -41,10 +45,16 @@ class _CreateAppointState extends State<CreateAppoint> {
     Future.delayed(Duration.zero, () {
       getSalon();
       getCars();
+      getTimeBusy();
     });
   }
-  int findCarIndex(String carId) {
-    return cars!.indexWhere((car) => car.id == carId);
+
+  Future<void> getTimeBusy() async {
+    print('get time busy' + user.carId!);
+    List<TimeBusyModel> timeBusyApi = await AppointmentService.getBusyCar(user.id, user.carId ?? '');
+    setState(() {
+      timeBusy = timeBusyApi;
+    });
   }
 
   @override
@@ -55,10 +65,8 @@ class _CreateAppointState extends State<CreateAppoint> {
   }
 
   Future<void> getSalon() async {
-    ChatUserModel userApi = ModalRoute
-        .of(context)!
-        .settings
-        .arguments as ChatUserModel;
+    ChatUserModel userApi =
+        ModalRoute.of(context)!.settings.arguments as ChatUserModel;
     setState(() {
       user = userApi;
     });
@@ -66,13 +74,17 @@ class _CreateAppointState extends State<CreateAppoint> {
 
   Future<void> getCars() async {
     List<Car>? carsApi = await SalonsService.getDetail(user.id);
-    if (user.carId !='' &&  carsApi!.isNotEmpty) {
+    if (user.carId != '' && carsApi!.isNotEmpty) {
       int initialPage = carsApi.indexWhere((car) => car.id == user.carId);
       //print(initialPage);
       carouselController.animateToPage(initialPage);
     }
     setState(() {
       cars = carsApi;
+      if (user.carId == '')
+        {
+          user.carId = cars![0].id;
+        }
     });
   }
 
@@ -82,7 +94,6 @@ class _CreateAppointState extends State<CreateAppoint> {
       today = selectedDay;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +124,7 @@ class _CreateAppointState extends State<CreateAppoint> {
                   color: Colors.grey[200],
                   padding: const EdgeInsets.all(8.0),
                   child: TableCalendar(
-                    firstDay: DateTime.utc(2010, 10, 16),
+                    firstDay: DateTime.now() ,
                     lastDay: DateTime.utc(2030, 3, 14),
                     focusedDay: today,
                     headerStyle: HeaderStyle(
@@ -133,82 +144,53 @@ class _CreateAppointState extends State<CreateAppoint> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.black87,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    NumberPicker(
-                      minValue: 0,
-                      maxValue: 23,
-                      value: hour,
-                      zeroPad: true,
-                      infiniteLoop: true,
-                      itemWidth: 80,
-                      itemHeight: 60,
-                      onChanged: (value) {
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ToggleButtons(
+                  isSelected: isSelected,
+                  onPressed: (int index) {
+                    if (index!=2)
+                      {
                         setState(() {
-                          hour = value;
+                          for (int buttonIndex = 0;
+                          buttonIndex < isSelected.length;
+                          buttonIndex++) {
+                            if (buttonIndex == index) {
+                              isSelected[buttonIndex] = true;
+                              setState(() {
+                                hour = 7 + buttonIndex;
+                              });
+                            } else {
+                              isSelected[buttonIndex] = false;
+                            }
+                          }
                         });
-                      },
-                      textStyle: TextStyle(color: Colors.grey, fontSize: 20),
-                      selectedTextStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                            top: BorderSide(color: Colors.white),
-                            bottom: BorderSide(color: Colors.white)),
-                      ),
-                    ),
-
-                    // Add a NumberPicker for minutes
-                    NumberPicker(
-                      minValue: 0,
-                      maxValue: 59,
-                      value: minute,
-                      zeroPad: true,
-                      infiniteLoop: true,
-                      itemWidth: 80,
-                      itemHeight: 60,
-                      onChanged: (value) {
-                        setState(() {
-                          minute = value;
-                        });
-                      },
-                      textStyle: TextStyle(color: Colors.grey, fontSize: 20),
-                      selectedTextStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                            top: BorderSide(color: Colors.white),
-                            bottom: BorderSide(color: Colors.white)),
-                      ),
-                    ),
-                  ],
+                      }
+                  },
+                  children: List<Widget>.generate(
+                      16,
+                      (index) => Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text((7 + index).toString() + ":00"),
+                          )),
                 ),
               ),
               SizedBox(height: 10),
               CarouselSlider(
                 carouselController: carouselController,
-                options: CarouselOptions(viewportFraction:1.0, height: 450.0, onPageChanged:(index,reason){
-                  setState(() {
-                    selectedCar = cars![index].id!;
-                  });
-                } ),
-                items: cars!.length>0 ? cars?.map((car) {
-                  return CarCard(car: car);
-                }).toList() : [],
+                options: CarouselOptions(
+                    viewportFraction: 1.0,
+                    height: 450.0,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        selectedCar = cars![index].id!;
+                      });
+                    }),
+                items: cars!.length > 0
+                    ? cars?.map((car) {
+                        return CarCard(car: car);
+                      }).toList()
+                    : [],
               ),
               SizedBox(height: 10),
               Text(
@@ -230,22 +212,22 @@ class _CreateAppointState extends State<CreateAppoint> {
                 child: ElevatedButton(
                   onPressed: () async {
                     print(selectedCar);
+                    DateTime combined = DateTime(
+                        today.year, today.month, today.day, hour, minute);
+                    print(combined);
                     var result = await AppointmentService.createAppointment(
                         AppointmentModel(
-                          salon: user.id,
-                          carId: selectedCar,
-                          datetime: today.add(Duration(
-                              hours: hour, minutes: minute)),
-                          description: controller.text,
-                        ));
+                      salon: user.id,
+                      carId: selectedCar,
+                      datetime: combined,
+                      description: controller.text,
+                    ));
                     print(result);
                     if (result) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Tạo lịch hẹn thành công'),
-                            backgroundColor: Colors.green,
-                          )
-                      );
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Tạo lịch hẹn thành công'),
+                        backgroundColor: Colors.green,
+                      ));
                       Navigator.pop(context);
                     }
                   },

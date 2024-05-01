@@ -15,54 +15,47 @@ class Message extends StatefulWidget {
 }
 
 class _MessageState extends State<Message> {
-  final List<ChatUserModel> users = [];
-  StreamSubscription? _onlineUsersSubscription;
+  late List<ChatUserModel> users = [];
 
+  StreamSubscription? _messageStreamSubscription;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getAllUsers();
-    _onlineUsersSubscription = SocketManager().onlineUsersStream.listen((event) {
-      print(event);
-      for (var user in users) {
-        if (event.contains(user.id)) {
-          setState(() {
-            user.isOnline = true;
-          });
-        } else {
-          setState(() {
-            user.isOnline = false;
-          });
-        }
-      }
+
+    _messageStreamSubscription = SocketManager().messageStream.listen((event) {
+      print('Received event: $event');
+      getAllUsers();
     });
 
   }
   @override
   void dispose() {
-    _onlineUsersSubscription?.cancel();
+    _messageStreamSubscription?.cancel();
     super.dispose();
   }
 
   Future<void> getAllUsers() async {
     List<ChatUserModel> usersAPI = await ChatService.getAllChatedUsers();
     setState(() {
-      users.addAll(usersAPI);
+      users = usersAPI;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return users.isNotEmpty
-        ? ListView.builder(
-            itemCount: users.length,
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.only(top: 1),
-            itemBuilder: (context, index) {
-              return ChatUserCard(user: users[index]);
-            },
-          )
-        : Center(child: Text('Không có tin nhắn nào'));
+        ?
+             ListView.builder(
+                itemCount: users.length,
+                physics: BouncingScrollPhysics(),
+                padding: EdgeInsets.only(top: 1),
+                itemBuilder: (context, index) {
+                  return ChatUserCard(user: users[index]);
+                },
+              )
+
+        :  Center(child: Text('Không có tin nhắn nào'));
   }
 }
