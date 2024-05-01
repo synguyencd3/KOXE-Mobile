@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -6,13 +7,15 @@ import 'package:mobile/model/chat_user_model.dart';
 import 'package:mobile/widgets/button.dart';
 import 'package:mobile/services/cars_service.dart';
 
+import '../loading.dart';
+
 class CarDetail extends StatefulWidget {
   @override
   State<CarDetail> createState() => _CarDetailState();
 }
 
 class _CarDetailState extends State<CarDetail> {
-  Car car = new Car();
+  Car car = Car();
   late final PageController pageController;
 
   @override
@@ -23,15 +26,13 @@ class _CarDetailState extends State<CarDetail> {
     super.initState();
   }
 
-  void initCar() {
-    var data = ModalRoute.of(context)!.settings.arguments as Map;
-    if (data.isNotEmpty)
-      {
+   void initCar() async {
+    //var data = ModalRoute.of(context)!.settings.arguments as Map;
+    var arg = ModalRoute.of(context)!.settings.arguments as Map;
+    var data = await CarsService.getDetail(arg['id']);
         setState(() {
-          car = data['car'];
+          car = data!;
         });
-      }
-
   }
 
   @override
@@ -41,7 +42,7 @@ class _CarDetailState extends State<CarDetail> {
       appBar: AppBar(
         title: Text(car.name ?? ''),
       ),
-      body: SingleChildScrollView(
+      body: car.id == null ? Loading() :SingleChildScrollView(
         child: Column(
           children: [
             CarouselSlider(
@@ -146,7 +147,7 @@ class _CarDetailState extends State<CarDetail> {
                   Divider(height: 5),
                   Container(
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -159,6 +160,40 @@ class _CarDetailState extends State<CarDetail> {
                             '${car.description}',
                             style: TextStyle(color: Colors.grey[800], fontSize: 16),
                           ),
+                          SizedBox(height: 10),
+                          Text(
+                            "Đang có tại",
+                            style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          Card(
+                            child: ListTile(
+                              title: Text('${car.salon?.name}',
+                                  style: TextStyle(fontWeight: FontWeight.bold)),
+                              subtitle: Text('${car.salon?.address}',
+                                  style:
+                                  TextStyle(color: Colors.grey[800], fontSize: 16)),
+                            ),
+                          ),
+                          car.warranty == null ? SizedBox() : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Gói bảo hành",
+                                style:
+                                TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                              ),
+                              Card(
+                                child: ListTile(
+                                  title: Text('${car.warranty?.name}',
+                                      style: TextStyle(fontWeight: FontWeight.bold)),
+                                  subtitle: Text('${car.warranty?.policy}',
+                                      style:
+                                      TextStyle(color: Colors.grey[800], fontSize: 16)),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -170,6 +205,7 @@ class _CarDetailState extends State<CarDetail> {
                     ChatUserModel user = ChatUserModel(id: carDetail?.salon?.salonId ?? '', name: carDetail?.salon?.name ?? '', carId: car.id );
                     Navigator.pushNamed(context, '/create_appointment', arguments: user);
                   }, title: 'Đặt lịch hẹn để xem xe này',),
+
                 ],
               ),
             ),

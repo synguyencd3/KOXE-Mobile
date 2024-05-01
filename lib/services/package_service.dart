@@ -22,4 +22,20 @@ class PackageService {
     return [];
   }
 
+  static Future<PackageModel> getDetailPackage(String id) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    var url = Uri.https(Config.apiURL, Config.getAllPackageAPI + '/$id');
+
+    var response = await http.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      var packagesData = data['package']['package'];
+
+      return PackageModel.fromJson(packagesData);
+    }
+    return PackageModel(
+        id: '', name: '', description: '', price: 0, features: []);
+  }
 }

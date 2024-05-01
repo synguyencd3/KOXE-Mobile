@@ -19,7 +19,7 @@ class AppointmentService{
     var url = Uri.https(Config.apiURL, Config.getAppointmentsAPI);
 
     var response = await http.post(url, headers: requestHeaders);
-
+    print(response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       //print(data);
@@ -70,7 +70,7 @@ class AppointmentService{
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
-  print(appointmentId);
+    print(appointmentId);
     var url = Uri.https(Config.apiURL, Config.getSalonAppointmentsApi);
 
     var response = await http.post(url, headers: requestHeaders,body: jsonEncode({'salonId': salonId, 'id': appointmentId}) );
@@ -97,5 +97,27 @@ class AppointmentService{
     var response = await http.patch(url, headers: requestHeaders, body: jsonEncode({'id': appointmentId, 'status': status, 'salonId': salonId}));
     var data = jsonDecode(response.body);
     return data['status']=='success';
+  }
+
+  static Future<List<TimeBusyModel>> getBusyCar(String salonId, String carId) async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.getBusyCarApi);
+
+    var response = await http.post(url,
+        headers: requestHeaders,
+        body: jsonEncode({'salonId': salonId, 'carId': carId}));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return timeBusyFromJson(data['timeBusy']);
+    } else {
+      return [];
+    }
   }
 }

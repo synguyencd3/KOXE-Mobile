@@ -26,6 +26,7 @@ class Statistic extends StatefulWidget {
 class _StatisticState extends State<Statistic> {
   late Map<String, Map<String, dynamic>> invoicesMap= {};
   List<ChartData> chartData = [];
+  DateTime time = DateTime.now().subtract(Duration(days: 30));
 
   @override
   void initState() {
@@ -35,12 +36,26 @@ class _StatisticState extends State<Statistic> {
   }
 
   void getStat() async {
-    var data = await StatisticService.getStatistic("2024-04-21");
+    var data = await StatisticService.getStatistic("${time.year}-${time.month}-${time.day}");
     print(data['maintenances']);
     setState(() {
       invoicesMap=data;
     });
     initChart();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: time,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != time) {
+      setState(() {
+        time = picked;
+      });
+      getStat();
+    }
   }
 
   void initChart() {
@@ -57,6 +72,12 @@ class _StatisticState extends State<Statistic> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+              child: GestureDetector(
+                onTap: () => _selectDate(context),
+                  child: Text('Từ ngày: ${time.day}/${time.month}/${time.year}')),
+            ),
             Text('Bảo dưỡng'),
             invoicesMap.isEmpty ? Padding(
               padding: const EdgeInsets.all(30),
