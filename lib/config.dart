@@ -1,6 +1,6 @@
 class Config {
   static const String appName = "Salon oto";
-  static const String apiURL = "192.168.1.26:5000";
+  static const String apiURL = "server-graduation-thesis-1.onrender.com";
   static const String loginAPI = "auth/login";
   static const String registerAPI = "auth/register";
   static const String facebookAPI = "auth/facebook-mobile";
@@ -8,8 +8,9 @@ class Config {
   static const String googleCallback = "auth/google/callback";
   static const String userprofileAPI = "/users/profile";
   static const String getAllPackageAPI = "/packages";
-  static const String getCarsAPI = "/cars";
 
+  //Car
+  static const String getCarsAPI = "/cars";
 
   //Salon
   static const String SalonsAPI = "/salons";

@@ -49,7 +49,16 @@ class _CarState extends State<CarsListing> {
                     itemCount: cars.length,
                     physics: ClampingScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return CarCard(car: cars[index]);
+                      return Column(
+                        children: [
+                          CarCard(car: cars[index]),
+                          Row(
+                            children: [
+                              TextButton(onPressed: () => { Navigator.pushNamed(context, '/new_car', arguments: {'car':cars[index]})}, child: Text('edit'))
+                            ],
+                          )
+                        ],
+                      );
                     }))
           ],
         ));

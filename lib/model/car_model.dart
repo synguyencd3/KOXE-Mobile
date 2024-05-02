@@ -71,6 +71,16 @@ class Car {
     data['image'] = this.image;
     data['price'] = this.price;
     data['type'] = this.type;
+    data['origin'] = this.origin;
+    data['model'] = this.model;
+    data['brand'] = this.brand;
+    data['capacity'] = this.capacity;
+    data['door'] = this.door;
+    data['seat'] = this.seat;
+    data['kilometer'] = this.kilometer;
+    data['gear'] = this.gear;
+    data['mfg'] = this.mfg;
+    data['outColor'] = this.outColor;
     return data;
   }
 }

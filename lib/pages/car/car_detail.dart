@@ -16,7 +16,7 @@ class CarDetail extends StatefulWidget {
 
 class _CarDetailState extends State<CarDetail> {
   Car car = Car();
-  late final PageController pageController;
+ // late final PageController pageController;
 
   @override
   void initState() {

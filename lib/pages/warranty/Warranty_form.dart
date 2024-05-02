@@ -50,6 +50,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
   }
 
   void getCars() async {
+    print('getting car');
     var salonId = await SalonsService.isSalon();
     var data = await SalonsService.getDetail(salonId);
     setState(() {
@@ -58,15 +59,22 @@ class _WarrantyFormState extends State<WarrantyForm> {
   }
 
   void initWarranty() {
-  var data = ModalRoute.of(context)!.settings.arguments as Map;
-  setState(() {
-    warranty = data['warranty'];
-  });
-  _name.text = warranty?.name ?? "";
-  _limitKilometers.text = warranty?.limitKilometer.toString() ?? "";
-  _months.text = warranty?.months.toString() ?? "";
-  _policy.text = warranty?.policy ?? "";
-  //_email.text = salon?.email ?? "";
+    try {
+      var data = ModalRoute
+          .of(context)!
+          .settings
+          .arguments as Map;
+      setState(() {
+        warranty = data['warranty'];
+      });
+      _name.text = warranty?.name ?? "";
+      _limitKilometers.text = warranty?.limitKilometer.toString() ?? "";
+      _months.text = warranty?.months.toString() ?? "";
+      _policy.text = warranty?.policy ?? "";
+      //_email.text = salon?.email ?? "";
+    } catch (exception) {
+        print(exception);
+    }
   }
 
   void updateWarranty() async {
@@ -103,6 +111,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
       limitKilometer: int.parse(_limitKilometers.text),
       months: int.parse(_months.text),
       policy: _policy.text,
+      car: _selectedCar
       //note: _note.text
     );
     WarrantyService.NewWarranty(model).then((value) {
