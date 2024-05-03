@@ -42,6 +42,7 @@ class _CarState extends State<CarsListing> {
         ),
         body: Column(
           children: [
+            TextButton(onPressed: () {Navigator.pushNamed(context, '/new_car');}, child: Text('Thêm xe')),
             Expanded(
                 child:cars.isEmpty && !isCalling ? Loading(): ListView.builder(
                     shrinkWrap: true,
@@ -54,7 +55,7 @@ class _CarState extends State<CarsListing> {
                           CarCard(car: cars[index]),
                           Row(
                             children: [
-                              TextButton(onPressed: () => { Navigator.pushNamed(context, '/new_car', arguments: {'car':cars[index]})}, child: Text('edit'))
+                              TextButton(onPressed: () => { Navigator.pushNamed(context, '/new_car', arguments: {'car':cars[index]}).then((value) => getCars())}, child: Text('edit'))
                             ],
                           )
                         ],

@@ -48,15 +48,15 @@ class _EditCarState extends State<EditCar> {
   void NewCar() {
     Car car = Car(name: _name.text,
         description: _description.text,
-      //  price: int.parse(_price.text),
+        price: int.parse(_price.text),
         type: _type.text,
         origin: _origin.text,
         model : _model.text,
         brand : _brand.text,
-       // capacity: double.parse(_capacity.text),
-       // door : int.parse(_door.text),
-      //  seat: int.parse(_seat.text),
-      //  kilometer: int.parse(_kilometer.text),
+        capacity: double.parse(_capacity.text),
+        door : int.parse(_door.text),
+        seat: int.parse(_seat.text),
+        kilometer: int.parse(_kilometer.text),
         gear: _gear.text,
         mfg: _mfg.text,
         outColor: _outColor.text,
@@ -79,7 +79,7 @@ class _EditCarState extends State<EditCar> {
   void EditCar() {
     Car carForm = Car(name: _name.text,
         description: _description.text,
-      //  price: int.parse(_price.text),
+        price: int.parse(_price.text),
         type: _type.text,
         origin: _origin.text,
         model : _model.text,
@@ -143,7 +143,7 @@ class _EditCarState extends State<EditCar> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Thêm salon',
+          title: Text('Thêm xe',
             //   style: FlutterFlowTheme.of(context).titleLarge.override(
             //   fontFamily: 'Outfit',
             //   color: Color(0xFF15161E),
@@ -159,7 +159,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _name,
-                decoration: InputDecoration(labelText: 'Tên salon',
+                decoration: InputDecoration(labelText: 'Tên xe',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),

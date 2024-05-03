@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/services/statistic_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import '../loading.dart';
 
@@ -24,9 +24,10 @@ class Statistic extends StatefulWidget {
 }
 
 class _StatisticState extends State<Statistic> {
-  late Map<String, Map<String, dynamic>> invoicesMap= {};
+  Map<String, Map<String, dynamic>> invoicesMap= {};
   List<ChartData> chartData = [];
   DateTime time = DateTime.now().subtract(Duration(days: 30));
+  Map<String, dynamic> pieData ={};
 
   @override
   void initState() {
@@ -37,9 +38,11 @@ class _StatisticState extends State<Statistic> {
 
   void getStat() async {
     var data = await StatisticService.getStatistic("${time.year}-${time.month}-${time.day}");
-    print(data['maintenances']);
+    var topData = await StatisticService.getTop("${time.year}-${time.month}-${time.day}");
+    print(topData);
     setState(() {
       invoicesMap=data;
+      pieData = topData;
     });
     initChart();
   }
@@ -121,6 +124,7 @@ class _StatisticState extends State<Statistic> {
              )
              ).toList(),),
             ),
+            pieData.isEmpty ? SizedBox(height: 0) : PieChart(dataMap: pieData['MTTopDb']),
             Text('Doanh số'),
             invoicesMap.isEmpty ? Padding(
               padding: const EdgeInsets.all(30),
@@ -161,6 +165,7 @@ class _StatisticState extends State<Statistic> {
               ]
              )
              ).toList(),),
+            pieData.isEmpty ? SizedBox(height: 0,): PieChart(dataMap: pieData['buyCarTop']),
             Text("Thống kê doanh thu"),
             SfCartesianChart(
               series: <CartesianSeries<ChartData,int>>[

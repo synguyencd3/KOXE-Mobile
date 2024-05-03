@@ -64,7 +64,9 @@ class CarsService {
     Map<String, dynamic> remain = {'salonId': mySalon};
     var param = model.tojson();
     var request = http.MultipartRequest("POST", url);
+    print(param);
     request.headers.addAll(requestHeaders);
+    request.fields['salonId'] = mySalon;
     param.entries.forEach((element) {
       if (element.key !='images' && element.value!=null && element.value!="" && element.value!='car_id')
       {
@@ -75,7 +77,8 @@ class CarsService {
         }
       }
     });
-    http.patch(url,headers: requestHeaders, body: jsonEncode(remain));
+    var a=await http.post(url,headers: requestHeaders, body: jsonEncode(remain));
+    print(a.body);
     if (model.image !=null)
     {
       model.image?.forEach((element) async {
@@ -88,6 +91,7 @@ class CarsService {
     var responseData = await response.stream.toBytes();
     var responseString = String.fromCharCodes(responseData);
     var data = jsonDecode(responseString);
+    print(data);
     if (data['status'] == 'success') return true;
     return false;
   }
