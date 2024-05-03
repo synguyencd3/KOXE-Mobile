@@ -5,11 +5,11 @@ import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 import '../loading.dart';
 
-var dataMap = <String, dynamic>{
-  'Toyota Corolla': [12,2412043],
-  'Honda crv': [4,139111],
-  'name 1': [4, 22456]
-};
+// var dataMap = <String, dynamic>{
+//   'Toyota Corolla': [12,2412043],
+//   'Honda crv': [4,139111],
+//   'name 1': [4, 22456]
+// };
 
 class ChartData {
   ChartData(this.x, this.y);

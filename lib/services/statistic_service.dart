@@ -83,5 +83,49 @@ class StatisticService {
     return map;
   }
 
+  static Future<Map<String, dynamic>> getTop (String salonId, String fromDate) async {
+    await APIService.refreshToken();
+    String mySalon = await SalonsService.isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
 
+    var url = Uri.https(Config.apiURL, Config.getTop);
+
+    var response = await http.post(url,
+    headers: requestHeaders,
+    body: jsonEncode({"salonId": salonId, "fromDate": fromDate}));
+
+    var responseData = jsonDecode(response.body);
+    var map = <String, dynamic>{};
+    if (responseData['status'] == 'success') {
+     map['buyCarTop'] = topCar(responseData['buyCarTop']);
+     map['MTTopDb'] = topAccessories(responseData['MTTopDb']);
+     map['accessoriesTop'] = topAccessories(responseData['accessoriesTop']);
+     return map;
+    }
+    return {};
+  }
+
+  static Map<String, double> topCar(List<dynamic> Json) {
+    Map<String, double> map = {};
+    Json.forEach((element) {
+      map['${element['name']}'] = element['quantitySold'];
+    });
+    //print(map);
+    return map;
+  }
+
+  static Map<String, double> topAccessories(List<dynamic> Json) {
+    Map<String, double> map = {};
+    Json.forEach((element) {
+      try {
+        map['${element['name']['name']}'] = element['quantitySold'];
+      } catch (exception) {}
+    });
+    //print(map);
+    return map;
+  }
 }
