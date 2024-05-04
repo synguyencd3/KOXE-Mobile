@@ -83,7 +83,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
       limitKilometer: int.parse(_limitKilometers.text),
       months: int.parse(_months.text),
       policy: _policy.text,
-      car: _selectedCar
+   //   car: _selectedCar
     );
     WarrantyService.updateWarranty(warrantyForm, warranty!.warrantyId!).then((value) {
       if (value!) {
@@ -111,7 +111,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
       limitKilometer: int.parse(_limitKilometers.text),
       months: int.parse(_months.text),
       policy: _policy.text,
-      car: _selectedCar
+     // car: _selectedCar
       //note: _note.text
     );
     WarrantyService.NewWarranty(model).then((value) {

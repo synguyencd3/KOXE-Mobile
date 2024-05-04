@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile/services/salon_service.dart';
+import 'package:mobile/services/warranty_service.dart';
 
 import '../../model/car_model.dart';
+import '../../model/warranty_model.dart';
 import '../../services/cars_service.dart';
 
 class EditCar extends StatefulWidget {
@@ -20,6 +23,8 @@ class _EditCarState extends State<EditCar> {
   List<File>? image;
   List<XFile>? pickedFile;
   final picker = ImagePicker();
+  List<Warranty> warranties= [];
+  Warranty? selectedWarranty;
 
   late final TextEditingController _name  = TextEditingController();
   late final TextEditingController _description  = TextEditingController();
@@ -92,7 +97,7 @@ class _EditCarState extends State<EditCar> {
         mfg: _mfg.text,
         outColor: _outColor.text,
         image: pickedFile?.map((e) => e.path).toList());
-
+    if (selectedWarranty!=null) WarrantyService.pushWarranty(selectedWarranty!.warrantyId!, car!.id!);
     CarsService.EditCar(carForm, car!.id!).then((value) {
       if (value==true)
       {
@@ -119,9 +124,11 @@ class _EditCarState extends State<EditCar> {
     //var data = ModalRoute.of(context)!.settings.arguments as Map;
     var arg = ModalRoute.of(context)!.settings.arguments as Map;
     Car oldCar = arg['car'];
+    var warrantyData = await WarrantyService.getAll();
     var data = await CarsService.getDetail(oldCar.id!);
     setState(() {
       car = data!;
+      warranties=warrantyData;
     });
     _name.text = car?.name ?? "";
     _description.text = car?.description ?? "";
@@ -475,8 +482,31 @@ class _EditCarState extends State<EditCar> {
                       : Text('${pickedFile!.length} ảnh đã chọn')
               ),
 
-              SizedBox(height: 20),
+            SizedBox(height: 20),
 
+            DropdownButtonFormField<Warranty>(
+              decoration: InputDecoration(labelText: 'Bảo hành',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),),
+              value: selectedWarranty,
+              items: warranties.map((warranty) {
+                return DropdownMenuItem<Warranty>(
+                  value: warranty,
+                  child: Text(warranty.name!),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedWarranty = value;
+                });
+              }),
               car == null?
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
