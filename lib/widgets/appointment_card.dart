@@ -19,12 +19,11 @@ class _AppointmentCardState extends State<AppointmentCard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(widget.appointment.datetime);
   }
 
   @override
   Widget build(BuildContext context) {
-    DateTime appointmentDateTime = widget.appointment.datetime.toLocal();
+    DateTime appointmentDateTime = widget.appointment.datetime;
     String appointmentDate =
         '${appointmentDateTime.day}/${appointmentDateTime.month}/${appointmentDateTime.year}';
     String formattedHour = appointmentDateTime.hour.toString().padLeft(2, '0');
@@ -80,7 +79,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
               ),
               leading: Icon(Icons.check_circle),
             ),
-            widget.isSalon == ''
+            (widget.isSalon == '' ||  widget.appointment.dayDiff < 0)
                 ? Container()
                 : widget.appointment.status == 0
                     ? Row(

@@ -367,7 +367,7 @@ class _MaintainceManageState extends State<MaintainceManage>
                                     },
                                     child: Text('Thêm hóa đơn bảo dưỡng',
                                         style: TextStyle(
-                                            fontSize: 20, color: Colors.blue))))
+                                            fontSize: 20))))
                             : Column(
                                 children: [
                                   TextButton(
@@ -377,7 +377,7 @@ class _MaintainceManageState extends State<MaintainceManage>
                                       child: Text('Thêm hóa đơn bảo dưỡng',
                                           style: TextStyle(
                                               fontSize: 20,
-                                              color: Colors.blue))),
+                                          ))),
                                   Expanded(
                                     child: ListView.builder(
                                       itemCount: invoices.length,

@@ -10,7 +10,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/widgets/car_card.dart';
-
 import '../../model/time_busy_model.dart';
 
 class CreateAppoint extends StatefulWidget {
@@ -44,14 +43,14 @@ class _CreateAppointState extends State<CreateAppoint> {
     controller = TextEditingController();
     Future.delayed(Duration.zero, () {
       getSalon();
-      getCars();
-      getTimeBusy();
+      getCars().then((value) => getTimeBusy());
     });
   }
 
   Future<void> getTimeBusy() async {
     print('get time busy' + user.carId!);
-    List<TimeBusyModel> timeBusyApi = await AppointmentService.getBusyCar(user.id, user.carId ?? '');
+    List<TimeBusyModel> timeBusyApi =
+        await AppointmentService.getBusyCar(user.id, user.carId ?? '');
     setState(() {
       timeBusy = timeBusyApi;
     });
@@ -81,10 +80,9 @@ class _CreateAppointState extends State<CreateAppoint> {
     }
     setState(() {
       cars = carsApi;
-      if (user.carId == '')
-        {
-          user.carId = cars![0].id;
-        }
+      if (user.carId == '') {
+        user.carId = cars![0].id;
+      }
     });
   }
 
@@ -124,7 +122,7 @@ class _CreateAppointState extends State<CreateAppoint> {
                   color: Colors.grey[200],
                   padding: const EdgeInsets.all(8.0),
                   child: TableCalendar(
-                    firstDay: DateTime.now() ,
+                    firstDay: DateTime.now(),
                     lastDay: DateTime.utc(2030, 3, 14),
                     focusedDay: today,
                     headerStyle: HeaderStyle(
@@ -149,30 +147,33 @@ class _CreateAppointState extends State<CreateAppoint> {
                 child: ToggleButtons(
                   isSelected: isSelected,
                   onPressed: (int index) {
-                    if (index!=2)
-                      {
-                        setState(() {
-                          for (int buttonIndex = 0;
-                          buttonIndex < isSelected.length;
-                          buttonIndex++) {
-                            if (buttonIndex == index) {
-                              isSelected[buttonIndex] = true;
-                              setState(() {
-                                hour = 7 + buttonIndex;
-                              });
-                            } else {
-                              isSelected[buttonIndex] = false;
-                            }
+                    if (timeBusy.any((time) => time.time.hour == 7 + index && isSameDay(today,time.time))) {
+                      return;
+                    }
+                      setState(() {
+                        for (int buttonIndex = 0;
+                            buttonIndex < isSelected.length;
+                            buttonIndex++) {
+                          if (buttonIndex == index) {
+                            isSelected[buttonIndex] = true;
+                            setState(() {
+                              hour = 7 + buttonIndex;
+                            });
+                          } else {
+                            isSelected[buttonIndex] = false;
                           }
-                        });
-                      }
+                        }
+                      });
                   },
                   children: List<Widget>.generate(
                       16,
-                      (index) => Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text((7 + index).toString() + ":00"),
-                          )),
+                      (index) => Container(
+                        color: timeBusy.any((time) => time.time.hour == 7 + index && isSameDay(today,time.time)) ? Colors.grey : Colors.transparent,
+                        child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text((7 + index).toString() + ":00"),
+                            ),
+                      )),
                 ),
               ),
               SizedBox(height: 10),
