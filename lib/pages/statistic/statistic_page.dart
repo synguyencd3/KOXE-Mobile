@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/services/statistic_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import '../loading.dart';
 
-var dataMap = <String, dynamic>{
-  'Toyota Corolla': [12,2412043],
-  'Honda crv': [4,139111],
-  'name 1': [4, 22456]
-};
+// var dataMap = <String, dynamic>{
+//   'Toyota Corolla': [12,2412043],
+//   'Honda crv': [4,139111],
+//   'name 1': [4, 22456]
+// };
 
 class ChartData {
   ChartData(this.x, this.y);
@@ -24,8 +24,10 @@ class Statistic extends StatefulWidget {
 }
 
 class _StatisticState extends State<Statistic> {
-  late Map<String, Map<String, dynamic>> invoicesMap= {};
+  Map<String, Map<String, dynamic>> invoicesMap= {};
   List<ChartData> chartData = [];
+  DateTime time = DateTime.now().subtract(Duration(days: 30));
+  Map<String, dynamic> pieData ={};
 
   @override
   void initState() {
@@ -35,12 +37,28 @@ class _StatisticState extends State<Statistic> {
   }
 
   void getStat() async {
-    var data = await StatisticService.getStatistic("2024-04-21");
-    print(data['maintenances']);
+    var data = await StatisticService.getStatistic("${time.year}-${time.month}-${time.day}");
+    var topData = await StatisticService.getTop("${time.year}-${time.month}-${time.day}");
+    print(topData);
     setState(() {
       invoicesMap=data;
+      pieData = topData;
     });
     initChart();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: time,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != time) {
+      setState(() {
+        time = picked;
+      });
+      getStat();
+    }
   }
 
   void initChart() {
@@ -57,6 +75,12 @@ class _StatisticState extends State<Statistic> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+              child: GestureDetector(
+                onTap: () => _selectDate(context),
+                  child: Text('Từ ngày: ${time.day}/${time.month}/${time.year}')),
+            ),
             Text('Bảo dưỡng'),
             invoicesMap.isEmpty ? Padding(
               padding: const EdgeInsets.all(30),
@@ -100,6 +124,7 @@ class _StatisticState extends State<Statistic> {
              )
              ).toList(),),
             ),
+            pieData.isEmpty ? SizedBox(height: 0) : PieChart(dataMap: pieData['MTTopDb']),
             Text('Doanh số'),
             invoicesMap.isEmpty ? Padding(
               padding: const EdgeInsets.all(30),
@@ -140,6 +165,7 @@ class _StatisticState extends State<Statistic> {
               ]
              )
              ).toList(),),
+            pieData.isEmpty ? SizedBox(height: 0,): PieChart(dataMap: pieData['buyCarTop']),
             Text("Thống kê doanh thu"),
             SfCartesianChart(
               series: <CartesianSeries<ChartData,int>>[

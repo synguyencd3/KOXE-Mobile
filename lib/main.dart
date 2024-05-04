@@ -3,6 +3,7 @@ import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/pages/Payment.dart';
 import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
+import 'package:mobile/pages/car/edit_car.dart';
 import 'package:mobile/pages/login.dart';
 import 'package:mobile/pages/news/news.dart';
 import 'package:mobile/pages/permission/Employee_permission.dart';
@@ -106,6 +107,7 @@ class _MyAppState extends State<MyApp> {
         '/maintaince_manage' : (context) => MaintainceManage(),
         '/accessory_manage' : (context) => AccessoriesManage(),
         '/user_manage' : (context) => UserManage(),
+        '/new_car' : (context) => EditCar()
       },
     );
   }

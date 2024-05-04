@@ -16,7 +16,7 @@ class _WebViewContainerState extends State<WebViewContainer> {
 
   final controller = WebViewController()
   ..setJavaScriptMode(JavaScriptMode.unrestricted)
-  ..loadRequest(Uri.http(Config.apiURL,Config.facebookAPI));
+  ..loadRequest(Uri.https(Config.apiURL,Config.facebookAPI));
 
   @override
   Widget build(BuildContext context) {

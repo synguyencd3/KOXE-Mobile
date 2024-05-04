@@ -20,7 +20,7 @@ class AppointmentService {
     var url = Uri.https(Config.apiURL, Config.getAppointmentsAPI);
 
     var response = await http.post(url, headers: requestHeaders);
-
+    print(response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       print(data);

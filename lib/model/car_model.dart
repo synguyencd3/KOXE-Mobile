@@ -1,4 +1,5 @@
 import 'package:mobile/model/car_of_salon_model.dart';
+import 'package:mobile/model/warranty_model.dart';
 List<Car> carsFromJson(dynamic str) =>
     List<Car>.from((str).map((x) => Car.fromJson(x)));
 
@@ -20,7 +21,7 @@ class Car {
   String? mfg;
   String? outColor;
   CarSalon? salon;
-  int? available;
+  Warranty? warranty;
 
   Car(
       {this.id,
@@ -39,8 +40,7 @@ class Car {
       this.type,
       this.mfg,
       this.outColor,
-      this.salon,
-      this.available});
+      this.salon});
 
   Car.fromJson(Map<String, dynamic> json) {
     id = json['car_id'];
@@ -60,7 +60,7 @@ class Car {
     mfg = json['mfg'];
     outColor = json['outColor'];
     salon = json['salon'] != null ? CarSalon.fromJson(json['salon']): null;
-   // available = json['available'];
+    warranty = json['warranties'] != null ? Warranty.fromJson(json['warranties']): null;
   }
 
   Map<String, dynamic> tojson() {
@@ -71,6 +71,16 @@ class Car {
     data['image'] = this.image;
     data['price'] = this.price;
     data['type'] = this.type;
+    data['origin'] = this.origin;
+    data['model'] = this.model;
+    data['brand'] = this.brand;
+    data['capacity'] = this.capacity;
+    data['door'] = this.door;
+    data['seat'] = this.seat;
+    data['kilometer'] = this.kilometer;
+    data['gear'] = this.gear;
+    data['mfg'] = this.mfg;
+    data['outColor'] = this.outColor;
     return data;
   }
 }

@@ -53,6 +53,7 @@ dependencies:
   zego_uikit_prebuilt_call: ^4.5.4
   tuple: ^2.0.2
   syncfusion_flutter_charts: ^25.1.41+2
+  pie_chart: ^5.4.0
   
 dev_dependencies:
   flutter_test:

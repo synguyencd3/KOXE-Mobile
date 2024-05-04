@@ -70,7 +70,7 @@ class _CarCardState extends State<CarCard> {
                   IconButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/car_detail',
-                            arguments: {'car': widget.car});
+                            arguments: {'car': widget.car ,'id': widget.car.id});
                       },
                       icon: Icon(Icons.arrow_forward))
                 ],

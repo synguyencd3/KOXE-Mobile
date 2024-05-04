@@ -33,7 +33,7 @@ class SalonsService {
     return [];
   }
 
-  static Future<List<Car>?> getDetail(String salonId) async {
+  static Future<List<Car>> getDetail(String salonId) async {
     var LoginInfo = await SharedService.loginDetails();
        Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ class SalonsService {
       //print(data);
       return carsFromJson(data['salon']['cars']);
     }
-    return null;
+    return [];
   }
 
   static Future<Salon?> getMySalon() async {

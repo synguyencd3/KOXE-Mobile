@@ -19,7 +19,7 @@ class NewSalon extends StatefulWidget {
 
 class _NewSalonState extends State<NewSalon> {
   List<File>? image;
- List<XFile>? pickedFile;
+  List<XFile>? pickedFile;
   final picker = ImagePicker();
   Salon? salon;
 
@@ -60,7 +60,7 @@ class _NewSalonState extends State<NewSalon> {
     });
   }
 
-    void EditSalon() {
+  void EditSalon() {
     Salon salonForm = Salon(name: _name.text, 
                         address: _address.text, 
                         introductionMarkdown: _description.text,
@@ -81,7 +81,6 @@ class _NewSalonState extends State<NewSalon> {
         }
     });
   }
-
 
   void initSalon() {
   var data = ModalRoute.of(context)!.settings.arguments as Map;

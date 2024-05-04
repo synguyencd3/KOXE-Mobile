@@ -1,3 +1,5 @@
+import 'car_model.dart';
+
 List<Warranty> warrantiesFromJson(dynamic str) =>
     List<Warranty>.from((str).map((x) => Warranty.fromJson(x)));
 
@@ -10,6 +12,7 @@ class Warranty {
   int? months;
   String? policy;
   String? note;
+//  Car? car;
  // Salon? salon;
 
   Warranty(
@@ -21,6 +24,7 @@ class Warranty {
         this.months,
         this.policy,
         this.note,
+      //  this.car
         });
 
   Warranty.fromJson(Map<String, dynamic> json) {
@@ -44,6 +48,7 @@ class Warranty {
     data['limit_kilometer'] = this.limitKilometer ;
     data['months'] = this.months;
     data['policy'] = this.policy;
+   // data['carId'] = this.car?.id;
    // data['note'] = this.note;
     // if (this.salon != null) {
     //   data['salon'] = this.salon!.toJson();

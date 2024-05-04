@@ -109,4 +109,26 @@ class WarrantyService {
     return false;
   }
 
+  static Future<bool?> pushWarranty(String warrantyId, String carId) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    String mySalon = await SalonsService.isSalon();
+    Map<String, String> requestHeaders = {
+      // 'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.pushWarranty);
+
+    var response = await http.post(url, headers: requestHeaders, body: {
+      'salonId' : mySalon,
+      'warrantyId' : warrantyId,
+      'carId' : carId
+    });
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'success') return true;
+    return false;
+  }
 }

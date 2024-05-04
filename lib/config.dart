@@ -8,8 +8,9 @@ class Config {
   static const String googleCallback = "auth/google/callback";
   static const String userprofileAPI = "/users/profile";
   static const String getAllPackageAPI = "/packages";
-  static const String getCarsAPI = "/cars";
 
+  //Car
+  static const String getCarsAPI = "/cars";
 
   //Salon
   static const String SalonsAPI = "/salons";
@@ -46,6 +47,7 @@ class Config {
   static const String createWarranty = '/warranty/create';
   static const String updateWarranty = '/warranty/update';
   static const String deleteWarranty = '/warranty/delete';
+  static const String pushWarranty = '/warranty/push-warranty';
 
 
   //Google API
@@ -82,6 +84,7 @@ static const String zegoAppSign = '686508249a354437ee8f22ad801b016981d3d62206cff
 
 //statistic
 static const String statistic = "/invoice/statistics";
+static const String getTop = 'invoice/get-top';
 //Maintaince API
   static const String getAllMaintaincesAPI = "maintenance/salon";
   static const String maintainceAPI = "/maintenance";

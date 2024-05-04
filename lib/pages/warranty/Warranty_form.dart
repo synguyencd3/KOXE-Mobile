@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/warranty_service.dart';
 
+import '../../model/car_model.dart';
 import '../../model/warranty_model.dart';
 
 
 
-class Car {
-  String? name;
-  // Add other properties as needed
-
-  Car({this.name});
-}
+// class Car {
+//   String? name;
+//   // Add other properties as needed
+//
+//   Car({this.name});
+// }
 
 class WarrantyForm extends StatefulWidget {
   @override
@@ -19,12 +21,14 @@ class WarrantyForm extends StatefulWidget {
 
 class _WarrantyFormState extends State<WarrantyForm> {
   final _formKey = GlobalKey<FormState>();
-  final List<Car> cars = [
-    Car(name: "Car A"),
-    Car(name: "Car B"),
-    Car(name: "Car C"),
-    // Add more Car objects as needed
-  ];
+  // final List<Car> cars = [
+  //   Car(name: "Car A"),
+  //   Car(name: "Car B"),
+  //   Car(name: "Car C"),
+  //   // Add more Car objects as needed
+  // ];
+  List<Car> cars = [];
+
 
   late final _name = TextEditingController();
   late final _limitKilometers = TextEditingController();
@@ -41,19 +45,36 @@ class _WarrantyFormState extends State<WarrantyForm> {
     super.initState();
     Future.delayed(Duration.zero, () {
       initWarranty();
+      getCars();
     }); 
   }
 
+  void getCars() async {
+    print('getting car');
+    var salonId = await SalonsService.isSalon();
+    var data = await SalonsService.getDetail(salonId);
+    setState(() {
+      cars = data;
+    });
+  }
+
   void initWarranty() {
-  var data = ModalRoute.of(context)!.settings.arguments as Map;
-  setState(() {
-    warranty = data['warranty'];
-  });
-  _name.text = warranty?.name ?? "";
-  _limitKilometers.text = warranty?.limitKilometer.toString() ?? "";
-  _months.text = warranty?.months.toString() ?? "";
-  _policy.text = warranty?.policy ?? "";
-  //_email.text = salon?.email ?? "";
+    try {
+      var data = ModalRoute
+          .of(context)!
+          .settings
+          .arguments as Map;
+      setState(() {
+        warranty = data['warranty'];
+      });
+      _name.text = warranty?.name ?? "";
+      _limitKilometers.text = warranty?.limitKilometer.toString() ?? "";
+      _months.text = warranty?.months.toString() ?? "";
+      _policy.text = warranty?.policy ?? "";
+      //_email.text = salon?.email ?? "";
+    } catch (exception) {
+        print(exception);
+    }
   }
 
   void updateWarranty() async {
@@ -61,7 +82,8 @@ class _WarrantyFormState extends State<WarrantyForm> {
       name: _name.text,
       limitKilometer: int.parse(_limitKilometers.text),
       months: int.parse(_months.text),
-      policy: _policy.text
+      policy: _policy.text,
+   //   car: _selectedCar
     );
     WarrantyService.updateWarranty(warrantyForm, warranty!.warrantyId!).then((value) {
       if (value!) {
@@ -89,6 +111,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
       limitKilometer: int.parse(_limitKilometers.text),
       months: int.parse(_months.text),
       policy: _policy.text,
+     // car: _selectedCar
       //note: _note.text
     );
     WarrantyService.NewWarranty(model).then((value) {
