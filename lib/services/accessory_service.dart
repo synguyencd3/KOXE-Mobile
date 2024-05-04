@@ -22,7 +22,7 @@ class AccessoryService {
       'Access-Control-Allow-Origin': "*",
     };
 
-    var url = Uri.http(Config.apiURL, '${Config.getSalonAccessoriesApi}/$salonId');
+    var url = Uri.https(Config.apiURL, '${Config.getSalonAccessoriesApi}/$salonId');
 
     var response = await http.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
@@ -42,7 +42,7 @@ class AccessoryService {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.accessoryAPI);
+    var url = Uri.https(Config.apiURL, Config.accessoryAPI);
 
     var response = await http.post(url, headers: requestHeaders, body: jsonEncode(accessory.toJson()));
     return response.statusCode == 201;
@@ -58,7 +58,7 @@ class AccessoryService {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, '${Config.accessoryAPI}/$id');
+    var url = Uri.https(Config.apiURL, '${Config.accessoryAPI}/$id');
 
     var response = await http.delete(url, headers: requestHeaders);
     return response.statusCode == 200;
@@ -75,7 +75,7 @@ class AccessoryService {
     };
     print(accessory.toJson());
 
-    var url = Uri.http(Config.apiURL, '${Config.accessoryAPI}/${accessory.id}');
+    var url = Uri.https(Config.apiURL, '${Config.accessoryAPI}/${accessory.id}');
 
     var response = await http.patch(url, headers: requestHeaders, body: jsonEncode(accessory.toJson()));
     return response.statusCode == 200;

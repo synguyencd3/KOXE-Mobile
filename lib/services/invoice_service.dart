@@ -17,7 +17,7 @@ class InvoiceService{
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.invoiceAPI);
+    var url = Uri.https(Config.apiURL, Config.invoiceAPI);
     var response = await http.get(url, headers: requestHeaders);
     //print(response.body);
     if (response.statusCode == 200) {
@@ -37,7 +37,7 @@ class InvoiceService{
       'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
-    var url = Uri.http(Config.apiURL, Config.invoiceAPI);
+    var url = Uri.https(Config.apiURL, Config.invoiceAPI);
     var response = await http.post(url, headers: requestHeaders, body: jsonEncode(invoice.toJson()));
     print(response.body);
     return response.statusCode == 201;

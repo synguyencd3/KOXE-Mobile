@@ -19,7 +19,7 @@ class MaintainceService{
      // HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, '${Config.getAllMaintaincesAPI}/$salonId');
+    var url = Uri.https(Config.apiURL, '${Config.getAllMaintaincesAPI}/$salonId');
     var response = await http.get(url, headers: requestHeaders);
     print(response.body);
     if (response.statusCode == 200) {
@@ -39,7 +39,7 @@ class MaintainceService{
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.maintainceAPI);
+    var url = Uri.https(Config.apiURL, Config.maintainceAPI);
     var response = await http.post(url, headers: requestHeaders, body: jsonEncode(maintaince.toJson()));
    return response.statusCode == 201;
   }
@@ -53,7 +53,7 @@ class MaintainceService{
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, '${Config.maintainceAPI}/$id');
+    var url = Uri.https(Config.apiURL, '${Config.maintainceAPI}/$id');
     var response = await http.delete(url, headers: requestHeaders);
     return response.statusCode == 200;
   }
@@ -67,7 +67,7 @@ class MaintainceService{
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, '${Config.maintainceAPI}/${maintaince.id}');
+    var url = Uri.https(Config.apiURL, '${Config.maintainceAPI}/${maintaince.id}');
     var response = await http.patch(url, headers: requestHeaders, body: jsonEncode(maintaince.toJson()));
     return response.statusCode == 200;
   }

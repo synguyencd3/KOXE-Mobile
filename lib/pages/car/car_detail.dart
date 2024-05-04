@@ -82,6 +82,12 @@ class _CarDetailState extends State<CarDetail> {
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: Column(
                 children: [
+                  // ListTile(
+                  //   title: Text('Số lượng có sẵn',
+                  //       style: TextStyle(fontWeight: FontWeight.bold)),
+                  //   trailing: Text(car.available !=0 ? '${car.available}' : 'Chưa cập nhật',
+                  //       style: TextStyle(color: Colors.grey[800], fontSize: 16)),
+                  // ),
                   ListTile(
                     title: Text('Xuất xứ',
                         style: TextStyle(fontWeight: FontWeight.bold)),
@@ -170,6 +176,7 @@ class _CarDetailState extends State<CarDetail> {
                     ChatUserModel user = ChatUserModel(id: carDetail?.salon?.salonId ?? '', name: carDetail?.salon?.name ?? '', carId: car.id );
                     Navigator.pushNamed(context, '/create_appointment', arguments: user);
                   }, title: 'Đặt lịch hẹn để xem xe này',),
+                  SizedBox(height: 20,)
                 ],
               ),
             ),

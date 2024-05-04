@@ -20,6 +20,7 @@ class Car {
   String? mfg;
   String? outColor;
   CarSalon? salon;
+  int? available;
 
   Car(
       {this.id,
@@ -38,7 +39,8 @@ class Car {
       this.type,
       this.mfg,
       this.outColor,
-      this.salon});
+      this.salon,
+      this.available});
 
   Car.fromJson(Map<String, dynamic> json) {
     id = json['car_id'];
@@ -58,6 +60,7 @@ class Car {
     mfg = json['mfg'];
     outColor = json['outColor'];
     salon = json['salon'] != null ? CarSalon.fromJson(json['salon']): null;
+   // available = json['available'];
   }
 
   Map<String, dynamic> tojson() {

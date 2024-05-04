@@ -59,7 +59,7 @@ class _AppointmentState extends State<Appointment>
         appointmentAPI =
             await AppointmentService.getAllSalonAppointments(salonId);
       }
-      print(appointmentAPI[0].datetime);
+      //print(appointmentAPI[0].datetime);
       appointmentsCurrent = [];
       appointmentsHistory = [];
       for (var appointment in appointmentAPI) {
