@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/config.dart';
 import 'package:mobile/pages/appointment/appointment.dart';
+import 'package:mobile/pages/post/post.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/widgets/bottom_bar.dart';
 import 'package:mobile/widgets/introduction_car.dart';
@@ -32,6 +33,7 @@ class _MainHomeState extends State<MainHome> {
     PageModule(page: Home(), label: 'Xin chào,'),
     PageModule(page: IntroCar(), label: 'Sản phẩm'),
     PageModule(page: Appointment(), label: 'Lịch hẹn'),
+    PageModule(page: PostPage(), label: 'Bài viết'),
     PageModule(page: Message(), label: 'Tin nhắn'),
     PageModule(page: User(), label: 'Tài khoản'),
   ];
