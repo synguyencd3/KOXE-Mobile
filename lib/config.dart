@@ -93,4 +93,7 @@ static const String getTop = 'invoice/get-top';
 // Accessory API
   static const String getSalonAccessoriesApi = "/accessory/salon";
   static const String accessoryAPI = "/accessory";
+
+  //Post API
+static const String posts = "/posts/feed";
 }
