@@ -38,6 +38,7 @@ import 'package:mobile/pages/maintaince/maintaince_manage.dart';
 import 'package:mobile/pages/accessory_manage.dart';
 import 'package:mobile/pages/user_manage.dart';
 import 'package:mobile/pages/post/post_detail.dart';
+import 'package:mobile/pages/post/create_post.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -110,6 +111,7 @@ class _MyAppState extends State<MyApp> {
         '/user_manage' : (context) => UserManage(),
         '/new_car' : (context) => EditCar(),
         '/post_detail' : (context) => PostDetail(),
+        '/create_post' : (context) => CreatePost(),
       },
     );
   }

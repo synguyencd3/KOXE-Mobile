@@ -14,7 +14,7 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
   late PackageModel firstPackage = PackageModel(
     name: '',
     price: 400000,
@@ -22,12 +22,27 @@ class _HomeState extends State<Home> {
     id: '',
     features: [],
   );
-
+  late AnimationController _controller;
+  late Animation<Offset> _offsetAnimation;
+  late bool _isAnimationInitialized = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..forward();
+    _offsetAnimation = Tween<Offset>(
+      begin: const Offset(-1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+    _isAnimationInitialized = true;
     getAllPackages();
+
   }
 
   Future<void> getAllPackages() async {
@@ -40,18 +55,23 @@ class _HomeState extends State<Home> {
   }
 
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          NewsPadding(),
-          SalonPadding(),
-          SizedBox(height: 10),
-          ServiceCard(
-            package: firstPackage,
-          ),
-        ],
+    return _isAnimationInitialized ? SlideTransition(
+      position: _offsetAnimation,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            NewsPadding(),
+            SalonPadding(),
+            SizedBox(height: 10),
+            ServiceCard(
+              package: firstPackage,
+            ),
+          ],
+        ),
       ),
+    ): Center(
+      child: CircularProgressIndicator(),
     );
   }
 }

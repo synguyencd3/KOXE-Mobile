@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,9 @@ import 'package:mobile/model/notification_model.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
+import '../model/chat_user_model.dart';
+import '../services/chat_service.dart';
+
 class MainHome extends StatefulWidget {
   const MainHome({super.key});
 
@@ -34,12 +38,13 @@ class _MainHomeState extends State<MainHome> {
     PageModule(page: IntroCar(), label: 'Sản phẩm'),
     PageModule(page: Appointment(), label: 'Lịch hẹn'),
     PageModule(page: PostPage(), label: 'Bài viết'),
-    PageModule(page: Message(), label: 'Tin nhắn'),
     PageModule(page: User(), label: 'Tài khoản'),
   ];
   int _currentIndex = 0;
   int _count = 0;
+  int _countMessage = 0;
   StreamSubscription? _notificationSubscription;
+  StreamSubscription? _messageSubscription;
   final List<NotificationModel> notifications = [];
 
   @override
@@ -48,33 +53,44 @@ class _MainHomeState extends State<MainHome> {
     initSocket();
     initCallService();
     getAllNotification();
-    _notificationSubscription = SocketManager().notificationStream.listen((data) {
+    getAllMessageNotSeen();
+    _notificationSubscription =
+        SocketManager().notificationStream.listen((data) {
       print(data);
       setState(() {
         _count++;
       });
     });
+    _messageSubscription = SocketManager().messageStream.listen((data) {
+      print(data);
+      setState(() {
+        _countMessage++;
+      });
+    });
   }
+
   @override
   void dispose() {
     super.dispose();
     _notificationSubscription?.cancel();
+    _messageSubscription?.cancel();
   }
 
   void initCallService() async {
-
     var userLogin = await SharedService.loginDetails();
     print(userLogin?.user?.id);
     print(userLogin?.user?.username);
     print('initing');
     ZegoUIKitPrebuiltCallInvitationService().init(
-    appID: Config.zegoAppID /*input your AppID*/,
-    appSign: Config.zegoAppSign /*input your AppSign*/,
-    userID: userLogin != null ? userLogin.user!.id!.substring(0,8) : 'undefined' ,
-    userName: userLogin != null ? userLogin.user!.fullname! : 'undefined' ,
-    plugins: [ZegoUIKitSignalingPlugin()],
-  );
+      appID: Config.zegoAppID /*input your AppID*/,
+      appSign: Config.zegoAppSign /*input your AppSign*/,
+      userID:
+          userLogin != null ? userLogin.user!.id!.substring(0, 8) : 'undefined',
+      userName: userLogin != null ? userLogin.user!.fullname! : 'undefined',
+      plugins: [ZegoUIKitSignalingPlugin()],
+    );
   }
+
   Future<void> initSocket() async {
     final Map<String, dynamic> userProfile = await APIService.getUserProfile();
     String salonId = await SalonsService.isSalon();
@@ -82,17 +98,16 @@ class _MainHomeState extends State<MainHome> {
       print(data);
     });
   }
+
   Future<void> getAllNotification() async {
     String salonId = await SalonsService.isSalon();
     int count = 0;
     List<NotificationModel> notificationAPI = [];
-    if (salonId == '')
-    {
+    if (salonId == '') {
       notificationAPI = await NotificationService.getAllNotification();
-    }
-    else
-    {
-      notificationAPI = await NotificationService.getAllNotificationSalon(salonId);
+    } else {
+      notificationAPI =
+          await NotificationService.getAllNotificationSalon(salonId);
     }
     if (notificationAPI.isNotEmpty) {
       for (var item in notificationAPI) {
@@ -107,25 +122,62 @@ class _MainHomeState extends State<MainHome> {
     }
   }
 
+  Future<void> getAllMessageNotSeen() async {
+    List<ChatUserModel> usersAPI = await ChatService.getAllChatedUsers();
+    int _countTemp = 0;
+
+    for (var item in usersAPI) {
+      if (item.message?.status == false) {
+        _countTemp++;
+      }
+    }
+    setState(() {
+      _countMessage = _countTemp;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    double iconsSize = 30.0;
     return Scaffold(
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(pages[_currentIndex].label),
-            GestureDetector(
-              child: _count> 0 ? badges.Badge(
-                badgeAnimation: badges.BadgeAnimation.fade(),
-                  badgeContent: Text(_count.toString()), child: Icon(Icons.notifications, size: 30))
-              : Icon(Icons.notifications, size: 30),
-              onTap: () {
-                Navigator.pushNamed(context, '/notification' , arguments: notifications);
-                setState(() {
-                  _count = 0;
-                });
-              },
+            Row(
+              children: [
+                GestureDetector(
+                  child: _count > 0
+                      ? badges.Badge(
+                          badgeAnimation: badges.BadgeAnimation.fade(),
+                          badgeContent: Text(_count.toString()),
+                          child: Icon(Icons.notifications_outlined, size: iconsSize))
+                      : Icon(Icons.notifications_outlined, size: iconsSize),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/notification',
+                        arguments: notifications);
+                    setState(() {
+                      _count = 0;
+                    });
+                  },
+                ),
+              SizedBox(width: 10),
+                GestureDetector(
+                  child: _countMessage > 0
+                      ? badges.Badge(
+                      badgeAnimation: badges.BadgeAnimation.fade(),
+                      badgeContent: Text(_countMessage.toString()),
+                      child: Icon(Icons.chat_outlined, size: iconsSize))
+                      : Icon(Icons.chat_outlined, size: iconsSize),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/message');
+                    setState(() {
+                      _countMessage = 0;
+                    });
+                  },
+                ),
+              ],
             ),
           ],
         ),
