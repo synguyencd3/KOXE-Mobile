@@ -18,4 +18,6 @@ class UserPostModel {
         fullname: json['fullname'],
         avatar: json['avatar']);
   }
+
+
 }

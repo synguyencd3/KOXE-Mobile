@@ -51,7 +51,9 @@ class _PostPageState extends State<PostPage> {
             children: [
               salonId == ''
                   ? TextButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/create_post');
+                      },
                       icon: Icon(Icons.post_add),
                       label: Text('Thêm bài viết'),
                     )
