@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/model/document_model.dart';
+
+import '../../model/car_model.dart';
+import '../../services/salon_service.dart';
 
 class CreateObjectForm extends StatefulWidget {
   @override
@@ -10,14 +14,32 @@ class _CreateObjectFormState extends State<CreateObjectForm> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   bool _reuse = false;
-  String? _selectedObject;
-  List<Map<String, dynamic>> _formCards = [];
+  Car? _selectedObject;
+  //List<Map<String, dynamic>> _formCards = [];
+  List<Document> _formCards = [];
 
-  List<String> _objects = [
-    'Object 1',
-    'Object 2',
-    'Object 3',
-  ];
+  // List<String> _objects = [
+  //   'Object 1',
+  //   'Object 2',
+  //   'Object 3',
+  // ];
+
+  List<Car> _objects = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initCars();
+  }
+
+  void initCars() async {
+    var salonId = await SalonsService.isSalon();
+    var data = await SalonsService.getDetail(salonId);
+    setState(() {
+      _objects = data;
+    });
+  }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
@@ -48,17 +70,19 @@ class _CreateObjectFormState extends State<CreateObjectForm> {
 
   void _addFormCard() {
     setState(() {
-      _formCards.add({
-        'name': "",
-        'order': "",
-        'details': [],
-      });
+      // _formCards.add({
+      //   'name': "",
+      //   'order': "",
+      //   'details': [],
+      // });
+      _formCards.add(Document());
     });
   }
 
   void _addDetailField(int index) {
     setState(() {
-      _formCards[index]['details']?.add(' ');
+      //_formCards[index]['details']?.add(' ');
+      _formCards[index].details?.add(Details());
     });
   }
 
@@ -108,12 +132,12 @@ class _CreateObjectFormState extends State<CreateObjectForm> {
                 ],
               ),
               if (_reuse)
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField<Car>(
                   value: _selectedObject,
-                  items: _objects.map((String object) {
-                    return DropdownMenuItem<String>(
+                  items: _objects.map((Car object) {
+                    return DropdownMenuItem<Car>(
                       value: object,
-                      child: Text(object),
+                      child: Text(object.name!),
                     );
                   }).toList(),
                   onChanged: (value) {
@@ -145,10 +169,8 @@ class _CreateObjectFormState extends State<CreateObjectForm> {
               SizedBox(height: 16.0),
               ..._formCards.asMap().entries.map((entry) {
                 int index = entry.key;
-                //Map<String, List<String>> formCard = entry.value;
                 var formCard = entry.value;
-                //List<String> details = formCard['details']!;
-                var details = formCard['details'];
+                var details = formCard.details;
 
                 return Card(
                   child: Padding(
@@ -159,20 +181,22 @@ class _CreateObjectFormState extends State<CreateObjectForm> {
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Name'),
                           onChanged: (value) {
-                            formCard['name']=value;
+                            //formCard['name']=value;
+                            formCard.name=value;
                           },
                         ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Order'),
                           onChanged: (value) {
-                            formCard['order'] = value;
+                            //formCard['order'] = value;
+                            formCard.order=int.parse(value);
                           },
                         ),
-                        for (int i = 0; i < details.length; i++)
+                        for (int i = 0; i < details!.length; i++)
                           TextFormField(
                             decoration: InputDecoration(labelText: 'Detail ${i + 1}'),
                             onChanged: (value) {
-                              details[i] = value;
+                              details[i].name = value;
                             },
                           ),
                         TextButton(
