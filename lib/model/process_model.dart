@@ -1,11 +1,13 @@
 import 'package:mobile/model/salon_model.dart';
 
 import 'document_model.dart';
-
+List<process> processFromJson(dynamic str) =>
+    List<process>.from((str).map((x) => process.fromJson(x)));
 class process {
   String? id;
   String? name;
-  Null? description;
+  String? carId;
+  String? description;
   int? type;
   Salon? salon;
   List<Document>? documents;
@@ -15,11 +17,13 @@ class process {
         this.name,
         this.description,
         this.type,
+        this.carId,
         this.salon,
         this.documents});
 
   process.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    carId = json['carId'];
     name = json['name'];
     description = json['description'];
     type = json['type'];
@@ -34,7 +38,8 @@ class process {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
+    if (this.id != null ) data['id'] = this.id;
+    if (carId != null) data['carId'] = this.carId;
     data['name'] = this.name;
     data['description'] = this.description;
     data['type'] = this.type;

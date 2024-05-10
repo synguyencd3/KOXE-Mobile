@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Document {
   String? period;
   String? name;
@@ -22,12 +24,15 @@ class Document {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['period'] = this.period;
+    if (this.period != null) data['period'] = this.period;
     data['name'] = this.name;
-    data['reuse'] = this.reuse;
+    //data['reuse'] = this.reuse;
     data['order'] = this.order;
+    // if (this.details != null) {
+    //   data['details'] = this.details!.map((v) => v.toJson()).toList();
+    // }
     if (this.details != null) {
-      data['details'] = this.details!.map((v) => v.toJson()).toList();
+     data['details'] = this.details!.map((e) => e.name).toList();
     }
     return data;
   }
@@ -48,9 +53,9 @@ class Details {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
+    if (this.id!=null)data['id'] = this.id;
     data['name'] = this.name;
-    data['update_date'] = this.updateDate;
+    if (this.updateDate!= null)data['update_date'] = this.updateDate;
     return data;
   }
 }

@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/document_model.dart';
+import 'package:mobile/services/process_service.dart';
 
 import '../../model/car_model.dart';
+import '../../model/process_model.dart';
 import '../../services/salon_service.dart';
 
-class CreateObjectForm extends StatefulWidget {
+class NewProcess extends StatefulWidget {
   @override
-  _CreateObjectFormState createState() => _CreateObjectFormState();
+  _NewProcessState createState() => _NewProcessState();
 }
 
-class _CreateObjectFormState extends State<CreateObjectForm> {
+class _NewProcessState extends State<NewProcess> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   bool _reuse = false;
   Car? _selectedObject;
+  int type=0;
   //List<Map<String, dynamic>> _formCards = [];
   List<Document> _formCards = [];
 
@@ -47,24 +50,53 @@ class _CreateObjectFormState extends State<CreateObjectForm> {
       String name = _nameController.text;
       String description = _descriptionController.text;
 
-      Map<String, dynamic> object = {
-        'name': name,
-        'description': description,
-        'reuse': _reuse,
-        'selectedObject': _selectedObject,
-        'formCards': _formCards,
-      };
+      // Map<String, dynamic> object = {
+      //   'name': name,
+      //   'description': description,
+      //   'reuse': _reuse,
+      //   'selectedObject': _selectedObject,
+      //   'formCards': _formCards,
+      // };
+
+      process model;
+
+      if (_reuse) {
+        model  = process(
+            type: type,
+            name: _nameController.text,
+            carId: _selectedObject?.id,
+            description: _descriptionController.text,
+            documents: _formCards
+        );
+      }
+      else {
+        model = process(
+            name: _nameController.text,
+            description: _descriptionController.text,
+            documents: _formCards
+        );
+      }
 
       // Print the created object
-      print(object);
-
+      //print(object);
+      ProcessService.NewProcess(model).then((value) {
+        if (value!) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Tạo thành công'),
+                backgroundColor: Colors.green,
+              )
+          );
+          Navigator.pop(context);
+        }
+      });
       // Reset the form
-      _formKey.currentState!.reset();
-      _nameController.clear();
-      _descriptionController.clear();
-      _reuse = false;
-      _selectedObject = null;
-      _formCards.clear();
+      // _formKey.currentState!.reset();
+      // _nameController.clear();
+      // _descriptionController.clear();
+      // _reuse = false;
+      // _selectedObject = null;
+     // _formCards.clear();
     }
   }
 
@@ -75,7 +107,7 @@ class _CreateObjectFormState extends State<CreateObjectForm> {
       //   'order': "",
       //   'details': [],
       // });
-      _formCards.add(Document());
+      _formCards.add(Document(details: []));
     });
   }
 
@@ -118,6 +150,35 @@ class _CreateObjectFormState extends State<CreateObjectForm> {
                   return null;
                 },
               ),
+
+                Row(
+                  children: [
+                    Text('Xe'),
+                    Radio<int>(
+                      value: 0,
+                      groupValue: type,
+                      onChanged: (int? value) {
+                        setState(() {
+                          type = value!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text('Hoa tiêu'),
+                    Radio<int>(
+                      value: 1,
+                      groupValue: type,
+                      onChanged: (int? value) {
+                        setState(() {
+                          type = value!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               Row(
                 children: [
                   Text('Reuse: '),
