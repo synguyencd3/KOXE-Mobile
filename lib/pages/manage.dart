@@ -79,7 +79,7 @@ class _ManageState extends State<Manage> {
             text_card(
                 title: 'Quản lý qui trình',
                 onTap: () {
-                  Navigator.pushNamed(context, '/new_process');
+                  Navigator.pushNamed(context, '/process_list');
                 }),
           ],
         ));

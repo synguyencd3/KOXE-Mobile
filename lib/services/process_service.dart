@@ -60,4 +60,26 @@ class ProcessService {
     }
     return false;
   }
+
+  static Future<bool?> DeleteProcess(String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    String mySalon = await SalonsService.isSalon();
+    Map<String, String> requestHeaders = {
+      // 'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.deleteProcess);
+
+    var response = await http.delete(url, headers: requestHeaders, body: {
+      'salonId' : mySalon,
+      'processId' : id
+    });
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'success') return true;
+    return false;
+  }
 }

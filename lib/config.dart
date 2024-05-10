@@ -97,4 +97,5 @@ static const String getTop = 'invoice/get-top';
   //Process
   static const String getProcess = '/legals/process';
   static const String newProcess = '/legals/create-process';
+  static const String deleteProcess = '/legals/delete-documents';
 }
