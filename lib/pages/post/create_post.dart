@@ -1,10 +1,15 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/widgets/dropdown.dart';
 import 'package:mobile/services/salon_service.dart';
+import 'package:mobile/services/post_service.dart';
+
+import '../../model/car_model.dart';
+import '../../model/post_model.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -21,22 +26,27 @@ class _CreatePostState extends State<CreatePost> {
   double paddingSize = 10;
   List<File>? image;
   List<XFile>? pickedFile;
-  final ValueNotifier<String?> selectedValueNotifier = ValueNotifier<String>('');
+  final ValueNotifier<String?> selectedValueNotifier =
+      ValueNotifier<String>('');
   final picker = ImagePicker();
-  late final TextEditingController _name = TextEditingController();
-  late final TextEditingController _description = TextEditingController();
   late final TextEditingController _price = TextEditingController();
   late final TextEditingController _type = TextEditingController();
   late final TextEditingController _origin = TextEditingController();
-  late final TextEditingController _model = TextEditingController();
   late final TextEditingController _brand = TextEditingController();
-  late final TextEditingController _capacity = TextEditingController();
-  late final TextEditingController _door = TextEditingController();
   late final TextEditingController _seat = TextEditingController();
   late final TextEditingController _kilometer = TextEditingController();
   late final TextEditingController _gear = TextEditingController();
   late final TextEditingController _mfg = TextEditingController();
-  late final TextEditingController _outColor = TextEditingController();
+  late final TextEditingController _color = TextEditingController();
+  late final TextEditingController _text = TextEditingController();
+  late final TextEditingController _accessory = TextEditingController();
+  late final TextEditingController _registrationDeadline = TextEditingController();
+  late final TextEditingController _address = TextEditingController();
+  late final TextEditingController _version = TextEditingController();
+  late final TextEditingController _fuel = TextEditingController();
+  late final TextEditingController _licensePlate = TextEditingController();
+  late final TextEditingController _ownerNumber = TextEditingController();
+  late final TextEditingController _design = TextEditingController();
 
   List<Salon> salons = [];
 
@@ -65,12 +75,40 @@ class _CreatePostState extends State<CreatePost> {
     });
   }
 
+  Future<bool> createPost(String selectedSalonId) async {
+    PostModel postModel = PostModel(
+      text: _text.text,
+      image: pickedFile?.map((e) => e.path).toList(),
+      accessory: _accessory.text,
+      registrationDeadline: _registrationDeadline.text,
+      address: _address.text,
+      fuel: _fuel.text,
+      licensePlate: _licensePlate.text,
+      ownerNumber: int.parse(_ownerNumber.text),
+      color: _color.text,
+      design: _design.text,
+      salonId: selectedSalonId,
+      car: Car(
+          brand: _brand.text,
+          type: _type.text,
+          origin: _origin.text,
+          model: _version.text,
+          gear: _gear.text,
+          mfg: _mfg.text,
+          kilometer: int.parse(_kilometer.text),
+          price: int.parse(_price.text),
+          seat: int.parse(_seat.text)),
+    );
+    bool response = await PostService.createPost(postModel);
+    return response;
+  }
+
   @override
   Widget build(BuildContext context) {
     final _dropdownkey = GlobalKey();
     return Scaffold(
         appBar: AppBar(
-          title: Text('Tạo bài kết nối'),
+          title: const Text('Tạo bài kết nối'),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -93,42 +131,44 @@ class _CreatePostState extends State<CreatePost> {
                         child: GestureDetector(
                           onTap: () => pickImage(),
                           child: Container(
-                              padding: EdgeInsets.all(30),
+                              padding: const EdgeInsets.all(30),
                               color: _backgroundColor,
                               child: Center(
                                   child: Column(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.add_a_photo,
                                     size: 40,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Thêm ảnh xe',
                                     style: TextStyle(fontSize: 20),
                                   )
                                 ],
                               ))),
                         )),
-                    TextFormField(
-                      controller: _name,
-                      decoration: InputDecoration(
-                        labelText: 'Tên xe',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            //  color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          if (image != null)
+                            for (var i = 0; i < image!.length; i++)
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                child: Image.file(
+                                  image![i],
+                                  width: 100,
+                                  height: 100,
+                                ),
+                              )
+                        ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextFormField(
-                      controller: _price,
+                      controller: _brand,
                       decoration: InputDecoration(
-                        labelText: 'giá',
+                        labelText: 'Hãng xe',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
                         focusedBorder: OutlineInputBorder(
@@ -144,7 +184,7 @@ class _CreatePostState extends State<CreatePost> {
                     TextFormField(
                       controller: _type,
                       decoration: InputDecoration(
-                        labelText: 'Loại',
+                        labelText: 'Dòng xe',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
                         focusedBorder: OutlineInputBorder(
@@ -156,7 +196,71 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _mfg,
+                      decoration: InputDecoration(
+                        labelText: 'Năm sản xuất',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            // color: Color(0xFF6F61EF),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _version,
+                      decoration: InputDecoration(
+                        labelText: 'Phiên bản',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            // color: Color(0xFF6F61EF),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _gear,
+                      decoration: InputDecoration(
+                        labelText: 'Hộp số',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            // color: Color(0xFF6F61EF),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _fuel,
+                      decoration: InputDecoration(
+                        labelText: 'Nhiên liệu',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            // color: Color(0xFF6F61EF),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     TextFormField(
                       controller: _origin,
                       decoration: InputDecoration(
@@ -172,11 +276,11 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextFormField(
-                      controller: _model,
+                      controller: _design,
                       decoration: InputDecoration(
-                        labelText: 'Model',
+                        labelText: 'Kiểu dáng',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
                         focusedBorder: OutlineInputBorder(
@@ -188,55 +292,7 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: _brand,
-                      decoration: InputDecoration(
-                        labelText: 'Hãng',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: _capacity,
-                      decoration: InputDecoration(
-                        labelText: 'Dung tích',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: _door,
-                      decoration: InputDecoration(
-                        labelText: 'Số cửa',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextFormField(
                       controller: _seat,
                       decoration: InputDecoration(
@@ -256,7 +312,7 @@ class _CreatePostState extends State<CreatePost> {
                     TextFormField(
                       controller: _kilometer,
                       decoration: InputDecoration(
-                        labelText: 'Odo',
+                        labelText: 'Số km đã đi',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
                         focusedBorder: OutlineInputBorder(
@@ -270,9 +326,9 @@ class _CreatePostState extends State<CreatePost> {
                     ),
                     SizedBox(height: 20),
                     TextFormField(
-                      controller: _gear,
+                      controller: _color,
                       decoration: InputDecoration(
-                        labelText: 'Số',
+                        labelText: 'Màu sắc',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
                         focusedBorder: OutlineInputBorder(
@@ -286,9 +342,9 @@ class _CreatePostState extends State<CreatePost> {
                     ),
                     SizedBox(height: 20),
                     TextFormField(
-                      controller: _mfg,
+                      controller: _licensePlate,
                       decoration: InputDecoration(
-                        labelText: 'tiêu hao nhiên liệu/lít',
+                        labelText: 'Biển số xe',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
                         focusedBorder: OutlineInputBorder(
@@ -302,9 +358,9 @@ class _CreatePostState extends State<CreatePost> {
                     ),
                     SizedBox(height: 20),
                     TextFormField(
-                      controller: _outColor,
+                      controller: _ownerNumber,
                       decoration: InputDecoration(
-                        labelText: 'Màu ngoại thất',
+                        labelText: 'Số chủ sở hữu',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12)),
                         focusedBorder: OutlineInputBorder(
@@ -318,11 +374,11 @@ class _CreatePostState extends State<CreatePost> {
                     ),
                     SizedBox(height: 20),
                     TextFormField(
-                      controller: _description,
+                      controller: _accessory,
                       autofocus: true,
                       obscureText: false,
                       decoration: InputDecoration(
-                        hintText: 'Giới thiệu',
+                        hintText: 'Phụ kiện đi kèm',
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -341,6 +397,54 @@ class _CreatePostState extends State<CreatePost> {
                     SizedBox(
                       height: 20,
                     ),
+                    TextFormField(
+                      controller: _price,
+                      decoration: InputDecoration(
+                        labelText: 'Giá',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            // color: Color(0xFF6F61EF),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    TextFormField(
+                      controller: _registrationDeadline,
+                      decoration: InputDecoration(
+                        labelText: 'Hạn đăng kiểm',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            // color: Color(0xFF6F61EF),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    TextFormField(
+                      controller: _address,
+                      decoration: InputDecoration(
+                        labelText: 'Địa chỉ hoa tiêu',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            // color: Color(0xFF6F61EF),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
                     Container(
                         padding: EdgeInsets.all(paddingSize),
                         color: _backgroundColor,
@@ -362,7 +466,7 @@ class _CreatePostState extends State<CreatePost> {
                     )
                   : Container(),
               TextField(
-                controller: _description,
+                controller: _text,
                 autofocus: true,
                 obscureText: false,
                 decoration: InputDecoration(
@@ -377,17 +481,29 @@ class _CreatePostState extends State<CreatePost> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   contentPadding:
-                  EdgeInsetsDirectional.fromSTEB(16, 24, 16, 12),
+                      EdgeInsetsDirectional.fromSTEB(16, 24, 16, 12),
                 ),
                 maxLines: 16,
                 minLines: 6,
               ),
-              FilledButton(onPressed: () {
-                String? selectedValue = selectedValueNotifier.value;
-                String? selectedSalonId = salons.firstWhere((salon) => salon.name == selectedValue)?.salonId;
-                print(selectedSalonId);
-                print(_mfg.text);
-              }, child: Text('Đăng bài'))
+              FilledButton(
+                  onPressed: () async {
+                    String? selectedValue = selectedValueNotifier.value;
+                    String? selectedSalonId = salons
+                        .firstWhere((salon) => salon.name == selectedValue)
+                        .salonId;
+                    bool response = await createPost(selectedSalonId!);
+                    if (response) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Đăng bài thành công'),backgroundColor: Colors.green,));
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Đăng bài thất bại'), backgroundColor: Colors.red,));
+                    }
+                    print(_mfg.text);
+                  },
+                  child: Text('Đăng bài'))
             ],
           ),
         ));

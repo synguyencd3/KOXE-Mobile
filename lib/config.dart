@@ -97,4 +97,7 @@ static const String getTop = 'invoice/get-top';
   //Post API
 static const String getPosts = "/posts/feed";
 static const String posts = "/posts";
+
+// Connection API
+static const String connectionsAPI = "/connections";
 }
