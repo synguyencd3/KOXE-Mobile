@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/salon_model.dart';
+import 'package:mobile/pages/Car%20Invoice/car_invoice.dart';
+import 'package:mobile/pages/Car%20Invoice/newCar_invoice.dart';
 import 'package:mobile/pages/Payment.dart';
 import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
@@ -7,6 +9,8 @@ import 'package:mobile/pages/car/edit_car.dart';
 import 'package:mobile/pages/login.dart';
 import 'package:mobile/pages/news/news.dart';
 import 'package:mobile/pages/permission/Employee_permission.dart';
+import 'package:mobile/pages/process/create_process.dart';
+import 'package:mobile/pages/process/process_list.dart';
 import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';
 import 'package:mobile/pages/salon/new_salon.dart';
@@ -110,10 +114,15 @@ class _MyAppState extends State<MyApp> {
         '/maintaince_manage' : (context) => MaintainceManage(),
         '/accessory_manage' : (context) => AccessoriesManage(),
         '/user_manage' : (context) => UserManage(),
-        '/new_car' : (context) => EditCar(),
+
         '/post_detail' : (context) => PostDetail(),
         '/create_post' : (context) => CreatePost(),
         '/connection' : (context) => Connection(),
+        '/new_car' : (context) => EditCar(),
+        '/new_process' : (context) => NewProcess(),
+        '/process_list' : (context) => Processes(),
+        '/car_voice' : (context) => CarInvoiceList(),
+        '/car_invoice/new': (context) => CarInvoiceForm()
       },
     );
   }

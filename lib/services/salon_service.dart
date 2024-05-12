@@ -33,7 +33,9 @@ class SalonsService {
     return [];
   }
 
-  static Future<List<Car>> getDetail(String salonId) async {
+  static Future<List<Car>> getDetail(String? salonId) async {
+    await APIService.refreshToken();
+    var mySalon = await SalonsService.isSalon();
     var LoginInfo = await SharedService.loginDetails();
        Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -42,7 +44,9 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$salonId');
+     var url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$mySalon');
+      if (salonId != null)
+        url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$salonId');
 
     var response = await http.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
