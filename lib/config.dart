@@ -98,4 +98,10 @@ static const String getTop = 'invoice/get-top';
   static const String getProcess = '/legals/process';
   static const String newProcess = '/legals/create-process';
   static const String deleteProcess = '/legals/delete-documents';
+
+  //Car Invoice
+  static const String getInvoiceCarCustomer = '/invoice/get-invoice-buy-car';
+  static const String createInvoiceCar = '/invoice/create-invoice';
+  static const String lookupInvoiceCar = '/invoice/lookup';
+  static const String getInvoiceCar = '/invoice/all';
 }

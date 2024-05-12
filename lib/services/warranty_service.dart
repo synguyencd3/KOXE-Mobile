@@ -24,7 +24,7 @@ class WarrantyService {
 
     var url = Uri.https(Config.apiURL, Config.warranty);
 
-    var response = await http.post(url, body: {
+    var response = await http.post(url,headers: requestHeaders, body: {
     'salonId': mySalon
     });
     print(response.body);

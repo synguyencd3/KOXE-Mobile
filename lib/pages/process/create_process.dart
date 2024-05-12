@@ -71,6 +71,7 @@ class _NewProcessState extends State<NewProcess> {
       }
       else {
         model = process(
+            type: type,
             name: _nameController.text,
             description: _descriptionController.text,
             documents: _formCards

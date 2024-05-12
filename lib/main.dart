@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/salon_model.dart';
+import 'package:mobile/pages/Car%20Invoice/car_invoice.dart';
+import 'package:mobile/pages/Car%20Invoice/newCar_invoice.dart';
 import 'package:mobile/pages/Payment.dart';
 import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
@@ -111,7 +113,9 @@ class _MyAppState extends State<MyApp> {
         '/user_manage' : (context) => UserManage(),
         '/new_car' : (context) => EditCar(),
         '/new_process' : (context) => NewProcess(),
-        '/process_list' : (context) => Processes()
+        '/process_list' : (context) => Processes(),
+        '/car_voice' : (context) => CarInvoiceList(),
+        '/car_invoice/new': (context) => CarInvoiceForm()
       },
     );
   }
