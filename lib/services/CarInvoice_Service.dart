@@ -66,4 +66,29 @@ class CarInvoiceService {
     }
     return false;
   }
+
+  // static Future<bool?> newInvoice(InvoiceRequest model) async {
+  //   await APIService.refreshToken();
+  //
+  //   String mySalon = await SalonsService.isSalon();
+  //   var LoginInfo = await SharedService.loginDetails();
+  //   Map<String, String> requestHeaders = {
+  //     'Content-Type': 'application/json',
+  //     'Accept': '*/*',
+  //     'Access-Control-Allow-Origin': "*",
+  //     HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+  //   };
+  //
+  //   var url = Uri.https(Config.apiURL, Config.createInvoiceCar);
+  //   var reqBody = model.toJson();
+  //   reqBody['salonId'] = mySalon;
+  //   print(jsonEncode(reqBody));
+  //   var response = await http.post(url,headers: requestHeaders, body: jsonEncode(reqBody));
+  //   print(response.body);
+  //   var responseData = jsonDecode(response.body);
+  //   if (responseData['status'] == 'success') {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 }

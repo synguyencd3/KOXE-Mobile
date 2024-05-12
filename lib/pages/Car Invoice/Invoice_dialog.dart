@@ -1,11 +1,14 @@
 
+
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/model/document_model.dart';
-import 'package:mobile/pages/loading.dart';
 import 'package:mobile/services/process_service.dart';
 
 import '../../model/CarInvoice_response.dart';
 import '../../model/process_model.dart';
+import '../loading.dart';
 
 class InvoiceDialog extends StatefulWidget {
   late final CarInvoice model;
@@ -23,10 +26,11 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
   TextEditingController carNameController = TextEditingController();
   TextEditingController emailAddressController = TextEditingController();
 
-  List<Document> selectedProcesses = [];
+  List<Details> selectedProcesses = [];
    process? _process;
+   Document? currentPeriod;
 
-  void toggleObjectSelection(Document object) {
+  void toggleObjectSelection(Details object) {
     setState(() {
      selectedProcesses.add(object);
     });
@@ -39,8 +43,11 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
       _process = data;
       for (var doc in _process!.documents!)
         {
-          if (doc.period == widget.model.legalsUser?.currentPeriod) return;
-          selectedProcesses.add(doc);
+          if (doc.period == widget.model.legalsUser?.currentPeriod) {
+            currentPeriod=doc;
+            return;
+          }
+          //selectedProcesses.add(doc);
         }
     });
   }
@@ -56,13 +63,13 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
     getProcess();
   }
   void submitForm() {
-    String fullName = fullNameController.text;
-    String phoneNumber = phoneNumberController.text;
-   // String id = idController.text;
-    String carName = carNameController.text;
-    String emailAddress = emailAddressController.text;
-
-    // Do something with the form inputs, such as sending them to an API
+   //  String fullName = fullNameController.text;
+   //  String phoneNumber = phoneNumberController.text;
+   // // String id = idController.text;
+   //  String carName = carNameController.text;
+   //  String emailAddress = emailAddressController.text;
+   //
+   //  // Do something with the form inputs, such as sending them to an API
 
     Navigator.of(context).pop(); // Close the dialog
   }
@@ -74,6 +81,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
       title: Text('Information'),
       content: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
@@ -97,21 +105,36 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
               decoration: InputDecoration(labelText: 'Email Address'),
             ),
             SizedBox(height: 16),
-            Text('Select Objects:'),
-            (_process == null ) ? Loading() :
+            (currentPeriod == null ) ? Loading() :
+            Column(
+              children: [
+                Text(currentPeriod!.name!),
                 Column(
-                  children: _process!.documents!.map((e)  {
-                    return  CheckboxListTile(
-                            title: Text(e.name!),
-                            value: selectedProcesses.contains(e),
-                            onChanged: (value) => toggleObjectSelection(e),
-                            subtitle: Align(
-                              alignment: Alignment.topLeft,
-                              child: Column(
-                                children: e.details!.map((e) => Text(e.name!)).toList(),),
-                            ));
-                  }).toList()
+                  children: currentPeriod!.details!.map((e) => CheckboxListTile(
+                      value: true,
+                      title: Text(e.name!),
+                      onChanged: (value) => toggleObjectSelection(e)
+                  )).toList(),
                 )
+              ],
+            ),
+
+                // (_process == null ) ? Loading() :
+                // Column(
+                //   children: _process!.documents!.map((e)  {
+                //     return  CheckboxListTile(
+                //             title: Text(e.name!),
+                //             value: selectedProcesses.contains(e),
+                //             onChanged: (value) => toggleObjectSelection(e),
+                //             subtitle: Align(
+                //               alignment: Alignment.topLeft,
+                //               child: Column(
+                //                 children: e.details!.map((e) => Text(e.name!)).toList(),),
+                //             ));
+                //   }).toList()
+                // )
+
+
           ],
         ),
       ),
