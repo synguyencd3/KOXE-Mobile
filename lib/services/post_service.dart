@@ -47,4 +47,26 @@ class PostService {
 
     return response.statusCode == 201;
   }
+
+  static Future<PostModel> getPostDetail(String id) async {
+    await APIService.refreshToken();
+    var loginDetail = await SharedService.loginDetails();
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      'Authorization': 'Bearer ${loginDetail?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, '${Config.posts}/$id');
+
+    var response = await http.get(url, headers: requestHeaders);
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+    return PostModel.fromJson(data['post']);
+    }
+    return PostModel(text: 'Error');
+  }
 }

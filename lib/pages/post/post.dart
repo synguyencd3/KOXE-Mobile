@@ -49,15 +49,24 @@ class _PostPageState extends State<PostPage> {
           }
           return Column(
             children: [
-              salonId == ''
-                  ? TextButton.icon(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/create_post');
-                      },
-                      icon: Icon(Icons.post_add),
-                      label: Text('Thêm bài viết'),
-                    )
-                  : Container(),
+              Row(
+                children: [
+                  salonId == ''
+                      ? TextButton.icon(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/create_post');
+                          },
+                          icon: Icon(Icons.post_add),
+                          label: Text('Thêm bài viết'),
+                        )
+                      : Container(),
+                  TextButton.icon(
+                    onPressed: (){},
+                    icon: Icon(Icons.connect_without_contact),
+                    label: Text('Quản lý kết nối'),
+                  )
+                ],
+              ),
               Expanded(
                 child: ListView.builder(
                     itemCount: posts.length,

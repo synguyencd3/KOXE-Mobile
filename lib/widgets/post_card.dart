@@ -17,7 +17,7 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-       Navigator.pushNamed(context, '/post_detail');
+       Navigator.pushNamed(context, '/post_detail', arguments: widget.post.postId);
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -35,7 +35,7 @@ class _PostCardState extends State<PostCard> {
             Expanded(
               flex: 1,
               child: CircleAvatar(
-                backgroundImage: NetworkImage(widget.post.user.avatar),
+                backgroundImage: NetworkImage(widget.post.user?.avatar ?? ''),
               ),
             ),
             Expanded(
@@ -45,7 +45,7 @@ class _PostCardState extends State<PostCard> {
                 children: [
                   Text(widget.post.text),
                   Text(widget.post.createAt.toString()),
-                  Text('Người đăng: ' + widget.post.user.fullname),
+                  Text('Người đăng: ' + widget.post.user!.fullname ?? ''),
                 ],
               ),
             )

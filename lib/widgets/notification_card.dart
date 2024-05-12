@@ -89,6 +89,10 @@ class _NotificationCardState extends State<NotificationCard> {
                         },
                       );
                     }
+                    if (widget.notification.types == 'request')
+                      {
+                        Navigator.pushNamed(context, '/post_detail', arguments: widget.notification.data);
+                      }
                     setState(() {
                       widget.notification.isRead = true;
                     });
