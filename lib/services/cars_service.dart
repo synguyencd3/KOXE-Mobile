@@ -61,39 +61,53 @@ class CarsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    Map<String, dynamic> remain = {'salonId': mySalon};
-    var param = model.tojson();
-    var request = http.MultipartRequest("POST", url);
-    print(param);
-    request.headers.addAll(requestHeaders);
-    request.fields['salonId'] = mySalon;
-    param.entries.forEach((element) {
-      if (element.key !='images' && element.value!=null && element.value!="" && element.value!='car_id')
-      {
-        try {
-          request.fields['${element.key}'] = element.value;
-        } catch (exception) {
-          remain['${element.key}'] = element.value;
-        }
-      }
-    });
-    var a=await http.post(url,headers: requestHeaders, body: jsonEncode(remain));
-    print(a.body);
-    if (model.image !=null)
-    {
-      model.image?.forEach((element) async {
-        request.files.add(
-            await http.MultipartFile.fromPath("image", element)
-        );
-      },);
+    var param = {
+      'salonId': mySalon,
+      'salonSalonId': mySalon,
+    };
+
+    var response = await http.post(url,headers: requestHeaders, body: jsonEncode(param));
+
+    var responseData = jsonDecode(response.body);
+    print(responseData);
+    if (responseData['status'] == 'success') {
+      return await EditCar(model, responseData['car']['car_id']);
     }
-    var response = await request.send();
-    var responseData = await response.stream.toBytes();
-    var responseString = String.fromCharCodes(responseData);
-    var data = jsonDecode(responseString);
-    print(data);
-    if (data['status'] == 'success') return true;
     return false;
+   //  Map<String, dynamic> remain = {'salonId': mySalon};
+   //  var param = model.tojson();
+   //  var request = http.MultipartRequest("POST", url);
+   //  print(param);
+   //  request.headers.addAll(requestHeaders);
+   //  request.fields['salonId'] = mySalon;
+   // // request.fields['salonSalonId'] = mySalon;
+   //  param.entries.forEach((element) {
+   //    if (element.key !='images' && element.value!=null && element.value!="" && element.value!='car_id')
+   //    {
+   //      try {
+   //        request.fields['${element.key}'] = element.value;
+   //      } catch (exception) {
+   //        remain['${element.key}'] = element.value;
+   //      }
+   //    }
+   //  });
+   //  var a=await http.post(url,headers: requestHeaders, body: jsonEncode(remain));
+   //  print(a.body);
+   //  if (model.image !=null)
+   //  {
+   //    model.image?.forEach((element) async {
+   //      request.files.add(
+   //          await http.MultipartFile.fromPath("image", element)
+   //      );
+   //    },);
+   //  }
+   //  var response = await request.send();
+   //  var responseData = await response.stream.toBytes();
+   //  var responseString = String.fromCharCodes(responseData);
+   //  var data = jsonDecode(responseString);
+   //  print(data);
+   //  if (data['status'] == 'success') return true;
+   //  return false;
   }
 
   static Future<bool?> EditCar(Car model, String id) async {

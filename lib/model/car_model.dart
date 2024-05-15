@@ -65,10 +65,10 @@ class Car {
 
   Map<String, dynamic> tojson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['car_id'] = this.id;
+    //data['car_id'] = this.id;
     data['name'] = this.name;
     data['description'] = this.description;
-    data['image'] = this.image;
+    //data['image'] = this.image;
     data['price'] = this.price;
     data['type'] = this.type;
     data['origin'] = this.origin;

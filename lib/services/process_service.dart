@@ -44,7 +44,6 @@ class ProcessService {
     String mySalon = await SalonsService.isSalon();
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
       'Accept': '*/*',
       'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
@@ -57,8 +56,10 @@ class ProcessService {
       'processId': id
     };
 
+    print("id ${id}");
+    print("salon $mySalon");
 
-    var response = await http.post(url, body: requestBody);
+    var response = await http.post(url,headers: requestHeaders, body: requestBody);
     print(response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -109,6 +110,31 @@ class ProcessService {
       'salonId' : mySalon,
       'processId' : id
     });
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'success') return true;
+    return false;
+  }
+
+  static Future<bool?> updateDetails(String carId, String phone, List<String> details) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    String mySalon = await SalonsService.isSalon();
+    Map<String, String> requestHeaders = {
+      // 'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.checkDetailProcess);
+    print(jsonEncode(details));
+    var response = await http.post(url, headers: requestHeaders, body: {
+      'salonId' : mySalon,
+      'phone': phone,
+      'carId': carId,
+      'details': details.join(",")
+    });
+    print(response.body);
     var data = jsonDecode(response.body);
     if (data['status'] == 'success') return true;
     return false;
