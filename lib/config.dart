@@ -98,6 +98,7 @@ static const String getTop = 'invoice/get-top';
   static const String getProcess = '/legals/process';
   static const String newProcess = '/legals/create-process';
   static const String deleteProcess = '/legals/delete-documents';
+  static const String checkDetailProcess = '/legals/check-details-user';
 
   //Car Invoice
   static const String getInvoiceCarCustomer = '/invoice/get-invoice-buy-car';

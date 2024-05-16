@@ -12,8 +12,9 @@ import '../loading.dart';
 
 class InvoiceDialog extends StatefulWidget {
   late final CarInvoice model;
+  final VoidCallback callMethod;
 
-  InvoiceDialog({required this.model});
+  InvoiceDialog({required this.model, required this.callMethod});
 
   @override
   _InvoiceDialogState createState() => _InvoiceDialogState();
@@ -26,21 +27,33 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
   TextEditingController carNameController = TextEditingController();
   TextEditingController emailAddressController = TextEditingController();
 
-  List<Details> selectedProcesses = [];
+  Set<String> selectedProcesses = {};
    process? _process;
    Document? currentPeriod;
 
-  void toggleObjectSelection(Details object) {
+  void toggleObjectSelection(String object) {
+    if (selectedProcesses.contains(object))
+      {
+        setState(() {
+          selectedProcesses.remove(object);
+        });
+      }
+    else {
     setState(() {
      selectedProcesses.add(object);
     });
+    }
   }
 
   void getProcess() async {
+    if (widget.model.legalsUser?.processId == null) return;
     var data = await ProcessService.get(widget.model.legalsUser?.processId);
-    if (data == null) return;
     setState(() {
       _process = data;
+      for (var detail in widget.model.legalsUser!.details!)
+      {
+        toggleObjectSelection(detail);
+      }
       for (var doc in _process!.documents!)
         {
           if (doc.period == widget.model.legalsUser?.currentPeriod) {
@@ -70,8 +83,29 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
    //  String emailAddress = emailAddressController.text;
    //
    //  // Do something with the form inputs, such as sending them to an API
-
-    Navigator.of(context).pop(); // Close the dialog
+    // Close the dialog
+    widget.callMethod();
+    ProcessService.updateDetails(widget.model.legalsUser!.carId!,widget.model.phone!, selectedProcesses.toList()).then((value)
+    {
+        if (value!) {
+            ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Tạo thành công'),
+              backgroundColor: Colors.green,
+            )
+        );
+        Navigator.pop(context);
+      }
+        else
+        {
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+        content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+        backgroundColor: Colors.red,
+        )
+        );
+    }
+    });
   }
 
   @override
@@ -111,9 +145,11 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                 Text(currentPeriod!.name!),
                 Column(
                   children: currentPeriod!.details!.map((e) => CheckboxListTile(
-                      value: true,
+                      value: selectedProcesses.contains(e.name),
                       title: Text(e.name!),
-                      onChanged: (value) => toggleObjectSelection(e)
+                      onChanged: (bool? value) {
+                       toggleObjectSelection(e.name!);
+                      }
                   )).toList(),
                 )
               ],

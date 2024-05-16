@@ -43,7 +43,9 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
         child: Column(
           children: [
             TextButton(onPressed: () {
-              Navigator.pushNamed(context, '/car_invoice/new');
+              Navigator.pushNamed(context, '/car_invoice/new').then((value) {
+                getInvoices();
+              });
             }, child: Icon(CupertinoIcons.plus),),
             ListView.builder(
               shrinkWrap: true,
@@ -55,7 +57,7 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                     showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return InvoiceDialog(model: invoice);
+                      return InvoiceDialog(model: invoice,callMethod: getInvoices,);
                     });
                   },
                   child: Card(
