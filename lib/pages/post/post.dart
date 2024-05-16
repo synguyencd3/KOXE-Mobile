@@ -50,6 +50,7 @@ class _PostPageState extends State<PostPage> {
           return Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   salonId == ''
                       ? TextButton.icon(
@@ -61,7 +62,9 @@ class _PostPageState extends State<PostPage> {
                         )
                       : Container(),
                   TextButton.icon(
-                    onPressed: (){},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/connection');
+                    },
                     icon: Icon(Icons.connect_without_contact),
                     label: Text('Quản lý kết nối'),
                   )

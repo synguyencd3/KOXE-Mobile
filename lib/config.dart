@@ -112,4 +112,7 @@ static const String posts = "/posts";
 
 // Connection API
 static const String connectionsAPI = "/connections";
+
+// Transaction API
+static const String transactionsAPI = "/transactions";
 }
