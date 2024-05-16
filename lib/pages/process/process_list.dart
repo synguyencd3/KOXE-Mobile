@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mobile/services/process_service.dart';
 
 import '../../model/process_model.dart';
@@ -43,9 +44,12 @@ class _ProcessesState extends State<Processes> {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          TextButton(onPressed: () {
-            Navigator.pushNamed(context, '/new_process').then((value) {getProcesses();});
-          }, child: Text('New Process')),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(onPressed: () {
+              Navigator.pushNamed(context, '/new_process').then((value) {getProcesses();});
+            }, child: Text('New Process')),
+          ),
           Expanded(
               child: processes.isEmpty && !isCalling ? Loading(): ListView.builder(
                   shrinkWrap: true,
