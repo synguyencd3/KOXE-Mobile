@@ -7,21 +7,22 @@ List<PostModel> postModelFromJson(dynamic str) =>
     List<PostModel>.from((str).map((x) => PostModel.fromJson(x)));
 
 class PostModel {
-  Car? car;
+  late Car? car;
   List<String>? image;
   String? fuel;
   String? design;
   String? color;
   String? licensePlate;
   int? ownerNumber;
-  String? accessory;
-  String? registrationDeadline;
+  bool? accessory;
+  bool? registrationDeadline;
   String? address;
   String? postId;
-  final String text;
+  String? text='';
   DateTime? createAt;
   UserPostModel? user;
   late String? salonId;
+  String? title;
 
   PostModel({
     this.postId,
@@ -39,9 +40,21 @@ class PostModel {
     this.address,
     this.image,
     this.car,
+    this.title,
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
+    Car carA  =Car(
+      brand: json['brand'],
+      type: json['type'],
+      mfg: json['mfg'],
+      model: json['version'],
+      gear: json['gear'],
+      origin: json['origin'],
+      seat: json['seat'],
+      kilometer: json['kilometer'],
+      price: json['price'],);
+
     return PostModel(
       postId: json['post_id'],
       text: json['text'],
@@ -56,7 +69,7 @@ class PostModel {
       //registrationDeadline: json['registrationDeadline'],
       address: json['address'],
       image: json['image']!= null ? List<String>.from(json['image']): [],
-      //car: Car.fromJson(json),
+      car: carA,
     );
   }
 
@@ -81,5 +94,6 @@ class PostModel {
         "price": car?.price,
         "address": address,
         "image": image,
+        "title": title,
       };
 }

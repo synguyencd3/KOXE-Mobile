@@ -8,7 +8,7 @@ import 'package:mobile/widgets/text_card.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/model/user_model.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile/widgets/utils.dart';
+import 'package:mobile/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserInfo extends StatefulWidget {

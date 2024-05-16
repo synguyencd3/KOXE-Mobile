@@ -28,6 +28,10 @@ class _CreatePostState extends State<CreatePost> {
   List<XFile>? pickedFile;
   final ValueNotifier<String?> selectedValueNotifier =
       ValueNotifier<String>('');
+  final ValueNotifier<String?> selectedValueAccessory =
+      ValueNotifier<String>('');
+  final ValueNotifier<String?> selectedValueRegistration =
+      ValueNotifier<String>('');
   final picker = ImagePicker();
   late final TextEditingController _price = TextEditingController();
   late final TextEditingController _type = TextEditingController();
@@ -39,16 +43,17 @@ class _CreatePostState extends State<CreatePost> {
   late final TextEditingController _mfg = TextEditingController();
   late final TextEditingController _color = TextEditingController();
   late final TextEditingController _text = TextEditingController();
-  late final TextEditingController _accessory = TextEditingController();
-  late final TextEditingController _registrationDeadline = TextEditingController();
   late final TextEditingController _address = TextEditingController();
   late final TextEditingController _version = TextEditingController();
   late final TextEditingController _fuel = TextEditingController();
   late final TextEditingController _licensePlate = TextEditingController();
   late final TextEditingController _ownerNumber = TextEditingController();
   late final TextEditingController _design = TextEditingController();
+  late final TextEditingController _title = TextEditingController();
 
   List<Salon> salons = [];
+  static const double _distanceSize = 20.0;
+  List<String> _booleanValues = ['Có', 'Không'];
 
   Future<void> pickImage() async {
     pickedFile = await picker.pickMultiImage();
@@ -79,8 +84,9 @@ class _CreatePostState extends State<CreatePost> {
     PostModel postModel = PostModel(
       text: _text.text,
       image: pickedFile?.map((e) => e.path).toList(),
-      accessory: _accessory.text,
-      registrationDeadline: _registrationDeadline.text,
+      accessory: selectedValueAccessory.value == 'Có' ? true : false,
+      registrationDeadline:
+          selectedValueRegistration.value == 'Có' ? true : false,
       address: _address.text,
       fuel: _fuel.text,
       licensePlate: _licensePlate.text,
@@ -112,6 +118,7 @@ class _CreatePostState extends State<CreatePost> {
         ),
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Form(
                 key: _formKey,
@@ -164,7 +171,7 @@ class _CreatePostState extends State<CreatePost> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: _distanceSize),
                     TextFormField(
                       controller: _brand,
                       decoration: InputDecoration(
@@ -198,6 +205,7 @@ class _CreatePostState extends State<CreatePost> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      keyboardType: TextInputType.number,
                       controller: _mfg,
                       decoration: InputDecoration(
                         labelText: 'Năm sản xuất',
@@ -294,6 +302,7 @@ class _CreatePostState extends State<CreatePost> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      keyboardType: TextInputType.number,
                       controller: _seat,
                       decoration: InputDecoration(
                         labelText: 'Số chỗ ngồi',
@@ -308,8 +317,9 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextFormField(
+                      keyboardType: TextInputType.number,
                       controller: _kilometer,
                       decoration: InputDecoration(
                         labelText: 'Số km đã đi',
@@ -358,6 +368,7 @@ class _CreatePostState extends State<CreatePost> {
                     ),
                     SizedBox(height: 20),
                     TextFormField(
+                      keyboardType: TextInputType.number,
                       controller: _ownerNumber,
                       decoration: InputDecoration(
                         labelText: 'Số chủ sở hữu',
@@ -373,27 +384,11 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    TextFormField(
-                      controller: _accessory,
-                      autofocus: true,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        hintText: 'Phụ kiện đi kèm',
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        contentPadding:
-                            EdgeInsetsDirectional.fromSTEB(16, 24, 16, 12),
-                      ),
-                      maxLines: 16,
-                      minLines: 6,
-                    ),
+                    Text('Phụ kiện đi kèm'),
+                    DropdownMenuExample(
+                        width: 400,
+                        valueNotifier: selectedValueAccessory,
+                        items: _booleanValues),
                     SizedBox(
                       height: 20,
                     ),
@@ -413,21 +408,10 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    TextFormField(
-                      controller: _registrationDeadline,
-                      decoration: InputDecoration(
-                        labelText: 'Hạn đăng kiểm',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
+                    DropdownMenuExample(
+                        width: 400,
+                        valueNotifier: selectedValueRegistration,
+                        items: _booleanValues),
                     SizedBox(height: 20),
                     TextFormField(
                       controller: _address,
@@ -453,6 +437,7 @@ class _CreatePostState extends State<CreatePost> {
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
               salons.isNotEmpty
                   ? DropdownMenuExample(
                       key: _dropdownkey,
@@ -465,6 +450,23 @@ class _CreatePostState extends State<CreatePost> {
                           .cast<String>(),
                     )
                   : Container(),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _title,
+                decoration: InputDecoration(
+                  labelText: 'Tiêu đề bài kết nối',
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      // color: Color(0xFF6F61EF),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
               TextField(
                 controller: _text,
                 autofocus: true,
@@ -486,6 +488,7 @@ class _CreatePostState extends State<CreatePost> {
                 maxLines: 16,
                 minLines: 6,
               ),
+              const SizedBox(height: 20),
               FilledButton(
                   onPressed: () async {
                     String? selectedValue = selectedValueNotifier.value;
@@ -494,12 +497,16 @@ class _CreatePostState extends State<CreatePost> {
                         .salonId;
                     bool response = await createPost(selectedSalonId!);
                     if (response) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Đăng bài thành công'),backgroundColor: Colors.green,));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Đăng bài thành công'),
+                        backgroundColor: Colors.green,
+                      ));
                       Navigator.pop(context);
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Đăng bài thất bại'), backgroundColor: Colors.red,));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Đăng bài thất bại'),
+                        backgroundColor: Colors.red,
+                      ));
                     }
                     print(_mfg.text);
                   },
