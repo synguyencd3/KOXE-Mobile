@@ -99,13 +99,14 @@ static const String getTop = 'invoice/get-top';
   static const String newProcess = '/legals/create-process';
   static const String deleteProcess = '/legals/delete-documents';
   static const String checkDetailProcess = '/legals/check-details-user';
+  static const String updatePeriodProcess = '/legals/update-period-user';
 
   //Car Invoice
   static const String getInvoiceCarCustomer = '/invoice/get-invoice-buy-car';
   static const String createInvoiceCar = '/invoice/create-invoice';
   static const String lookupInvoiceCar = '/invoice/lookup';
   static const String getInvoiceCar = '/invoice/all';
-
+  static const String doneInvoiceCar = '/invoice/tick-done';
   //Post API
 static const String getPosts = "/posts/feed";
 static const String posts = "/posts";

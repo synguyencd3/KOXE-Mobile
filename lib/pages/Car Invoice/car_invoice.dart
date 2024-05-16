@@ -57,7 +57,7 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                     showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return InvoiceDialog(model: invoice,callMethod: getInvoices,);
+                      return InvoiceDialog(model: invoice);
                     });
                   },
                   child: Card(
