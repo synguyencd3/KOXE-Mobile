@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/pages/Car%20Invoice/car_invoice.dart';
 import 'package:mobile/pages/Car%20Invoice/newCar_invoice.dart';
+import 'package:mobile/pages/Car%20Invoice/user_car_invoice.dart';
 import 'package:mobile/pages/Payment.dart';
 import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
@@ -114,7 +115,6 @@ class _MyAppState extends State<MyApp> {
         '/maintaince_manage' : (context) => MaintainceManage(),
         '/accessory_manage' : (context) => AccessoriesManage(),
         '/user_manage' : (context) => UserManage(),
-
         '/post_detail' : (context) => PostDetail(),
         '/create_post' : (context) => CreatePost(),
         '/connection' : (context) => Connection(),
@@ -122,6 +122,7 @@ class _MyAppState extends State<MyApp> {
         '/new_process' : (context) => NewProcess(),
         '/process_list' : (context) => Processes(),
         '/car_voice' : (context) => CarInvoiceList(),
+        '/customer/car_voice' : (context) => UserCarInvoiceList(),
         '/car_invoice/new': (context) => CarInvoiceForm()
       },
     );

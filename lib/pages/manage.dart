@@ -86,6 +86,11 @@ class _ManageState extends State<Manage> {
                 onTap: () {
                   Navigator.pushNamed(context, '/car_voice');
                 }),
+            text_card(
+                title: 'Lịch sử mua xe',
+                onTap: () {
+                  Navigator.pushNamed(context, '/customer/car_voice');
+                }),
           ],
         ));
   }
