@@ -118,23 +118,58 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                 )
               ],
             ),
-
-                // (_process == null ) ? Loading() :
-                // Column(
-                //   children: _process!.documents!.map((e)  {
-                //     return  CheckboxListTile(
-                //             title: Text(e.name!),
-                //             value: selectedProcesses.contains(e),
-                //             onChanged: (value) => toggleObjectSelection(e),
-                //             subtitle: Align(
-                //               alignment: Alignment.topLeft,
-                //               child: Column(
-                //                 children: e.details!.map((e) => Text(e.name!)).toList(),),
-                //             ));
-                //   }).toList()
-                // )
-
-
+            widget.model.done == true ? SizedBox(height:0,):
+            period == _process?.documents?.length && selectedProcessInThisStage.length ==  currentPeriod?.details?.length ? TextButton(onPressed: () {
+              ProcessService.updateDetails(widget.model.legalsUser!.carId!,widget.model.phone!, selectedProcesses.toList());
+              ProcessService.done(widget.model.invoiceId!).then((value) {
+                  if (value == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Tạo thành công'),
+                          backgroundColor: Colors.green,
+                        )
+                    );
+                    Navigator.pop(context);
+                  }
+                  else
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+                          backgroundColor: Colors.red,
+                        )
+                    );
+                  }
+                  Navigator.pop(context);
+                });
+            },
+            child: Text("Done")) :
+            selectedProcessInThisStage.length ==  currentPeriod?.details?.length ?
+                TextButton(onPressed: () {
+                  ProcessService.updateDetails(widget.model.legalsUser!.carId!,widget.model.phone!, selectedProcesses.toList());
+                  ProcessService.updateProcess(widget.model.legalsUser!.carId!,widget.model.phone!,_process!.documents![period].period!).then((value) {getProcess();}).then((value) {
+                    if (value == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Tạo thành công'),
+                            backgroundColor: Colors.green,
+                          )
+                      );
+                      Navigator.pop(context);
+                    }
+                    else
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+                            backgroundColor: Colors.red,
+                          )
+                      );
+                    }
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text('next'),) : SizedBox(height: 10,)
           ],
         ),
       ),

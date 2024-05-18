@@ -12,11 +12,7 @@ class CarInvoiceList extends StatefulWidget {
 }
 
 class _CarInvoiceListState extends State<CarInvoiceList> {
-  // final List<Car> cars = [
-  //   Car('Car 1', 'Customer 1', '1234567890'),
-  //   Car('Car 2', 'Customer 2', '9876543210'),
-  //   Car('Car 3', 'Customer 3', '5555555555'),
-  // ];
+
 
   List<CarInvoice> invoices = [];
 
@@ -37,14 +33,19 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Car Transaction'),
+        title: Text("Giao dịch xe"),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            TextButton(onPressed: () {
-              Navigator.pushNamed(context, '/car_invoice/new');
-            }, child: Icon(CupertinoIcons.plus),),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(onPressed: () {
+                Navigator.pushNamed(context, '/car_invoice/new').then((value) {
+                  getInvoices();
+                });
+              }, child: Text("Thêm giao dịch"),),
+            ),
             ListView.builder(
               shrinkWrap: true,
               itemCount: invoices.length,
@@ -60,11 +61,15 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                   },
                   child: Card(
                     child: ListTile(
-                      title: Text(invoice.carName!),
+                      title: Text(invoice.carName!,  style: TextStyle(
+                          fontWeight:FontWeight.bold,fontSize: 20,
+                          color: invoice.done== false? Colors.red: Colors.green
+                      )),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Customer: ${invoice.fullname}'),
+                          SizedBox(height: 5),
                           Text('Phone: ${invoice.phone}'),
                         ],
                       ),
@@ -80,10 +85,3 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
   }
 }
 
-class Car {
-  final String carName;
-  final String customerName;
-  final String phoneNumber;
-
-  Car(this.carName, this.customerName, this.phoneNumber);
-}
