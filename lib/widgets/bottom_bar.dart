@@ -32,7 +32,7 @@ class _BottomBarState extends State<BottomBar> {
           icon: Icon(Icons.calendar_today),
           label: 'Appointment',
         ),
-        BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
+        BottomNavigationBarItem(icon: Icon(Icons.article), label: 'Kết nối salon'),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Profile',

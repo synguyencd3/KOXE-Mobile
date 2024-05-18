@@ -46,8 +46,10 @@ class InvoiceModel {
         maintainces = List<MaintainceModel>.from(json['maintenanceServices']
             .map((x) => MaintainceModel.fromJson(x))),
         licensePlate = json['licensePlate'],
-        accessories = List<AccessoryModel>.from(
-            json['accessories'].map((x) => AccessoryModel.fromJson(x))),
+        accessories = json['accessories'] != null
+            ? List<AccessoryModel>.from(
+                json['accessories'].map((x) => AccessoryModel.fromJson(x)))
+            : [],
         carName = json['carName'];
 
   Map<String, dynamic> toJson() => {

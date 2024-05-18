@@ -19,6 +19,9 @@ class _MessageState extends State<Message> {
 
   StreamSubscription? _messageStreamSubscription;
   @override
+
+
+
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -38,24 +41,37 @@ class _MessageState extends State<Message> {
 
   Future<void> getAllUsers() async {
     List<ChatUserModel> usersAPI = await ChatService.getAllChatedUsers();
-    setState(() {
       users = usersAPI;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return users.isNotEmpty
-        ?
-             ListView.builder(
-                itemCount: users.length,
-                physics: BouncingScrollPhysics(),
-                padding: EdgeInsets.only(top: 1),
-                itemBuilder: (context, index) {
-                  return ChatUserCard(user: users[index]);
-                },
-              )
-
-        :  Center(child: Text('Không có tin nhắn nào'));
+    return
+             Scaffold(
+               appBar: AppBar(
+                 title: Text('Tin nhắn'),
+               ),
+               body: FutureBuilder(
+                 future: getAllUsers(),
+                 builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Loading();
+                    }
+                    else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    }
+                   return ListView.builder(
+                      itemCount: users.length,
+                      physics: BouncingScrollPhysics(),
+                      padding: EdgeInsets.only(top: 1),
+                      itemBuilder: (context, index) {
+                        return ChatUserCard(user: users[index]);
+                      },
+                    );
+                 }
+               ),
+             );
   }
 }

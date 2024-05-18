@@ -168,13 +168,13 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   items: cars.map((Car value) {
                     return DropdownMenuItem<Car>(
                       value: value,
-                      child: Text(value.name!),
+                      child: Text(value.name?? ""),
                     );
                   }).toList(),
                   onChanged: (value) {
                     setState(() {
                      _selectedCar=value!;
-                     _expense.text = value!.price.toString();
+                     _expense.text = value.price.toString();
                     });
                   },
                   decoration: InputDecoration(labelText: 'Dropdown 1'),

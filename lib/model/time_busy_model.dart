@@ -9,7 +9,7 @@ class TimeBusyModel {
 
   factory TimeBusyModel.fromJson(Map<String, dynamic> json) {
     return TimeBusyModel(
-      time: DateTime.parse(json['date']).toLocal(),
+      time: DateTime.parse(json['date']),
     );
   }
 }

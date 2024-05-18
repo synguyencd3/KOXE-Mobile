@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/model/connection_model.dart';
 import 'package:mobile/model/notification_model.dart';
+import 'package:mobile/services/connection_service.dart';
 import 'package:mobile/services/notification_service.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +9,7 @@ import 'package:mobile/widgets/appointment_card.dart';
 import 'package:mobile/services/appointment_service.dart';
 import 'package:mobile/model/appointment_model.dart';
 import 'package:mobile/services/salon_service.dart';
+import 'package:mobile/widgets/connection_card.dart';
 
 class NotificationCard extends StatefulWidget {
   final NotificationModel notification;
@@ -18,8 +21,12 @@ class NotificationCard extends StatefulWidget {
 }
 
 class _NotificationCardState extends State<NotificationCard> {
-
   // 0: not yet, 1: accepted, 2: rejected
+  Future<ConnectionModel> getConnectionDetail() async {
+    print('abc${widget.notification.data}' ?? '');
+    ConnectionModel connection = await ConnectionService.getConnectionDetail(widget.notification.data ?? '');
+    return connection;
+  }
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -58,6 +65,26 @@ class _NotificationCardState extends State<NotificationCard> {
                   if (salonId == '') {
                     await NotificationService.markAsRead(
                         widget.notification.id);
+                    if (widget.notification.types == 'connection')
+                      {
+                        ConnectionModel connection = await getConnectionDetail();
+                        print(connection.id);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                                backgroundColor: Colors.transparent,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ConnectionCard(
+                                  connection: connection,
+                                    ),
+                                  ],
+                                ));
+                          },
+                        );
+                      }
                     setState(() {
                       widget.notification.isRead = true;
                     });
@@ -89,6 +116,10 @@ class _NotificationCardState extends State<NotificationCard> {
                         },
                       );
                     }
+                    if (widget.notification.types == 'request')
+                      {
+                        Navigator.pushNamed(context, '/post_detail', arguments: widget.notification.data);
+                      }
                     setState(() {
                       widget.notification.isRead = true;
                     });

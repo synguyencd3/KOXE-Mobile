@@ -122,12 +122,13 @@ class _EditCarState extends State<EditCar> {
 
   void initCar() async {
     //var data = ModalRoute.of(context)!.settings.arguments as Map;
-    var arg = ModalRoute.of(context)!.settings.arguments as Map;
-    Car oldCar = arg['car'];
+    var arg = ModalRoute.of(context)!.settings.arguments == null ? null : ModalRoute.of(context)!.settings.arguments as Map;
+    Car? oldCar = arg?['car'];
     var warrantyData = await WarrantyService.getAll();
-    var data = await CarsService.getDetail(oldCar.id!);
+    Car? data = oldCar == null ? null : await CarsService.getDetail(oldCar.id!);
+    print('set state');
     setState(() {
-      car = data!;
+      car = data;
       warranties=warrantyData;
     });
     _name.text = car?.name ?? "";

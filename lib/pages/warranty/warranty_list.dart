@@ -48,9 +48,12 @@ class _WarrantyState extends State<WarrantyList> {
         body: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            TextButton(onPressed: () {
-              Navigator.pushNamed(context, '/warranty_form').then((value) {getWarrantiess();});
-            }, child: Text('Add Warranty')),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(onPressed: () {
+                Navigator.pushNamed(context, '/warranty_form').then((value) {getWarrantiess();});
+              }, child: Text('Add Warranty')),
+            ),
             Expanded(
                 child: warranties.isEmpty && !isCalling ? Loading(): ListView.builder(
                     shrinkWrap: true,

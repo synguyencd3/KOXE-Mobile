@@ -17,7 +17,7 @@ class AppointmentService {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.getAppointmentsAPI);
+    var url = Uri.https(Config.apiURL, Config.getAppointmentsAPI);
 
     var response = await http.post(url, headers: requestHeaders);
     print(response.body);
@@ -38,7 +38,7 @@ class AppointmentService {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.createAppointmentAPI);
+    var url = Uri.https(Config.apiURL, Config.createAppointmentAPI);
 
     var response = await http.post(url,
         headers: requestHeaders, body: jsonEncode(appointment.toJson()));
@@ -55,7 +55,7 @@ class AppointmentService {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.getSalonAppointmentsApi);
+    var url = Uri.https(Config.apiURL, Config.getSalonAppointmentsApi);
 
     var response = await http.post(url,
         headers: requestHeaders, body: jsonEncode({'salonId': salonId}));
@@ -108,7 +108,7 @@ class AppointmentService {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
 
-    var url = Uri.http(Config.apiURL, Config.updateSalonAppointmentApi);
+    var url = Uri.https(Config.apiURL, Config.updateSalonAppointmentApi);
 
     var response = await http.patch(url,
         headers: requestHeaders,

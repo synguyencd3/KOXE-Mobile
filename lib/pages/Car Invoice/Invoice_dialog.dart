@@ -12,6 +12,7 @@ import '../loading.dart';
 
 class InvoiceDialog extends StatefulWidget {
   late final CarInvoice model;
+  //final VoidCallback callMethod;
 
   InvoiceDialog({required this.model});
 
@@ -26,23 +27,50 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
   TextEditingController carNameController = TextEditingController();
   TextEditingController emailAddressController = TextEditingController();
 
-  List<Details> selectedProcesses = [];
+  Set<String> selectedProcesses = {};
+  Set<String> selectedProcessInThisStage={};
    process? _process;
    Document? currentPeriod;
+   int countSelected=0;
+   int period=0;
 
-  void toggleObjectSelection(Details object) {
+  void toggleObjectSelection(String object) {
+    if (selectedProcesses.contains(object))
+      {
+        setState(() {
+          selectedProcesses.remove(object);
+          selectedProcessInThisStage.remove(object);
+        });
+      }
+    else {
     setState(() {
      selectedProcesses.add(object);
+     selectedProcessInThisStage.add(object);
     });
+    }
+  }
+  void countSelection(bool value)
+  {
+    if (value) {
+      countSelected++;
+    } else {
+      countSelected--;
+    }
   }
 
   void getProcess() async {
+    if (widget.model.legalsUser?.processId == null) return;
     var data = await ProcessService.get(widget.model.legalsUser?.processId);
-    if (data == null) return;
     setState(() {
+      selectedProcessInThisStage = {};
       _process = data;
+      for (var detail in widget.model.legalsUser!.details!)
+      {
+        selectedProcesses.add(detail);
+      }
       for (var doc in _process!.documents!)
         {
+          period++;
           if (doc.period == widget.model.legalsUser?.currentPeriod) {
             currentPeriod=doc;
             return;
@@ -70,8 +98,28 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
    //  String emailAddress = emailAddressController.text;
    //
    //  // Do something with the form inputs, such as sending them to an API
-
-    Navigator.of(context).pop(); // Close the dialog
+    // Close the dialog
+    ProcessService.updateDetails(widget.model.legalsUser!.carId!,widget.model.phone!, selectedProcesses.toList()).then((value)
+    {
+        if (value!) {
+            ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Tạo thành công'),
+              backgroundColor: Colors.green,
+            )
+        );
+        Navigator.pop(context);
+      }
+        else
+        {
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+        content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+        backgroundColor: Colors.red,
+        )
+        );
+    }
+    });
   }
 
   @override
@@ -92,10 +140,6 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
               controller: phoneNumberController,
               decoration: InputDecoration(labelText: 'Phone Number'),
             ),
-            // TextField(
-            //   controller: idController,
-            //   decoration: InputDecoration(labelText: 'ID'),
-            // ),
             TextField(
               controller: carNameController,
               decoration: InputDecoration(labelText: 'Car Name'),
@@ -110,11 +154,18 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
               children: [
                 Text(currentPeriod!.name!),
                 Column(
-                  children: currentPeriod!.details!.map((e) => CheckboxListTile(
-                      value: true,
-                      title: Text(e.name!),
-                      onChanged: (value) => toggleObjectSelection(e)
-                  )).toList(),
+                  children: currentPeriod!.details!.map((e) {
+                    if (selectedProcesses.contains(e.name))
+                      setState(() {
+                        selectedProcessInThisStage.add(e.name!);
+                      });
+                    return   CheckboxListTile(
+                            value: selectedProcesses.contains(e.name),
+                            title: Text(e.name!),
+                            onChanged: (bool? value) {
+                             toggleObjectSelection(e.name!);
+                            });
+                  }).toList(),
                 )
               ],
             ),
@@ -186,26 +237,3 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
     );
   }
 }
-
-// void main() {
-//   runApp(MaterialApp(
-//     home: Scaffold(
-//       appBar: AppBar(
-//         title: Text('Flutter Alert Dialog'),
-//       ),
-//       body: Center(
-//         child: RaisedButton(
-//           child: Text('Open Alert Dialog'),
-//           onPressed: () {
-//             showDialog(
-//               context: context,
-//               builder: (BuildContext context) {
-//                 return MyAlertDialog();
-//               },
-//             );
-//           },
-//         ),
-//       ),
-//     ),
-//   ));
-// }

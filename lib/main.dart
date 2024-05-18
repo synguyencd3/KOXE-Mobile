@@ -41,6 +41,9 @@ import 'package:mobile/pages/warranty/warranty_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_manage.dart';
 import 'package:mobile/pages/accessory_manage.dart';
 import 'package:mobile/pages/user_manage.dart';
+import 'package:mobile/pages/post/post_detail.dart';
+import 'package:mobile/pages/post/create_post.dart';
+import 'package:mobile/pages/connection/connection.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -111,6 +114,10 @@ class _MyAppState extends State<MyApp> {
         '/maintaince_manage' : (context) => MaintainceManage(),
         '/accessory_manage' : (context) => AccessoriesManage(),
         '/user_manage' : (context) => UserManage(),
+
+        '/post_detail' : (context) => PostDetail(),
+        '/create_post' : (context) => CreatePost(),
+        '/connection' : (context) => Connection(),
         '/new_car' : (context) => EditCar(),
         '/new_process' : (context) => NewProcess(),
         '/process_list' : (context) => Processes(),
