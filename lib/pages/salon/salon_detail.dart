@@ -101,8 +101,15 @@ class _SalonDetailState extends State<SalonDetail> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            salon.banner == null ? Container() :
             CarouselSlider(
-              options: CarouselOptions(height: 200.0),
+              options: CarouselOptions(
+                  height: 200.0,
+                  aspectRatio: 2.0,
+                enlargeCenterPage: true,
+                enableInfiniteScroll: false,
+                autoPlay: true,
+              ),
               items: salon.banner!.isNotEmpty
                   ? salon.banner!.map((i) {
                       return Builder(
@@ -110,8 +117,7 @@ class _SalonDetailState extends State<SalonDetail> {
                           return Container(
                               width: MediaQuery.of(context).size.width,
                               margin: EdgeInsets.symmetric(horizontal: 5.0),
-                              decoration: BoxDecoration(color: Colors.amber),
-                              child: Image.network(i));
+                              child: i == "" ? Image.asset("assets/house-placeholder.jpg"):Image.network(i));
                         },
                       );
                     }).toList()

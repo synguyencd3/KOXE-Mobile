@@ -259,8 +259,7 @@ class SalonCard extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(child: Image.network(salon.image!),
-                borderRadius: BorderRadius.circular(8),),
+                child: ClipRRect(borderRadius: BorderRadius.circular(8),child: salon.image! == "null" || salon.image! == "" ? Image.asset("assets/house-placeholder.jpg") : Image.network(salon.image!),),
               ),
               Align(
                 alignment: AlignmentDirectional(-1, 0),
