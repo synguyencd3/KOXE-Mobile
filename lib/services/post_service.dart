@@ -69,4 +69,5 @@ class PostService {
     }
     return PostModel(text: 'Error');
   }
+
 }

@@ -54,6 +54,7 @@ class _CreatePostState extends State<CreatePost> {
   List<Salon> salons = [];
   static const double _distanceSize = 20.0;
   List<String> _booleanValues = ['Có', 'Không'];
+  List<String> selectedSalonIds = [];
 
   Future<void> pickImage() async {
     pickedFile = await picker.pickMultiImage();
@@ -71,17 +72,19 @@ class _CreatePostState extends State<CreatePost> {
     Future.delayed(Duration.zero, () {
       getAllSalons();
     });
+    selectedSalonIds = [];
   }
 
   Future<void> getAllSalons() async {
-    List<Salon> salonsAPI = await SalonsService.getAll();
+    List<Salon> salonsAPI = await SalonsService.getSalonNoBlock();
     setState(() {
       salons = salonsAPI;
     });
   }
 
-  Future<bool> createPost(String selectedSalonId) async {
+  Future<bool> createPost() async {
     PostModel postModel = PostModel(
+      title: _title.text,
       text: _text.text,
       image: pickedFile?.map((e) => e.path).toList(),
       accessory: selectedValueAccessory.value == 'Có' ? true : false,
@@ -93,7 +96,7 @@ class _CreatePostState extends State<CreatePost> {
       ownerNumber: int.parse(_ownerNumber.text),
       color: _color.text,
       design: _design.text,
-      salonId: selectedSalonId,
+      salonId: selectedSalonIds,
       car: Car(
           brand: _brand.text,
           type: _type.text,
@@ -432,24 +435,11 @@ class _CreatePostState extends State<CreatePost> {
                     Container(
                         padding: EdgeInsets.all(paddingSize),
                         color: _backgroundColor,
-                        child: Text('THÔNG TIN SALON KẾT NỐI',
+                        child: Text('THÔNG TIN BÀI KẾT NỐI',
                             style: TextStyle(fontSize: _titleSize))),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
-              salons.isNotEmpty
-                  ? DropdownMenuExample(
-                      key: _dropdownkey,
-                      width: 400,
-                      valueNotifier: selectedValueNotifier,
-                      items: salons
-                          .map((e) => e.name)
-                          .where((name) => name != null)
-                          .toList()
-                          .cast<String>(),
-                    )
-                  : Container(),
               const SizedBox(height: 20),
               TextField(
                 controller: _title,
@@ -491,24 +481,64 @@ class _CreatePostState extends State<CreatePost> {
               const SizedBox(height: 20),
               FilledButton(
                   onPressed: () async {
-                    String? selectedValue = selectedValueNotifier.value;
-                    String? selectedSalonId = salons
-                        .firstWhere((salon) => salon.name == selectedValue)
-                        .salonId;
-                    bool response = await createPost(selectedSalonId!);
-                    if (response) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Đăng bài thành công'),
-                        backgroundColor: Colors.green,
-                      ));
-                      Navigator.pop(context);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Đăng bài thất bại'),
-                        backgroundColor: Colors.red,
-                      ));
-                    }
-                    print(_mfg.text);
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return StatefulBuilder(
+                              builder: (context, StateSetter setState) {
+                            return AlertDialog(
+                              title: Text('Chọn salon'),
+                              content: Container(
+                                width: 300,
+                                height: 300,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: salons.map((salon) {
+                                      return CheckboxListTile(
+                                        title: Text(salon.name!),
+                                        value: selectedSalonIds
+                                            .contains(salon.salonId),
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            if (value == true) {
+                                              selectedSalonIds
+                                                  .add(salon.salonId!);
+                                            } else {
+                                              selectedSalonIds
+                                                  .remove(salon.salonId);
+                                            }
+                                          });
+                                        },
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text('OK'),
+                                  onPressed: () async {
+                                    bool response = await createPost();
+                                    if (response) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text('Đăng bài thành công'),
+                                        backgroundColor: Colors.green,
+                                      ));
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text('Đăng bài thất bại'),
+                                        backgroundColor: Colors.red,
+                                      ));
+                                    }
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            );
+                          });
+                        });
                   },
                   child: Text('Đăng bài'))
             ],

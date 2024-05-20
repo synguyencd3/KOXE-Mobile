@@ -234,58 +234,60 @@ class _PostDetailState extends State<PostDetail> {
                 );
               }),
         ),
-        floatingActionButton: Row(
+        bottomNavigationBar: Row(
           children: [
             Expanded(
-              child: FloatingActionButton(
-                heroTag: null,
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SingleChildScrollView(
-                          child: AlertDialog(
-                            title: Text('Chọn quy trình thực hiện với hoa tiêu'),
-                            content: StatefulBuilder(
-                                builder: (context, StateSetter setState) {
-                              return Column(
-                                children: processes.map((process) {
-                                  return RadioListTile<String>(
-                                    title: Text(process.name ?? ''),
-                                    value: process.id ?? '',
-                                    groupValue: selectedProcess,
-                                    onChanged: (String? value) {
-                                      setState(() {
-                                        selectedProcess = value;
-                                      });
-                                    },
-                                  );
-                                }).toList(),
-                              );
-                            }),
-                            actions: [
-                              TextButton(
-                                child: Text('OK'),
-                                onPressed: () async {
-                                  bool response = await createConnection();
-                                  if (response) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text('Kết nối thành công')));
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text('Kết nối thất bại')));
-                                  }
-                                  Navigator.of(context).pop();
-                                },
-                              )
-                            ],
-                          ),
-                        );
-                      });
-                },
-                child: Text('Kết nối'),
+              child: Container(
+                child: FloatingActionButton(
+                  heroTag: null,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SingleChildScrollView(
+                            child: AlertDialog(
+                              title: Text('Chọn quy trình thực hiện với hoa tiêu'),
+                              content: StatefulBuilder(
+                                  builder: (context, StateSetter setState) {
+                                return Column(
+                                  children: processes.map((process) {
+                                    return RadioListTile<String>(
+                                      title: Text(process.name ?? ''),
+                                      value: process.id ?? '',
+                                      groupValue: selectedProcess,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          selectedProcess = value;
+                                        });
+                                      },
+                                    );
+                                  }).toList(),
+                                );
+                              }),
+                              actions: [
+                                TextButton(
+                                  child: Text('OK'),
+                                  onPressed: () async {
+                                    bool response = await createConnection();
+                                    if (response) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                              content: Text('Kết nối thành công')));
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                              content: Text('Kết nối thất bại')));
+                                    }
+                                    Navigator.of(context).pop();
+                                  },
+                                )
+                              ],
+                            ),
+                          );
+                        });
+                  },
+                  child: Text('Kết nối'),
+                ),
               ),
             ),
             Expanded(

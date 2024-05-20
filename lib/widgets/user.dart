@@ -117,9 +117,15 @@ class _UserState extends State<User> {
             }),
         text_card(
             title: 'Xe của tôi',
-            icon: Icons.manage_accounts,
+            icon: Icons.car_crash,
             onTap: () {
               Navigator.pushNamed(context, '/user_manage');
+            }),
+        text_card(
+            title: 'Quản lý giao dịch hoa tiêu',
+            icon: Icons.manage_accounts,
+            onTap: () {
+              Navigator.pushNamed(context, '/transaction');
             }),
         text_card(
             title: 'Đăng xuất',
