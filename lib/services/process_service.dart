@@ -139,4 +139,45 @@ class ProcessService {
     if (data['status'] == 'success') return true;
     return false;
   }
+
+  static Future<bool?> updateProcess(String carId, String phone, String periodId) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    String mySalon = await SalonsService.isSalon();
+    Map<String, String> requestHeaders = {
+
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.updatePeriodProcess);
+    var body = { 'salonId' : mySalon,
+      'phone': phone,
+      'carId': carId,
+      'newPeriod': periodId};
+    print(body);
+    var response = await http.patch(url, headers: requestHeaders, body: body
+    );
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'success') return true;
+    return false;
+  }
+
+  static Future<bool?> done(String invoiceId) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    String mySalon = await SalonsService.isSalon();
+    Map<String, String> requestHeaders = {
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.doneInvoiceCar);
+    var response = await http.patch(url, headers: requestHeaders, body: {
+      'salonId' : mySalon,
+      'invoiceId' : invoiceId
+    });
+    print(response.body);
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'success') return true;
+    return false;
+  }
 }

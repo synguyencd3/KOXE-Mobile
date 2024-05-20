@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/model/car_model.dart';
@@ -42,7 +43,9 @@ class _CarState extends State<CarsListing> {
         ),
         body: Column(
           children: [
-            TextButton(onPressed: () {Navigator.pushNamed(context, '/new_car');}, child: Text('Thêm xe')),
+            Align(
+              alignment: Alignment.centerLeft,
+                child: TextButton(onPressed: () {Navigator.pushNamed(context, '/new_car');}, child: Text('Thêm xe'))),
             Expanded(
                 child:cars.isEmpty && !isCalling ? Loading(): ListView.builder(
                     shrinkWrap: true,

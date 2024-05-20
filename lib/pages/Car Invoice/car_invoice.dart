@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mobile/pages/Car%20Invoice/Invoice_dialog.dart';
 import 'package:mobile/services/CarInvoice_Service.dart';
 
@@ -42,11 +43,14 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            TextButton(onPressed: () {
-              Navigator.pushNamed(context, '/car_invoice/new').then((value) {
-                getInvoices();
-              });
-            }, child: Icon(CupertinoIcons.plus),),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(onPressed: () {
+                Navigator.pushNamed(context, '/car_invoice/new').then((value) {
+                  getInvoices();
+                });
+              }, child: Icon(CupertinoIcons.plus),),
+            ),
             ListView.builder(
               shrinkWrap: true,
               itemCount: invoices.length,
@@ -57,7 +61,7 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                     showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return InvoiceDialog(model: invoice,callMethod: getInvoices,);
+                      return InvoiceDialog(model: invoice);
                     });
                   },
                   child: Card(
