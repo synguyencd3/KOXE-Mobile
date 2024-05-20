@@ -21,7 +21,7 @@ class PostModel {
   String? text='';
   DateTime? createAt;
   UserPostModel? user;
-  late String? salonId;
+  late List<String>? salonId;
   String? title;
 
   PostModel({

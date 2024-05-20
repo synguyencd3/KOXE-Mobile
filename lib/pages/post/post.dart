@@ -50,7 +50,7 @@ class _PostPageState extends State<PostPage> {
           return Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   salonId == ''
                       ? TextButton.icon(
@@ -59,8 +59,8 @@ class _PostPageState extends State<PostPage> {
                           },
                           icon: Icon(Icons.post_add),
                           label: Text('Thêm bài viết'),
-                        )
-                      : Container(),
+                        ): Container(),
+
                   TextButton.icon(
                     onPressed: () {
                       Navigator.pushNamed(context, '/connection');

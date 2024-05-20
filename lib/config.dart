@@ -116,4 +116,10 @@ static const String connectionsAPI = "/connections";
 
 // Transaction API
 static const String transactionsAPI = "/transactions";
+
+//Stage API
+static const String stagesAPI = "/stages";
+
+//Block API
+static const String blocksAPI = "/block-user";
 }

@@ -1,4 +1,5 @@
 import 'package:mobile/model/salon_model.dart';
+import 'package:mobile/model/stage_model.dart';
 
 import 'document_model.dart';
 List<process> processFromJson(dynamic str) =>
@@ -11,6 +12,7 @@ class process {
   int? type;
   Salon? salon;
   List<Document>? documents;
+  List<StageModel>? stages;
 
   process(
       {this.id,
@@ -32,6 +34,12 @@ class process {
       documents = <Document>[];
       json['documents'].forEach((v) {
         documents!.add(new Document.fromJson(v));
+      });
+    }
+    if (json['stages'] != null) {
+      stages = <StageModel>[];
+      json['stages'].forEach((v) {
+        stages!.add(new StageModel.fromJson(v));
       });
     }
   }

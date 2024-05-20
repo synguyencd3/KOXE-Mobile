@@ -69,4 +69,21 @@ class PostService {
     }
     return PostModel(text: 'Error');
   }
+
+  static Future<bool> blockUser(String postId) async {
+    await APIService.refreshToken();
+    var loginDetail = await SharedService.loginDetails();
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      'Authorization': 'Bearer ${loginDetail?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.blocksAPI);
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({'post_id ': postId}));
+    return response.statusCode == 200;
+  }
+
 }

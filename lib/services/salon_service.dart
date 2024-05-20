@@ -276,4 +276,24 @@ class SalonsService {
     if (resBody['status'] == 'success') return true;
     return false;
   }
+  static Future<List<Salon>> getSalonNoBlock() async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, '${Config.SalonsAPI}' + '/no-block');
+
+    var response = await http.get(url, headers: requestHeaders);
+    print(response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return salonsFromJson(data['salons']);
+    }
+    return [];
+  }
 }

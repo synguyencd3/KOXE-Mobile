@@ -44,6 +44,8 @@ import 'package:mobile/pages/user_manage.dart';
 import 'package:mobile/pages/post/post_detail.dart';
 import 'package:mobile/pages/post/create_post.dart';
 import 'package:mobile/pages/connection/connection.dart';
+import 'package:mobile/pages/transaction/transaction.dart';
+import 'package:mobile/pages/transaction/transaction_detail.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -114,7 +116,6 @@ class _MyAppState extends State<MyApp> {
         '/maintaince_manage' : (context) => MaintainceManage(),
         '/accessory_manage' : (context) => AccessoriesManage(),
         '/user_manage' : (context) => UserManage(),
-
         '/post_detail' : (context) => PostDetail(),
         '/create_post' : (context) => CreatePost(),
         '/connection' : (context) => Connection(),
@@ -122,7 +123,10 @@ class _MyAppState extends State<MyApp> {
         '/new_process' : (context) => NewProcess(),
         '/process_list' : (context) => Processes(),
         '/car_voice' : (context) => CarInvoiceList(),
-        '/car_invoice/new': (context) => CarInvoiceForm()
+        '/car_invoice/new': (context) => CarInvoiceForm(),
+        '/transaction': (context) => Transaction(),
+        '/transaction_detail': (context) => TransactionDetail(),
+
       },
     );
   }
