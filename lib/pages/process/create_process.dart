@@ -193,7 +193,7 @@ class _NewProcessState extends State<NewProcess> {
                   ),
                 ],
               ),
-              if (_reuse)
+              if (!_reuse)
                 DropdownButtonFormField<Car>(
                   value: _selectedObject,
                   items: _objects.map((Car object) {

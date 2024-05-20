@@ -42,6 +42,27 @@ class CarInvoiceService {
     return [];
   }
 
+  static Future<List<CarInvoice>> getAllCustomer() async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      // 'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    var url = Uri.https(Config.apiURL, Config.getInvoiceCarCustomer);
+
+
+    var response = await http.post(url,headers: requestHeaders);
+    print(response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return carInvoicesFromJson(data['invoices']);
+    }
+    return [];
+  }
+
   static Future<bool?> newInvoice(InvoiceRequest model) async {
     await APIService.refreshToken();
 

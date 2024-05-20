@@ -27,13 +27,13 @@ class _CarCardState extends State<CarCard> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
                 child:
-                    (widget.car.image != null && widget.car.image!.isNotEmpty)
+                    (widget.car.image != null && widget.car.image!.isNotEmpty && widget.car.image![0] != "null")
                         ? Image.network(
                             widget.car.image![0],
                             height: 230,
                             width: double.infinity,
                           )
-                        : Container(),
+                        : Image.asset("assets/placeholder-single.png"),
               ),
               SizedBox(height: 10),
               Text(

@@ -91,14 +91,6 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
     getProcess();
   }
   void submitForm() {
-   //  String fullName = fullNameController.text;
-   //  String phoneNumber = phoneNumberController.text;
-   // // String id = idController.text;
-   //  String carName = carNameController.text;
-   //  String emailAddress = emailAddressController.text;
-   //
-   //  // Do something with the form inputs, such as sending them to an API
-    // Close the dialog
     ProcessService.updateDetails(widget.model.legalsUser!.carId!,widget.model.phone!, selectedProcesses.toList()).then((value)
     {
         if (value!) {
@@ -160,6 +152,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                         selectedProcessInThisStage.add(e.name!);
                       });
                     return   CheckboxListTile(
+                            enabled: widget.model.done== null? false: !widget.model.done!,
                             value: selectedProcesses.contains(e.name),
                             title: Text(e.name!),
                             onChanged: (bool? value) {
@@ -169,7 +162,8 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                 )
               ],
             ),
-            period == _process?.documents?.length ? TextButton(onPressed: () {
+            widget.model.done == true ? SizedBox(height:0,):
+            period == _process?.documents?.length && selectedProcessInThisStage.length ==  currentPeriod?.details?.length ? TextButton(onPressed: () {
               ProcessService.updateDetails(widget.model.legalsUser!.carId!,widget.model.phone!, selectedProcesses.toList());
               ProcessService.done(widget.model.invoiceId!).then((value) {
                   if (value == true) {
@@ -190,8 +184,8 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                         )
                     );
                   }
+                  Navigator.pop(context);
                 });
-              Navigator.pop(context);
             },
             child: Text("Done")) :
             selectedProcessInThisStage.length ==  currentPeriod?.details?.length ?

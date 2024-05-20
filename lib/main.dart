@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/pages/Car%20Invoice/car_invoice.dart';
 import 'package:mobile/pages/Car%20Invoice/newCar_invoice.dart';
+import 'package:mobile/pages/Car%20Invoice/user_car_invoice.dart';
 import 'package:mobile/pages/Payment.dart';
 import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
@@ -126,7 +127,7 @@ class _MyAppState extends State<MyApp> {
         '/car_invoice/new': (context) => CarInvoiceForm(),
         '/transaction': (context) => Transaction(),
         '/transaction_detail': (context) => TransactionDetail(),
-
+        '/customer/car_voice' : (context) => UserCarInvoiceList(),
       },
     );
   }

@@ -2,23 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/pages/Car%20Invoice/Invoice_dialog.dart';
+import 'package:mobile/pages/Car%20Invoice/user_Invoice_dialog.dart';
 import 'package:mobile/services/CarInvoice_Service.dart';
 
 import '../../model/CarInvoice_response.dart';
 
 
-class CarInvoiceList extends StatefulWidget {
+class UserCarInvoiceList extends StatefulWidget {
   @override
-  State<CarInvoiceList> createState() => _CarInvoiceListState();
+  State<UserCarInvoiceList> createState() => _CarInvoiceListState();
 }
 
-class _CarInvoiceListState extends State<CarInvoiceList> {
+class _CarInvoiceListState extends State<UserCarInvoiceList> {
 
 
   List<CarInvoice> invoices = [];
 
   void getInvoices() async {
-    var data = await CarInvoiceService.getAll(null);
+    var data = await CarInvoiceService.getAllCustomer();
     setState(() {
       invoices = data;
     });
@@ -34,19 +35,11 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Giao dịch xe"),
+        title: Text("Lịch sử mua xe"),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(onPressed: () {
-                Navigator.pushNamed(context, '/car_invoice/new').then((value) {
-                  getInvoices();
-                });
-              }, child: Text("Thêm giao dịch"),),
-            ),
             ListView.builder(
               shrinkWrap: true,
               itemCount: invoices.length,
@@ -55,10 +48,10 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                 return GestureDetector(
                   onTap: () {
                     showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return InvoiceDialog(model: invoice);
-                    });
+                        context: context,
+                        builder: (BuildContext context) {
+                          return UserInvoiceDialog(model: invoice);
+                        });
                   },
                   child: Card(
                     child: ListTile(
@@ -85,4 +78,3 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
     );
   }
 }
-

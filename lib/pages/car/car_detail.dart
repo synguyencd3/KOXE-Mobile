@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:mobile/model/chat_model.dart';
+import 'package:panorama/panorama.dart';
 import 'package:mobile/model/chat_user_model.dart';
 import 'package:mobile/widgets/button.dart';
 import 'package:mobile/services/cars_service.dart';
@@ -49,7 +49,12 @@ class _CarDetailState extends State<CarDetail> {
               child: Column(
                 children: [
                   CarouselSlider(
-                    options: CarouselOptions(height: 200.0),
+                    options: CarouselOptions(
+                        height: 200.0,
+                        aspectRatio: 2.0,
+                        enableInfiniteScroll: false,
+                        autoPlay: true
+                    ),
                     items: car.image != null
                         ? car.image!.map((i) {
                             return Builder(
@@ -60,8 +65,9 @@ class _CarDetailState extends State<CarDetail> {
                                         EdgeInsets.symmetric(horizontal: 5.0),
                                     decoration:
                                         BoxDecoration(color: Colors.amber),
-                                    child: Image.network(
-                                      i ?? '',
+                                    child:
+                                    Image.network(
+                                      i ?? 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.meadowbrookventuresinc.com%2Fvehicle%2F2007-chevrolet-impala-5547%2F&psig=AOvVaw1F85gFMkxnOc3ZhOCqGg-Y&ust=1716219588856000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCLDtmauGmoYDFQAAAAAdAAAAABAE',
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: 200.0,
