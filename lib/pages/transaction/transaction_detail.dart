@@ -131,62 +131,84 @@ class _TransactionDetailState extends State<TransactionDetail> {
                               showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return AlertDialog(
-                                      title: Text('Đánh giá hoa tiêu'),
-                                      content: Column(
-                                        children: [
-                                          Text('Đánh giá hoa tiêu'),
-                                          TextField(
-                                            controller: _rating,
-                                            decoration: InputDecoration(
-                                              hintText: 'Nhập đánh giá',
+                                    return SingleChildScrollView(
+                                      child: AlertDialog(
+                                        title: Text('Đánh giá hoa tiêu'),
+                                        content: Column(
+                                          children: [
+                                            TextField(
+                                              keyboardType: TextInputType.number,
+                                              controller: _rating,
+                                              decoration: InputDecoration(
+                                                labelText: 'Đánh giá hoa tiêu',
+                                                enabledBorder: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(12)),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    // color: Color(0xFF6F61EF),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          Text('Hoa hồng cho hoa tiêu'),
-                                          TextField(
-                                            controller: _commission,
-                                            decoration: InputDecoration(
-                                              hintText: 'Nhập hoa hồng',
+                                            const SizedBox(height: 10,),
+                                            TextField(
+                                              keyboardType: TextInputType.number,
+                                              controller: _commission,
+                                              decoration: InputDecoration(
+                                                labelText: 'Hoa hồng',
+                                                enabledBorder: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(12)),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    // color: Color(0xFF6F61EF),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                              ),
                                             ),
-                                          ),
+
+                                          ],
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text('Hủy')),
+                                          TextButton(
+                                              onPressed: () {
+                                                updateNextStage().then((value) {
+                                                  if (value == 1) {
+                                                    ScaffoldMessenger.of(context)
+                                                        .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          'Cập nhật thành công'),
+                                                    ));
+                                                  } else if (value == 2) {
+                                                    ScaffoldMessenger.of(context)
+                                                        .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          'Giao dịch đã hoàn thành'),
+                                                    ));
+                                                    setState(() {
+                                                      showButton = false;
+                                                    });
+                                                  } else {
+                                                    ScaffoldMessenger.of(context)
+                                                        .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          'Cập nhật thất bại'),
+                                                    ));
+                                                  }
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text('Tiếp tục')),
                                         ],
                                       ),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text('Hủy')),
-                                        TextButton(
-                                            onPressed: () {
-                                              updateNextStage().then((value) {
-                                                if (value == 1) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        'Cập nhật thành công'),
-                                                  ));
-                                                } else if (value == 2) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        'Giao dịch đã hoàn thành'),
-                                                  ));
-                                                  setState(() {
-                                                    showButton = false;
-                                                  });
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        'Cập nhật thất bại'),
-                                                  ));
-                                                }
-                                              });
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text('Tiếp tục')),
-                                      ],
                                     );
                                   });
                             },

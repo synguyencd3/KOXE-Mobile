@@ -55,6 +55,18 @@ class _ConnectionCardState extends State<ConnectionCard> {
               leading: Icon(Icons.calendar_today_rounded),
             ),
             ListTile(
+              title: Text(widget.connection.processData?.name ?? ''),
+              leading: Icon(Icons.car_repair),
+            ),
+            Column(
+              children: widget.connection.processData?.stages?.map((stage) {
+                return ListTile(
+                  title: Text(stage.name ?? ''),
+                  // Add more properties as needed
+                );
+              }).toList() ?? [], // Use an empty list if stages is null
+            ),
+            ListTile(
               title: Text(
                 widget.connection.status == 'pending'
                     ? 'Chưa chấp nhận'

@@ -246,7 +246,8 @@ class _PostDetailState extends State<PostDetail> {
                         builder: (BuildContext context) {
                           return SingleChildScrollView(
                             child: AlertDialog(
-                              title: Text('Chọn quy trình thực hiện với hoa tiêu'),
+                              title:
+                                  Text('Chọn quy trình thực hiện với hoa tiêu'),
                               content: StatefulBuilder(
                                   builder: (context, StateSetter setState) {
                                 return Column(
@@ -270,13 +271,15 @@ class _PostDetailState extends State<PostDetail> {
                                   onPressed: () async {
                                     bool response = await createConnection();
                                     if (response) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                              content: Text('Kết nối thành công')));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content:
+                                                  Text('Kết nối thành công')));
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                              content: Text('Kết nối thất bại')));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content:
+                                                  Text('Kết nối thất bại')));
                                     }
                                     Navigator.of(context).pop();
                                   },
@@ -303,6 +306,22 @@ class _PostDetailState extends State<PostDetail> {
                 child: Text('Nhắn tin'),
               ),
             ),
+            Expanded(
+              child: FloatingActionButton(
+                heroTag: null,
+                onPressed: () async{
+                  bool response = await PostService.blockUser(post.postId ?? '');
+                  if (response) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('Chặn hoa tiêu thành công')));
+                  } else {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('Chặn hoa tiêu thất bại')));
+                  }
+                },
+                child: Text('Chặn hoa tiêu'),
+              ),
+            )
           ],
         ));
   }

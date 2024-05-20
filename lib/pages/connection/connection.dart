@@ -29,7 +29,7 @@ class _ConnectionState extends State<Connection> {
       connections = connectionsAPI;
    });
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
