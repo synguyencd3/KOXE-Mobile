@@ -7,6 +7,7 @@ class InvoiceRequest {
   String? phone;
   int? expense;
   String? processId;
+  String? employeeId;
 
   InvoiceRequest(
       {this.carId,
@@ -16,7 +17,8 @@ class InvoiceRequest {
         this.email,
         this.phone,
         this.expense,
-        this.processId});
+        this.processId,
+        this.employeeId});
 
   InvoiceRequest.fromJson(Map<String, dynamic> json) {
     carId = json['carId'];
@@ -27,6 +29,7 @@ class InvoiceRequest {
     phone = json['phone'];
     expense = json['expense'];
     processId = json['processId'];
+    employeeId = json[' employeeId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +42,7 @@ class InvoiceRequest {
     data['phone'] = this.phone;
     data['expense'] = this.expense;
     data['processId'] = this.processId;
+    data['employeeId'] = this.employeeId;
     return data;
   }
 }

@@ -11,6 +11,7 @@ import 'package:mobile/services/salon_service.dart';
 
 import '../../model/CarInvoice_response.dart';
 import '../../model/car_model.dart';
+import '../../model/employee_model.dart';
 import '../../model/process_model.dart';
 
 class CarInvoiceForm extends StatefulWidget {
@@ -28,10 +29,12 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
   var _note = TextEditingController();
   Car? _selectedCar;
   process? _selectedProcess;
+  Employee? _selectedEmployee;
 
   //List<String> _dropdownItems = ['Option 1', 'Option 2', 'Option 3'];
   List<Car> cars = [];
   List<process> processes = [];
+  List<Employee> employees = [];
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
@@ -43,7 +46,8 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
       phone: _phoneNumber.text,
       expense: int.parse(_expense.text),
       processId: _selectedProcess!.id!,
-      note: _note.text
+      note: _note.text,
+        employeeId:  _selectedEmployee!.userId!
     );
 
     CarInvoiceService.newInvoice(invoice).then((value) {
@@ -84,7 +88,14 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
       processes = data;
       _selectedProcess = processes[0];
     });
-}
+  }
+
+  void getEmployees() async {
+    var data = await SalonsService.getEmployees();
+    setState(() {
+      employees = data;
+    });
+  }
 
   @override
   void initState() {
@@ -92,13 +103,14 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
     super.initState();
     getCars();
     getProcesses();
+    getEmployees();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Form'),
+        title: Text('Tạo giao dịch mơi'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -108,7 +120,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
             child: Column(
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Full Name'),
+                  decoration: InputDecoration(labelText: 'Họ tên'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your full name';
@@ -133,7 +145,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Phone Number'),
+                  decoration: InputDecoration(labelText: 'Điện thoại'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your phone number';
@@ -152,7 +164,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                 ),
                 TextFormField(
                   controller: _expense,
-                  decoration: InputDecoration(labelText: 'Expense'),
+                  decoration: InputDecoration(labelText: 'Thanh toán'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your expense';
@@ -163,6 +175,21 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                     _expense.text = value!;
                   },
                 ),
+              DropdownButtonFormField<Employee>(
+                value: _selectedEmployee,
+                items: employees.map((Employee value) {
+                  return DropdownMenuItem<Employee>(
+                    value: value,
+                    child: Text(value.fullname ?? ""),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedEmployee=value!;
+                  });
+                },
+                decoration: InputDecoration(labelText: 'Nhân viên'),
+              ),
                 DropdownButtonFormField<Car>(
                   value: _selectedCar,
                   items: cars.map((Car value) {
@@ -177,7 +204,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                      _expense.text = value.price.toString();
                     });
                   },
-                  decoration: InputDecoration(labelText: 'Dropdown 1'),
+                  decoration: InputDecoration(labelText: 'Xe'),
                 ),
                 DropdownButtonFormField<process>(
                   value: _selectedProcess,
@@ -192,7 +219,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                       _selectedProcess = value!;
                     });
                   },
-                  decoration: InputDecoration(labelText: 'Dropdown 2'),
+                  decoration: InputDecoration(labelText: 'Quy trình'),
                 ),
                 TextButton(
                   onPressed: _submitForm,

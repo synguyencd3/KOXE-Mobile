@@ -24,6 +24,10 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
     });
   }
 
+  void callToRefresh() {
+    getInvoices();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -57,7 +61,7 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                     showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return InvoiceDialog(model: invoice);
+                      return InvoiceDialog(model: invoice, callMethod: callToRefresh,);
                     });
                   },
                   child: Card(
