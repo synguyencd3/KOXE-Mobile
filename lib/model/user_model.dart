@@ -15,6 +15,7 @@ class UserModel {
     String? role;
     String? date_of_birth;
     File? avatarFile;
+    List<String>? permissions;
 
   UserModel(
       { this.id,
@@ -26,7 +27,8 @@ class UserModel {
       this.gender,
       this.phone,
        this.role,
-      this.date_of_birth});
+      this.date_of_birth,
+      this.permissions});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['user_id'];
@@ -39,6 +41,7 @@ class UserModel {
     avatar = json['avatar'];
     role = json['role'];
     date_of_birth = json['date_of_birth'];
+    permissions = json['permissions'] == null ? [] :json['permissions'].cast<String>() ;
   }
 
   Map<String, dynamic> toJson() {
@@ -53,6 +56,7 @@ class UserModel {
     data['avatar'] = this.avatarFile;
     data['role'] = this.role;
     data['date_of_birth'] = this.date_of_birth;
+    data['permissions'] = this.permissions;
     return data;
   }
 }

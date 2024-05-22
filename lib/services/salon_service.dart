@@ -276,4 +276,9 @@ class SalonsService {
     if (resBody['status'] == 'success') return true;
     return false;
   }
+
+  static Future<Set<String>> getPermission() async {
+    var LoginInfo = await SharedService.loginDetails();
+    return Set.from(LoginInfo!.user?.permissions ?? []);
+  }
 }

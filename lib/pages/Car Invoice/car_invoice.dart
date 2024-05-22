@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/pages/Car%20Invoice/Invoice_dialog.dart';
 import 'package:mobile/services/CarInvoice_Service.dart';
+import 'package:mobile/services/salon_service.dart';
 
 import '../../model/CarInvoice_response.dart';
 
@@ -16,7 +17,7 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
 
 
   List<CarInvoice> invoices = [];
-
+  Set<String> permissions = {};
   void getInvoices() async {
     var data = await CarInvoiceService.getAll(null);
     setState(() {
@@ -28,11 +29,19 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
     getInvoices();
   }
 
+  void getPermissions() async {
+    var data = await SalonsService.getPermission();
+    setState(() {
+      permissions=data;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getInvoices();
+    getPermissions();
   }
   @override
   Widget build(BuildContext context) {
@@ -43,6 +52,7 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            permissions.contains("OWNER") || permissions.contains("C_IV") ?
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(onPressed: () {
@@ -50,7 +60,7 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                   getInvoices();
                 });
               }, child: Text("Thêm giao dịch"),),
-            ),
+            ) : Container(),
             ListView.builder(
               shrinkWrap: true,
               itemCount: invoices.length,

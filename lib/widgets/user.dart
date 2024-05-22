@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/socket/socket_manager.dart';
 import 'package:mobile/widgets/text_card.dart';
@@ -17,6 +18,7 @@ class User extends StatefulWidget {
 class _UserState extends State<User> {
   Map<String, dynamic> userProfile = {};
   late TextEditingController controller;
+  Set<String> permissions = {};
 
   @override
   void initState() {
@@ -24,7 +26,16 @@ class _UserState extends State<User> {
     super.initState();
     controller = TextEditingController();
     getUserProfile();
+    getPermissions();
   }
+
+  void getPermissions() async {
+    var data = await SalonsService.getPermission();
+    print(data);
+    setState(() {
+      permissions = data;
+    });
+}
 
   Future<void> getUserProfile() async {
     try {
@@ -109,12 +120,13 @@ class _UserState extends State<User> {
             onTap: () {
               Navigator.pushNamed(context, '/setting');
             }),
+        permissions.length > 0 ?
         text_card(
             title: 'Quản lý',
             icon: Icons.manage_accounts,
             onTap: () {
               Navigator.pushNamed(context, '/manage');
-            }),
+            }) : Container(),
         text_card(
             title: 'Xe của tôi',
             icon: Icons.manage_accounts,
