@@ -295,5 +295,9 @@ class SalonsService {
       return salonsFromJson(data['salons']);
     }
     return [];
+
+  static Future<Set<String>> getPermission() async {
+    var LoginInfo = await SharedService.loginDetails();
+    return Set.from(LoginInfo!.user?.permissions ?? []);
   }
 }
