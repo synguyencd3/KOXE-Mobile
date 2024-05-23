@@ -57,6 +57,7 @@ class TransactionService {
     var response = await http.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      print(data);
       return TransactionModel.fromJson(data['transaction']);
     }
     return TransactionModel();
@@ -98,7 +99,8 @@ class TransactionService {
     return false;
   }
 
-  static Future<int> updateNextStage(String transactionId, int commission,int rating) async {
+  static Future<int> updateNextStage(
+      String transactionId, int commission, int rating) async {
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
@@ -107,20 +109,18 @@ class TransactionService {
     };
     var url = Uri.https(
         Config.apiURL, Config.transactionsAPI + '/${transactionId}' + '/next');
-    var response = await http.patch(url, headers: requestHeaders,body: jsonEncode({'commission': commission,'rating':rating}));
+    var response = await http.patch(url,
+        headers: requestHeaders,
+        body: jsonEncode({'commission': commission, 'rating': rating}));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      if (data['status'] == 'success'){
+      if (data['status'] == 'success') {
         return 1;
+      } else if (data['status'] == 'completed') {
+        return 2;
+      } else {
+        return 0;
       }
-      else if (data['status']=='completed')
-        {
-          return 2;
-        }
-      else
-        {
-          return 0;
-        }
     }
     return 0;
   }

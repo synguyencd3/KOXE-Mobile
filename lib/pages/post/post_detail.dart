@@ -64,7 +64,7 @@ class _PostDetailState extends State<PostDetail> {
           title: Text('Chi tiết bài kết nối'),
         ),
         body: FractionallySizedBox(
-          heightFactor: 0.9,
+          heightFactor: 0.95,
           child: FutureBuilder(
               future: getDetailPost(),
               builder: (context, snapshot) {
@@ -310,6 +310,7 @@ class _PostDetailState extends State<PostDetail> {
               child: FloatingActionButton(
                 heroTag: null,
                 onPressed: () async{
+                  print(post.postId ?? '');
                   bool response = await PostService.blockUser(post.postId ?? '');
                   if (response) {
                     ScaffoldMessenger.of(context)

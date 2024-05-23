@@ -43,9 +43,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
   Future<void> getTransaction() async {
     TransactionModel transactionArgument =
         ModalRoute.of(context)!.settings.arguments as TransactionModel;
-    setState(() {
-      transaction = transactionArgument;
-    });
+    transaction = transactionArgument;
   }
 
   Future<void> getStageDetail() async {
@@ -62,6 +60,16 @@ class _TransactionDetailState extends State<TransactionDetail> {
     });
   }
 
+  Future<void> getTransactionDetail() async {
+    print(transaction.id);
+    TransactionModel transactionAPI =
+        await TransactionService.getTransactionDetail(transaction.id ?? '');
+    setState(() {
+      print('abc');
+      transaction = transactionAPI;
+    });
+  }
+
   Future<bool> updateCheckedTransaction() async {
     bool updated = await TransactionService.updateCheckedTransaction(
         transaction.id ?? '', transaction.checked ?? []);
@@ -69,13 +77,25 @@ class _TransactionDetailState extends State<TransactionDetail> {
   }
 
   Future<int> updateNextStage() async {
-    int updated =
-        await TransactionService.updateNextStage(transaction.id ?? '', int.parse(_commission.text), int.parse(_rating.text));
+    if (_commission.text == '')
+      {
+        _commission.text = '0';
+      }
+    if (_rating.text == '')
+      {
+        _rating.text = '0';
+      }
+    int updated = await TransactionService.updateNextStage(transaction.id ?? '',
+        int.parse(_commission.text), int.parse(_rating.text));
     return updated;
   }
 
   bool areAllCheckboxesChecked() {
     return checkboxValues.every((bool value) => value);
+  }
+
+  bool checkStatus() {
+    return transaction.status == 'success';
   }
 
   @override
@@ -85,156 +105,225 @@ class _TransactionDetailState extends State<TransactionDetail> {
           title: Text('Chi tiết giao dịch'),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(children: [
-            Text(
-              transaction.processData?.name ?? '',
-              style: TextStyle(
-                  fontSize: 30, fontWeight: FontWeight.bold, color: Colors.red),
-            ),
-            Text('Trạng thái: ${transaction.status}'),
-            Text('Hoa tiêu: ${transaction.userTransaction?.name ?? 'N/A'}'),
-            Text('Giai đoạn hiện tại: ${transaction.stage?.name ?? ' '}'),
-            SingleChildScrollView(
-              child: Column(
-                children: stage.commissionDetails?.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      CommissionDetailModel detail = entry.value;
-                      return CheckboxListTile(
-                        title: Text(detail.name ?? ''),
-                        value: checkboxValues[index],
-                        onChanged: (bool? value) {
-                          setState(() {
-                            checkboxValues[index] = value ?? false;
-                            if (value == true) {
-                              transaction.checked
-                                  ?.add(detail.commissionDetailId);
-                            } else {
-                              transaction.checked
-                                  ?.remove(detail.commissionDetailId);
-                            }
-                            //print(transaction.checked);
-                          });
-                        },
-                      );
-                    }).toList() ??
-                    [],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                (showButton && areAllCheckboxesChecked())
-                    ? Container(
-                        child: FilledButton(
-                            onPressed: () async {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return SingleChildScrollView(
-                                      child: AlertDialog(
-                                        title: Text('Đánh giá hoa tiêu'),
-                                        content: Column(
-                                          children: [
-                                            TextField(
-                                              keyboardType: TextInputType.number,
-                                              controller: _rating,
-                                              decoration: InputDecoration(
-                                                labelText: 'Đánh giá hoa tiêu',
-                                                enabledBorder: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(12)),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    // color: Color(0xFF6F61EF),
-                                                    width: 2,
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(12),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 10,),
-                                            TextField(
-                                              keyboardType: TextInputType.number,
-                                              controller: _commission,
-                                              decoration: InputDecoration(
-                                                labelText: 'Hoa hồng',
-                                                enabledBorder: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(12)),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    // color: Color(0xFF6F61EF),
-                                                    width: 2,
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(12),
-                                                ),
-                                              ),
-                                            ),
+                padding: const EdgeInsets.all(8.0),
+                child: (checkStatus())
+                    ? Column(children: [
+                        Text(
+                          transaction.processData?.name ?? '',
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red),
+                        ),
+                        Text('Trạng thái: ${transaction.status}'),
+                        Text(
+                            'Hoa tiêu: ${transaction.userTransaction?.name ?? 'N/A'}'),
+                        Text(
+                            'Giai đoạn hiện tại: ${transaction.stage?.name ?? ' '}'),
+                        SingleChildScrollView(
+                          child: Column(
+                            children: stage.commissionDetails
+                                    ?.asMap()
+                                    .entries
+                                    .map((entry) {
+                                  int index = entry.key;
+                                  CommissionDetailModel detail = entry.value;
+                                  return CheckboxListTile(
+                                    title: Text(detail.name ?? ''),
+                                    value: checkboxValues[index],
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        checkboxValues[index] = value ?? false;
+                                        if (value == true) {
+                                          transaction.checked
+                                              ?.add(detail.commissionDetailId);
+                                        } else {
+                                          transaction.checked?.remove(
+                                              detail.commissionDetailId);
+                                        }
+                                        //print(transaction.checked);
+                                      });
+                                    },
+                                  );
+                                }).toList() ??
+                                [],
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            (showButton && areAllCheckboxesChecked())
+                                ? Container(
+                                    child: FilledButton(
+                                        onPressed: () async {
+                                          bool response =
+                                              await updateCheckedTransaction();
+                                          int check = await updateNextStage();
+                                          if (check == 1) {
+                                            await getTransactionDetail().then((value) => getStageDetail());
+                                          } else {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return SingleChildScrollView(
+                                                    child: AlertDialog(
+                                                      title: Text(
+                                                          'Đánh giá hoa tiêu'),
+                                                      content: Column(
+                                                        children: [
+                                                          TextField(
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            controller: _rating,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              labelText:
+                                                                  'Đánh giá hoa tiêu',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              12)),
+                                                              focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  width: 2,
+                                                                ),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          TextField(
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            controller:
+                                                                _commission,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              labelText:
+                                                                  'Hoa hồng',
+                                                              enabledBorder: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              12)),
+                                                              focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  // color: Color(0xFF6F61EF),
+                                                                  width: 2,
+                                                                ),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: Text('Hủy')),
+                                                        TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              int value =
+                                                                  await updateNextStage();
+                                                              if (value == 1) {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'Cập nhật thành công'),
+                                                                ));
+                                                              } else if (value ==
+                                                                  2) {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'Giao dịch đã hoàn thành'),
+                                                                ));
+                                                                setState(() {
+                                                                  showButton =
+                                                                      false;
+                                                                });
+                                                              } else {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        SnackBar(
+                                                                  content: Text(
+                                                                      'Cập nhật thất bại'),
+                                                                ));
+                                                              }
 
-                                          ],
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text('Hủy')),
-                                          TextButton(
-                                              onPressed: () {
-                                                updateNextStage().then((value) {
-                                                  if (value == 1) {
-                                                    ScaffoldMessenger.of(context)
-                                                        .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                          'Cập nhật thành công'),
-                                                    ));
-                                                  } else if (value == 2) {
-                                                    ScaffoldMessenger.of(context)
-                                                        .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                          'Giao dịch đã hoàn thành'),
-                                                    ));
-                                                    setState(() {
-                                                      showButton = false;
-                                                    });
-                                                  } else {
-                                                    ScaffoldMessenger.of(context)
-                                                        .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                          'Cập nhật thất bại'),
-                                                    ));
-                                                  }
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: Text(
+                                                                'Tiếp tục')),
+                                                      ],
+                                                    ),
+                                                  );
                                                 });
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text('Tiếp tục')),
-                                        ],
-                                      ),
-                                    );
+                                          }
+                                        },
+                                        child: Text('Tiếp tục')))
+                                : Container(),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            FilledButton(
+                                onPressed: () async {
+                                  updateCheckedTransaction().then((value) {
+                                    if (value) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text('Cập nhật thành công'),
+                                      ));
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text('Cập nhật thất bại'),
+                                      ));
+                                    }
                                   });
-                            },
-                            child: Text('Tiếp tục')))
-                    : Container(),
-                SizedBox(
-                  width: 10,
-                ),
-                FilledButton(
-                    onPressed: () async {
-                      updateCheckedTransaction().then((value) {
-                        if (value) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Cập nhật thành công'),
-                          ));
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Cập nhật thất bại'),
-                          ));
-                        }
-                      });
-                    },
-                    child: Text('Lưu')),
-              ],
-            ),
-          ]),
-        ));
+                                },
+                                child: Text('Lưu')),
+                          ],
+                        ),
+                      ])
+                    : Center(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 100,
+                            ),
+                            Text('Giao dịch đã hoàn thành'),
+                          ],
+                        ),
+                      ),
+
+            ));
   }
 }

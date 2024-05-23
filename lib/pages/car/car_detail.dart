@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:panorama/panorama.dart';
 import 'package:mobile/model/chat_user_model.dart';
 import 'package:mobile/widgets/button.dart';
 import 'package:mobile/services/cars_service.dart';

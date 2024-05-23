@@ -82,7 +82,7 @@ class PostService {
     };
 
     var url = Uri.https(Config.apiURL, Config.blocksAPI);
-    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({'post_id ': postId}));
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({'postId ': postId}));
     return response.statusCode == 200;
   }
 

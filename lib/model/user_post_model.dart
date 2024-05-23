@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-List<UserPostModel> userPostModelFromJson(String str) =>
-    List<UserPostModel>.from(
-        json.decode(str).map((x) => UserPostModel.fromJson(x)));
+List<UserPostModel> userPostModelFromJson(dynamic str) =>
+    List<UserPostModel>.from((str).map((x) => UserPostModel.fromJson(x)));
 
 class UserPostModel {
   String userId;
   String fullname;
-  String avatar;
+  String? avatar;
 
   UserPostModel(
       {required this.userId, required this.fullname, required this.avatar});
@@ -16,8 +15,6 @@ class UserPostModel {
     return UserPostModel(
         userId: json['user_id'],
         fullname: json['fullname'],
-        avatar: json['avatar']);
+        avatar: json['avatar'] != null ? json['avatar'] : '');
   }
-
-
 }

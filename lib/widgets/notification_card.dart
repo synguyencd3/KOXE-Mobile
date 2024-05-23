@@ -22,11 +22,6 @@ class NotificationCard extends StatefulWidget {
 
 class _NotificationCardState extends State<NotificationCard> {
   // 0: not yet, 1: accepted, 2: rejected
-  Future<ConnectionModel> getConnectionDetail() async {
-    print('abc${widget.notification.data}' ?? '');
-    ConnectionModel connection = await ConnectionService.getConnectionDetail(widget.notification.data ?? '');
-    return connection;
-  }
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -65,26 +60,23 @@ class _NotificationCardState extends State<NotificationCard> {
                   if (salonId == '') {
                     await NotificationService.markAsRead(
                         widget.notification.id);
-                    if (widget.notification.types == 'connection')
-                      {
-                        ConnectionModel connection = await getConnectionDetail();
-                        print(connection.id);
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                                backgroundColor: Colors.transparent,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ConnectionCard(
-                                  connection: connection,
-                                    ),
-                                  ],
-                                ));
-                          },
-                        );
-                      }
+                    if (widget.notification.types == 'connection') {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                              backgroundColor: Colors.transparent,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ConnectionCard(
+                                    connectionId:  widget.notification.data ?? '',
+                                  ),
+                                ],
+                              ));
+                        },
+                      );
+                    }
                     setState(() {
                       widget.notification.isRead = true;
                     });
@@ -116,16 +108,17 @@ class _NotificationCardState extends State<NotificationCard> {
                         },
                       );
                     }
-                    if (widget.notification.types == 'request')
-                      {
-                        Navigator.pushNamed(context, '/post_detail', arguments: widget.notification.data);
-                      }
+                    if (widget.notification.types == 'request') {
+                      Navigator.pushNamed(context, '/post_detail',
+                          arguments: widget.notification.data);
+                    }
                     setState(() {
                       widget.notification.isRead = true;
                     });
                   }
                 }),
-            (widget.notification.types == 'invite' && widget.notification.isAccepted == 0)
+            (widget.notification.types == 'invite' &&
+                    widget.notification.isAccepted == 0)
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

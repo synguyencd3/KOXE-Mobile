@@ -47,6 +47,7 @@ import 'package:mobile/pages/post/create_post.dart';
 import 'package:mobile/pages/connection/connection.dart';
 import 'package:mobile/pages/transaction/transaction.dart';
 import 'package:mobile/pages/transaction/transaction_detail.dart';
+import 'package:mobile/pages/blocked_user.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -128,6 +129,7 @@ class _MyAppState extends State<MyApp> {
         '/transaction': (context) => Transaction(),
         '/transaction_detail': (context) => TransactionDetail(),
         '/customer/car_voice' : (context) => UserCarInvoiceList(),
+        '/blocked_user' : (context) => BlockedUser(),
       },
     );
   }

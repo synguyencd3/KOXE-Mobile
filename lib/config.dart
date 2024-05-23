@@ -122,4 +122,5 @@ static const String stagesAPI = "/stages";
 
 //Block API
 static const String blocksAPI = "/block-user";
+static const String blockedUsersAPI = "/salons/users/blocked";
 }

@@ -5,9 +5,9 @@ import '../services/connection_service.dart';
 import 'package:mobile/services/salon_service.dart';
 
 class ConnectionCard extends StatefulWidget {
-  ConnectionModel connection;
+  String connectionId;
 
-  ConnectionCard({super.key, required this.connection});
+  ConnectionCard({super.key, required this.connectionId});
 
   @override
   State<ConnectionCard> createState() => _ConnectionCardState();
@@ -16,26 +16,40 @@ class ConnectionCard extends StatefulWidget {
 class _ConnectionCardState extends State<ConnectionCard> {
   Future<bool> updateStatusConnection(String status) async {
     bool response = await ConnectionService.updateStatusConnection(
-        status, widget.connection.id ?? '');
+        status, widget.connectionId ?? '');
     return response;
   }
+
   String salonId = '';
+  ConnectionModel connection = ConnectionModel();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
       getSalon();
+      getConnectionDetail();
     });
   }
 
   Future<void> getSalon() async {
-   String? salonIdAPI = await SalonsService.isSalon();
-   setState(() {
-     salonId = salonIdAPI;
-   });
-
+    String? salonIdAPI = await SalonsService.isSalon();
+    setState(() {
+      salonId = salonIdAPI;
+    });
   }
+
+  Future<void> getConnectionDetail() async {
+    ConnectionModel connectionAPI =
+        await ConnectionService.getConnectionDetail(widget.connectionId ?? '');
+    if (mounted) {
+      setState(() {
+        connection = connectionAPI;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -47,42 +61,43 @@ class _ConnectionCardState extends State<ConnectionCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              title: Text(widget.connection.salon?.name ?? ''),
+              title: Text(connection.salon?.name ?? ''),
               leading: Icon(Icons.store),
             ),
             ListTile(
-              title: Text(widget.connection.createAt.toString()),
+              title: Text(connection.createAt.toString()),
               leading: Icon(Icons.calendar_today_rounded),
             ),
             ListTile(
-              title: Text(widget.connection.processData?.name ?? ''),
+              title: Text(connection.processData?.name ?? ''),
               leading: Icon(Icons.car_repair),
             ),
             Column(
-              children: widget.connection.processData?.stages?.map((stage) {
-                return ListTile(
-                  title: Text(stage.name ?? ''),
-                  // Add more properties as needed
-                );
-              }).toList() ?? [], // Use an empty list if stages is null
+              children: connection.processData?.stages?.map((stage) {
+                    return ListTile(
+                      title: Text(stage.name ?? ''),
+                      // Add more properties as needed
+                    );
+                  }).toList() ??
+                  [], // Use an empty list if stages is null
             ),
             ListTile(
               title: Text(
-                widget.connection.status == 'pending'
+                connection.status == 'pending'
                     ? 'Chưa chấp nhận'
-                    : widget.connection.status == 'accepted'
+                    : connection.status == 'accepted'
                         ? 'Đã chấp nhận'
                         : 'Bị từ chối',
                 style: TextStyle(
-                    color: widget.connection.status == 'pending'
+                    color: connection.status == 'pending'
                         ? Colors.yellow[900]
-                        : widget.connection.status == 'accepted'
+                        : connection.status == 'accepted'
                             ? Colors.green
                             : Colors.red),
               ),
               leading: Icon(Icons.check_circle),
             ),
-             (widget.connection.status == 'pending' && salonId == '' )
+            (connection.status == 'pending' && salonId == '')
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -92,7 +107,7 @@ class _ConnectionCardState extends State<ConnectionCard> {
                               await updateStatusConnection('accepted');
                           if (response) {
                             setState(() {
-                              widget.connection.status = 'accepted';
+                              connection.status = 'accepted';
                             });
                           }
                         },
@@ -107,7 +122,7 @@ class _ConnectionCardState extends State<ConnectionCard> {
                               await updateStatusConnection('rejected');
                           if (response) {
                             setState(() {
-                              widget.connection.status = 'rejected';
+                              connection.status = 'rejected';
                             });
                           }
                         },
