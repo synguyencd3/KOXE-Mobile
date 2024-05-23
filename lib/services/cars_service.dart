@@ -65,7 +65,6 @@ class CarsService {
       'salonId': mySalon,
       'salonSalonId': mySalon,
     };
-
     var response = await http.post(url,headers: requestHeaders, body: jsonEncode(param));
 
     var responseData = jsonDecode(response.body);

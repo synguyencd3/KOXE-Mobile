@@ -333,4 +333,8 @@ class SalonsService {
         headers: requestHeaders, body: jsonEncode({'userId': userId}));
     return response.statusCode == 201;
   }
+  static Future<Set<String>> getPermission() async {
+    var LoginInfo = await SharedService.loginDetails();
+    return Set.from(LoginInfo!.user?.permissions ?? []);
+  }
 }

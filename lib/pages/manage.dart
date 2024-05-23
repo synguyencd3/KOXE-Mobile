@@ -11,12 +11,21 @@ class Manage extends StatefulWidget {
 
 class _ManageState extends State<Manage> {
   List<Car> cars = [];
+  Set<String> permission = {};
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
       getMySalon();
+      getPermission();
+    });
+  }
+
+  void getPermission() async {
+    var data = await SalonsService.getPermission();
+    setState(() {
+      permission = data;
     });
   }
 
@@ -41,11 +50,12 @@ class _ManageState extends State<Manage> {
                 onTap: () {
                  Navigator.pushNamed(context, '/package/manage');
                 }),
+            permission.contains("OWNER") ?
             text_card(
                 title: 'Quản lý người dùng',
                 onTap: () {
                   Navigator.pushNamed(context, '/employee_management');
-                }),
+                }) : Container(),
             text_card(
                 title: 'Quản lý hoa tiêu bị chặn',
                 onTap: () {
@@ -71,21 +81,23 @@ class _ManageState extends State<Manage> {
                 onTap: () {
                  Navigator.pushNamed(context, '/accessory_manage');
                 }),
+            permission.contains("OWNER") || permission.contains("R_IV") ?
             text_card(
                 title: 'Báo cáo doanh thu',
                 onTap: () {
                   Navigator.pushNamed(context, '/statistic');
-                }),
+                }): Container(),
             text_card(
                 title: 'Quản lý qui trình',
                 onTap: () {
                   Navigator.pushNamed(context, '/process_list');
                 }),
+            permission.contains("OWNER") || permission.contains("R_IV") ?
             text_card(
                 title: 'Quản lý giao dịch',
                 onTap: () {
                   Navigator.pushNamed(context, '/car_voice');
-                }),
+                }): Container(),
             text_card(
                 title: 'Lịch sử mua xe',
                 onTap: () {

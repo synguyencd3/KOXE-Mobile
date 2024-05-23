@@ -12,9 +12,9 @@ import '../loading.dart';
 
 class InvoiceDialog extends StatefulWidget {
   late final CarInvoice model;
-  //final VoidCallback callMethod;
+  final Function callMethod;
 
-  InvoiceDialog({required this.model});
+  InvoiceDialog({required this.model, required this.callMethod});
 
   @override
   _InvoiceDialogState createState() => _InvoiceDialogState();
@@ -93,7 +93,9 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
   void submitForm() {
     ProcessService.updateDetails(widget.model.legalsUser!.carId!,widget.model.phone!, selectedProcesses.toList()).then((value)
     {
+
         if (value!) {
+            widget.callMethod();
             ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Tạo thành công'),
