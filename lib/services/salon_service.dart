@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/model/salon_model.dart';
+import 'package:mobile/model/user_model.dart';
+import 'package:mobile/model/user_post_model.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/shared_service.dart';
 
@@ -19,7 +21,7 @@ class SalonsService {
       'Content-Type': 'application/json',
       'Accept': '*/*',
       'Access-Control-Allow-Origin': "*",
-       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
     var url = Uri.https(Config.apiURL, Config.SalonsAPI);
@@ -37,16 +39,16 @@ class SalonsService {
     await APIService.refreshToken();
     var mySalon = await SalonsService.isSalon();
     var LoginInfo = await SharedService.loginDetails();
-       Map<String, String> requestHeaders = {
+    Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Accept': '*/*',
       'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-     var url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$mySalon');
-      if (salonId != null)
-        url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$salonId');
+    var url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$mySalon');
+    if (salonId != null)
+      url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$salonId');
 
     var response = await http.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
@@ -60,7 +62,7 @@ class SalonsService {
   static Future<Salon?> getMySalon() async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
-     Map<String, String> requestHeaders = {
+    Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Accept': '*/*',
       'Access-Control-Allow-Origin': "*",
@@ -70,7 +72,7 @@ class SalonsService {
     var url = Uri.https(Config.apiURL, Config.mySalon);
 
     var response = await http.get(url, headers: requestHeaders);
-     if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
       var salon = Salon.fromJson(data['salon']);
@@ -83,7 +85,7 @@ class SalonsService {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
     var url = Uri.https(Config.apiURL, Config.SalonsAPI);
-     Map<String, String> requestHeaders = {
+    Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Accept': '*/*',
       'Access-Control-Allow-Origin': "*",
@@ -99,16 +101,17 @@ class SalonsService {
     request.fields['email'] = param['email'];
     request.fields['phoneNumber'] = param['phoneNumber'];
     request.fields['introductionMarkdown'] = param['introductionMarkdown'];
-    
-    if (model.banner !=null)
-    {
-      var image = await http.MultipartFile.fromPath("image", model.banner!.first);
+
+    if (model.banner != null) {
+      var image =
+          await http.MultipartFile.fromPath("image", model.banner!.first);
       request.files.add(image);
-      model.banner?.forEach((element) async {
-        request.files.add(
-          await http.MultipartFile.fromPath("banner", element)
-        );
-      },);
+      model.banner?.forEach(
+        (element) async {
+          request.files
+              .add(await http.MultipartFile.fromPath("banner", element));
+        },
+      );
     }
     var response = await request.send();
     var responseData = await response.stream.toBytes();
@@ -131,9 +134,8 @@ class SalonsService {
 
     var url = Uri.https(Config.apiURL, "${Config.SalonsAPI}/$id");
 
-    var response = await http.delete(url, headers: requestHeaders, body: {
-      "salonId" : mySalon
-    });
+    var response = await http
+        .delete(url, headers: requestHeaders, body: {"salonId": mySalon});
     print(mySalon);
     print(response.body);
     var data = jsonDecode(response.body);
@@ -163,15 +165,16 @@ class SalonsService {
     request.fields['phoneNumber'] = param['phoneNumber'];
     request.fields['introductionMarkdown'] = param['introductionMarkdown'];
 
-    if (model.banner !=null)
-    {
-      var image = await http.MultipartFile.fromPath("image", model.banner!.first);
+    if (model.banner != null) {
+      var image =
+          await http.MultipartFile.fromPath("image", model.banner!.first);
       request.files.add(image);
-      model.banner?.forEach((element) async {
-        request.files.add(
-            await http.MultipartFile.fromPath("banner", element)
-        );
-      },);
+      model.banner?.forEach(
+        (element) async {
+          request.files
+              .add(await http.MultipartFile.fromPath("banner", element));
+        },
+      );
     }
     var response = await request.send();
     var responseData = await response.stream.toBytes();
@@ -181,9 +184,7 @@ class SalonsService {
     return false;
   }
 
-
-
-  static Future<String> isSalon()  async {
+  static Future<String> isSalon() async {
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
     //print('access token ${loginDetails?.accessToken}');
@@ -197,17 +198,16 @@ class SalonsService {
     var responseData = jsonDecode(response.body);
 
     if (responseData['status'] == 'success') {
-      if (responseData['salonId'] == null){
+      if (responseData['salonId'] == null) {
         return '';
       } else {
         return responseData['salonId'];
       }
-    }
-    else
-    {
+    } else {
       return '';
     }
   }
+
   static Future<bool> acceptInvite(String token) async {
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
@@ -216,7 +216,8 @@ class SalonsService {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
     var url = Uri.https(Config.apiURL, Config.acceptInviteAPI);
-    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({'token': token}));
+    var response = await http.post(url,
+        headers: requestHeaders, body: jsonEncode({'token': token}));
     var responseData = jsonDecode(response.body);
     if (responseData['status'] == 'success') {
       return true;
@@ -236,9 +237,8 @@ class SalonsService {
 
     var url = Uri.https(Config.apiURL, Config.getEmployees);
 
-    var response = await http.post(url, headers: requestHeaders, body: {
-      "salonId": mySalon
-    });
+    var response = await http
+        .post(url, headers: requestHeaders, body: {"salonId": mySalon});
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       //print(data);
@@ -260,7 +260,6 @@ class SalonsService {
 
     var url = Uri.https(Config.apiURL, Config.Permission);
 
-
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['salonId'] = mySalon;
     data['permission'] = permissions.join(",");
@@ -276,6 +275,7 @@ class SalonsService {
     if (resBody['status'] == 'success') return true;
     return false;
   }
+
   static Future<List<Salon>> getSalonNoBlock() async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
@@ -297,6 +297,42 @@ class SalonsService {
     return [];
   }
 
+  static Future<List<UserPostModel>> getBlockedUsers() async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.blockedUsersAPI);
+
+    var response = await http.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return userPostModelFromJson(data['blockedUsers']);
+    }
+    return [];
+  }
+
+  static Future<bool> UnBlockUser(String userId) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.blocksAPI + '/un');
+
+    var response = await http.post(url,
+        headers: requestHeaders, body: jsonEncode({'userId': userId}));
+    return response.statusCode == 201;
+  }
   static Future<Set<String>> getPermission() async {
     var LoginInfo = await SharedService.loginDetails();
     return Set.from(LoginInfo!.user?.permissions ?? []);

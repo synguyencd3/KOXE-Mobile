@@ -11,7 +11,7 @@ UserTransactionModel({
 factory UserTransactionModel.fromJson(Map<String, dynamic> json) {
   return UserTransactionModel(
     user_id: json['user_id'],
-    name: json['name'],
+    name:  json['name']!=null ?json['name']:'',
   );
 }
 }

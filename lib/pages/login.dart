@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Login Failed'),
+                      title: Text('Đăng nhập không thành công'),
                       content: Text('Kiểm tra lại thông tin đăng nhập'),
                       actions: [
                         TextButton(

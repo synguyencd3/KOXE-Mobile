@@ -40,7 +40,7 @@ class _ConnectionState extends State<Connection> {
           itemCount: connections.length,
           physics: BouncingScrollPhysics(),
           itemBuilder: (context, index) {
-            return ConnectionCard(connection: connections[index]);
+            return ConnectionCard(connectionId: connections[index].id ?? '');
           }),
     );
   }
