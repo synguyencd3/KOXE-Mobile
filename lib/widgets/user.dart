@@ -75,100 +75,107 @@ class _UserState extends State<User> {
             TextButton(onPressed: ()=>submit(), child: Text('OK')),
           ],
         ));
-    return Column(
-      children: [
-        SizedBox(height: 20),
-        Center(
-          child: CircleAvatar(
-            radius: 50,
-            backgroundImage: NetworkImage(userProfile['avatar'] != null
-                ? userProfile['avatar']
-                : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 20),
+          Center(
+            child: CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage(userProfile['avatar'] != null
+                  ? userProfile['avatar']
+                  : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        Text(
-          userProfile['fullname'] ?? '',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+          SizedBox(height: 10),
+          Text(
+            userProfile['fullname'] ?? '',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        text_card(
-            title: 'Thông tin cá nhân',
-            icon: Icons.person,
-            onTap: () async {
-              Navigator.pushNamed(context, '/user_info',
-                  arguments: userProfile);
-              final result = await Navigator.pushNamed(context, '/user_info',
-                  arguments: userProfile);
-              if (result == 'update') {
-                setState(() {
-                  getUserProfile();
+          SizedBox(height: 10),
+          text_card(
+              title: 'Thông tin cá nhân',
+              icon: Icons.person,
+              onTap: () async {
+                Navigator.pushNamed(context, '/user_info',
+                    arguments: userProfile);
+                final result = await Navigator.pushNamed(context, '/user_info',
+                    arguments: userProfile);
+                if (result == 'update') {
+                  setState(() {
+                    getUserProfile();
+                  });
+                }
+              }),
+          text_card(
+              title: 'Mời bạn bè',
+              icon: Icons.person_add,
+              onTap: openDialog,
+          ),
+          text_card(
+              title: 'Cài đặt',
+              icon: Icons.settings,
+              onTap: () {
+                Navigator.pushNamed(context, '/setting');
+              }),
+          permissions.length > 0 ?
+          text_card(
+              title: 'Quản lý',
+              icon: Icons.manage_accounts,
+              onTap: () {
+                Navigator.pushNamed(context, '/manage');
+              }) : Container(),
+          text_card(
+              title: 'Hóa đơn bảo dưỡng',
+              icon: Icons.car_crash,
+              onTap: () {
+                Navigator.pushNamed(context, '/user_manage');
+              }),
+          text_card(
+              title: 'Lịch sử mua xe',
+              onTap: () {
+                Navigator.pushNamed(context, '/customer/car_voice');
+              }),
+          text_card(
+              title: 'Quản lý giao dịch hoa tiêu',
+              icon: Icons.manage_accounts,
+              onTap: () {
+                Navigator.pushNamed(context, '/transaction');
+              }),
+          text_card(
+              title: 'Đăng xuất',
+              icon: Icons.logout,
+              onTap: () {
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(
+                    content: Text('Bạn có chắc chắn muốn đăng xuất không?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Không'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          ZegoUIKitPrebuiltCallInvitationService().uninit();
+                          Navigator.pop(context);
+                          SocketManager().disconnectSocket();
+                          SharedService.logout(context);
+                        },
+                        child: Text('Có'),
+                      ),
+                    ],
+                  );
                 });
-              }
-            }),
-        text_card(
-            title: 'Mời bạn bè',
-            icon: Icons.person_add,
-            onTap: openDialog,
-        ),
-        text_card(
-            title: 'Cài đặt',
-            icon: Icons.settings,
-            onTap: () {
-              Navigator.pushNamed(context, '/setting');
-            }),
-        permissions.length > 0 ?
-        text_card(
-            title: 'Quản lý',
-            icon: Icons.manage_accounts,
-            onTap: () {
-              Navigator.pushNamed(context, '/manage');
-            }) : Container(),
-        text_card(
-            title: 'Xe của tôi',
-            icon: Icons.car_crash,
-            onTap: () {
-              Navigator.pushNamed(context, '/user_manage');
-            }),
-        text_card(
-            title: 'Quản lý giao dịch hoa tiêu',
-            icon: Icons.manage_accounts,
-            onTap: () {
-              Navigator.pushNamed(context, '/transaction');
-            }),
-        text_card(
-            title: 'Đăng xuất',
-            icon: Icons.logout,
-            onTap: () {
-              showDialog(context: context, builder: (context) {
-                return AlertDialog(
-                  content: Text('Bạn có chắc chắn muốn đăng xuất không?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text('Không'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ZegoUIKitPrebuiltCallInvitationService().uninit();
-                        Navigator.pop(context);
-                        SocketManager().disconnectSocket();
-                        SharedService.logout(context);
-                      },
-                      child: Text('Có'),
-                    ),
-                  ],
-                );
-              });
-              //SharedService.logout(context);
-              //Navigator.pushReplacementNamed(context, '/login');
-            }),
-      ],
+                //SharedService.logout(context);
+                //Navigator.pushReplacementNamed(context, '/login');
+              }),
+        ],
+      ),
     );
   }
 }

@@ -40,33 +40,33 @@ class _SocialState extends State<Social> {
       body: Column(
         children: [
           SizedBox(height: 10),
-          userProfile["google"] == null ? ListTile(
+          ListTile(
             leading: CircleAvatar(
               backgroundImage: AssetImage('assets/google.png'),
             ),
             title: Text('Google'),
-            trailing: Icon(Icons.arrow_forward),
-            onTap: () {
+            trailing: userProfile['google']==null ?Icon(Icons.arrow_forward): Text('Đã liên kết'),
+            onTap: userProfile['google']==null ? () {
               //print('Tap');
               APIService.googleLinkIn().then((value) {
                 if (value) Navigator.pop(context);
               });
-            },
-          ) : SizedBox(height: 0,) ,
+            }: null,
+          ),
           SizedBox(height: 10),
-          userProfile["facebook"] == null ? ListTile(
+          ListTile(
             leading: CircleAvatar(
               backgroundImage: AssetImage('assets/facebook.png'),
             ),
             title: Text('Facebook'),
-            trailing: Icon(Icons.arrow_forward),
-            onTap: () {
+            trailing: userProfile['facebook'] ==null ? Icon(Icons.arrow_forward): Text('Đã liên kết'),
+            onTap:  userProfile['facebook'] ==null ? () {
               //print('Tap');
               APIService.facebookLinkIn().then((value) {
                 if (value) Navigator.pop(context);
               });
-            },
-          ) : SizedBox(height: 0,),
+            }: null,
+          ) ,
         ],
       ),
     );

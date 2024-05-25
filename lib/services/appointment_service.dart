@@ -118,7 +118,8 @@ class AppointmentService {
     return data['status'] == 'success';
   }
 
-  static Future<List<TimeBusyModel>> getBusyCar(String salonId, String carId) async {
+  static Future<List<TimeBusyModel>> getBusyCar(
+      String salonId, String carId) async {
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
@@ -138,5 +139,39 @@ class AppointmentService {
     } else {
       return [];
     }
+  }
+
+  static Future<bool> createAppointmentProcess(
+      AppointmentModel appointment) async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.createAppointmentProcessAPI);
+
+    var response = await http.post(url,
+        headers: requestHeaders, body: jsonEncode(appointment.toJson()));
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> updateAppointmentProcess(
+      String? appointmentId, int status) async {
+    //status:1 - accepted | status: 2 - rejected
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.updateAppointmentAPI);
+
+    var response = await http.patch(url,
+        headers: requestHeaders,
+        body: jsonEncode({'id': appointmentId, 'status': status}));
+    return response.statusCode == 200;
   }
 }

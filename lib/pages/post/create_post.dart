@@ -42,13 +42,11 @@ class _CreatePostState extends State<CreatePost> {
   late final TextEditingController _brand = TextEditingController();
   late final TextEditingController _seat = TextEditingController();
   late final TextEditingController _kilometer = TextEditingController();
-  late final TextEditingController _gear = TextEditingController();
   late final TextEditingController _mfg = TextEditingController();
   late final TextEditingController _color = TextEditingController();
   late final TextEditingController _text = TextEditingController();
   late final TextEditingController _address = TextEditingController();
   late final TextEditingController _version = TextEditingController();
-  late final TextEditingController _fuel = TextEditingController();
   late final TextEditingController _licensePlate = TextEditingController();
   late final TextEditingController _ownerNumber = TextEditingController();
   late final TextEditingController _design = TextEditingController();
@@ -79,15 +77,38 @@ class _CreatePostState extends State<CreatePost> {
     });
     selectedSalonIds = [];
   }
+  @override
+  void dispose() {
+    _price.dispose();
+    _type.dispose();
+    _origin.dispose();
+    _brand.dispose();
+    _seat.dispose();
+    _kilometer.dispose();
+    _mfg.dispose();
+    _color.dispose();
+    _text.dispose();
+    _address.dispose();
+    _version.dispose();
+    _licensePlate.dispose();
+    _ownerNumber.dispose();
+    _design.dispose();
+    _title.dispose();
+    super.dispose();
+  }
 
   Future<void> getAllSalons() async {
     List<Salon> salonsAPI = await SalonsService.getSalonNoBlock();
-    setState(() {
-      salons = salonsAPI;
-    });
+    if (mounted)
+      {
+        setState(() {
+          salons = salonsAPI;
+        });
+      }
   }
 
   Future<bool> createPost() async {
+    //print(selectedSalonIds);
     PostModel postModel = PostModel(
       title: _title.text,
       text: _text.text,
@@ -98,7 +119,7 @@ class _CreatePostState extends State<CreatePost> {
       address: _address.text,
       fuel: selectedValueFuel.value,
       licensePlate: _licensePlate.text,
-      ownerNumber: int.parse(_ownerNumber.text),
+      ownerNumber: _ownerNumber.text!= '' ? int.parse(_ownerNumber.text) : 0,
       color: _color.text,
       design: _design.text,
       salonId: selectedSalonIds,
@@ -109,12 +130,13 @@ class _CreatePostState extends State<CreatePost> {
           model: _version.text,
           gear: selectedValueGear.value,
           mfg: _mfg.text,
-          kilometer: int.parse(_kilometer.text),
-          price: int.parse(_price.text),
-          seat: int.parse(_seat.text)),
+          kilometer: _kilometer.text!='' ? int.parse(_kilometer.text): 0,
+          price:_price.text!='' ? int.parse(_price.text): 0,
+          seat: _seat.text!='' ?int.parse(_seat.text): 0),
     );
-    bool response = await PostService.createPost(postModel);
-    return response;
+    return true;
+     // bool response = await PostService.createPost(postModel);
+     // return response;
   }
 
   @override
@@ -427,53 +449,58 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                       const SizedBox(height: 20),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Phụ kiện đi kèm'),
-                              DropdownMenuExample(
-                                  width: 150,
-                                  valueNotifier: selectedValueAccessory,
-                                  items: _booleanValues),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Phụ kiện đi kèm'),
+                                DropdownMenuExample(
+                            
+                                    valueNotifier: selectedValueAccessory,
+                                    items: _booleanValues),
+                              ],
+                            ),
                           ),
-                          SizedBox(width: 50),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Hạn đăng kiểm'),
-                              DropdownMenuExample(
-                                  width: 150,
-                                  valueNotifier: selectedValueRegistration,
-                                  items: _booleanValues),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Hạn đăng kiểm'),
+                                DropdownMenuExample(
+                                    valueNotifier: selectedValueRegistration,
+                                    items: _booleanValues),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 20),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Hộp số'),
-                              DropdownMenuExample(
-                                  width: 150,
-                                  valueNotifier: selectedValueGear,
-                                  items: _gearValues),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Hộp số'),
+                                DropdownMenuExample(
+                                    valueNotifier: selectedValueGear,
+                                    items: _gearValues),
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 50),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Nhiên liệu'),
-                              DropdownMenuExample(
-                                  width: 150,
-                                  valueNotifier: selectedValueFuel,
-                                  items: _fuelValues),
-                            ],
+                          Expanded (
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Nhiên liệu'),
+                                DropdownMenuExample(
+                                    valueNotifier: selectedValueFuel,
+                                    items: _fuelValues),
+                              ],
+                            ),
                           ),
                         ],
                       ),

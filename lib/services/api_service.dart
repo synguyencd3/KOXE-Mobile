@@ -441,4 +441,23 @@ class APIService {
     if (data['status'] == "success") return true;
     return false;
   }
+  static Future<bool> changePassword(String oldPassword, String newPassword) async {
+    await refreshToken();
+    var url = Uri.https(Config.apiURL, Config.changePasswordAPI);
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    final Map<String, String?> param = <String, String?>{
+      'oldPassword': oldPassword,
+      'newPassword': newPassword
+    };
+
+    var response = await client.post(url, headers: requestHeaders, body: jsonEncode(param));
+   return response.statusCode == 200;
+  }
 }
