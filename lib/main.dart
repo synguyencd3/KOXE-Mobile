@@ -48,6 +48,7 @@ import 'package:mobile/pages/connection/connection.dart';
 import 'package:mobile/pages/transaction/transaction.dart';
 import 'package:mobile/pages/transaction/transaction_detail.dart';
 import 'package:mobile/pages/blocked_user.dart';
+import 'package:mobile/pages/change_password.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -99,7 +100,7 @@ class _MyAppState extends State<MyApp> {
         '/car_detail': (context) => CarDetail(),
         '/buy_package': (context) => BuyPackage(),
         '/packages': (context) => AllPackages(),
-        'social': (context) => Social(),
+        '/social': (context) => Social(),
         '/setting': (context) => Setting(),
         '/package/manage': (context) => ManagePackage(),
         '/chat': (context) => ChatPage(),
@@ -130,6 +131,7 @@ class _MyAppState extends State<MyApp> {
         '/transaction_detail': (context) => TransactionDetail(),
         '/customer/car_voice' : (context) => UserCarInvoiceList(),
         '/blocked_user' : (context) => BlockedUser(),
+        '/change_password' : (context) => ChangePassword(),
       },
     );
   }
