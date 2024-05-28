@@ -100,8 +100,6 @@ class _UserState extends State<User> {
               title: 'Thông tin cá nhân',
               icon: Icons.person,
               onTap: () async {
-                Navigator.pushNamed(context, '/user_info',
-                    arguments: userProfile);
                 final result = await Navigator.pushNamed(context, '/user_info',
                     arguments: userProfile);
                 if (result == 'update') {

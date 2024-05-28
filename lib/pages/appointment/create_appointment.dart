@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/model/chat_user_model.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:mobile/services/appointment_service.dart';
 import 'package:mobile/model/appointment_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';

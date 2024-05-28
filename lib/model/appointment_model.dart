@@ -13,6 +13,7 @@ class AppointmentModel {
   late String carId;
   final Car? car;
   late String? phone;
+  late String? from;
 
   AppointmentModel({
     this.description,
@@ -22,6 +23,7 @@ class AppointmentModel {
     required this.salon,
     this.carId = '',
     this.car,
+    this.phone
   });
 
   AppointmentModel.fromJson(Map<String, dynamic> json)
@@ -30,6 +32,7 @@ class AppointmentModel {
         status = json['status'],
         id = json['id'],
         car = json['car'] != null ? Car.fromJson(json['car']) : null,
+  from = json['from'],
         salon = json['salon'];
 
   Map<String, dynamic> toJson() => {

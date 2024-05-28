@@ -120,6 +120,14 @@ class _PostDetailState extends State<PostDetail> {
                           leading: Icon(Icons.location_pin),
                           title: Text(post.address ?? 'Chưa cập nhật'),
                         ),
+                        ListTile(
+                          leading: Icon(Icons.star),
+                          title: Text((post.user?.avgRating.toString() ?? '0') + ' tỉ lệ hoàn thành'),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.check_circle),
+                          title: Text((post.user?.completedTransactions.toString() ?? '0') + ' giao dịch hoàn thành'),
+                        ),
                         Text('Thông tin xe'),
                         ListTile(
                           leading: Text(

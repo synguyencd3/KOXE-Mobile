@@ -48,8 +48,10 @@ import 'package:mobile/pages/connection/connection.dart';
 import 'package:mobile/pages/transaction/transaction.dart';
 import 'package:mobile/pages/transaction/transaction_detail.dart';
 import 'package:mobile/pages/blocked_user.dart';
-import 'package:mobile/pages/change_password.dart';
-
+import 'package:mobile/pages/password/change_password.dart';
+import 'package:mobile/pages/password/verify_password.dart';
+import 'package:mobile/pages/password/new_password.dart';
+import 'package:mobile/pages/appointment/create_appointment_process.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -132,6 +134,9 @@ class _MyAppState extends State<MyApp> {
         '/customer/car_voice' : (context) => UserCarInvoiceList(),
         '/blocked_user' : (context) => BlockedUser(),
         '/change_password' : (context) => ChangePassword(),
+        '/verify_password' : (context) => VerifyPassword(),
+        '/new_password' : (context) => NewPassword(),
+        '/create_appointment_process' : (context) => CreateAppointProcess(),
       },
     );
   }

@@ -123,7 +123,7 @@ class _NewProcessState extends State<NewProcess> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Object Form'),
+        title: Text('Tạo quy trình mới'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -133,56 +133,62 @@ class _NewProcessState extends State<NewProcess> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(labelText: 'Tên quy trình'),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a name';
+                    return 'Vui lòng nhập tên';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: InputDecoration(labelText: 'Mô tả'),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a description';
+                    return 'Vui lòng nhập mô tả';
                   }
                   return null;
                 },
               ),
+ const SizedBox(height: 10),
+ Text('Quy trình áp dụng cho',style: TextStyle(fontWeight: FontWeight.bold),),
+                Row(
+                  children: [
+                    Row(
+                      children: [
+                        Text('Xe'),
+                        Radio<int>(
+                          value: 0,
+                          groupValue: type,
+                          onChanged: (int? value) {
+                            setState(() {
+                              type = value!;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Hoa tiêu'),
+                        Radio<int>(
+                          value: 1,
+                          groupValue: type,
+                          onChanged: (int? value) {
+                            setState(() {
+                              type = value!;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
 
-                Row(
-                  children: [
-                    Text('Xe'),
-                    Radio<int>(
-                      value: 0,
-                      groupValue: type,
-                      onChanged: (int? value) {
-                        setState(() {
-                          type = value!;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('Hoa tiêu'),
-                    Radio<int>(
-                      value: 1,
-                      groupValue: type,
-                      onChanged: (int? value) {
-                        setState(() {
-                          type = value!;
-                        });
-                      },
-                    ),
-                  ],
-                ),
               Row(
                 children: [
-                  Text('Reuse: '),
+                  Text('Sử dụng lại: '),
                   Checkbox(
                     value: _reuse,
                     onChanged: (value) {
@@ -207,23 +213,22 @@ class _NewProcessState extends State<NewProcess> {
                       _selectedObject = value;
                     });
                   },
-                  decoration: InputDecoration(labelText: 'Select Object'),
+                  decoration: InputDecoration(labelText: 'Chọn xe áp dụng'),
                   validator: (value) {
                     if (value == null) {
-                      return 'Please select an object';
+                      return 'Vui lòng chọn xe';
                     }
                     return null;
                   },
                 ),
               TextButton(
-                child: Text('Submit'),
+                child: Text('Tạo quy trình'),
                 onPressed: () {
                   _submitForm();
                 },
               ),
-              SizedBox(height: 16.0),
               TextButton(
-                child: Text('Add Form Card'),
+                child: Text('Thêm giai đoạn cho quy trình'),
                 onPressed: () {
                   _addFormCard();
                 },
@@ -241,14 +246,14 @@ class _NewProcessState extends State<NewProcess> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Name'),
+                          decoration: InputDecoration(labelText: 'Tên chi tiết'),
                           onChanged: (value) {
                             //formCard['name']=value;
                             formCard.name=value;
                           },
                         ),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Order'),
+                          decoration: InputDecoration(labelText: 'Độ ưu tiên'),
                           onChanged: (value) {
                             //formCard['order'] = value;
                             formCard.order=int.parse(value);
@@ -262,7 +267,7 @@ class _NewProcessState extends State<NewProcess> {
                             },
                           ),
                         TextButton(
-                          child: Text('Add Detail Field'),
+                          child: Text('Thêm chi tiết cho giai đoạn'),
                           onPressed: () {
                             _addDetailField(index);
                           },
