@@ -116,7 +116,7 @@ class Config {
   static const String getInvoiceCarCustomer = '/invoice/get-invoice-buy-car';
   static const String createInvoiceCar = '/invoice/create-invoice';
   static const String lookupInvoiceCar = '/invoice/lookup';
-  static const String getInvoiceCar = '/invoice/all';
+  static const String getInvoiceCar = '/invoice/get-invoice-buy-car-salon';
   static const String doneInvoiceCar = '/invoice/tick-done';
 
   //Post API
@@ -137,5 +137,8 @@ class Config {
   static const String blockedUsersAPI = "/salons/users/blocked";
 
 // Password API
-  static const String changePasswordAPI = " /auth/change-pw";
+  static const String changePasswordAPI = "/auth/change-pw";
+  static const String verifyPasswordAPI = "/auth/verify-forgot-pw";
+  static const String renewPasswordAPI = "/auth/renew-forgot-pw";
+  static const String forgotPasswordAPI = "/auth/forgot-pw";
 }

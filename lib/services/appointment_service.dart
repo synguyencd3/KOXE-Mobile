@@ -143,6 +143,7 @@ class AppointmentService {
 
   static Future<bool> createAppointmentProcess(
       AppointmentModel appointment) async {
+    print(appointment.carId);
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
@@ -154,6 +155,7 @@ class AppointmentService {
 
     var response = await http.post(url,
         headers: requestHeaders, body: jsonEncode(appointment.toJson()));
+    print(response.body);
     return response.statusCode == 200;
   }
 
@@ -161,6 +163,7 @@ class AppointmentService {
       String? appointmentId, int status) async {
     //status:1 - accepted | status: 2 - rejected
     await APIService.refreshToken();
+    print('test');
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',

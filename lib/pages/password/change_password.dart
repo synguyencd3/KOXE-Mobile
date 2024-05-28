@@ -11,10 +11,17 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
-  TextEditingController _oldPassword = TextEditingController();
-  TextEditingController _newPassword = TextEditingController();
-  TextEditingController _confirmNewPassword = TextEditingController();
-
+  late final TextEditingController _oldPassword = TextEditingController();
+  late final TextEditingController _newPassword = TextEditingController();
+  late final TextEditingController _confirmNewPassword = TextEditingController();
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _oldPassword.dispose();
+    _newPassword.dispose();
+    _confirmNewPassword.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +78,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập mật khẩu hiện tại';
+                    return 'Vui lòng nhập mật khẩu mới';
                   }
                   if (value.length < 6) {
                     return 'Mật khẩu phải có ít nhất 6 ký tự';

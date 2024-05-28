@@ -157,6 +157,7 @@ class _ChatState extends State<ChatPage> {
             flexibleSpace: _appBar(),
           ),
           body: Chat(
+
             messages: _messages,
             onAttachmentPressed: _handleAttachmentPressed,
             onSendPressed: _handleSendPressed,

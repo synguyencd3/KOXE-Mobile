@@ -1,13 +1,16 @@
 import 'package:mobile/model/feature_model.dart';
-List<PackageModel> packagesFromJson(dynamic str) =>
-str == null ? [] :
-    List<PackageModel>.from((str).map((x) => PackageModel.fromJson(x)));
+
+List<PackageModel> packagesFromJson(dynamic str) => str == null
+    ? []
+    : List<PackageModel>.from((str).map((x) => PackageModel.fromJson(x)));
+
 class PackageModel {
-  late  String id;
+  late String id;
   late String name;
-  late  String description;
-  late  int price;
-  late  List<FeatureModel> features;
+  late String description;
+  late int price;
+  late List<FeatureModel> features;
+
   PackageModel({
     required this.id,
     required this.name,
@@ -15,6 +18,7 @@ class PackageModel {
     required this.price,
     required this.features,
   });
+
   PackageModel.fromJson(Map<String, dynamic> json)
       : id = json['package_id'],
         name = json['name'],
@@ -24,6 +28,7 @@ class PackageModel {
             ? []
             : List<FeatureModel>.from(
                 json['features'].map((x) => FeatureModel.fromJson(x)));
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['package_id'] = this.id;
@@ -33,4 +38,3 @@ class PackageModel {
     return data;
   }
 }
-
