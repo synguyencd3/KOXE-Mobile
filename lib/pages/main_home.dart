@@ -146,10 +146,6 @@ class _MainHomeState extends State<MainHome> {
           children: [
             Text(
               pages[_currentIndex].label,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold
-              ),
             ),
             Row(
               children: [
@@ -158,8 +154,8 @@ class _MainHomeState extends State<MainHome> {
                       ? badges.Badge(
                           badgeAnimation: badges.BadgeAnimation.fade(),
                           badgeContent: Text(_count.toString()),
-                          child: Icon(Icons.notifications_outlined, size: iconsSize, color: Colors.white,))
-                      : Icon(Icons.notifications_outlined, size: iconsSize, color: Colors.white,),
+                          child: Icon(Icons.notifications_outlined, size: iconsSize))
+                      : Icon(Icons.notifications_outlined, size: iconsSize),
                   onTap: () {
                     Navigator.pushNamed(context, '/notification',
                         arguments: notifications);
@@ -174,8 +170,8 @@ class _MainHomeState extends State<MainHome> {
                       ? badges.Badge(
                       badgeAnimation: badges.BadgeAnimation.fade(),
                       badgeContent: Text(_countMessage.toString()),
-                      child: Icon(Icons.chat_outlined, size: iconsSize, color: Colors.white,))
-                      : Icon(Icons.chat_outlined, size: iconsSize, color: Colors.white,),
+                      child: Icon(Icons.chat_outlined, size: iconsSize))
+                      : Icon(Icons.chat_outlined, size: iconsSize),
                   onTap: () {
                     Navigator.pushNamed(context, '/message');
                     setState(() {
@@ -187,7 +183,7 @@ class _MainHomeState extends State<MainHome> {
             ),
           ],
         ),
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.lightBlue,
       ),
       body: pages[_currentIndex].page,
       bottomNavigationBar: BottomBar(

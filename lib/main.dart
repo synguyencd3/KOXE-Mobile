@@ -77,11 +77,7 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: widget.navigatorKey,
       title: 'Flutter Demo',
       theme: ThemeData(
-        canvasColor: Colors.white,
-        colorScheme: ColorScheme.light(),
-       cardTheme: CardTheme(color: Colors.white),
-       cardColor: Colors.white,
-       // colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       initialRoute: '/login',

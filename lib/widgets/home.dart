@@ -176,10 +176,8 @@ class SalonPadding extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, '/salons');
                     },
-                    label: Text('Xem tất cả', style: TextStyle(
-                      color: Colors.black
-                    ),),
-                    icon: Icon(Icons.arrow_forward, color: Colors.black,),
+                    label: Text('Xem tất cả'),
+                    icon: Icon(Icons.arrow_forward),
                   ),
                 ],
               ),
@@ -238,14 +236,14 @@ class _ServiceCardState extends State<ServiceCard> {
                     title: Text(
                       '${widget.package.name}',
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
+                          color: Colors.blue, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text('Giá: ${widget.package.price}'),
                     trailing: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/buy_package');
                       },
-                      child: Text('Mua ngay', style: TextStyle(color: Colors.black),),
+                      child: Text('Mua ngay'),
                     ),
                   ),
                   widget.package.features.length == 0
@@ -263,14 +261,11 @@ class _ServiceCardState extends State<ServiceCard> {
                 ],
               ),
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black
-              ),
+            FilledButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/packages');
               },
-              child: Text('Xem tất cả', style: TextStyle(color: Colors.white),),
+              child: Text('Xem tất cả'),
             ),
           ],
         ),
