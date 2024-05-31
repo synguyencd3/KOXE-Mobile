@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile/services/api_service.dart';
+import 'package:mobile/services/shared_service.dart';
 import 'dart:convert';
 import '../config.dart';
 import '../model/package_model.dart';
@@ -7,6 +11,7 @@ import '../model/package_model.dart';
 class PackageService {
   //static var client = http.Client();
   static Future<List<PackageModel>> getAllPackages() async {
+    await APIService.refreshToken();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
@@ -15,9 +20,8 @@ class PackageService {
     var response = await http.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      var packagesData = data['packages'];
       //print(packagesData['packages']);
-      return packagesFromJson(packagesData['packages']);
+      return packagesFromJson(data['packages']);
     }
     return [];
   }

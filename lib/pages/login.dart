@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //import 'package:flutterflow_ui/flutterflow_ui.dart';
@@ -15,8 +16,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _username;
   late final TextEditingController _password;
+  late final TextEditingController _email;
   bool isAPIcallProcess = false;
-
   void Login() {
     setState(() {
       isAPIcallProcess = true;
@@ -37,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Login Failed'),
+                      title: Text('Đăng nhập không thành công'),
                       content: Text('Kiểm tra lại thông tin đăng nhập'),
                       actions: [
                         TextButton(
@@ -60,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                   context, '/mhome', (route) => false)
             }
           else
-            {print("login failed")}
+            {print("Đăng nhập thất bại")}
         });
   }
 
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                   context, '/mhome', (route) => false)
             }
           else
-            {print("login failed")}
+            {print("Đăng nhập thất bại")}
         });
   }
 
@@ -86,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     _username = TextEditingController();
     _password = TextEditingController();
+    _email = TextEditingController();
     super.initState();
     IsLoggedIn();
   }
@@ -94,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _username.dispose();
     _password.dispose();
+    _email.dispose();
     super.dispose();
   }
 
@@ -105,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
         // backgroundColor: FlutterFlowTheme.of(context).primary,
         title: Align(
           child: Text(
-            'LOGIN',
+            'Đăng nhập',
             // style: FlutterFlowTheme.of(context).headlineMedium.override(
             //       fontFamily: 'Outfit',
             //       color: Colors.white,
@@ -127,16 +130,52 @@ class _LoginPageState extends State<LoginPage> {
             passwordField(password: _password),
 
             //Forgot Password Text
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [Text('Forgot Password?')],
+            GestureDetector(
+              onTap: () {
+                showDialog(context: context, builder:  (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Nhập email khôi phục'),
+                    content: TextField(
+                      controller: _email,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(Radius.circular(7))),
+                        hintText: 'Email',
+                        // labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                        //hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                      ),
+                    ) ,
+                    actions: [
+                      TextButton(onPressed: (){
+                        Navigator.of(context).pop();
+                      }, child: Text('Hủy')),
+                      TextButton(onPressed: () async{
+                        bool response = await APIService.forgotPassword(_email.text);
+                        if (response)
+                          {
+                            Navigator.pushNamed(context, '/verify_password', arguments: _email.text);
+                          }
+                        else
+                          {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email không tồn tại')));
+                          }
+
+                      }, child: Text('Gửi mã xác nhận')),
+                    ],
+                  );
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [Text('Quên mật khẩu?')],
+                ),
               ),
             ),
 
             //Button
-            Button(name: 'Login', callback: Login),
+            Button(name: 'Đăng nhập', callback: Login),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
               child: Text(
@@ -147,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
 
             Button(
               width: 230,
-              name: 'Sign in with Google',
+              name: 'Đăng nhập với Google',
               callback: () {
                 //Navigator.pushNamed(context, '/register');
                 googleSignIn();
@@ -156,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
 
             Button(
               width: 230,
-              name: 'Sign in with Facebook',
+              name: 'Đăng nhập với Facebook',
               callback: () {
                 //Navigator.pushNamed(context, '/fblogin');
                 facebookSignIn();
@@ -168,13 +207,13 @@ class _LoginPageState extends State<LoginPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Dont't have an account?"),
+                  const Text("Chưa có tài khoản?"),
                   const SizedBox(
                     width: 2,
                   ),
                   GestureDetector(
                     child: Text(
-                      "Sign up",
+                      "Đăng ký ngay",
                       style: TextStyle(color: Colors.blue[400]),
                     ),
                     onTap: () {

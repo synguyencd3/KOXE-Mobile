@@ -16,7 +16,7 @@ class NotificationModel {
   NotificationModel.fromJson(Map<String, dynamic> json)
       : description = json['description'],
         isRead = json['read'],
-        avatar = json['avatar'],
+        avatar = json['avatar']!= null ?json['avatar']: "",
         id = json['id'],
         types = json['types'],
         data = json['data'] ?? "",

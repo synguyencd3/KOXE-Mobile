@@ -59,6 +59,10 @@ class ChatService {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
     var url = Uri.https(Config.apiURL, '${Config.sendMessageAPI}/$userId');
+    //http.MultipartRequest request = new http.MultipartRequest("POST", url);
+    //request.headers.addAll(requestHeaders);
+    //request.fields['message'] = message;
+    //var response = await request.send();
     var response = await http.post(url, headers: requestHeaders, body: {
       'message': message,
     });

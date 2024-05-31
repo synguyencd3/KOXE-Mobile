@@ -21,13 +21,22 @@ class _AppointmentCardState extends State<AppointmentCard> {
     super.initState();
   }
 
+  bool isFromUser() {
+    return widget.appointment.from == 'user';
+  }
+
+  bool isFromSalon() {
+    return widget.appointment.from == 'salon';
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime appointmentDateTime = widget.appointment.datetime;
     String appointmentDate =
         '${appointmentDateTime.day}/${appointmentDateTime.month}/${appointmentDateTime.year}';
     String formattedHour = appointmentDateTime.hour.toString().padLeft(2, '0');
-    String formattedMinute = appointmentDateTime.minute.toString().padLeft(2, '0');
+    String formattedMinute =
+        appointmentDateTime.minute.toString().padLeft(2, '0');
     return Card(
         child: Container(
       padding: const EdgeInsets.all(8.0),
@@ -79,61 +88,80 @@ class _AppointmentCardState extends State<AppointmentCard> {
               ),
               leading: Icon(Icons.check_circle),
             ),
-            (widget.isSalon == '' ||  widget.appointment.dayDiff < 0)
-                ? Container()
-                : widget.appointment.status == 0
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          FilledButton(
-                            onPressed: () async {
-                              bool check = await AppointmentService
-                                  .updateSalonAppointment(
-                                      widget.isSalon, widget.appointment.id, 1);
-                              if (check) {
-                                setState(() {
-                                  widget.appointment.status = 1;
-                                });
-                              }
-                            },
-                            child: Row(
-                              children: [
-                                Icon(Icons.check_circle),
-                                SizedBox(width: 10),
-                                Text('Chấp nhận'),
-                              ],
-                            ),
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.green)),
-                          ),
-                          FilledButton(
-                            onPressed: () async {
-                              bool check = await AppointmentService
-                                  .updateSalonAppointment(widget.isSalon,
-                                      widget.appointment.id ?? '', 2);
-                              if (check) {
-                                setState(() {
-                                  widget.appointment.status = 2;
-                                });
-                              }
-                            },
-                            child: Row(
-                              children: [
-                                Icon(Icons.do_not_disturb_on_rounded),
-                                SizedBox(width: 10),
-                                Text('Từ chối'),
-                              ],
-                            ),
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.red)),
-                          ),
-                        ],
-                      )
-                    : Container(),
+            ((widget.isSalon != '' &&
+                        widget.appointment.dayDiff > 0 &&
+                        widget.appointment.status == 0 &&
+                        isFromUser()) ||
+                    (widget.isSalon == '' &&
+                        widget.appointment.dayDiff > 0 &&
+                        widget.appointment.status == 0 &&
+                        isFromSalon()))
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FilledButton(
+                        onPressed: () async {
+                          bool check = false;
+                          if (isFromUser()) {
+                            check =
+                                await AppointmentService.updateSalonAppointment(
+                                    widget.isSalon, widget.appointment.id, 1);
+                          }
+                          if (isFromSalon()) {
+                            check =
+                                await AppointmentService.updateAppointmentProcess(
+                                    widget.appointment.id, 1);
+                          }
+                          if (check) {
+                            setState(() {
+                              widget.appointment.status = 1;
+                            });
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.check_circle),
+                            SizedBox(width: 10),
+                            Text('Chấp nhận'),
+                          ],
+                        ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.green)),
+                      ),
+                      FilledButton(
+                        onPressed: () async {
+                          bool check = false;
+                          if (isFromUser()) {
+                            check =
+                                await AppointmentService.updateSalonAppointment(
+                                    widget.isSalon, widget.appointment.id, 2);
+                          }
+                          if (isFromSalon()) {
+                            check =
+                                await AppointmentService.updateAppointmentProcess(
+                                   widget.appointment.id, 2);
+                          }
+                          if (check) {
+                            setState(() {
+                              widget.appointment.status = 2;
+                            });
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.do_not_disturb_on_rounded),
+                            SizedBox(width: 10),
+                            Text('Từ chối'),
+                          ],
+                        ),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.red)),
+                      ),
+                    ],
+                  )
+                : Container(),
           ]),
     ));
   }

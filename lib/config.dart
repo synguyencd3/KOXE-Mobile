@@ -25,9 +25,14 @@ class Config {
   static const String getAppointmentsAPI = "/appointment/get-appoint-user";
   static const String createAppointmentAPI = "/appointment/create-appointment";
   static const String refreshToken = "auth/refresh";
-  static const String getSalonAppointmentsApi = "/appointment/get-appoint-admin";
-  static const String updateSalonAppointmentApi = "/appointment/update-one-admin";
+  static const String getSalonAppointmentsApi =
+      "/appointment/get-appoint-admin";
+  static const String updateSalonAppointmentApi =
+      "/appointment/update-one-admin";
   static const String getBusyCarApi = "/appointment/get-busy-car";
+  static const String createAppointmentProcessAPI =
+      "/appointment/create-appointment-process";
+  static const String updateAppointmentAPI = "/appointment/response-appointment-process";
 
   //Payment
   static const String VNPayAPI = "/payment/create_payment_url";
@@ -43,12 +48,11 @@ class Config {
   static const String news = "https://crawl-data-pink.vercel.app/articles";
 
   //Warranty
-  static const String warranty  = "/warranty";
+  static const String warranty = "/warranty";
   static const String createWarranty = '/warranty/create';
   static const String updateWarranty = '/warranty/update';
   static const String deleteWarranty = '/warranty/delete';
   static const String pushWarranty = '/warranty/push-warranty';
-
 
   //Google API
   static const String client_id =
@@ -73,23 +77,30 @@ class Config {
   static const String sendMessageAPI = "/messages/send";
 
   //Notification API
-static const String getNotificationAPI = "/notification/get-notification-user";
-static const String markAsReadAPI = "/notification/read-notification-user";
-static const String getNotificationSalonAPI = "/notification/get-notification-admin";
-static const String markAsReadSalonAPI = "/notification/read-notification-admin";
+  static const String getNotificationAPI =
+      "/notification/get-notification-user";
+  static const String markAsReadAPI = "/notification/read-notification-user";
+  static const String getNotificationSalonAPI =
+      "/notification/get-notification-admin";
+  static const String markAsReadSalonAPI =
+      "/notification/read-notification-admin";
 
-//Zego 
-static const int zegoAppID = 52749659;
-static const String zegoAppSign = '686508249a354437ee8f22ad801b016981d3d62206cff615804d23559dc1eb99';
+//Zego
+  static const int zegoAppID = 52749659;
+  static const String zegoAppSign =
+      '686508249a354437ee8f22ad801b016981d3d62206cff615804d23559dc1eb99';
 
 //statistic
-static const String statistic = "/invoice/statistics";
-static const String getTop = 'invoice/get-top';
+  static const String statistic = "/invoice/statistics";
+  static const String getTop = 'invoice/get-top';
+
 //Maintaince API
   static const String getAllMaintaincesAPI = "maintenance/salon";
   static const String maintainceAPI = "/maintenance";
+
 //Invoice API
   static const String invoiceAPI = "/invoice";
+
 // Accessory API
   static const String getSalonAccessoriesApi = "/accessory/salon";
   static const String accessoryAPI = "/accessory";
@@ -105,15 +116,29 @@ static const String getTop = 'invoice/get-top';
   static const String getInvoiceCarCustomer = '/invoice/get-invoice-buy-car';
   static const String createInvoiceCar = '/invoice/create-invoice';
   static const String lookupInvoiceCar = '/invoice/lookup';
-  static const String getInvoiceCar = '/invoice/all';
+  static const String getInvoiceCar = '/invoice/get-invoice-buy-car-salon';
   static const String doneInvoiceCar = '/invoice/tick-done';
+
   //Post API
-static const String getPosts = "/posts/feed";
-static const String posts = "/posts";
+  static const String getPosts = "/posts/feed";
+  static const String posts = "/posts";
 
 // Connection API
-static const String connectionsAPI = "/connections";
+  static const String connectionsAPI = "/connections";
 
 // Transaction API
-static const String transactionsAPI = "/transactions";
+  static const String transactionsAPI = "/transactions";
+
+//Stage API
+  static const String stagesAPI = "/stages";
+
+//Block API
+  static const String blocksAPI = "/block-user";
+  static const String blockedUsersAPI = "/salons/users/blocked";
+
+// Password API
+  static const String changePasswordAPI = "/auth/change-pw";
+  static const String verifyPasswordAPI = "/auth/verify-forgot-pw";
+  static const String renewPasswordAPI = "/auth/renew-forgot-pw";
+  static const String forgotPasswordAPI = "/auth/forgot-pw";
 }

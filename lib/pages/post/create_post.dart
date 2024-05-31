@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/widgets/dropdown.dart';
@@ -32,6 +33,8 @@ class _CreatePostState extends State<CreatePost> {
       ValueNotifier<String>('');
   final ValueNotifier<String?> selectedValueRegistration =
       ValueNotifier<String>('');
+  final ValueNotifier<String> selectedValueGear = ValueNotifier<String>('');
+  final ValueNotifier<String> selectedValueFuel = ValueNotifier<String>('');
   final picker = ImagePicker();
   late final TextEditingController _price = TextEditingController();
   late final TextEditingController _type = TextEditingController();
@@ -39,13 +42,11 @@ class _CreatePostState extends State<CreatePost> {
   late final TextEditingController _brand = TextEditingController();
   late final TextEditingController _seat = TextEditingController();
   late final TextEditingController _kilometer = TextEditingController();
-  late final TextEditingController _gear = TextEditingController();
   late final TextEditingController _mfg = TextEditingController();
   late final TextEditingController _color = TextEditingController();
   late final TextEditingController _text = TextEditingController();
   late final TextEditingController _address = TextEditingController();
   late final TextEditingController _version = TextEditingController();
-  late final TextEditingController _fuel = TextEditingController();
   late final TextEditingController _licensePlate = TextEditingController();
   late final TextEditingController _ownerNumber = TextEditingController();
   late final TextEditingController _design = TextEditingController();
@@ -54,6 +55,9 @@ class _CreatePostState extends State<CreatePost> {
   List<Salon> salons = [];
   static const double _distanceSize = 20.0;
   List<String> _booleanValues = ['Có', 'Không'];
+  List<String> _gearValues = ['Số tự động', 'Số sàn', 'Bán tự động'];
+  List<String> _fuelValues = ['Xăng', 'Dầu', 'Điện', 'Hybrid'];
+  List<String> selectedSalonIds = [];
 
   Future<void> pickImage() async {
     pickedFile = await picker.pickMultiImage();
@@ -71,447 +75,569 @@ class _CreatePostState extends State<CreatePost> {
     Future.delayed(Duration.zero, () {
       getAllSalons();
     });
+    selectedSalonIds = [];
+  }
+  @override
+  void dispose() {
+    _price.dispose();
+    _type.dispose();
+    _origin.dispose();
+    _brand.dispose();
+    _seat.dispose();
+    _kilometer.dispose();
+    _mfg.dispose();
+    _color.dispose();
+    _text.dispose();
+    _address.dispose();
+    _version.dispose();
+    _licensePlate.dispose();
+    _ownerNumber.dispose();
+    _design.dispose();
+    _title.dispose();
+    super.dispose();
   }
 
   Future<void> getAllSalons() async {
-    List<Salon> salonsAPI = await SalonsService.getAll();
-    setState(() {
-      salons = salonsAPI;
-    });
+    List<Salon> salonsAPI = await SalonsService.getSalonNoBlock();
+    if (mounted)
+      {
+        setState(() {
+          salons = salonsAPI;
+        });
+      }
   }
 
-  Future<bool> createPost(String selectedSalonId) async {
+  Future<bool> createPost() async {
+    //print(selectedSalonIds);
     PostModel postModel = PostModel(
+      title: _title.text,
       text: _text.text,
       image: pickedFile?.map((e) => e.path).toList(),
       accessory: selectedValueAccessory.value == 'Có' ? true : false,
       registrationDeadline:
           selectedValueRegistration.value == 'Có' ? true : false,
       address: _address.text,
-      fuel: _fuel.text,
+      fuel: selectedValueFuel.value,
       licensePlate: _licensePlate.text,
-      ownerNumber: int.parse(_ownerNumber.text),
+      ownerNumber: _ownerNumber.text!= '' ? int.parse(_ownerNumber.text) : 0,
       color: _color.text,
       design: _design.text,
-      salonId: selectedSalonId,
+      salonId: selectedSalonIds,
       car: Car(
           brand: _brand.text,
           type: _type.text,
           origin: _origin.text,
           model: _version.text,
-          gear: _gear.text,
+          gear: selectedValueGear.value,
           mfg: _mfg.text,
-          kilometer: int.parse(_kilometer.text),
-          price: int.parse(_price.text),
-          seat: int.parse(_seat.text)),
+          kilometer: _kilometer.text!='' ? int.parse(_kilometer.text): 0,
+          price:_price.text!='' ? int.parse(_price.text): 0,
+          seat: _seat.text!='' ?int.parse(_seat.text): 0),
     );
-    bool response = await PostService.createPost(postModel);
-    return response;
+    return true;
+     // bool response = await PostService.createPost(postModel);
+     // return response;
   }
 
   @override
   Widget build(BuildContext context) {
-    final _dropdownkey = GlobalKey();
     return Scaffold(
         appBar: AppBar(
           title: const Text('Tạo bài kết nối'),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                        padding: EdgeInsets.all(paddingSize),
-                        color: _backgroundColor,
-                        child: Text(
-                          'THÔNG TIN XE',
-                          style: TextStyle(fontSize: _titleSize),
-                        )),
-                    DottedBorder(
-                        color: Colors.black,
-                        strokeWidth: 1,
-                        child: GestureDetector(
-                          onTap: () => pickImage(),
-                          child: Container(
-                              padding: const EdgeInsets.all(30),
-                              color: _backgroundColor,
-                              child: Center(
-                                  child: Column(
-                                children: [
-                                  const Icon(
-                                    Icons.add_a_photo,
-                                    size: 40,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                          padding: EdgeInsets.all(paddingSize),
+                          color: _backgroundColor,
+                          child: Text(
+                            'THÔNG TIN XE',
+                            style: TextStyle(fontSize: _titleSize),
+                          )),
+                      DottedBorder(
+                          color: Colors.black,
+                          strokeWidth: 1,
+                          child: GestureDetector(
+                            onTap: () => pickImage(),
+                            child: Container(
+                                padding: const EdgeInsets.all(30),
+                                color: _backgroundColor,
+                                child: Center(
+                                    child: Column(
+                                  children: [
+                                    const Icon(
+                                      Icons.add_a_photo,
+                                      size: 40,
+                                    ),
+                                    const Text(
+                                      'Thêm ảnh xe',
+                                      style: TextStyle(fontSize: 20),
+                                    )
+                                  ],
+                                ))),
+                          )),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            if (image != null)
+                              for (var i = 0; i < image!.length; i++)
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Image.file(
+                                    image![i],
+                                    width: 100,
+                                    height: 100,
                                   ),
-                                  const Text(
-                                    'Thêm ảnh xe',
-                                    style: TextStyle(fontSize: 20),
-                                  )
-                                ],
-                              ))),
-                        )),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
+                                )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: _distanceSize),
+                      Row(
                         children: [
-                          if (image != null)
-                            for (var i = 0; i < image!.length; i++)
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                child: Image.file(
-                                  image![i],
-                                  width: 100,
-                                  height: 100,
+                          Expanded(
+                            child: TextFormField(
+                              controller: _brand,
+                              decoration: InputDecoration(
+                                labelText: 'Hãng xe',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                              )
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _type,
+                              decoration: InputDecoration(
+                                labelText: 'Dòng xe',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: _distanceSize),
-                    TextFormField(
-                      controller: _brand,
-                      decoration: InputDecoration(
-                        labelText: 'Hãng xe',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: _mfg,
+                              decoration: InputDecoration(
+                                labelText: 'Năm sản xuất',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(12),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _version,
+                              decoration: InputDecoration(
+                                labelText: 'Phiên bản',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _origin,
+                              decoration: InputDecoration(
+                                labelText: 'Xuất xứ',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _design,
+                              decoration: InputDecoration(
+                                labelText: 'Kiểu dáng',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: _seat,
+                              decoration: InputDecoration(
+                                labelText: 'Số chỗ ngồi',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: _kilometer,
+                              decoration: InputDecoration(
+                                labelText: 'Số km đã đi',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _licensePlate,
+                              decoration: InputDecoration(
+                                labelText: 'Biển số xe',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: _ownerNumber,
+                              decoration: InputDecoration(
+                                labelText: 'Số chủ sở hữu',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _color,
+                              decoration: InputDecoration(
+                                labelText: 'Màu sắc',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _price,
+                              decoration: InputDecoration(
+                                labelText: 'Giá',
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: Color(0xFF6F61EF),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Phụ kiện đi kèm'),
+                                DropdownMenuExample(
+                            
+                                    valueNotifier: selectedValueAccessory,
+                                    items: _booleanValues),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Hạn đăng kiểm'),
+                                DropdownMenuExample(
+                                    valueNotifier: selectedValueRegistration,
+                                    items: _booleanValues),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Hộp số'),
+                                DropdownMenuExample(
+                                    valueNotifier: selectedValueGear,
+                                    items: _gearValues),
+                              ],
+                            ),
+                          ),
+                          Expanded (
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Nhiên liệu'),
+                                DropdownMenuExample(
+                                    valueNotifier: selectedValueFuel,
+                                    items: _fuelValues),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                          padding: EdgeInsets.all(paddingSize),
+                          color: _backgroundColor,
+                          child: Text('THÔNG TIN HOA TIÊU',
+                              style: TextStyle(fontSize: _titleSize))),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _address,
+                        decoration: InputDecoration(
+                          labelText: 'Địa chỉ hoa tiêu',
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              // color: Color(0xFF6F61EF),
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: _type,
-                      decoration: InputDecoration(
-                        labelText: 'Dòng xe',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: _mfg,
-                      decoration: InputDecoration(
-                        labelText: 'Năm sản xuất',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _version,
-                      decoration: InputDecoration(
-                        labelText: 'Phiên bản',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _gear,
-                      decoration: InputDecoration(
-                        labelText: 'Hộp số',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _fuel,
-                      decoration: InputDecoration(
-                        labelText: 'Nhiên liệu',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _origin,
-                      decoration: InputDecoration(
-                        labelText: 'Xuất xứ',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _design,
-                      decoration: InputDecoration(
-                        labelText: 'Kiểu dáng',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: _seat,
-                      decoration: InputDecoration(
-                        labelText: 'Số chỗ ngồi',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: _kilometer,
-                      decoration: InputDecoration(
-                        labelText: 'Số km đã đi',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: _color,
-                      decoration: InputDecoration(
-                        labelText: 'Màu sắc',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: _licensePlate,
-                      decoration: InputDecoration(
-                        labelText: 'Biển số xe',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: _ownerNumber,
-                      decoration: InputDecoration(
-                        labelText: 'Số chủ sở hữu',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text('Phụ kiện đi kèm'),
-                    DropdownMenuExample(
-                        width: 400,
-                        valueNotifier: selectedValueAccessory,
-                        items: _booleanValues),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: _price,
-                      decoration: InputDecoration(
-                        labelText: 'Giá',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    DropdownMenuExample(
-                        width: 400,
-                        valueNotifier: selectedValueRegistration,
-                        items: _booleanValues),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: _address,
-                      decoration: InputDecoration(
-                        labelText: 'Địa chỉ hoa tiêu',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            // color: Color(0xFF6F61EF),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                        padding: EdgeInsets.all(paddingSize),
-                        color: _backgroundColor,
-                        child: Text('THÔNG TIN SALON KẾT NỐI',
-                            style: TextStyle(fontSize: _titleSize))),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              salons.isNotEmpty
-                  ? DropdownMenuExample(
-                      key: _dropdownkey,
-                      width: 400,
-                      valueNotifier: selectedValueNotifier,
-                      items: salons
-                          .map((e) => e.name)
-                          .where((name) => name != null)
-                          .toList()
-                          .cast<String>(),
-                    )
-                  : Container(),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _title,
-                decoration: InputDecoration(
-                  labelText: 'Tiêu đề bài kết nối',
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      // color: Color(0xFF6F61EF),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
+                      SizedBox(height: 20),
+                      Container(
+                          padding: EdgeInsets.all(paddingSize),
+                          color: _backgroundColor,
+                          child: Text('THÔNG TIN BÀI KẾT NỐI',
+                              style: TextStyle(fontSize: _titleSize))),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _text,
-                autofocus: true,
-                obscureText: false,
-                decoration: InputDecoration(
-                  hintText: 'Lời nhắn cho salon',
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      width: 2,
+                const SizedBox(height: 20),
+                TextField(
+                  controller: _title,
+                  decoration: InputDecoration(
+                    labelText: 'Tiêu đề bài kết nối',
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        // color: Color(0xFF6F61EF),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    borderRadius: BorderRadius.circular(12),
                   ),
-                  contentPadding:
-                      EdgeInsetsDirectional.fromSTEB(16, 24, 16, 12),
                 ),
-                maxLines: 16,
-                minLines: 6,
-              ),
-              const SizedBox(height: 20),
-              FilledButton(
-                  onPressed: () async {
-                    String? selectedValue = selectedValueNotifier.value;
-                    String? selectedSalonId = salons
-                        .firstWhere((salon) => salon.name == selectedValue)
-                        .salonId;
-                    bool response = await createPost(selectedSalonId!);
-                    if (response) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Đăng bài thành công'),
-                        backgroundColor: Colors.green,
-                      ));
-                      Navigator.pop(context);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Đăng bài thất bại'),
-                        backgroundColor: Colors.red,
-                      ));
-                    }
-                    print(_mfg.text);
-                  },
-                  child: Text('Đăng bài'))
-            ],
+                const SizedBox(height: 20),
+                TextField(
+                  controller: _text,
+                  autofocus: true,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    hintText: 'Lời nhắn cho salon',
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding:
+                        EdgeInsetsDirectional.fromSTEB(16, 24, 16, 12),
+                  ),
+                  maxLines: 16,
+                  minLines: 6,
+                ),
+                const SizedBox(height: 20),
+                FilledButton(
+                    onPressed: () async {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return StatefulBuilder(
+                                builder: (context, StateSetter setState) {
+                              return AlertDialog(
+                                title: Text('Chọn salon'),
+                                content: Container(
+                                  width: 300,
+                                  height: 300,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: salons.map((salon) {
+                                        return CheckboxListTile(
+                                          title: Text(salon.name!),
+                                          value: selectedSalonIds
+                                              .contains(salon.salonId),
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              if (value == true) {
+                                                selectedSalonIds
+                                                    .add(salon.salonId!);
+                                              } else {
+                                                selectedSalonIds
+                                                    .remove(salon.salonId);
+                                              }
+                                            });
+                                          },
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text('OK'),
+                                    onPressed: () async {
+                                      bool response = await createPost();
+                                      if (response) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('Đăng bài thành công'),
+                                          backgroundColor: Colors.green,
+                                        ));
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text('Đăng bài thất bại'),
+                                          backgroundColor: Colors.red,
+                                        ));
+                                      }
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                          });
+                    },
+                    child: Text('Đăng bài'))
+              ],
+            ),
           ),
         ));
   }

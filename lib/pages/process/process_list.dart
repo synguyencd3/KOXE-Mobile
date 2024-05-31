@@ -39,7 +39,7 @@ class _ProcessesState extends State<Processes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Process'),
+        title: Text('Quy trình'),
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
@@ -48,7 +48,7 @@ class _ProcessesState extends State<Processes> {
             alignment: Alignment.centerLeft,
             child: TextButton(onPressed: () {
               Navigator.pushNamed(context, '/new_process').then((value) {getProcesses();});
-            }, child: Text('New Process')),
+            }, child: Text('Tạo quy trình mới')),
           ),
           Expanded(
               child: processes.isEmpty && !isCalling ? Loading(): ListView.builder(
@@ -99,10 +99,10 @@ class ProcessCard extends StatelessWidget {
                   children: [
                     OutlinedButton(onPressed: () {
                       Navigator.pushNamed(context, '/new_process', arguments: {'process': process});
-                    }, child: Text('Edit')),
+                    }, child: Text('Chỉnh sửa')),
                     OutlinedButton(onPressed: () {
                       delete(processModel.id);
-                    }, child: Text('Delete')),
+                    }, child: Text('Xóa')),
                   ],),
               )
             ],

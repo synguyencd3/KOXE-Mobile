@@ -45,7 +45,13 @@ import 'package:mobile/pages/user_manage.dart';
 import 'package:mobile/pages/post/post_detail.dart';
 import 'package:mobile/pages/post/create_post.dart';
 import 'package:mobile/pages/connection/connection.dart';
-
+import 'package:mobile/pages/transaction/transaction.dart';
+import 'package:mobile/pages/transaction/transaction_detail.dart';
+import 'package:mobile/pages/blocked_user.dart';
+import 'package:mobile/pages/password/change_password.dart';
+import 'package:mobile/pages/password/verify_password.dart';
+import 'package:mobile/pages/password/new_password.dart';
+import 'package:mobile/pages/appointment/create_appointment_process.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -96,7 +102,7 @@ class _MyAppState extends State<MyApp> {
         '/car_detail': (context) => CarDetail(),
         '/buy_package': (context) => BuyPackage(),
         '/packages': (context) => AllPackages(),
-        'social': (context) => Social(),
+        '/social': (context) => Social(),
         '/setting': (context) => Setting(),
         '/package/manage': (context) => ManagePackage(),
         '/chat': (context) => ChatPage(),
@@ -122,8 +128,15 @@ class _MyAppState extends State<MyApp> {
         '/new_process' : (context) => NewProcess(),
         '/process_list' : (context) => Processes(),
         '/car_voice' : (context) => CarInvoiceList(),
+        '/car_invoice/new': (context) => CarInvoiceForm(),
+        '/transaction': (context) => Transaction(),
+        '/transaction_detail': (context) => TransactionDetail(),
         '/customer/car_voice' : (context) => UserCarInvoiceList(),
-        '/car_invoice/new': (context) => CarInvoiceForm()
+        '/blocked_user' : (context) => BlockedUser(),
+        '/change_password' : (context) => ChangePassword(),
+        '/verify_password' : (context) => VerifyPassword(),
+        '/new_password' : (context) => NewPassword(),
+        '/create_appointment_process' : (context) => CreateAppointProcess(),
       },
     );
   }

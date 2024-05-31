@@ -1,4 +1,5 @@
 import 'package:mobile/model/car_model.dart';
+
 List<AppointmentModel> appointmentsFromJson(dynamic str) =>
     List<AppointmentModel>.from((str).map((x) => AppointmentModel.fromJson(x)));
 
@@ -11,6 +12,8 @@ class AppointmentModel {
   late int dayDiff;
   late String carId;
   final Car? car;
+  late String? phone;
+  late String? from;
 
   AppointmentModel({
     this.description,
@@ -20,6 +23,7 @@ class AppointmentModel {
     required this.salon,
     this.carId = '',
     this.car,
+    this.phone
   });
 
   AppointmentModel.fromJson(Map<String, dynamic> json)
@@ -27,7 +31,8 @@ class AppointmentModel {
         datetime = DateTime.parse(json['date']),
         status = json['status'],
         id = json['id'],
-  car  = json['car'] != null ? Car.fromJson(json['car']) : null,
+        car = json['car'] != null ? Car.fromJson(json['car']) : null,
+  from = json['from'],
         salon = json['salon'];
 
   Map<String, dynamic> toJson() => {
@@ -35,5 +40,6 @@ class AppointmentModel {
         'date': datetime.toString(),
         'carId': carId,
         'salonId': salon,
+        if (phone != null) 'phone': phone,
       };
 }

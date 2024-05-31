@@ -30,8 +30,11 @@ class PostService {
   }
 
   static Future<bool> createPost(PostModel postModel) async {
+    // print(postModel.salonId);
+    // return true;
     await APIService.refreshToken();
     var loginDetail = await SharedService.loginDetails();
+
 
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -41,7 +44,7 @@ class PostService {
     };
 
     var url = Uri.https(Config.apiURL, Config.posts);
-
+print(jsonEncode(postModel.toJson()));
     var response = await http.post(url,
         headers: requestHeaders, body: jsonEncode(postModel.toJson()));
 
@@ -69,4 +72,21 @@ class PostService {
     }
     return PostModel(text: 'Error');
   }
+
+  static Future<bool> blockUser(String postId) async {
+    await APIService.refreshToken();
+    var loginDetail = await SharedService.loginDetails();
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      'Authorization': 'Bearer ${loginDetail?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.blocksAPI);
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({'postId ': postId}));
+    return response.statusCode == 200;
+  }
+
 }

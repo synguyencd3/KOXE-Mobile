@@ -29,18 +29,18 @@ class _ConnectionState extends State<Connection> {
       connections = connectionsAPI;
    });
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Connection'),
+        title: Text('Quản lý kết nối'),
       ),
       body: ListView.builder(
           itemCount: connections.length,
           physics: BouncingScrollPhysics(),
           itemBuilder: (context, index) {
-            return ConnectionCard(connection: connections[index]);
+            return ConnectionCard(connectionId: connections[index].id ?? '');
           }),
     );
   }

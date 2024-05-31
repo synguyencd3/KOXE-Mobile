@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/services/package_service.dart';
 import 'package:mobile/model/package_model.dart';
+import 'package:mobile/services/salon_service.dart';
 
+import '../model/salon_model.dart';
 import '../services/payment_service.dart';
 
 class Home extends StatefulWidget {
@@ -22,6 +24,7 @@ class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
     id: '',
     features: [],
   );
+  late Salon firstSalon = Salon();
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   late bool _isAnimationInitialized = false;
@@ -42,6 +45,7 @@ class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
     ));
     _isAnimationInitialized = true;
     getAllPackages();
+    getAllSalons();
 
   }
 
@@ -53,6 +57,15 @@ class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
       });
     });
   }
+  Future<void> getAllSalons() async {
+    List<Salon> salons = await SalonsService.getAll();
+    Future.delayed(Duration(seconds: 0), () {
+      setState(() {
+        firstSalon = salons[0];
+      });
+    });
+  }
+
 
   Widget build(BuildContext context) {
     return _isAnimationInitialized ? SlideTransition(
@@ -62,7 +75,7 @@ class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             NewsPadding(),
-            SalonPadding(),
+            SalonPadding(firstSalon: firstSalon,),
             SizedBox(height: 10),
             ServiceCard(
               package: firstPackage,
@@ -134,8 +147,9 @@ class NewsPadding extends StatelessWidget {
 }
 
 class SalonPadding extends StatelessWidget {
+  final Salon firstSalon;
   const SalonPadding({
-    super.key,
+    super.key,required this.firstSalon,
   });
 
   @override
@@ -156,19 +170,31 @@ class SalonPadding extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 5),
               Text('Các salon',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   )),
               SizedBox(height: 10),
-              Image(
-                image: AssetImage('assets/salon.jpg'),
-                fit: BoxFit.cover,
+              Container(
+                height: 200,
+                width: double.infinity,
+                child: Image(
+                  image: NetworkImage(firstSalon.image ?? ''),
+                  fit: BoxFit.cover,
+                ),
               ),
               SizedBox(height: 20),
-              Text('Tưng bừng khai trương Mercedes Bình Tân'),
+              Text(firstSalon.name ?? '', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              ListTile(
+                title: Text(firstSalon.address ?? '', style: TextStyle(fontSize: 14),),
+                leading: Icon(Icons.location_on),
+              ),
+              ListTile(
+                title: Text(firstSalon.phoneNumber ?? '', style: TextStyle(fontSize: 14),),
+                leading: Icon(Icons.phone),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -215,6 +241,7 @@ class _ServiceCardState extends State<ServiceCard> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
+              padding: EdgeInsets.all(5),
               child: Text(
                 'Các gói dịch vụ',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

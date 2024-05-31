@@ -242,12 +242,14 @@ class _UserInfoState extends State<UserInfo> {
               text_card(
                 title: 'Liên kết mạng xã hội',
                 onTap: () {
-                  Navigator.pushNamed(context, 'social', arguments: {'profile': userProfile});
+                  Navigator.pushNamed(context, '/social', arguments: {'profile': userProfile});
                 },
               ),
               text_card(
                 title: 'Đổi mật khẩu',
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, '/change_password');
+                },
               ),
             ]),
           )),

@@ -148,7 +148,6 @@ class _BuyPackageState extends State<BuyPackage> {
               ),
               SizedBox(height: 20),
               DropdownMenuExample(
-                width: 300,
                 valueNotifier: dropDownNotifier,
                 items: list,
               ),

@@ -441,4 +441,94 @@ class APIService {
     if (data['status'] == "success") return true;
     return false;
   }
+  static Future<bool> changePassword(String oldPassword, String newPassword) async {
+    //print(oldPassword + newPassword);
+    await refreshToken();
+    var url = Uri.https(Config.apiURL, Config.changePasswordAPI);
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    final Map<String, String?> param = <String, String>{
+      'oldPassword': oldPassword,
+      'newPassword': newPassword
+    };
+
+    var response = await client.post(url, headers: requestHeaders, body: jsonEncode(param));
+   return response.statusCode == 200;
+  }
+  static Future<bool> forgotPassword(String email) async {
+    await refreshToken();
+    var url = Uri.https(Config.apiURL, Config.forgotPasswordAPI);
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    final Map<String, String?> param = <String, String>{
+      'email': email,
+    };
+    var response = await client.post(url, headers: requestHeaders, body: jsonEncode(param));
+    return response.statusCode == 200;
+  }
+  static Future<String> verifyPassword(String email, String code) async {
+    await refreshToken();
+    var url = Uri.https(Config.apiURL, Config.verifyPasswordAPI);
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    final Map<String, String?> param = <String, String>{
+      'email': email,
+      'code': code
+    };
+    var response = await client.post(url, headers: requestHeaders, body: jsonEncode(param));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      if (data['status'] == "success")
+        {
+          return data['code'];
+        }
+     else
+       {
+          return '';
+       }
+    }
+    return '';
+  }
+
+  static Future<bool> renewPassword(String email, String code,String newPassword) async {
+    await refreshToken();
+    var url = Uri.https(Config.apiURL, Config.renewPasswordAPI);
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    final Map<String, String?> param = <String, String>{
+      'email': email,
+      'code': code,
+      'newPassword': newPassword
+    };
+    var response = await client.post(url, headers: requestHeaders, body: jsonEncode(param));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      if (data['status'] == "success") return true;
+    }
+    return false;
+  }
 }
