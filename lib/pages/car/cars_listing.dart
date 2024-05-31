@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/services/cars_service.dart';
 import 'package:mobile/services/salon_service.dart';

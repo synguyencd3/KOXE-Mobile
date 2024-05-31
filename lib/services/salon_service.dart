@@ -14,7 +14,7 @@ import '../model/employee_model.dart';
 class SalonsService {
   static var client = http.Client();
 
-  static Future<List<Salon>> getAll() async {
+  static Future<List<Salon>> getAll(int page, int perPage) async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
@@ -24,7 +24,10 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.https(Config.apiURL, Config.SalonsAPI);
+    var url = Uri.https(Config.apiURL, Config.SalonsAPI, {
+      "page": page.toString(),
+      "per_page": perPage.toString()
+    });
 
     var response = await http.get(url, headers: requestHeaders);
     print(response.body);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 //import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/config.dart';
 import 'package:mobile/services/payment_service.dart';
@@ -18,6 +19,7 @@ class _SalonListState extends State<SalonList> {
   List<Salon> salons = [];
   Set<String> keySet = Set();
   bool isCalling = false;
+  int index =1;
   @override
   void initState() {
     super.initState();
@@ -35,10 +37,11 @@ class _SalonListState extends State<SalonList> {
   }
 
   Future<void> getSalons() async {
-    var list = await SalonsService.getAll();
+    var list = await SalonsService.getAll(index, 5);
     print(list);
     setState(() {
-      salons = list;
+      if (list.length>0) index++;
+      salons.addAll(list);
       isCalling = true;
     });
   }
@@ -58,12 +61,15 @@ class _SalonListState extends State<SalonList> {
           keySet.contains(Config.SalonKeyMap) ?
           TextButton(onPressed: () { Navigator.pushNamed(context, '/my_salon').then((value) {getSalons();});}, child: const Text('Your salon')): const SizedBox(height: 20) ,
           Expanded(
-            child: salons.isEmpty && !isCalling ? Loading() :ListView.builder(
-                itemCount: salons.length,
-                itemBuilder: (context, index) {
-                  return SalonCard(
-                      salon: salons[index]);
-                }),
+            child: salons.isEmpty && !isCalling ? Loading() :LazyLoadScrollView(
+              onEndOfPage: () { getSalons(); },
+              child: ListView.builder(
+                  itemCount: salons.length,
+                  itemBuilder: (context, index) {
+                    return SalonCard(
+                        salon: salons[index]);
+                  }),
+            ),
           ),
         ],
       ),

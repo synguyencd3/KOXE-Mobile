@@ -10,7 +10,7 @@ class NewsService {
 
   static var client = http.Client();
 
-  static Future<List<Articles>> getArticles() async {
+  static Future<List<Articles>> getArticles(int page, int perPage) async {
     // final Map<String, String> param = <String, String>{
     //   'q': 'f1',
     //   'language': 'en',
@@ -19,7 +19,7 @@ class NewsService {
     // };
 
     //var url = Uri.https(Config.newsURL, Config.newsAPi, param);
-    var url = Uri.parse(Config.news);
+    var url = Uri.parse(Config.news+"?page=${page}&per_page=${perPage}");
 
     var response = await http.get(url);
 

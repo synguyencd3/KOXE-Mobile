@@ -58,7 +58,7 @@ class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
     });
   }
   Future<void> getAllSalons() async {
-    List<Salon> salons = await SalonsService.getAll();
+    List<Salon> salons = await SalonsService.getAll(1,1);
     Future.delayed(Duration(seconds: 0), () {
       setState(() {
         firstSalon = salons[0];
