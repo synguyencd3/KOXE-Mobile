@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:mobile/widgets/post_card.dart';
 import '../../model/post_model.dart';
 import '../../services/post_service.dart';
@@ -16,7 +17,7 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   List<PostModel> posts = [];
   String salonId = '';
-
+  int index=1;
   @override
   void initState() {
     // TODO: implement initState
@@ -30,8 +31,10 @@ class _PostPageState extends State<PostPage> {
     if (salonIdAPI == '') {
       return;
     } else {
-      List<PostModel> postsAPI = await PostService.getAllPosts();
-      posts = postsAPI;
+      List<PostModel> postsAPI = await PostService.getAllPosts(index, 5);
+      posts.addAll(postsAPI);
+      if (postsAPI.length>0) index++;
+      print("intex"+index.toString());
     }
   }
 
@@ -71,12 +74,15 @@ class _PostPageState extends State<PostPage> {
                 ],
               ),
               Expanded(
-                child: ListView.builder(
-                    itemCount: posts.length,
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return PostCard(post: posts[index]);
-                    }),
+                child: LazyLoadScrollView(
+                     onEndOfPage: () { getPosts(); },
+                     child: ListView.builder(
+                      itemCount: posts.length,
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return PostCard(post: posts[index]);
+                      }),
+                ),
               ),
             ],
           );

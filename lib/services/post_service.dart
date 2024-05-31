@@ -7,7 +7,7 @@ import 'package:mobile/services/shared_service.dart';
 import 'package:http/http.dart' as http;
 
 class PostService {
-  static Future<List<PostModel>> getAllPosts() async {
+  static Future<List<PostModel>> getAllPosts(int page, int perPage) async {
     await APIService.refreshToken();
     var loginDetail = await SharedService.loginDetails();
 
@@ -18,7 +18,10 @@ class PostService {
       'Authorization': 'Bearer ${loginDetail?.accessToken}',
     };
 
-    var url = Uri.https(Config.apiURL, Config.getPosts);
+    var url = Uri.https(Config.apiURL, Config.getPosts, {
+      "page": page.toString(),
+      "per_page": perPage.toString()
+    });
 
     var response = await http.get(url, headers: requestHeaders);
 
