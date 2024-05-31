@@ -38,7 +38,7 @@ class _NewsBoardState extends State<NewsBoard> {
       appBar: AppBar(
         //backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         title: Text(
-          'News',
+          'Tin tức',
           //style: FlutterFlowTheme.of(context).titleLarge,
         ),
       ),

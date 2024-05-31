@@ -120,8 +120,8 @@ class NewsPadding extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, '/news');
                     },
-                    label: Text('Xem tất cả'),
-                    icon: Icon(Icons.arrow_forward),
+                    label: Text('Xem tất cả', style:TextStyle(color: Colors.black)),
+                    icon: Icon(Icons.arrow_forward, color:Colors.black),
                   ),
                 ],
               ),
@@ -176,8 +176,10 @@ class SalonPadding extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, '/salons');
                     },
-                    label: Text('Xem tất cả'),
-                    icon: Icon(Icons.arrow_forward),
+                    label: Text('Xem tất cả', style: TextStyle(
+                      color: Colors.black
+                    ),),
+                    icon: Icon(Icons.arrow_forward, color: Colors.black,),
                   ),
                 ],
               ),
@@ -236,14 +238,14 @@ class _ServiceCardState extends State<ServiceCard> {
                     title: Text(
                       '${widget.package.name}',
                       style: TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold),
+                          color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text('Giá: ${widget.package.price}'),
                     trailing: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/buy_package');
                       },
-                      child: Text('Mua ngay'),
+                      child: Text('Mua ngay', style: TextStyle(color: Colors.black),),
                     ),
                   ),
                   widget.package.features.length == 0
@@ -261,11 +263,14 @@ class _ServiceCardState extends State<ServiceCard> {
                 ],
               ),
             ),
-            FilledButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black
+              ),
               onPressed: () {
                 Navigator.pushNamed(context, '/packages');
               },
-              child: Text('Xem tất cả'),
+              child: Text('Xem tất cả', style: TextStyle(color: Colors.white),),
             ),
           ],
         ),

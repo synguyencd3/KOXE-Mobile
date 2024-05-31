@@ -99,16 +99,17 @@ class WarrantyCard extends StatelessWidget {
                   child: Text('${warranty.policy}')),
 
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 10),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    OutlinedButton(onPressed: () {
+                    IconButton(onPressed: () {
                       Navigator.pushNamed(context, '/warranty_form', arguments: {'warranty': warranty});
-                    }, child: Text('Edit')),
-                    OutlinedButton(onPressed: () {
+                    }, icon: Icon(Icons.edit)
+                    ),
+                    IconButton(onPressed: () {
                       delete(warranty.warrantyId);
-                    }, child: Text('Delete')),
+                    }, icon: Icon(Icons.delete)),
                   ],),
               )
             ],

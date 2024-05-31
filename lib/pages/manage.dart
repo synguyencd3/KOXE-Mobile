@@ -40,8 +40,11 @@ class _ManageState extends State<Manage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Quản lý'),
-          backgroundColor: Colors.lightBlue,
+          title: Text('Quản lý', style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold
+          ),),
+          backgroundColor: Colors.black,
         ),
         body: Column(
           children: [

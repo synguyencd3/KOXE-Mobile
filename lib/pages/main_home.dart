@@ -34,7 +34,7 @@ class MainHome extends StatefulWidget {
 
 class _MainHomeState extends State<MainHome> {
   List<PageModule> pages = [
-    PageModule(page: Home(), label: 'Xin chào,'),
+    PageModule(page: Home(), label: 'Xin chào'),
     PageModule(page: IntroCar(), label: 'Sản phẩm'),
     PageModule(page: Appointment(), label: 'Lịch hẹn'),
     PageModule(page: PostPage(), label: 'Bài viết'),
@@ -144,7 +144,13 @@ class _MainHomeState extends State<MainHome> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(pages[_currentIndex].label),
+            Text(
+              pages[_currentIndex].label,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold
+              ),
+            ),
             Row(
               children: [
                 GestureDetector(
@@ -152,8 +158,8 @@ class _MainHomeState extends State<MainHome> {
                       ? badges.Badge(
                           badgeAnimation: badges.BadgeAnimation.fade(),
                           badgeContent: Text(_count.toString()),
-                          child: Icon(Icons.notifications_outlined, size: iconsSize))
-                      : Icon(Icons.notifications_outlined, size: iconsSize),
+                          child: Icon(Icons.notifications_outlined, size: iconsSize, color: Colors.white,))
+                      : Icon(Icons.notifications_outlined, size: iconsSize, color: Colors.white,),
                   onTap: () {
                     Navigator.pushNamed(context, '/notification',
                         arguments: notifications);
@@ -168,8 +174,8 @@ class _MainHomeState extends State<MainHome> {
                       ? badges.Badge(
                       badgeAnimation: badges.BadgeAnimation.fade(),
                       badgeContent: Text(_countMessage.toString()),
-                      child: Icon(Icons.chat_outlined, size: iconsSize))
-                      : Icon(Icons.chat_outlined, size: iconsSize),
+                      child: Icon(Icons.chat_outlined, size: iconsSize, color: Colors.white,))
+                      : Icon(Icons.chat_outlined, size: iconsSize, color: Colors.white,),
                   onTap: () {
                     Navigator.pushNamed(context, '/message');
                     setState(() {
@@ -181,7 +187,7 @@ class _MainHomeState extends State<MainHome> {
             ),
           ],
         ),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.black87,
       ),
       body: pages[_currentIndex].page,
       bottomNavigationBar: BottomBar(
