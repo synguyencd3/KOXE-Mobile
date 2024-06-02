@@ -99,7 +99,7 @@ class ProcessCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(onPressed: () {
-                      Navigator.pushNamed(context, '/new_process', arguments: {'process': process});
+                      Navigator.pushNamed(context, '/new_process', arguments: {'process': processModel});
                     }, icon: Icon(Icons.edit),),
                     IconButton(onPressed: () {
                       delete(processModel.id);
