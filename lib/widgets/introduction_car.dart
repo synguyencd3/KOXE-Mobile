@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/services/cars_service.dart';
@@ -20,22 +22,17 @@ class _CarState extends State<IntroCar> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      getCars(index, 5);
+      getCars(index, 5, "");
       isCalling = true;
     });
-
   }
-  Future getCars(int page, int perPage) async {
-    var list = await CarsService.getAll(page, perPage);
-    // if (mounted)
-    //   {
+  Future getCars(int page, int perPage, String search) async {
+    var list = await CarsService.getAll(page, perPage, search);
         setState(() {
           if (list.length>0) index++;
           print(index);
           cars.addAll(list);
         });
-      // }
-
   }
 
   @override
@@ -43,11 +40,7 @@ class _CarState extends State<IntroCar> {
     return cars.isEmpty && !isCalling ? Padding(
       padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
       child: Loading(),
-     ) : //Column(
-    //   mainAxisAlignment: MainAxisAlignment.start,
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   children: cars.map((value) => CarCard(car: value)).toList(),
-    // ),
+     ) :
     LazyLoadScrollView(
         scrollOffset: 200,
         child: ListView.builder(
@@ -58,7 +51,7 @@ class _CarState extends State<IntroCar> {
         itemBuilder: (context, index) {
           return CarCard(car: cars[index]);
         })
-        , onEndOfPage: () => {getCars(index,5)}
+        , onEndOfPage: () => {getCars(index,5,"")}
     );
   }
 }

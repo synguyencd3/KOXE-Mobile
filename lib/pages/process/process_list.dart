@@ -80,6 +80,7 @@ class ProcessCard extends StatelessWidget {
         child: Align(
           alignment: AlignmentDirectional(-1, 0),
           child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Align(
                   alignment: AlignmentDirectional(-1, 0),
@@ -93,16 +94,16 @@ class ProcessCard extends StatelessWidget {
                   child: Text(processModel.description!)),
 
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 0, 50, 10),
+                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    OutlinedButton(onPressed: () {
+                    IconButton(onPressed: () {
                       Navigator.pushNamed(context, '/new_process', arguments: {'process': process});
-                    }, child: Text('Chỉnh sửa')),
-                    OutlinedButton(onPressed: () {
+                    }, icon: Icon(Icons.edit),),
+                    IconButton(onPressed: () {
                       delete(processModel.id);
-                    }, child: Text('Xóa')),
+                    }, icon: Icon(Icons.delete)),
                   ],),
               )
             ],

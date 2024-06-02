@@ -18,15 +18,7 @@ class _NewProcessState extends State<NewProcess> {
   bool _reuse = false;
   Car? _selectedObject;
   int type=0;
-  //List<Map<String, dynamic>> _formCards = [];
   List<Document> _formCards = [];
-
-  // List<String> _objects = [
-  //   'Object 1',
-  //   'Object 2',
-  //   'Object 3',
-  // ];
-
   List<Car> _objects = [];
 
   @override
@@ -46,20 +38,9 @@ class _NewProcessState extends State<NewProcess> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Form is valid, create the object
       String name = _nameController.text;
       String description = _descriptionController.text;
-
-      // Map<String, dynamic> object = {
-      //   'name': name,
-      //   'description': description,
-      //   'reuse': _reuse,
-      //   'selectedObject': _selectedObject,
-      //   'formCards': _formCards,
-      // };
-
       process model;
-
       if (_reuse) {
         model  = process(
             type: type,
@@ -77,9 +58,6 @@ class _NewProcessState extends State<NewProcess> {
             documents: _formCards
         );
       }
-
-      // Print the created object
-      //print(object);
       ProcessService.NewProcess(model).then((value) {
         if (value!) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -91,30 +69,17 @@ class _NewProcessState extends State<NewProcess> {
           Navigator.pop(context);
         }
       });
-      // Reset the form
-      // _formKey.currentState!.reset();
-      // _nameController.clear();
-      // _descriptionController.clear();
-      // _reuse = false;
-      // _selectedObject = null;
-     // _formCards.clear();
     }
   }
 
   void _addFormCard() {
     setState(() {
-      // _formCards.add({
-      //   'name': "",
-      //   'order': "",
-      //   'details': [],
-      // });
       _formCards.add(Document(details: []));
     });
   }
 
   void _addDetailField(int index) {
     setState(() {
-      //_formCards[index]['details']?.add(' ');
       _formCards[index].details?.add(Details());
     });
   }
