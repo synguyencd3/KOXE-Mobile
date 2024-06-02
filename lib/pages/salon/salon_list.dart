@@ -37,7 +37,7 @@ class _SalonListState extends State<SalonList> {
   }
 
   Future<void> getSalons() async {
-    var list = await SalonsService.getAll(index, 5);
+    var list = await SalonsService.getAll(index, 5,"");
     print(list);
     setState(() {
       if (list.length>0) index++;

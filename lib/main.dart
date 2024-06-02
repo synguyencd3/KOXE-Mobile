@@ -16,6 +16,7 @@ import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';
 import 'package:mobile/pages/salon/new_salon.dart';
 import 'package:mobile/pages/salon/salon_list.dart';
+import 'package:mobile/pages/search/searchPage.dart';
 import 'package:mobile/pages/statistic/statistic_page.dart';
 import 'package:mobile/pages/warranty/Warranty_form.dart';
 import 'package:mobile/pages/warranty/warranty_list.dart';
@@ -137,6 +138,7 @@ class _MyAppState extends State<MyApp> {
         '/verify_password' : (context) => VerifyPassword(),
         '/new_password' : (context) => NewPassword(),
         '/create_appointment_process' : (context) => CreateAppointProcess(),
+        '/search' : (context) => SearchPage()
       },
     );
   }
