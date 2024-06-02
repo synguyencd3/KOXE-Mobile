@@ -99,7 +99,7 @@ class Config {
   static const String maintainceAPI = "/maintenance";
 
 //Invoice API
-  static const String invoiceAPI = "/invoice";
+  static const String invoiceAPI = "/invoice/get-invoice-maintenance";
 
 // Accessory API
   static const String getSalonAccessoriesApi = "/accessory/salon";
