@@ -18,48 +18,66 @@ class _NewProcessState extends State<NewProcess> {
   bool _reuse = false;
   Car? _selectedObject;
   int type=0;
-  //List<Map<String, dynamic>> _formCards = [];
   List<Document> _formCards = [];
-
-  // List<String> _objects = [
-  //   'Object 1',
-  //   'Object 2',
-  //   'Object 3',
-  // ];
-
-  List<Car> _objects = [];
+  List<Car> _cars = [];
+  process? _process;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    initCars();
+    Future.delayed(Duration.zero, ()
+    {
+      initProcess();
+    });
   }
 
-  void initCars() async {
+  void initProcess() async {
     var salonId = await SalonsService.isSalon();
     var data = await SalonsService.getDetail(salonId);
+    var arg = ModalRoute.of(context)!.settings.arguments == null ? null: ModalRoute.of(context)!.settings.arguments as Map;
     setState(() {
-      _objects = data;
+      _process = arg?['process'];
+      _cars = data;
     });
+    _nameController.text=_process?.name ?? "";
+    _descriptionController.text = _process?.description ?? "";
+    if (_process!= null)
+      {
+        setState(() {
+          _formCards = _process!.documents!;
+        });
+        print(_formCards);
+      }
+  }
+
+  void EditCar() {
+
+    process model = process(
+        type: type,
+        name: _nameController.text,
+        description: _descriptionController.text,
+        documents: _formCards
+    );
+    // ProcessService.changeProcess(model).then((value) {
+    //   if (value==true)
+    //   {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //         SnackBar(
+    //           content: Text('Chỉnh sửa thành công'),
+    //           backgroundColor: Colors.green,
+    //         )
+    //     );
+    //     Navigator.pop(context);
+    //   }
+    // });
   }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Form is valid, create the object
       String name = _nameController.text;
       String description = _descriptionController.text;
-
-      // Map<String, dynamic> object = {
-      //   'name': name,
-      //   'description': description,
-      //   'reuse': _reuse,
-      //   'selectedObject': _selectedObject,
-      //   'formCards': _formCards,
-      // };
-
       process model;
-
       if (_reuse) {
         model  = process(
             type: type,
@@ -77,9 +95,6 @@ class _NewProcessState extends State<NewProcess> {
             documents: _formCards
         );
       }
-
-      // Print the created object
-      //print(object);
       ProcessService.NewProcess(model).then((value) {
         if (value!) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -91,30 +106,17 @@ class _NewProcessState extends State<NewProcess> {
           Navigator.pop(context);
         }
       });
-      // Reset the form
-      // _formKey.currentState!.reset();
-      // _nameController.clear();
-      // _descriptionController.clear();
-      // _reuse = false;
-      // _selectedObject = null;
-     // _formCards.clear();
     }
   }
 
   void _addFormCard() {
     setState(() {
-      // _formCards.add({
-      //   'name': "",
-      //   'order': "",
-      //   'details': [],
-      // });
       _formCards.add(Document(details: []));
     });
   }
 
   void _addDetailField(int index) {
     setState(() {
-      //_formCards[index]['details']?.add(' ');
       _formCards[index].details?.add(Details());
     });
   }
@@ -186,41 +188,41 @@ class _NewProcessState extends State<NewProcess> {
                   ],
                 ),
 
-              Row(
-                children: [
-                  Text('Sử dụng lại: '),
-                  Checkbox(
-                    value: _reuse,
-                    onChanged: (value) {
-                      setState(() {
-                        _reuse = value!;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              if (!_reuse)
-                DropdownButtonFormField<Car>(
-                  value: _selectedObject,
-                  items: _objects.map((Car object) {
-                    return DropdownMenuItem<Car>(
-                      value: object,
-                      child: Text(object.name!),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedObject = value;
-                    });
-                  },
-                  decoration: InputDecoration(labelText: 'Chọn xe áp dụng'),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Vui lòng chọn xe';
-                    }
-                    return null;
-                  },
-                ),
+              // Row(
+              //   children: [
+              //     Text('Sử dụng lại: '),
+              //     Checkbox(
+              //       value: _reuse,
+              //       onChanged: (value) {
+              //         setState(() {
+              //           _reuse = value!;
+              //         });
+              //       },
+              //     ),
+              //   ],
+              // ),
+              // if (!_reuse)
+              //   DropdownButtonFormField<Car>(
+              //     value: _selectedObject,
+              //     items: _cars.map((Car object) {
+              //       return DropdownMenuItem<Car>(
+              //         value: object,
+              //         child: Text(object.name!),
+              //       );
+              //     }).toList(),
+              //     onChanged: (value) {
+              //       setState(() {
+              //         _selectedObject = value;
+              //       });
+              //     },
+              //     decoration: InputDecoration(labelText: 'Chọn xe áp dụng'),
+              //     validator: (value) {
+              //       if (value == null) {
+              //         return 'Vui lòng chọn xe';
+              //       }
+              //       return null;
+              //     },
+              //   ),
               TextButton(
                 child: Text('Tạo quy trình'),
                 onPressed: () {
@@ -246,6 +248,7 @@ class _NewProcessState extends State<NewProcess> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
+                          initialValue: formCard.name,
                           decoration: InputDecoration(labelText: 'Tên chi tiết'),
                           onChanged: (value) {
                             //formCard['name']=value;
@@ -253,6 +256,7 @@ class _NewProcessState extends State<NewProcess> {
                           },
                         ),
                         TextFormField(
+                          initialValue: formCard.order.toString(),
                           decoration: InputDecoration(labelText: 'Độ ưu tiên'),
                           onChanged: (value) {
                             //formCard['order'] = value;
@@ -261,6 +265,7 @@ class _NewProcessState extends State<NewProcess> {
                         ),
                         for (int i = 0; i < details!.length; i++)
                           TextFormField(
+                            initialValue: details[i].name,
                             decoration: InputDecoration(labelText: 'Detail ${i + 1}'),
                             onChanged: (value) {
                               details[i].name = value;

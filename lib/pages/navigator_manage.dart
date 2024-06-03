@@ -32,7 +32,7 @@ class NavigatorManage extends StatelessWidget {
           text_card(
               title: 'Tạo group salon',
               onTap: () {
-                Navigator.pushNamed(context, '/connection');
+                Navigator.pushNamed(context, '/salon_group');
               }),
         ],
       ),

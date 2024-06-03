@@ -55,6 +55,8 @@ import 'package:mobile/pages/appointment/create_appointment_process.dart';
 import 'package:mobile/pages/my_car.dart';
 import 'package:mobile/pages/transaction_manage.dart';
 import 'package:mobile/pages/navigator_manage.dart';
+import 'package:mobile/pages/search/searchPage.dart';
+import 'package:mobile/pages/salon_group/salon_group.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -143,6 +145,8 @@ class _MyAppState extends State<MyApp> {
         '/my_car' : (context) => MyCar(),
         '/transaction_manage' : (context) => TransactionManage(),
         '/navigator_manage' : (context) => NavigatorManage(),
+        '/search' : (context) => SearchPage(),
+        '/salon_group' : (context) => SalonGroup(),
       },
     );
   }

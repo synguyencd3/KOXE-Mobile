@@ -1,5 +1,11 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/model/salon_group_model.dart';
+import 'package:mobile/services/salon_service.dart';
+
+import '../../model/salon_model.dart';
+import '../../services/salon_group_service.dart';
+import 'package:mobile/pages/loading.dart';
 
 class SalonGroup extends StatefulWidget {
   const SalonGroup({super.key});
@@ -9,22 +15,180 @@ class SalonGroup extends StatefulWidget {
 }
 
 class _SalonGroupState extends State<SalonGroup> {
+  List<SalonGroupModel> salonGroups = [];
+  List<Salon> salons = [];
+  List<String> selectedSalonIds = [];
+  TextEditingController groupNameController = TextEditingController();
+
+  Future<void> getAllGroups() async {
+    List<SalonGroupModel> salonGroupsAPI =
+        await SalonGroupService.getAllGroups();
+    salonGroups = salonGroupsAPI;
+  }
+
+  Future<void> getAllSalons() async {
+    List<Salon> salonsAPI = await SalonsService.getSalonNoBlock();
+    setState(() {
+      salons = salonsAPI;
+    });
+  }
+
+  Future<void> deleteGroup(String id) async {
+    bool response = await SalonGroupService.deleteGroup(id);
+    if (response) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Xóa nhóm thành công')));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Xóa nhóm thất bại')));
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      getAllGroups();
+      getAllSalons();
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    groupNameController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Các nhóm salon'),
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text('Nhóm salon $index'),
-            onTap: () {
-              Navigator.pushNamed(context, '/salon_group_detail');
-            },
-          );
-        },
+      body: Column(
+        children: [
+          TextButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Tạo nhóm salon'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            TextField(
+                              controller: groupNameController,
+                              decoration: InputDecoration(
+                                labelText: 'Tên nhóm',
+                              ),
+                            ),
+                            Text('Chọn các salon',
+                                style: TextStyle(fontSize: 20)),
+                            for (var salon in salons)
+                              StatefulBuilder(builder:
+                                  (BuildContext context, StateSetter setState) {
+                                return CheckboxListTile(
+                                  title: Text(salon.name ?? ''),
+                                  value:
+                                      selectedSalonIds.contains(salon.salonId),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      if (value == true) {
+                                        selectedSalonIds.add(salon.salonId!);
+                                      } else {
+                                        selectedSalonIds.remove(salon.salonId);
+                                      }
+                                      setState(() {});
+                                    });
+                                  },
+                                );
+                              }),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Hủy')),
+                          TextButton(
+                              onPressed: () async {
+                                SalonGroupModel group = SalonGroupModel(
+                                    name: groupNameController.text,
+                                    salonId: selectedSalonIds);
+                                bool response =
+                                    await SalonGroupService.createGroup(group);
+                                if (response) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text('Tạo nhóm thành công')));
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text('Tạo nhóm thất bại')));
+                                }
+                                Navigator.pop(context);
+                              },
+                              child: Text('Tạo')),
+                        ],
+                      );
+                    });
+              },
+              child: Text('Tạo nhóm salon')),
+          Expanded(
+            child: FutureBuilder(
+                future: getAllGroups(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Loading();
+                  }
+                  return salonGroups.isEmpty
+                      ? Center(
+                          child: Text('Không có group nào'),
+                        )
+                      : ListView.builder(
+                          itemCount: salonGroups.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: ListTile(
+                                title: Text(salonGroups[index].name),
+                                trailing: IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () async {
+                                    await deleteGroup(salonGroups[index].id!);
+                                  },
+                                ),
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('Danh sách các salon'),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              for (var salon
+                                                  in salonGroups[index].salons!)
+                                                ListTile(
+                                                  title: Text(salon.name),
+                                                )
+                                            ],
+                                          ),
+                                        );
+                                      });
+                                },
+                              ),
+                            );
+                          },
+                        );
+                }),
+          ),
+        ],
       ),
     );
   }

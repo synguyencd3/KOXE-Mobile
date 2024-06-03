@@ -109,6 +109,7 @@ class Config {
   //Process
   static const String getProcess = '/legals/process';
   static const String newProcess = '/legals/create-process';
+  static const String updateProcessName = '/legals/update-process';
   static const String deleteProcess = '/legals/delete-documents';
   static const String checkDetailProcess = '/legals/check-details-user';
   static const String updatePeriodProcess = '/legals/update-period-user';
@@ -142,4 +143,7 @@ class Config {
   static const String verifyPasswordAPI = "/auth/verify-forgot-pw";
   static const String renewPasswordAPI = "/auth/renew-forgot-pw";
   static const String forgotPasswordAPI = "/auth/forgot-pw";
+
+  //Salon Group API
+static const String salonGroupAPI = "/group/salon";
 }

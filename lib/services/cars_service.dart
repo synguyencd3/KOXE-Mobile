@@ -11,7 +11,7 @@ import 'api_service.dart';
 class CarsService {
   static var client = http.Client();
 
-  static Future<List<Car>> getAll(int page, int perPage) async {
+  static Future<List<Car>> getAll(int page, int perPage, String search) async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Accept': '*/*',
@@ -20,7 +20,8 @@ class CarsService {
 
     var url = Uri.https(Config.apiURL, Config.getCarsAPI, {
       "page": page.toString(),
-      "per_page": perPage.toString()
+      "per_page": perPage.toString(),
+      "q": search
     });
     var response = await http.get(url);
     

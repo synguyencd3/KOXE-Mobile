@@ -111,6 +111,7 @@ class ProcessService {
       'processId' : id
     });
     var data = jsonDecode(response.body);
+    print(data);
     if (data['status'] == 'success') return true;
     return false;
   }

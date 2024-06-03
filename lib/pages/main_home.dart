@@ -150,6 +150,11 @@ class _MainHomeState extends State<MainHome> {
             Row(
               children: [
                 GestureDetector(
+                  child: Icon(Icons.search),
+                  onTap: () {Navigator.pushNamed(context, '/search');},
+                ),
+                SizedBox(width: 10),
+                GestureDetector(
                   child: _count > 0
                       ? badges.Badge(
                           badgeAnimation: badges.BadgeAnimation.fade(),
