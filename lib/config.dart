@@ -100,6 +100,7 @@ class Config {
 
 //Invoice API
   static const String invoiceAPI = "/invoice";
+  static const String getInvoiceAPI = "/invoice/get-invoice-maintenance";
 
 // Accessory API
   static const String getSalonAccessoriesApi = "/accessory/salon";

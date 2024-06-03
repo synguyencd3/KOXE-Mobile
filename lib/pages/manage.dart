@@ -33,7 +33,7 @@ class _ManageState extends State<Manage> {
     var salon = await SalonsService.getMySalon();
     //print(salon!.cars?[0].description);
     setState(() {
-      cars = salon!.cars!;
+      cars = salon!.cars;
     });
   }
   @override
@@ -96,7 +96,7 @@ class _ManageState extends State<Manage> {
             text_card(
                 title: 'Quản lý giao dịch',
                 onTap: () {
-                  Navigator.pushNamed(context, '/car_voice');
+                  Navigator.pushNamed(context, '/transaction_manage');
                 }): Container(),
           ],
         ));

@@ -210,7 +210,9 @@ class _MaintainceManageState extends State<MaintainceManage>
                     ),
                   ),
                   SizedBox(height: 10),
-                  Text('Chọn gói bảo dưỡng' , style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                  Text('Chọn gói bảo dưỡng',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   ...maintainces.map((maintaince) {
                     int index = maintainces.indexOf(maintaince);
                     return MaintainceCheckbox(
@@ -221,7 +223,9 @@ class _MaintainceManageState extends State<MaintainceManage>
                     );
                   }).toList(),
                   SizedBox(height: 10),
-                  Text('Chọn phụ tùng sử dụng', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                  Text('Chọn phụ tùng sử dụng',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   ...accessories.map((accessory) {
                     int index = accessories.indexOf(accessory);
                     return AccessoryCheckbox(
@@ -244,17 +248,17 @@ class _MaintainceManageState extends State<MaintainceManage>
               TextButton(
                 child: Text('Thêm'),
                 onPressed: () async {
-             print(selectedAcessories);
+                  print(selectedAcessories);
                   List<MaintainceRequestModel> nonNullSelectedMaintainces =
                       selectedMaintainces
                           .where((element) => element != null)
                           .map((e) => MaintainceRequestModel(id: e ?? ''))
                           .toList();
                   List<AccessoryRequestModel> nonNullSelectedAccessories =
-                  selectedAcessories
-                      .where((element) => element != null)
-                      .map((e) => AccessoryRequestModel(id: e ?? ''))
-                      .toList();
+                      selectedAcessories
+                          .where((element) => element != null)
+                          .map((e) => AccessoryRequestModel(id: e ?? ''))
+                          .toList();
                   print(nonNullSelectedAccessories);
                   InvoiceModel invoice = InvoiceModel(
                     licensePlate: licenseController.text,
@@ -264,7 +268,6 @@ class _MaintainceManageState extends State<MaintainceManage>
                     note: noteController.text,
                     services: nonNullSelectedMaintainces,
                     accessoriesRequest: nonNullSelectedAccessories,
-
                   );
                   bool response = await addInvoice(invoice);
                   if (response) {
@@ -325,9 +328,9 @@ class _MaintainceManageState extends State<MaintainceManage>
                                     onPressed: () {
                                       showAddMaintainceDialog(context);
                                     },
-                                    child: Text('Thêm gói bảo dưỡng',
-                                        style: TextStyle(
-                                            fontSize: 20))),
+                                    child: Text(
+                                      'Thêm gói bảo dưỡng',
+                                    )),
                               )
                             : Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -336,9 +339,9 @@ class _MaintainceManageState extends State<MaintainceManage>
                                       onPressed: () {
                                         showAddMaintainceDialog(context);
                                       },
-                                      child: Text('Thêm gói bảo dưỡng',
-                                          style: TextStyle(
-                                              fontSize: 20))),
+                                      child: Text(
+                                        'Thêm gói bảo dưỡng',
+                                      )),
                                   Expanded(
                                     child: ListView.builder(
                                         itemCount: maintainces.length,
@@ -365,19 +368,18 @@ class _MaintainceManageState extends State<MaintainceManage>
                                     onPressed: () {
                                       showAddInvoiceDialog(context);
                                     },
-                                    child: Text('Thêm hóa đơn bảo dưỡng',
-                                        style: TextStyle(
-                                            fontSize: 20))))
+                                    child: Text(
+                                      'Thêm hóa đơn bảo dưỡng',
+                                    )))
                             : Column(
                                 children: [
                                   TextButton(
                                       onPressed: () {
                                         showAddInvoiceDialog(context);
                                       },
-                                      child: Text('Thêm hóa đơn bảo dưỡng',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                          ))),
+                                      child: Text(
+                                        'Thêm hóa đơn bảo dưỡng',
+                                      )),
                                   Expanded(
                                     child: ListView.builder(
                                       itemCount: invoices.length,

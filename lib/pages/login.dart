@@ -290,7 +290,7 @@ class emailField extends StatelessWidget {
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          labelText: 'Username',
+          labelText: 'Tài khoản',
           // labelStyle: FlutterFlowTheme.of(context).labelMedium,
           // hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
@@ -317,7 +317,7 @@ class passwordField extends StatelessWidget {
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          hintText: 'Password',
+          hintText: 'Mật khẩu',
           // labelStyle: FlutterFlowTheme.of(context).labelMedium,
 //hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),

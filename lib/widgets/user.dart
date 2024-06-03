@@ -127,21 +127,16 @@ class _UserState extends State<User> {
                 Navigator.pushNamed(context, '/manage');
               }) : Container(),
           text_card(
-              title: 'Hóa đơn bảo dưỡng',
+              title: 'Xe của tôi',
               icon: Icons.car_crash,
               onTap: () {
-                Navigator.pushNamed(context, '/user_manage');
+                Navigator.pushNamed(context, '/my_car');
               }),
           text_card(
-              title: 'Lịch sử mua xe',
-              onTap: () {
-                Navigator.pushNamed(context, '/customer/car_voice');
-              }),
-          text_card(
-              title: 'Quản lý giao dịch hoa tiêu',
+              title: 'Hoa tiêu',
               icon: Icons.manage_accounts,
               onTap: () {
-                Navigator.pushNamed(context, '/transaction');
+                Navigator.pushNamed(context, '/navigator_manage');
               }),
           text_card(
               title: 'Đăng xuất',

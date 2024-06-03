@@ -77,7 +77,7 @@ class _RegisterState extends State<Register> {
          // backgroundColor: FlutterFlowTheme.of(context).primary,
           title: Align(
             child: Text(
-              'REGISTER',
+              'ĐĂNG KÝ',
               // style: FlutterFlowTheme.of(context).headlineMedium.override(
               //       fontFamily: 'Outfit',
               //       color: Colors.white,
@@ -105,7 +105,7 @@ class _RegisterState extends State<Register> {
                     password: _password,
                   ),
                   Button(
-                      name: 'Register',
+                      name: 'Đăng ký',
                       callback: () {
                         if (_formKey.currentState!.validate()) {
                           Register();
@@ -120,14 +120,14 @@ class _RegisterState extends State<Register> {
                   ),
                   Button(
                     width: 230,
-                    name: 'Sign in with Google',
+                    name: 'Đăng nhập với Google',
                     callback: () {
                       Navigator.pushNamed(context, '/register');
                     },
                   ),
                   Button(
                     width: 230,
-                    name: 'Sign in with Facebook',
+                    name: 'Đăng nhập với Facebook',
                     callback: () {
                       Navigator.pushNamed(context, '/register');
                     },
@@ -138,7 +138,7 @@ class _RegisterState extends State<Register> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Have an account?',
+                          'Đã có tài khoản?',
                         //  style: FlutterFlowTheme.of(context).bodyMedium,
                         ),
                         SizedBox(
@@ -146,7 +146,7 @@ class _RegisterState extends State<Register> {
                         ),
                         GestureDetector(
                           child: Text(
-                            ' Login',
+                            ' Đăng nhập ngay',
                             style: TextStyle(color: Colors.blue[400]),
                           ),
                           onTap: () {
@@ -185,7 +185,7 @@ class nameField extends StatelessWidget {
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          labelText: 'Full Name',
+          labelText: 'Họ tên',
          // labelStyle: FlutterFlowTheme.of(context).labelMedium,
         //  hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
@@ -208,14 +208,14 @@ class usernameField extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
       child: TextFormField(
         validator: (username) {
-          if (username == "") return 'Please enter username';
+          if (username == "") return 'Vui lòng nhập tên tài khoản';
           return null;
         },
         controller: _username,
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          labelText: 'Username',
+          labelText: 'Tên tài khoản',
        //   labelStyle: FlutterFlowTheme.of(context).labelMedium,
         //  hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
@@ -238,7 +238,7 @@ class passwordField extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
       child: TextFormField(
         validator: (value) {
-          if (value == "") return "Please type a password";
+          if (value == "") return "Vui lòng nhập mật khẩu";
           return null;
         },
         obscureText: true,
@@ -246,7 +246,7 @@ class passwordField extends StatelessWidget {
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(7))),
-          hintText: 'Password',
+          hintText: 'Mật khẩu',
        //   labelStyle: FlutterFlowTheme.of(context).labelMedium,
        //   hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),
@@ -276,14 +276,14 @@ class ConfirmPasswordField extends StatelessWidget {
           print(_password.text);
           return (confirmation == _password.text)
               ? null
-              : "Confirm password should match password";
+              : "Mật khẩu không khớp";
         },
         obscureText: true,
         controller: _confirmPassword,
         decoration: InputDecoration(
           border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(7))),
-          hintText: 'Confirm Password',
+          hintText: 'Nhập lại mật khẩu',
       //    labelStyle: FlutterFlowTheme.of(context).labelMedium,
        //   hintStyle: FlutterFlowTheme.of(context).labelMedium,
         ),

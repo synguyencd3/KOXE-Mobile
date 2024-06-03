@@ -41,7 +41,7 @@ import 'package:mobile/pages/appointment/create_appointment.dart';
 import 'package:mobile/pages/warranty/warranty_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_manage.dart';
 import 'package:mobile/pages/accessory_manage.dart';
-import 'package:mobile/pages/user_manage.dart';
+import 'package:mobile/pages/maintaince/user_maintaince.dart';
 import 'package:mobile/pages/post/post_detail.dart';
 import 'package:mobile/pages/post/create_post.dart';
 import 'package:mobile/pages/connection/connection.dart';
@@ -52,6 +52,9 @@ import 'package:mobile/pages/password/change_password.dart';
 import 'package:mobile/pages/password/verify_password.dart';
 import 'package:mobile/pages/password/new_password.dart';
 import 'package:mobile/pages/appointment/create_appointment_process.dart';
+import 'package:mobile/pages/my_car.dart';
+import 'package:mobile/pages/transaction_manage.dart';
+import 'package:mobile/pages/navigator_manage.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -120,7 +123,7 @@ class _MyAppState extends State<MyApp> {
         '/statistic' : (context) => Statistic(),
         '/maintaince_manage' : (context) => MaintainceManage(),
         '/accessory_manage' : (context) => AccessoriesManage(),
-        '/user_manage' : (context) => UserManage(),
+        '/user_maintaince' : (context) => UserMaintaince(),
         '/post_detail' : (context) => PostDetail(),
         '/create_post' : (context) => CreatePost(),
         '/connection' : (context) => Connection(),
@@ -137,6 +140,9 @@ class _MyAppState extends State<MyApp> {
         '/verify_password' : (context) => VerifyPassword(),
         '/new_password' : (context) => NewPassword(),
         '/create_appointment_process' : (context) => CreateAppointProcess(),
+        '/my_car' : (context) => MyCar(),
+        '/transaction_manage' : (context) => TransactionManage(),
+        '/navigator_manage' : (context) => NavigatorManage(),
       },
     );
   }
