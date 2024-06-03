@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/chat_model.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/model/chat_user_model.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ChatService {
   static var client = http.Client();
@@ -20,21 +22,19 @@ class ChatService {
 
     var response = await http.get(url, headers: requestHeaders);
 
-    print(response.body);
+    //print(response.body);
     var data = jsonDecode(response.body);
-    if (response.body != '[]')
-      {
-        if (data['status'] == 'success') {
-          return chatsFromJson(data['messages']);
-        }
+    if (response.body != '[]') {
+      if (data['status'] == 'success' && data['messages'] != null) {
+        return chatsFromJson(data['messages']);
       }
-    else
-      {
-        print('def');
-      }
+    } else {
+      print('def');
+    }
 
     return [];
   }
+
   static Future<List<ChatUserModel>> getAllChatedUsers() async {
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
@@ -53,20 +53,34 @@ class ChatService {
     }
     return [];
   }
-  static Future<bool> sendMessage(String message, String userId) async {
+
+  static Future<bool> sendMessage(
+      String message, String userId, List<String> images) async {
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
     var url = Uri.https(Config.apiURL, '${Config.sendMessageAPI}/$userId');
-    //http.MultipartRequest request = new http.MultipartRequest("POST", url);
-    //request.headers.addAll(requestHeaders);
-    //request.fields['message'] = message;
-    //var response = await request.send();
-    var response = await http.post(url, headers: requestHeaders, body: {
-      'message': message,
-    });
-    print(response.body);
-    return true;
-}
+    http.MultipartRequest request = new http.MultipartRequest("POST", url);
+    request.headers.addAll(requestHeaders);
+    if (message != '') {
+      request.fields['message'] = message;
+    }
+
+    if (images.isNotEmpty) {
+      for (var imagePath in images) {
+      var multipartFile = await http.MultipartFile.fromPath(
+        'imgList',
+        imagePath,
+        contentType: MediaType('image', 'jpeg'),
+      );
+      request.files.add(multipartFile);
+
+      }
+    }
+
+    var response = await request.send();
+
+    return response.statusCode == 201;
+  }
 }

@@ -15,6 +15,7 @@ import 'package:mobile/services/api_service.dart';
 import 'package:mobile/model/chat_user_model.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+//import 'package:mobile/model/multiple_image_message.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -126,22 +127,54 @@ class _ChatState extends State<ChatPage> {
       //print(chatAPI[i].sender);
       final createAt =
           DateTime.parse(chatAPI[i].createdAt ?? DateTime.now().toString());
-      if (chatAPI[i].sender == _sender.id) {
-        final message = types.TextMessage(
-          author: _sender,
-          createdAt: createAt.millisecondsSinceEpoch,
-          id: const Uuid().v4(),
-          text: chatAPI[i].message,
-        );
-        _addMessage(message);
+      if (chatAPI[i].message != '') {
+        if (chatAPI[i].sender == _sender.id) {
+          final message = types.TextMessage(
+            author: _sender,
+            createdAt: createAt.millisecondsSinceEpoch,
+            id: const Uuid().v4(),
+            text: chatAPI[i].message,
+          );
+          _addMessage(message);
+        } else {
+          final message = types.TextMessage(
+            author: _receiver,
+            createdAt: createAt.millisecondsSinceEpoch,
+            id: const Uuid().v4(),
+            text: chatAPI[i].message,
+          );
+          _addMessage(message);
+        }
       } else {
-        final message = types.TextMessage(
-          author: _receiver,
-          createdAt: createAt.millisecondsSinceEpoch,
-          id: const Uuid().v4(),
-          text: chatAPI[i].message,
-        );
-        _addMessage(message);
+        for (String image in chatAPI[i].images ?? []) {
+          if (chatAPI[i].sender == _sender.id) {
+            final message = types.ImageMessage(
+              author: _sender,
+              createdAt: createAt.millisecondsSinceEpoch,
+              id: const Uuid().v4(),
+              height: 100,
+              width: 100,
+              name: 'Image',
+              size: 100,
+              uri: image,
+            );
+            _addMessage(message);
+          } else {
+            final message = types.ImageMessage(
+              author: _receiver,
+              createdAt: createAt.millisecondsSinceEpoch,
+              id: const Uuid().v4(),
+              height: 50,
+              width: 100,
+              name: 'Image',
+              size: 50,
+              uri: image,
+            );
+            _addMessage(message);
+
+          }
+        }
+
       }
     }
   }
@@ -157,17 +190,25 @@ class _ChatState extends State<ChatPage> {
             flexibleSpace: _appBar(),
           ),
           body: Chat(
-
+            //customMessageBuilder: _customMessageBuilder,
             messages: _messages,
             onAttachmentPressed: _handleAttachmentPressed,
             onSendPressed: _handleSendPressed,
             user: _sender,
+
           ),
         ),
       ),
     );
   }
-
+  // Widget _customMessageBuilder(types.Message message, {required int messageWidth}) {
+  //   if (message is MultipleImageMessage) {
+  //     return Row(
+  //       children: message.images.map((url) => Image.network(url, width: 100, height: 100)).toList(),
+  //     );
+  //   }
+  //   return Container();
+  // }
   void _addMessage(types.Message message) {
     setState(() {
       _messages.insert(0, message);
@@ -181,7 +222,8 @@ class _ChatState extends State<ChatPage> {
       id: const Uuid().v4(),
       text: message.text,
     );
-    bool success = await ChatService.sendMessage(textMessage.text, user!.id);
+    bool success =
+        await ChatService.sendMessage(textMessage.text, user!.id, []);
     if (success) {
       _addMessage(textMessage);
     }
@@ -206,16 +248,16 @@ class _ChatState extends State<ChatPage> {
                   child: Text('Photo'),
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleFileSelection();
-                },
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('File'),
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     Navigator.pop(context);
+              //     _handleFileSelection();
+              //   },
+              //   child: const Align(
+              //     alignment: AlignmentDirectional.centerStart,
+              //     child: Text('File'),
+              //   ),
+              // ),
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: const Align(
@@ -231,28 +273,35 @@ class _ChatState extends State<ChatPage> {
   }
 
   void _handleImageSelection() async {
-    final result = await ImagePicker().pickImage(
+    final result = await ImagePicker().pickMultiImage(
       imageQuality: 70,
       maxWidth: 1440,
-      source: ImageSource.gallery,
     );
 
-    if (result != null) {
-      final bytes = await result.readAsBytes();
-      final image = await decodeImageFromList(bytes);
-
-      final message = types.ImageMessage(
-        author: _sender,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        height: image.height.toDouble(),
-        id: const Uuid().v4(),
-        name: result.name,
-        size: bytes.length,
-        uri: result.path,
-        width: image.width.toDouble(),
-      );
-
-      _addMessage(message);
+    if (result.isNotEmpty) {
+      List<String> images = [];
+      for (var pickedFile in result) {
+        final bytes = await pickedFile.readAsBytes();
+        final image = await decodeImageFromList(bytes);
+        final message = types.ImageMessage(
+          author: _sender,
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          height: 50,
+          id: const Uuid().v4(),
+          name: pickedFile.name,
+          size: bytes.length,
+          uri: pickedFile.path,
+          width: 100,
+        );
+        _addMessage(message);
+        images.add(message.uri);
+      }
+      bool response = await ChatService.sendMessage('', user!.id, images);
+      if (response) {
+        print('success');
+      } else {
+        print('error');
+      }
     }
   }
 

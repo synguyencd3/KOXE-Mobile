@@ -17,7 +17,7 @@ class InvoiceService{
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.https(Config.apiURL, Config.invoiceAPI);
+    var url = Uri.https(Config.apiURL, Config.getInvoiceAPI);
     var response = await http.get(url, headers: requestHeaders);
     //print(response.body);
     if (response.statusCode == 200) {

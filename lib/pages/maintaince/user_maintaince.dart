@@ -2,18 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/invoice_card.dart';
 
-import '../model/invoice_model.dart';
-import '../services/invoice_service.dart';
+import '../../model/invoice_model.dart';
+import '../../services/invoice_service.dart';
 import 'package:mobile/pages/loading.dart';
 
-class UserManage extends StatefulWidget {
-  const UserManage({super.key});
+class UserMaintaince extends StatefulWidget {
+  const UserMaintaince({super.key});
 
   @override
-  State<UserManage> createState() => _UserManageState();
+  State<UserMaintaince> createState() => _UserMaintainceState();
 }
 
-class _UserManageState extends State<UserManage> {
+class _UserMaintainceState extends State<UserMaintaince> {
   late List<InvoiceModel> invoices = [];
 
   @override

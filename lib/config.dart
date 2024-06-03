@@ -99,7 +99,8 @@ class Config {
   static const String maintainceAPI = "/maintenance";
 
 //Invoice API
-  static const String invoiceAPI = "/invoice/get-invoice-maintenance";
+  static const String invoiceAPI = "/invoice";
+  static const String getInvoiceAPI = "/invoice/get-invoice-maintenance";
 
 // Accessory API
   static const String getSalonAccessoriesApi = "/accessory/salon";
@@ -142,4 +143,7 @@ class Config {
   static const String verifyPasswordAPI = "/auth/verify-forgot-pw";
   static const String renewPasswordAPI = "/auth/renew-forgot-pw";
   static const String forgotPasswordAPI = "/auth/forgot-pw";
+
+  //Salon Group API
+static const String salonGroupAPI = "/group/salon";
 }

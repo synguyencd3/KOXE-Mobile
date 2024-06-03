@@ -8,9 +8,12 @@ import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/widgets/dropdown.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/post_service.dart';
+import '../../model/salon_group_model.dart';
+import '../../services/salon_group_service.dart';
 
 import '../../model/car_model.dart';
 import '../../model/post_model.dart';
+import '../../services/salon_group_service.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -58,6 +61,7 @@ class _CreatePostState extends State<CreatePost> {
   List<String> _gearValues = ['Số tự động', 'Số sàn', 'Bán tự động'];
   List<String> _fuelValues = ['Xăng', 'Dầu', 'Điện', 'Hybrid'];
   List<String> selectedSalonIds = [];
+  List<SalonGroupModel> salonGroups = [];
 
   Future<void> pickImage() async {
     pickedFile = await picker.pickMultiImage();
@@ -74,9 +78,11 @@ class _CreatePostState extends State<CreatePost> {
     super.initState();
     Future.delayed(Duration.zero, () {
       getAllSalons();
+      getAllGroups();
     });
     selectedSalonIds = [];
   }
+
   @override
   void dispose() {
     _price.dispose();
@@ -99,12 +105,19 @@ class _CreatePostState extends State<CreatePost> {
 
   Future<void> getAllSalons() async {
     List<Salon> salonsAPI = await SalonsService.getSalonNoBlock();
-    if (mounted)
-      {
-        setState(() {
-          salons = salonsAPI;
-        });
-      }
+    if (mounted) {
+      setState(() {
+        salons = salonsAPI;
+      });
+    }
+  }
+
+  Future<void> getAllGroups() async {
+    List<SalonGroupModel> salonGroupsAPI =
+        await SalonGroupService.getAllGroups();
+    setState(() {
+      salonGroups = salonGroupsAPI;
+    });
   }
 
   Future<bool> createPost() async {
@@ -119,7 +132,7 @@ class _CreatePostState extends State<CreatePost> {
       address: _address.text,
       fuel: selectedValueFuel.value,
       licensePlate: _licensePlate.text,
-      ownerNumber: _ownerNumber.text!= '' ? int.parse(_ownerNumber.text) : 0,
+      ownerNumber: _ownerNumber.text != '' ? int.parse(_ownerNumber.text) : 0,
       color: _color.text,
       design: _design.text,
       salonId: selectedSalonIds,
@@ -130,13 +143,13 @@ class _CreatePostState extends State<CreatePost> {
           model: _version.text,
           gear: selectedValueGear.value,
           mfg: _mfg.text,
-          kilometer: _kilometer.text!='' ? int.parse(_kilometer.text): 0,
-          price:_price.text!='' ? int.parse(_price.text): 0,
-          seat: _seat.text!='' ?int.parse(_seat.text): 0),
+          kilometer: _kilometer.text != '' ? int.parse(_kilometer.text) : 0,
+          price: _price.text != '' ? int.parse(_price.text) : 0,
+          seat: _seat.text != '' ? int.parse(_seat.text) : 0),
     );
-    return true;
-     // bool response = await PostService.createPost(postModel);
-     // return response;
+    //return true;
+    bool response = await PostService.createPost(postModel);
+    return response;
   }
 
   @override
@@ -149,6 +162,7 @@ class _CreatePostState extends State<CreatePost> {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Form(
                   key: _formKey,
@@ -282,7 +296,6 @@ class _CreatePostState extends State<CreatePost> {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 20),
                       Row(
                         children: [
@@ -407,7 +420,6 @@ class _CreatePostState extends State<CreatePost> {
                         ],
                       ),
                       const SizedBox(height: 20),
-
                       Row(
                         children: [
                           Expanded(
@@ -457,7 +469,6 @@ class _CreatePostState extends State<CreatePost> {
                               children: [
                                 Text('Phụ kiện đi kèm'),
                                 DropdownMenuExample(
-                            
                                     valueNotifier: selectedValueAccessory,
                                     items: _booleanValues),
                               ],
@@ -491,7 +502,7 @@ class _CreatePostState extends State<CreatePost> {
                               ],
                             ),
                           ),
-                          Expanded (
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -579,60 +590,185 @@ class _CreatePostState extends State<CreatePost> {
                       showDialog(
                           context: context,
                           builder: (context) {
-                            return StatefulBuilder(
-                                builder: (context, StateSetter setState) {
-                              return AlertDialog(
-                                title: Text('Chọn salon'),
-                                content: Container(
-                                  width: 300,
-                                  height: 300,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: salons.map((salon) {
-                                        return CheckboxListTile(
-                                          title: Text(salon.name!),
-                                          value: selectedSalonIds
-                                              .contains(salon.salonId),
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              if (value == true) {
-                                                selectedSalonIds
-                                                    .add(salon.salonId!);
-                                              } else {
-                                                selectedSalonIds
-                                                    .remove(salon.salonId);
-                                              }
-                                            });
-                                          },
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: Text('OK'),
-                                    onPressed: () async {
-                                      bool response = await createPost();
-                                      if (response) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text('Đăng bài thành công'),
-                                          backgroundColor: Colors.green,
-                                        ));
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text('Đăng bài thất bại'),
-                                          backgroundColor: Colors.red,
-                                        ));
-                                      }
+                            return AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    title: Text('Chọn từng salon'),
+                                    trailing: Icon(Icons.arrow_forward),
+                                    onTap: () {
                                       Navigator.pop(context);
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return StatefulBuilder(builder:
+                                                (context,
+                                                    StateSetter setState) {
+                                              return AlertDialog(
+                                                title: Text('Chọn salon'),
+                                                content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: salons.map((salon) {
+                                                    return CheckboxListTile(
+                                                      title: Text(salon.name!),
+                                                      value: selectedSalonIds
+                                                          .contains(
+                                                              salon.salonId),
+                                                      onChanged: (bool? value) {
+                                                        setState(() {
+                                                          if (value == true) {
+                                                            selectedSalonIds
+                                                                .add(salon
+                                                                    .salonId!);
+                                                          } else {
+                                                            selectedSalonIds
+                                                                .remove(salon
+                                                                    .salonId);
+                                                          }
+                                                        });
+                                                      },
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                                actions: [
+                                                  TextButton(onPressed: (){
+                                                    Navigator.pop(context);
+                                                  }, child: Text('Hủy')),
+                                                  TextButton(
+                                                    child: Text('OK'),
+                                                    onPressed: () async {
+                                                      bool response =
+                                                          await createPost();
+                                                      if (response) {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                SnackBar(
+                                                          content: Text(
+                                                              'Đăng bài thành công'),
+                                                          backgroundColor:
+                                                              Colors.green,
+                                                        ));
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                SnackBar(
+                                                          content: Text(
+                                                              'Đăng bài thất bại'),
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                        ));
+                                                      }
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            });
+                                          });
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('Chọn nhóm salon'),
+                                    trailing: Icon(Icons.arrow_forward),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return StatefulBuilder(builder:
+                                                (context,
+                                                    StateSetter setState) {
+                                              return AlertDialog(
+                                                title: Text('Chọn nhóm salon'),
+                                                content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children:
+                                                      salonGroups.map((group) {
+                                                    return CheckboxListTile(
+                                                      title: Text(group.name),
+                                                      value: group.salons!
+                                                          .every((salon) =>
+                                                              selectedSalonIds
+                                                                  .contains(
+                                                                      salon
+                                                                          .id)),
+                                                      onChanged: (bool? value) {
+                                                        setState(() {
+                                                          if (value == true) {
+                                                            group.salons
+                                                                ?.forEach(
+                                                                    (salon) {
+                                                              if (!selectedSalonIds
+                                                                  .contains(salon
+                                                                      .id)) {
+                                                                selectedSalonIds
+                                                                    .add(salon
+                                                                        .id);
+                                                              }
+                                                            });
+                                                          } else {
+                                                            group.salons
+                                                                ?.forEach(
+                                                                    (salon) {
+                                                              selectedSalonIds
+                                                                  .remove(
+                                                                      salon.id);
+                                                            });
+                                                          }
+                                                        });
+                                                      },
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text('Hủy')),
+                                                  TextButton(
+                                                    child: Text('OK'),
+                                                    onPressed: () async {
+                                                      bool response =
+                                                          await createPost();
+                                                      if (response) {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                SnackBar(
+                                                          content: Text(
+                                                              'Đăng bài thành công'),
+                                                          backgroundColor:
+                                                              Colors.green,
+                                                        ));
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                SnackBar(
+                                                          content: Text(
+                                                              'Đăng bài thất bại'),
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                        ));
+                                                      }
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            });
+                                          });
                                     },
                                   ),
                                 ],
-                              );
-                            });
+                              ),
+                            );
                           });
                     },
                     child: Text('Đăng bài'))

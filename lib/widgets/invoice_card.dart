@@ -16,7 +16,6 @@ class _InvoiceCardState extends State<InvoiceCard> {
     showDialog(context: context, builder: (BuildContext context)
     {
       return AlertDialog(
-        title: Text('Chi tiết hóa đơn'),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +28,12 @@ class _InvoiceCardState extends State<InvoiceCard> {
                 subtitle:
                 Text(widget.invoice.createAt ?? '', style: TextStyle(fontSize: 16)),
               ),
-
+              ListTile(
+                title: Text(
+                  'Thông tin hóa đơn',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
               simpleInvoiceCard(widget.invoice),
               Divider(height: 20,),
               ListTile(

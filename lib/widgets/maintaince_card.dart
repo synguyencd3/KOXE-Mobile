@@ -125,10 +125,13 @@ class _MaintainceCardState extends State<MaintainceCard> {
       padding: const EdgeInsets.all(10.0),
       child: Column(
         children: [
-          Text(
-            'Gói bảo dưỡng: ${widget.maintaince.name}',
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(
+              'Gói bảo dưỡng: ${widget.maintaince.name}',
+              style: TextStyle(
+                  fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ),
           ListTile(
             title: Text('Giá: ${widget.maintaince.cost}'),
