@@ -85,6 +85,29 @@ class SalonsService {
     return null;
   }
 
+  static Future<Salon?> getSalon(String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, "${Config.SalonsAPI}/${id}");
+
+    var response = await http.get(url, headers: requestHeaders);
+    print(response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      var salon = Salon.fromJson(data['salon']);
+      return salon;
+    }
+    return null;
+  }
+
   static Future<bool?> NewSalon(Salon model) async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
@@ -130,9 +153,6 @@ class SalonsService {
     var LoginInfo = await SharedService.loginDetails();
     String mySalon = await isSalon();
     Map<String, String> requestHeaders = {
-      //'Content-Type': 'application/json',
-      //'Accept': '*/*',
-      //'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 

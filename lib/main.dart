@@ -9,6 +9,7 @@ import 'package:mobile/pages/car/cars_listing.dart';
 import 'package:mobile/pages/car/edit_car.dart';
 import 'package:mobile/pages/login.dart';
 import 'package:mobile/pages/news/news.dart';
+import 'package:mobile/pages/news/promotion.dart';
 import 'package:mobile/pages/permission/Employee_permission.dart';
 import 'package:mobile/pages/process/create_process.dart';
 import 'package:mobile/pages/process/process_list.dart';
@@ -153,6 +154,7 @@ class _MyAppState extends State<MyApp> {
         '/user_accessory' : (context) => UserAccessory(),
         '/accessory_invoice_manage' : (context) => AccessoryInvoiceManage(),
         '/maintaince_invoice_manage' : (context) => MaintainceInvoiceManage(),
+        '/promotions' : (context) => PromotionBoard(),
       },
     );
   }

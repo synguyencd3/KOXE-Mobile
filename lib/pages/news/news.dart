@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -47,16 +48,32 @@ class _NewsBoardState extends State<NewsBoard> {
       ),
       body: article.isEmpty && !isCalling ? Loading() : LazyLoadScrollView(
         onEndOfPage: () { getNews(); },
-        child: ListView.builder(
-            itemCount: article.length,
-            itemBuilder: (context, index) {
-              return NewsCard(
-                  title: article[index].title,
-                  description: article[index].summary,
-                  id: article[index].id,
-                  imageUrl: article[index].thumbnail);
-            }),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/promotions");
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text("Khuyến mãi"),
+                      Icon(Icons.arrow_forward)
+                    ],
+                  ),
+                ),
+              ),
+              Column(
+                children: article.map((e) => NewsCard(title: e.title, description: e.summary, id: e.id, imageUrl: e.thumbnail)).toList(),
+              )
+            ]
+          ),
+        ),
       ),
     );
   }
 }
+
