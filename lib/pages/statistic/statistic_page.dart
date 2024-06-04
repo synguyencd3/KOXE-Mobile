@@ -70,7 +70,7 @@ class _StatisticState extends State<Statistic> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Car Invoices'),
+        title: Text('Báo cáo doanh thu'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -79,94 +79,104 @@ class _StatisticState extends State<Statistic> {
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
               child: GestureDetector(
                 onTap: () => _selectDate(context),
-                  child: Text('Từ ngày: ${time.day}/${time.month}/${time.year}')),
+                  child: Text('Từ ngày: ${time.day}/${time.month}/${time.year}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
             ),
-            Text('Bảo dưỡng'),
+            Text('Bảo dưỡng',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
             invoicesMap.isEmpty ? Padding(
               padding: const EdgeInsets.all(30),
               child: Loading(),
             ) :
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child:  DataTable(
-                columns: const <DataColumn>[
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Car name',
-                    style: TextStyle(fontStyle: FontStyle.italic),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                  child: DataTable(
+                    columns: const <DataColumn>[
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        'Tên xe',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Total invoices',
-                    style: TextStyle(fontStyle: FontStyle.italic),
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        'Số hóa đơn',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Total expenses',
-                    style: TextStyle(fontStyle: FontStyle.italic),
+                  DataColumn(
+                    label: Expanded(
+                      child: Text(
+                        'Tổng doanh thu',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
                   ),
-                ),
+                              ],
+                               rows: invoicesMap['maintenances']!.entries.map((e) => DataRow(
+                  cells: <DataCell>[
+                    DataCell(Text(e.key)),
+                    DataCell(Text('${e.value[0]}')),
+                    DataCell(Text('${e.value[1]}'))
+                  ]
+                               )
+                               ).toList(),),
               ),
-            ],
-             rows: invoicesMap['maintenances']!.entries.map((e) => DataRow(
-              cells: <DataCell>[
-                DataCell(Text(e.key)),
-                DataCell(Text('${e.value[0]}')),
-                DataCell(Text('${e.value[1]}'))
-              ]
-             )
-             ).toList(),),
             ),
-            pieData.isEmpty ? SizedBox(height: 0) : PieChart(dataMap: pieData['MTTopDb']),
-            Text('Doanh số'),
+            pieData.isEmpty ? SizedBox(height: 0) : Card(child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: PieChart(dataMap: pieData['MTTopDb']),
+            )),
+            Text('Doanh số',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
             invoicesMap.isEmpty ? Padding(
               padding: const EdgeInsets.all(30),
               child: Loading(),
             ) :
-            DataTable(
-                columns: const <DataColumn>[
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Car name',
-                    style: TextStyle(fontStyle: FontStyle.italic),
+            Card(
+              child: DataTable(
+                  columns: const <DataColumn>[
+                DataColumn(
+                  label: Expanded(
+                    child: Text(
+                      'Tên xe',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
                   ),
                 ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Total invoices',
-                    style: TextStyle(fontStyle: FontStyle.italic),
+                DataColumn(
+                  label: Expanded(
+                    child: Text(
+                      'Số hóa đơn',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
                   ),
                 ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Total expenses',
-                    style: TextStyle(fontStyle: FontStyle.italic),
+                DataColumn(
+                  label: Expanded(
+                    child: Text(
+                      'Tổng doanh thu',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
                   ),
                 ),
-              ),
-            ],
-             rows: invoicesMap['buyCars']!.entries.map( (e) => DataRow(
-              cells: <DataCell>[
-                DataCell(Text(e.key)),
-                DataCell(Text('${e.value[0]}')),
-                DataCell(Text('${e.value[1]}'))
-              ]
-             )
-             ).toList(),),
-            pieData.isEmpty ? SizedBox(height: 0,): PieChart(dataMap: pieData['buyCarTop']),
-            Text("Thống kê doanh thu"),
+              ],
+               rows: invoicesMap['buyCars']!.entries.map( (e) => DataRow(
+                cells: <DataCell>[
+                  DataCell(Text(e.key)),
+                  DataCell(Text('${e.value[0]}')),
+                  DataCell(Text('${e.value[1]}'))
+                ]
+               )
+               ).toList(),),
+            ),
+            pieData.isEmpty ? SizedBox(height: 0,): Card(child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: PieChart(dataMap: pieData['buyCarTop']),
+            )),
+            Text("Thống kê doanh thu",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
             SfCartesianChart(
               series: <CartesianSeries<ChartData,int>>[
                 ColumnSeries(

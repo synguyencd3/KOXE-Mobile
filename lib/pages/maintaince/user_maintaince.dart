@@ -20,16 +20,11 @@ class _UserMaintainceState extends State<UserMaintaince> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      await getAllInvoices();
-    });
   }
 
   Future<void> getAllInvoices() async {
     List<InvoiceModel> invoicesAPI = await InvoiceService().getAllInvoices();
-    setState(() {
-      invoices = invoicesAPI;
-    });
+    invoices = invoicesAPI;
   }
 
   @override
@@ -39,11 +34,16 @@ class _UserMaintainceState extends State<UserMaintaince> {
           title: Text('Lịch sử bảo dưỡng'),
         ),
         body: invoices.isEmpty
-            ? Loading()
+            ? FutureBuilder(
+                future: getAllInvoices(),
+                builder: (context, snapshot) {
+                  return Center(
+                    child: Text('Không có lịch sử bảo dưỡng'),
+                  );
+                })
             : ListView.builder(
                 itemCount: invoices.length,
                 physics: BouncingScrollPhysics(),
-                padding: EdgeInsets.all(10),
                 itemBuilder: (context, index) {
                   return InvoiceCard(invoice: invoices[index]);
                 }));

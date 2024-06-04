@@ -5,6 +5,7 @@ import 'package:mobile/model/accessory_model.dart';
 
 import '../services/accessory_service.dart';
 import '../widgets/accessory_card.dart';
+import 'package:mobile/pages/loading.dart';
 
 class AccessoriesManage extends StatefulWidget {
   const AccessoriesManage({super.key});
@@ -15,24 +16,24 @@ class AccessoriesManage extends StatefulWidget {
 
 class _AccessoriesManageState extends State<AccessoriesManage> {
   late List<AccessoryModel> accessories = [];
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      getAllAccessories();
-    });
   }
+
   Future<void> getAllAccessories() async {
-    List<AccessoryModel> accessoriesAPI = await AccessoryService().getAccessoriesSalon();
+    List<AccessoryModel> accessoriesAPI =
+        await AccessoryService().getAccessoriesSalon();
     print(accessoriesAPI.length);
-    setState(() {
-      accessories = accessoriesAPI;
-    });
+    accessories = accessoriesAPI;
   }
+
   Future<bool> addAccessory(AccessoryModel accessory) async {
     bool response = await AccessoryService().addAccessory(accessory);
     return response;
   }
+
   void showAddAccessoryDialog(BuildContext context) {
     final nameController = TextEditingController();
     final manufacturerController = TextEditingController();
@@ -109,32 +110,46 @@ class _AccessoriesManageState extends State<AccessoriesManage> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quản lý phụ kiện'),
+        title: Text('Quản lý phụ tùng'),
         backgroundColor: Colors.lightBlue,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextButton(onPressed: () {
-            showAddAccessoryDialog(context);
-          }, child: Text('Thêm phụ kiện')),
-          Expanded(
-            child: ListView.builder(
-                padding: EdgeInsets.only(top: 1),
-                physics: BouncingScrollPhysics(),
-                itemCount: accessories.length,
-                itemBuilder: (context, index) {
-                  return AccessoryCard(
-                    accessory: accessories[index],
+      body: FutureBuilder(
+          future: getAllAccessories(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return Loading();
+            }
+            return accessories.isEmpty
+                ? Center(
+                    child: Text('Không có phụ tùng'),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            showAddAccessoryDialog(context);
+                          },
+                          child: Text('Thêm phụ kiện')),
+                      Expanded(
+                        child: ListView.builder(
+                            padding: EdgeInsets.only(top: 1),
+                            physics: BouncingScrollPhysics(),
+                            itemCount: accessories.length,
+                            itemBuilder: (context, index) {
+                              return AccessoryCard(
+                                accessory: accessories[index],
+                              );
+                            }),
+                      ),
+                    ],
                   );
-                }),
-          ),
-        ],
-      ),
+          }),
     );
   }
 }
