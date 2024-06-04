@@ -7,6 +7,7 @@ List<InvoiceModel> invoiceFromJson(dynamic str) =>
     List<InvoiceModel>.from((str).map((x) => InvoiceModel.fromJson(x)));
 
 class InvoiceModel {
+  String? id;
   String? type;
   int? expense;
   String? createAt;
@@ -37,6 +38,7 @@ class InvoiceModel {
 
   InvoiceModel.fromJson(Map<String, dynamic> json)
       : type = json['type'],
+        id = json['invoice_id'],
         expense = json['total'],
         createAt = json['invoiceDate'],
         fullName = json['fullname'],

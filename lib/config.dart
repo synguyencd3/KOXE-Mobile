@@ -146,4 +146,6 @@ class Config {
 
   //Salon Group API
 static const String salonGroupAPI = "/group/salon";
+// Accessory Group API
+static const String accessoryInvoiceAPI = "/buy-accessory";
 }

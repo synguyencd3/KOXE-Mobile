@@ -30,8 +30,9 @@ class _MyCarState extends State<MyCar> {
           text_card(
               title: 'Hóa đơn phụ tùng',
               onTap: () {
-                Navigator.pushNamed(context, '/user_maintaince');
+                Navigator.pushNamed(context,  '/user_accessory');
               }),
+
         ],
       ),
     );

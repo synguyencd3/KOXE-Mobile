@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:mobile/model/accessory_invoice_model.dart';
 import 'package:mobile/model/accessory_model.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/salon_service.dart';
@@ -79,5 +80,55 @@ class AccessoryService {
 
     var response = await http.patch(url, headers: requestHeaders, body: jsonEncode(accessory.toJson()));
     return response.statusCode == 200;
+  }
+
+  static Future<List<AccessoryInvoiceModel>> getAccessoryInvoices() async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.accessoryInvoiceAPI);
+
+    var response = await http.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return accessoriesInvoicefromJson(data['invoices']);
+    }
+    return [];
+  }
+  static Future<bool> deleteAcessoryInvoice(String id) async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, '${Config.accessoryInvoiceAPI}/$id');
+
+    var response = await http.delete(url, headers: requestHeaders);
+    return response.statusCode == 200;
+  }
+  static Future<bool> createAccessoryInvoice(AccessoryInvoiceModel invoice) async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.accessoryInvoiceAPI);
+
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode(invoice.toJson()));
+    return response.statusCode == 201;
   }
 }

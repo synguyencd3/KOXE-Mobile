@@ -76,38 +76,40 @@ class _SalonGroupState extends State<SalonGroup> {
                     builder: (context) {
                       return AlertDialog(
                         title: Text('Tạo nhóm salon'),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            TextField(
-                              controller: groupNameController,
-                              decoration: InputDecoration(
-                                labelText: 'Tên nhóm',
+                        content: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              TextField(
+                                controller: groupNameController,
+                                decoration: InputDecoration(
+                                  labelText: 'Tên nhóm',
+                                ),
                               ),
-                            ),
-                            Text('Chọn các salon',
-                                style: TextStyle(fontSize: 20)),
-                            for (var salon in salons)
-                              StatefulBuilder(builder:
-                                  (BuildContext context, StateSetter setState) {
-                                return CheckboxListTile(
-                                  title: Text(salon.name ?? ''),
-                                  value:
-                                      selectedSalonIds.contains(salon.salonId),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      if (value == true) {
-                                        selectedSalonIds.add(salon.salonId!);
-                                      } else {
-                                        selectedSalonIds.remove(salon.salonId);
-                                      }
-                                      setState(() {});
-                                    });
-                                  },
-                                );
-                              }),
-                          ],
+                              Text('Chọn các salon',
+                                  style: TextStyle(fontSize: 20)),
+                              for (var salon in salons)
+                                StatefulBuilder(builder:
+                                    (BuildContext context, StateSetter setState) {
+                                  return CheckboxListTile(
+                                    title: Text(salon.name ?? ''),
+                                    value:
+                                        selectedSalonIds.contains(salon.salonId),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value == true) {
+                                          selectedSalonIds.add(salon.salonId!);
+                                        } else {
+                                          selectedSalonIds.remove(salon.salonId);
+                                        }
+                                        setState(() {});
+                                      });
+                                    },
+                                  );
+                                }),
+                            ],
+                          ),
                         ),
                         actions: [
                           TextButton(
@@ -169,15 +171,17 @@ class _SalonGroupState extends State<SalonGroup> {
                                       builder: (context) {
                                         return AlertDialog(
                                           title: Text('Danh sách các salon'),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              for (var salon
-                                                  in salonGroups[index].salons!)
-                                                ListTile(
-                                                  title: Text(salon.name),
-                                                )
-                                            ],
+                                          content: SingleChildScrollView(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                for (var salon
+                                                    in salonGroups[index].salons!)
+                                                  ListTile(
+                                                    title: Text(salon.name),
+                                                  )
+                                              ],
+                                            ),
                                           ),
                                         );
                                       });

@@ -42,4 +42,16 @@ class InvoiceService{
     print(response.body);
     return response.statusCode == 201;
   }
+  static Future<bool> deleteInvoice(String id) async {
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    var url = Uri.https(Config.apiURL, Config.invoiceAPI + '/$id');
+    var response = await http.delete(url, headers: requestHeaders);
+    return response.statusCode == 200;
+  }
 }

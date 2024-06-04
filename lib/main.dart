@@ -57,6 +57,9 @@ import 'package:mobile/pages/transaction_manage.dart';
 import 'package:mobile/pages/navigator_manage.dart';
 import 'package:mobile/pages/search/searchPage.dart';
 import 'package:mobile/pages/salon_group/salon_group.dart';
+import 'package:mobile/pages/user_accessory.dart';
+import 'package:mobile/pages/accessory_invoice_manage.dart';
+import 'package:mobile/pages/maintaince/maintaince_invoice_manage.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -147,6 +150,9 @@ class _MyAppState extends State<MyApp> {
         '/navigator_manage' : (context) => NavigatorManage(),
         '/search' : (context) => SearchPage(),
         '/salon_group' : (context) => SalonGroup(),
+        '/user_accessory' : (context) => UserAccessory(),
+        '/accessory_invoice_manage' : (context) => AccessoryInvoiceManage(),
+        '/maintaince_invoice_manage' : (context) => MaintainceInvoiceManage(),
       },
     );
   }
