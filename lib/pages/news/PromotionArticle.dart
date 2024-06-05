@@ -15,7 +15,12 @@ class PromotionArticle extends StatefulWidget {
   final String id;
   final String title;
   final String thumbnail;
-  const PromotionArticle({super.key, required this.id, required this.thumbnail, required this.title});
+  const PromotionArticle({
+    super.key,
+    required this.id,
+    required this.thumbnail,
+    required this.title
+  });
 
   @override
   State<PromotionArticle> createState() => _PromotionArticleState();
@@ -77,18 +82,21 @@ class _PromotionArticleState extends State<PromotionArticle> {
                    ),
                   ),
                 ),
-                Image.network(_model.banner?[0] ?? "https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Glossary.svg"),
+                Image.network(_model.banner?[0] ??
+                    "https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Glossary.svg"),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
                   child: MarkdownBody(
-                    data: _model.contentMarkdown == null ? "": _model.contentMarkdown!
+                    data: _model.contentMarkdown == null ? "":
+                    _model.contentMarkdown!
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      Text("Khuyến mãi áp dụng tại salon",style: TextStyle(fontWeight: FontWeight.bold),),
+                      Text("Khuyến mãi áp dụng tại salon",
+                        style: TextStyle(fontWeight: FontWeight.bold),),
                     ],
                   ),
                 ),
