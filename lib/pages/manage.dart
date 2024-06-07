@@ -51,10 +51,10 @@ class _ManageState extends State<Manage> {
                 onTap: () {
                  Navigator.pushNamed(context, '/package/manage');
                 }),
-            permission.contains("OWNER") ?
+            permission.contains("OWNER") || permission.contains("R_EMP") ?
             text_card(
               headingIcon: Icons.person,
-                title: 'Quản lý người dùng',
+                title: 'Quản lý nhân viên',
                 onTap: () {
                   Navigator.pushNamed(context, '/employee_management');
                 }) : Container(),
@@ -76,24 +76,27 @@ class _ManageState extends State<Manage> {
                 onTap: () {
                   Navigator.pushNamed(context, '/connection');
                 }),
+            permission.contains("OWNER") || permission.contains("R_CAR") ?
             text_card(
                 headingIcon: Icons.directions_car_filled,
                 title: 'Quản lý xe',
                 onTap: () {
                 Navigator.pushNamed(context, '/listing/manage',arguments: cars);
-                }),
+                }): Container(),
+            permission.contains("OWNER") || permission.contains("R_WRT") ?
             text_card(
               headingIcon: Icons.shield,
                 title: 'Quản lý bảo hành',
                 onTap: () {
                   Navigator.pushNamed(context, '/warranty_list');
-                }),
+                }): Container(),
+            permission.contains("OWNER") || permission.contains("R_MT") ?
             text_card(
               headingIcon: Icons.build,
                 title: 'Quản lý bảo dưỡng',
                 onTap: () {
                   Navigator.pushNamed(context, '/maintaince_manage');
-                }),
+                }): Container(),
             text_card(
               headingIcon: Icons.toys,
                 title: 'Quản lý phụ tùng',

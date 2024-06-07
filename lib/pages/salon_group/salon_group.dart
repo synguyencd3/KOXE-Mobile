@@ -129,6 +129,9 @@ class _SalonGroupState extends State<SalonGroup> {
                                       SnackBar(
                                           content:
                                               Text('Tạo nhóm thành công')));
+                                  setState(() {
+                                    salonGroups.add(group);
+                                  });
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -164,6 +167,9 @@ class _SalonGroupState extends State<SalonGroup> {
                                   child: Row(
                                     children: [
                                       TextButton(onPressed: (){
+                                        groupNameController.text= salonGroups[index].name!;
+                                        selectedSalonIds.clear();
+                                        selectedSalonIds.addAll(salonGroups[index].salons!.map((e) => e.id).toList());
                                         showDialog(
                                             context: context,
                                             builder: (context) {
@@ -224,6 +230,7 @@ class _SalonGroupState extends State<SalonGroup> {
                                                               SnackBar(
                                                                   content:
                                                                   Text('Chỉnh sửa thành công')));
+                                                          setState(() {});
                                                         } else {
                                                           ScaffoldMessenger.of(context).showSnackBar(
                                                               SnackBar(
@@ -231,7 +238,7 @@ class _SalonGroupState extends State<SalonGroup> {
                                                         }
                                                         Navigator.pop(context);
                                                       },
-                                                      child: Text('Tạo')),
+                                                      child: Text('Sửa')),
                                                 ],
                                               );
                                             });

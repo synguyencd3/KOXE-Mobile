@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/pages/loading.dart';
 
-
 import '../../model/warranty_model.dart';
 import '../../services/warranty_service.dart';
 
 class WarrantyList extends StatefulWidget {
   const WarrantyList({Key? key}) : super(key: key);
+
   @override
   State<WarrantyList> createState() => _WarrantyState();
 }
@@ -16,13 +16,15 @@ class WarrantyList extends StatefulWidget {
 class _WarrantyState extends State<WarrantyList> {
   List<Warranty> warranties = [];
   bool isCalling = false;
+
   @override
   void initState() {
     super.initState();
     getWarrantiess();
   }
+
   Future<void> getWarrantiess() async {
-   // List<Warranty> list = ModalRoute.of(context)!.settings.arguments as List<Warranty>;
+    // List<Warranty> list = ModalRoute.of(context)!.settings.arguments as List<Warranty>;
     var list = await WarrantyService.getAll();
     //print(list);
     setState(() {
@@ -32,8 +34,11 @@ class _WarrantyState extends State<WarrantyList> {
   }
 
   Future<void> deleteWarranty(String id) async {
-    WarrantyService.DeleteWarranty(id).then((value) {getWarrantiess();});
+    WarrantyService.DeleteWarranty(id).then((value) {
+      getWarrantiess();
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,24 +52,32 @@ class _WarrantyState extends State<WarrantyList> {
         ),
         body: Column(
           mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(onPressed: () {
-                Navigator.pushNamed(context, '/warranty_form').then((value) {getWarrantiess();});
-              }, child: Text('Add Warranty')),
-            ),
+            TextButton.icon(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/warranty_form').then((value) {
+                    getWarrantiess();
+                  });
+                },
+                icon: Icon(Icons.add),
+                label: Text('Thêm gói bảo hành')),
             Expanded(
-                child: warranties.isEmpty && !isCalling ? Loading(): ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: warranties.length,
-                    physics: ClampingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.all(10),
-                          child: WarrantyCard(warranty: warranties[index], delete: deleteWarranty,));
-                    })),
+                child: warranties.isEmpty && !isCalling
+                    ? Loading()
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: warranties.length,
+                        physics: ClampingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Padding(
+                              padding: EdgeInsets.all(10),
+                              child: WarrantyCard(
+                                warranty: warranties[index],
+                                delete: deleteWarranty,
+                              ));
+                        })),
           ],
         ));
   }
@@ -72,6 +85,7 @@ class _WarrantyState extends State<WarrantyList> {
 
 class WarrantyCard extends StatelessWidget {
   const WarrantyCard({super.key, required this.warranty, required this.delete});
+
   final Warranty warranty;
 
   final Function delete;
@@ -79,42 +93,46 @@ class WarrantyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(padding: EdgeInsets.all(12),
-          child: Align(
-            alignment: AlignmentDirectional(-1, 0),
-            child: Column(
+      child: Padding(
+        padding: EdgeInsets.all(12),
+        child: Align(
+          alignment: AlignmentDirectional(-1, 0),
+          child: Column(
             children: [
               Align(
                   alignment: AlignmentDirectional(-1, 0),
-                  child: Text(
-                      '${warranty.name}',
+                  child: Text('${warranty.name}',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16))),
+                          fontWeight: FontWeight.bold, fontSize: 16))),
               Align(
-                  alignment: AlignmentDirectional(-1,0),
-                  child: Text('${warranty.limitKilometer} Km đầu tiên trong vòng ${warranty.months} tháng')),
+                  alignment: AlignmentDirectional(-1, 0),
+                  child: Text(
+                      '${warranty.limitKilometer} Km đầu tiên trong vòng ${warranty.months} tháng')),
               Align(
-                alignment: AlignmentDirectional(-1,0),
+                  alignment: AlignmentDirectional(-1, 0),
                   child: Text('${warranty.policy}')),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(onPressed: () {
-                      Navigator.pushNamed(context, '/warranty_form', arguments: {'warranty': warranty});
-                    }, icon: Icon(Icons.edit)
-                    ),
-                    IconButton(onPressed: () {
-                      delete(warranty.warrantyId);
-                    }, icon: Icon(Icons.delete)),
-                  ],),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/warranty_form',
+                              arguments: {'warranty': warranty});
+                        },
+                        icon: Icon(Icons.edit)),
+                    IconButton(
+                        onPressed: () {
+                          delete(warranty.warrantyId);
+                        },
+                        icon: Icon(Icons.delete)),
+                  ],
+                ),
               )
             ],
-                ),
           ),
+        ),
       ),
     );
   }

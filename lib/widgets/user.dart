@@ -113,12 +113,12 @@ class _UserState extends State<User> {
               headingIcon: Icons.person_add,
               onTap: openDialog,
           ),
-          text_card(
-              title: 'Cài đặt',
-              headingIcon: Icons.settings,
-              onTap: () {
-                Navigator.pushNamed(context, '/setting');
-              }),
+          // text_card(
+          //     title: 'Cài đặt',
+          //     headingIcon: Icons.settings,
+          //     onTap: () {
+          //       Navigator.pushNamed(context, '/setting');
+          //     }),
           permissions.length > 0 ?
           text_card(
               title: 'Quản lý',

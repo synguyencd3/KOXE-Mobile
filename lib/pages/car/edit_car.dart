@@ -184,7 +184,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _price,
-                decoration: InputDecoration(labelText: 'giá',
+                decoration: InputDecoration(labelText: 'Giá',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),
@@ -220,7 +220,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _origin,
-                decoration: InputDecoration(labelText: 'Xuất sứ',
+                decoration: InputDecoration(labelText: 'Xuất xứ',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),
@@ -238,7 +238,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _model,
-                decoration: InputDecoration(labelText: 'Model',
+                decoration: InputDecoration(labelText: 'Mẫu mã xe',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),
@@ -292,6 +292,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _door,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Số cửa',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
@@ -310,6 +311,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _seat,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Số chỗ ngồi',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
@@ -328,7 +330,8 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _kilometer,
-                decoration: InputDecoration(labelText: 'Odo',
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: 'Số km đã đi',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),
@@ -346,7 +349,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _gear,
-                decoration: InputDecoration(labelText: 'Số',
+                decoration: InputDecoration(labelText: 'Hộp số',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),
@@ -364,7 +367,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _mfg,
-                decoration: InputDecoration(labelText: 'tiêu hao nhiên liệu/lít',
+                decoration: InputDecoration(labelText: 'Năm sản xuất',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),

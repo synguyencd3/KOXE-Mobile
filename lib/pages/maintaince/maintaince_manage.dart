@@ -34,12 +34,10 @@ class _MaintainceManageState extends State<MaintainceManage>
     maintainces = maintaincesAPI;
   }
 
-
   Future<bool> addMaintaincePackage(MaintainceModel maintaince) async {
     bool response = await MaintainceService().addMaintaincePackage(maintaince);
     return response;
   }
-
 
   void showAddMaintainceDialog(BuildContext context) {
     final nameController = TextEditingController();
@@ -130,47 +128,47 @@ class _MaintainceManageState extends State<MaintainceManage>
         child: Column(
           children: [
             Expanded(
-                child:
-                  FutureBuilder(
-                      future: getAllMaintainces(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Loading();
-                        }
-                        return maintainces.isEmpty
-                            ? Center(
-                                child: TextButton(
-                                    onPressed: () {
-                                      showAddMaintainceDialog(context);
-                                    },
-                                    child: Text(
-                                      'Thêm gói bảo dưỡng',
-                                    )),
-                              )
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  TextButton(
-                                      onPressed: () {
-                                        showAddMaintainceDialog(context);
-                                      },
-                                      child: Text(
-                                        'Thêm gói bảo dưỡng',
-                                      )),
-                                  Expanded(
-                                    child: ListView.builder(
-                                        itemCount: maintainces.length,
-                                        physics: BouncingScrollPhysics(),
-                                        padding: EdgeInsets.only(top: 1),
-                                        itemBuilder: (context, index) {
-                                          return MaintainceCard(
-                                              maintaince: maintainces[index]);
-                                        }),
-                                  ),
-                                ],
-                              );
-                      }),
+              child: FutureBuilder(
+                  future: getAllMaintainces(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Loading();
+                    }
+                    return maintainces.isEmpty
+                        ? Center(
+                            child: TextButton.icon(
+                                icon: Icon(Icons.add),
+                                onPressed: () {
+                                  showAddMaintainceDialog(context);
+                                },
+                                label: Text(
+                                  'Thêm gói bảo dưỡng',
+                                )),
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              TextButton.icon(
+                                  icon: Icon(Icons.add),
+                                  onPressed: () {
+                                    showAddMaintainceDialog(context);
+                                  },
+                                  label: Text(
+                                    'Thêm gói bảo dưỡng',
+                                  )),
+                              Expanded(
+                                child: ListView.builder(
+                                    itemCount: maintainces.length,
+                                    physics: BouncingScrollPhysics(),
+                                    padding: EdgeInsets.only(top: 1),
+                                    itemBuilder: (context, index) {
+                                      return MaintainceCard(
+                                          maintaince: maintainces[index]);
+                                    }),
+                              ),
+                            ],
+                          );
+                  }),
             ),
           ],
         ),

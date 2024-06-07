@@ -87,7 +87,7 @@ class _AccessoriesManageState extends State<AccessoriesManage> {
                 if (response) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Thêm gói bảo dưỡng thành công'),
+                      content: Text('Thêm phụ tùng thành công'),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -97,7 +97,7 @@ class _AccessoriesManageState extends State<AccessoriesManage> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Thêm gói bảo dưỡng thất bại'),
+                      content: Text('Thêm phụ tùng thất bại'),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -131,11 +131,12 @@ class _AccessoriesManageState extends State<AccessoriesManage> {
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      TextButton(
+                      TextButton.icon(
+                        icon: Icon(Icons.add),
                           onPressed: () {
                             showAddAccessoryDialog(context);
                           },
-                          child: Text('Thêm phụ kiện')),
+                          label: Text('Thêm phụ tùng')),
                       Expanded(
                         child: ListView.builder(
                             padding: EdgeInsets.only(top: 1),
