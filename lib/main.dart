@@ -61,6 +61,7 @@ import 'package:mobile/pages/salon_group/salon_group.dart';
 import 'package:mobile/pages/user_accessory.dart';
 import 'package:mobile/pages/accessory_invoice_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_invoice_manage.dart';
+import 'package:mobile/pages/post/post.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -155,6 +156,7 @@ class _MyAppState extends State<MyApp> {
         '/accessory_invoice_manage' : (context) => AccessoryInvoiceManage(),
         '/maintaince_invoice_manage' : (context) => MaintainceInvoiceManage(),
         '/promotions' : (context) => PromotionBoard(),
+        '/post' : (context) => PostPage(),
       },
     );
   }

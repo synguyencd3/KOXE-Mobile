@@ -20,7 +20,7 @@ class TransactionService {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       //print(data);
-      return transactionsFromJson(data['transaction']);
+      return transactionsFromJson(data['transaction']['transaction']);
     }
     print('error');
     return [];

@@ -43,10 +43,9 @@ class _CarState extends State<CarsListing> {
           ),
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-                child: TextButton(onPressed: () {Navigator.pushNamed(context, '/new_car');}, child: Text('Thêm xe'))),
+           TextButton.icon(onPressed: () {Navigator.pushNamed(context, '/new_car');}, icon: Icon(Icons.add), label:Text('Thêm xe')),
             Expanded(
                 child:cars.isEmpty && !isCalling ? Loading(): ListView.builder(
                     shrinkWrap: true,

@@ -5,18 +5,21 @@ class text_card extends StatelessWidget {
   final Function onTap;
   final IconData icon;
   final String trailingText;
+  final IconData? headingIcon;
 
   const text_card(
       {required this.title,
       required this.onTap,
       this.icon = Icons.arrow_forward_ios,
-      this.trailingText = ''});
+      this.trailingText = '',
+      this.headingIcon});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ListTile(
+          leading: headingIcon != null ? Icon(headingIcon) : null,
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

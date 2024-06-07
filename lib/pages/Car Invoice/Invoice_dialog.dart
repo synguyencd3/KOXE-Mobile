@@ -110,7 +110,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Information'),
+      title: Text('Thông tin giao dịch'),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,19 +118,19 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
           children: [
             TextField(
               controller: fullNameController,
-              decoration: InputDecoration(labelText: 'Full Name'),
+              decoration: InputDecoration(labelText: 'Họ tên'),
             ),
             TextField(
               controller: phoneNumberController,
-              decoration: InputDecoration(labelText: 'Phone Number'),
+              decoration: InputDecoration(labelText: 'Số điện thoại'),
             ),
             TextField(
               controller: carNameController,
-              decoration: InputDecoration(labelText: 'Car Name'),
+              decoration: InputDecoration(labelText: 'Tên xe'),
             ),
             TextField(
               controller: emailAddressController,
-              decoration: InputDecoration(labelText: 'Email Address'),
+              decoration: InputDecoration(labelText: 'Địa chỉ email'),
             ),
             SizedBox(height: 16),
             (currentPeriod == null)
