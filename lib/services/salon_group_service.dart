@@ -41,6 +41,17 @@ class SalonGroupService {
   }
 
   static Future<bool> deleteGroup(String id) async {
+    print(id);
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    var url = Uri.https(Config.apiURL, '${Config.salonGroupAPI}/$id');
+    var response = await http.delete(url, headers: requestHeaders);
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> updateGroup(SalonGroupModel group) async {
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -48,8 +59,9 @@ class SalonGroupService {
       'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
-    var url = Uri.https(Config.apiURL, '${Config.salonGroupAPI}/$id');
-    var response = await http.delete(url, headers: requestHeaders);
+    var url = Uri.https(Config.apiURL, '${Config.salonGroupAPI}/${group.id}');
+    var response =
+        await http.patch(url, headers: requestHeaders, body: jsonEncode(group));
     return response.statusCode == 200;
   }
 }

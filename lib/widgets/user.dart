@@ -98,7 +98,7 @@ class _UserState extends State<User> {
           SizedBox(height: 10),
           text_card(
               title: 'Thông tin cá nhân',
-              icon: Icons.person,
+              headingIcon: Icons.person,
               onTap: () async {
                 final result = await Navigator.pushNamed(context, '/user_info',
                     arguments: userProfile);
@@ -110,37 +110,37 @@ class _UserState extends State<User> {
               }),
           text_card(
               title: 'Mời bạn bè',
-              icon: Icons.person_add,
+              headingIcon: Icons.person_add,
               onTap: openDialog,
           ),
           text_card(
               title: 'Cài đặt',
-              icon: Icons.settings,
+              headingIcon: Icons.settings,
               onTap: () {
                 Navigator.pushNamed(context, '/setting');
               }),
           permissions.length > 0 ?
           text_card(
               title: 'Quản lý',
-              icon: Icons.manage_accounts,
+              headingIcon: Icons.manage_accounts,
               onTap: () {
                 Navigator.pushNamed(context, '/manage');
               }) : Container(),
           text_card(
               title: 'Xe của tôi',
-              icon: Icons.car_crash,
+              headingIcon: Icons.car_crash,
               onTap: () {
                 Navigator.pushNamed(context, '/my_car');
               }),
           text_card(
               title: 'Hoa tiêu',
-              icon: Icons.manage_accounts,
+              headingIcon: Icons.manage_accounts,
               onTap: () {
                 Navigator.pushNamed(context, '/navigator_manage');
               }),
           text_card(
               title: 'Đăng xuất',
-              icon: Icons.logout,
+              headingIcon: Icons.logout,
               onTap: () {
                 showDialog(context: context, builder: (context) {
                   return AlertDialog(

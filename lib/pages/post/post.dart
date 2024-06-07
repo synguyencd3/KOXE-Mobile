@@ -40,52 +40,51 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getPosts(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Loading();
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          }
-          return Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  salonId == ''
-                      ? TextButton.icon(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/create_post');
-                          },
-                          icon: Icon(Icons.post_add),
-                          label: Text('Thêm bài viết'),
-                        ): Container(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Bài viết'),
+        backgroundColor: Colors.lightBlue,
+      ),
+      body: FutureBuilder(
+          future: getPosts(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Loading();
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            }
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    salonId == ''
+                        ? TextButton.icon(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/create_post');
+                            },
+                            icon: Icon(Icons.post_add),
+                            label: Text('Thêm bài viết'),
+                          ): Container(),
 
-                  TextButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/connection');
-                    },
-                    icon: Icon(Icons.connect_without_contact),
-                    label: Text('Quản lý kết nối'),
-                  )
-                ],
-              ),
-              Expanded(
-                child: LazyLoadScrollView(
-                     onEndOfPage: () { getPosts(); },
-                     child: ListView.builder(
-                      itemCount: posts.length,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return PostCard(post: posts[index]);
-                      }),
+                  ],
                 ),
-              ),
-            ],
-          );
-        });
+                Expanded(
+                  child: LazyLoadScrollView(
+                       onEndOfPage: () { getPosts(); },
+                       child: ListView.builder(
+                        itemCount: posts.length,
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return PostCard(post: posts[index]);
+                        }),
+                  ),
+                ),
+              ],
+            );
+          }),
+    );
   }
 }

@@ -159,11 +159,109 @@ class _SalonGroupState extends State<SalonGroup> {
                             return Card(
                               child: ListTile(
                                 title: Text(salonGroups[index].name),
-                                trailing: IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () async {
-                                    await deleteGroup(salonGroups[index].id!);
-                                  },
+                                trailing: Container(
+                                  width: MediaQuery.of(context).size.width * 0.3,
+                                  child: Row(
+                                    children: [
+                                      TextButton(onPressed: (){
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: Text('Chỉnh sửa nhóm'),
+                                                content: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      TextField(
+                                                        controller: groupNameController,
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Tên nhóm',
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 10,),
+                                                      Text('Chọn các salon',
+                                                          style: TextStyle(fontSize: 20)),
+                                                      for (var salon in salons)
+                                                        StatefulBuilder(builder:
+                                                            (BuildContext context, StateSetter setState) {
+                                                          return CheckboxListTile(
+                                                            title: Text(salon.name ?? ''),
+                                                            value:
+                                                            selectedSalonIds.contains(salon.salonId),
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                if (value == true) {
+                                                                  selectedSalonIds.add(salon.salonId!);
+                                                                } else {
+                                                                  selectedSalonIds.remove(salon.salonId);
+                                                                }
+                                                                setState(() {});
+                                                              });
+                                                            },
+                                                          );
+                                                        }),
+                                                    ],
+                                                  ),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text('Hủy')),
+                                                  TextButton(
+                                                      onPressed: () async {
+                                                        SalonGroupModel group = SalonGroupModel(
+                                                          id: salonGroups[index].id,
+                                                            name: groupNameController.text,
+                                                            salonId: selectedSalonIds);
+                                                        bool response =
+                                                        await SalonGroupService.updateGroup(group);
+                                                        if (response) {
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                              SnackBar(
+                                                                  content:
+                                                                  Text('Chỉnh sửa thành công')));
+                                                        } else {
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                              SnackBar(
+                                                                  content: Text('Chỉnh sửa thất bại')));
+                                                        }
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text('Tạo')),
+                                                ],
+                                              );
+                                            });
+                                      }, child: Icon(Icons.edit)),
+                                      IconButton(
+                                        icon: Icon(Icons.delete),
+                                        onPressed: () async {
+                                          showDialog(context: context, builder: (context) {
+                                            return AlertDialog(
+                                              title: Text('Xác nhận xóa'),
+                                              content: Text('Bạn có chắc chắn muốn xóa nhóm này không?'),
+                                              actions: [
+                                                TextButton(onPressed: () {
+                                                  Navigator.pop(context);
+                                                }, child: Text('Hủy')),
+                                                TextButton(onPressed: () async {
+                                                  await deleteGroup(salonGroups[index].id!);
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    salonGroups.removeAt(index);
+                                                  });
+                                                }, child: Text('Xóa')),
+                                              ],
+                                            );
+                                          });
+                                        },
+                                      ),
+
+                                    ],
+                                  ),
                                 ),
                                 onTap: () {
                                   showDialog(

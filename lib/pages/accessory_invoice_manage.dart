@@ -343,9 +343,25 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                                           icon: Icon(Icons.info)),
                                       IconButton(
                                           onPressed: () {
-                                            deleteAccessoryInvoice(
-                                                accessoryInvoices[index].id ??
-                                                    '');
+                                            showDialog(context: context, builder: (context){
+                                              return AlertDialog(
+                                                content: Text('Bạn có chắc chắn muốn xóa hóa đơn này không?'),
+                                                actions: [
+                                                  TextButton(onPressed: (){
+                                                    Navigator.of(context).pop();
+                                                  }, child: Text('Hủy')),
+                                                  TextButton(onPressed: (){
+                                                    Navigator.of(context).pop();
+                                                    setState(() {
+                                                      accessoryInvoices.removeAt(index);
+                                                    });
+                                                    deleteAccessoryInvoice(
+                                                        accessoryInvoices[index].id ??
+                                                            '');
+                                                  }, child: Text('Xác nhận')),
+                                                ]
+                                              );
+                                            });
                                           },
                                           icon: Icon(Icons.delete)),
                                     ],
