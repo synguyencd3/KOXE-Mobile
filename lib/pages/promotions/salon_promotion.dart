@@ -6,7 +6,8 @@ import 'package:mobile/services/promotion_service.dart';
 
 import '../../model/promotion_model.dart';
 import '../loading.dart';
-import '../news/promotion_card.dart';
+import '../news/PromotionArticle.dart';
+
 
 class SAlonPromotionBoard extends StatefulWidget {
   const SAlonPromotionBoard({super.key});
@@ -29,7 +30,7 @@ class _SAlonPromotionBoardState extends State<SAlonPromotionBoard> {
     var list = await PromotionService.getPromotions();
     setState(() {
       if (list.length>0) index++;
-      promotions.addAll(list);
+      promotions=list;
       isCalling =true;
     });
   }
@@ -51,9 +52,82 @@ class _SAlonPromotionBoardState extends State<SAlonPromotionBoard> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: ((context) {return NewPromotion();})));
                 }, icon: Icon(Icons.add), label:Text('Thêm khuyến mãi')),
-                Column(children: promotions.map((e) => PromotionCard(title: e.title, description: e.description, id: e.id, imageUrl: e.thumbnail)).toList(),)
+                Column(children: promotions.map((e) => PromotionCard(title: e.title, description: e.description, id: e.id, imageUrl: e.thumbnail, fetch: getPromotions ,)).toList(),)
               ]
             )
+        ),
+      ),
+    );
+  }
+}
+
+class PromotionCard extends StatelessWidget {
+  const PromotionCard(
+      {super.key,
+        required this.title,
+        required this.description,
+        required this.id,
+        required this.fetch,
+        this.imageUrl});
+
+  final String? title;
+  final String? description;
+  final String? id;
+  final String? imageUrl;
+  final Function fetch;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PromotionArticle(id: id ?? "", thumbnail: imageUrl?? "", title: title ?? "",)));
+        },
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            children: [
+              imageUrl != null ?  Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(child: Image.network(imageUrl!),
+                  borderRadius: BorderRadius.circular(8),),
+              ): Container(height: 10,),
+              Align(
+                alignment: AlignmentDirectional(-1, 0),
+                child: Column(
+                  children: [Text(title!, style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                  ),),
+                    SizedBox(height: 3),
+                    Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                        child: Text(description!)
+                    )],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () {
+
+                      }, icon: Icon(Icons.edit)),
+                  IconButton(
+                      onPressed: () {
+                        PromotionService.DeletePromotion(id!).then((value) => {
+                          if (value==true) fetch()
+                        });
+                      },
+                      icon: Icon(Icons.delete)),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

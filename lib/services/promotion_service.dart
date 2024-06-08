@@ -55,4 +55,25 @@ class PromotionService {
     String salonId = await SalonsService.isSalon();
     return NewsService.getSalonPromotions(salonId);
   }
+
+  static Future<bool?> DeletePromotion(String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    String mySalon = await SalonsService.isSalon();
+    Map<String, String> requestHeaders = {
+      // 'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, '${Config.promotionAPI}/${id}');
+
+    var response = await http.delete(url);
+
+    var data = jsonDecode(response.body);
+    print(data);
+    if (data['status'] == 'success') return true;
+    return false;
+  }
 }
