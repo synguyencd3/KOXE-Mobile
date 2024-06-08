@@ -152,4 +152,5 @@ static const String accessoryInvoiceAPI = "/buy-accessory";
 
 //Promotion
 static const String promotionAPI = "/promotions";
+static const String salonPromotionAPI = "/promotions/salon";
 }
