@@ -24,7 +24,7 @@ class _ProcessesState extends State<Processes> {
     getProcesses();
   }
 
-  Future<void> deleteProcess(String id) async {
+  void deleteProcess(String id) async {
     ProcessService.DeleteProcess(id).then((value) {
       getProcesses();
     });

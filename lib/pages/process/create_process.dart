@@ -51,7 +51,7 @@ class _NewProcessState extends State<NewProcess> {
       }
   }
 
-  void EditCar() {
+  void EditProcess() {
 
     process model = process(
         type: type,
@@ -59,18 +59,18 @@ class _NewProcessState extends State<NewProcess> {
         description: _descriptionController.text,
         documents: _formCards
     );
-    // ProcessService.changeProcess(model).then((value) {
-    //   if (value==true)
-    //   {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //         SnackBar(
-    //           content: Text('Chỉnh sửa thành công'),
-    //           backgroundColor: Colors.green,
-    //         )
-    //     );
-    //     Navigator.pop(context);
-    //   }
-    // });
+    ProcessService.changeProcess(model, _process!.id!).then((value) {
+      if (value==true)
+      {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Chỉnh sửa thành công'),
+              backgroundColor: Colors.green,
+            )
+        );
+        Navigator.pop(context);
+      }
+    });
   }
 
   void _submitForm() {
@@ -223,10 +223,15 @@ class _NewProcessState extends State<NewProcess> {
               //       return null;
               //     },
               //   ),
-              TextButton(
+              _process == null ? TextButton(
                 child: Text('Tạo quy trình'),
                 onPressed: () {
                   _submitForm();
+                },
+              ): TextButton(
+                child: Text('Cập nhật quy trình'),
+                onPressed: () {
+                  EditProcess();
                 },
               ),
               TextButton(
