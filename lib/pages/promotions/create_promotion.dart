@@ -2,26 +2,50 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/model/promotion_request.dart';
+import 'package:mobile/pages/news/PromotionArticle.dart';
+import 'package:mobile/services/news_service.dart';
 import 'package:mobile/services/promotion_service.dart';
 
+import '../../model/promotion_article_model.dart';
+
 class NewPromotion extends StatefulWidget {
+  NewPromotion({this.id});
+
   @override
   _NewPromotionState createState() => _NewPromotionState();
+  late final String? id;
 }
 
 class _NewPromotionState extends State<NewPromotion> {
   final _formKey = GlobalKey<FormState>();
+  late final PromotionArticleModel? promotion;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _contentHtmlController = TextEditingController();
+  //final TextEditingController _contentHtmlController = TextEditingController();
   final TextEditingController _contentMarkdownController = TextEditingController();
   DateTime? _startDate;
   DateTime? _endDate;
   List<File>? image;
   List<XFile>? pickedFile;
   final picker = ImagePicker();
+
+
+  Future<void> GetPromotion() async {
+    var data = await NewsService.getPromotion(widget.id!);
+    setState(() {
+      promotion=data;
+    });
+    
+    _titleController.text = promotion?.title ?? "";
+    _descriptionController.text = promotion?.description ?? "";
+    _contentMarkdownController.text = promotion?.contentMarkdown ?? "";
+    _startDate = new DateFormat("dd/MM/yyyy").parse(promotion!.startDate!);//DateTime.parse(promotion!.startDate!);
+    _endDate = new DateFormat("dd/MM/yyyy").parse(promotion!.endDate!);
+  }
 
   Future<void> _pickDate(BuildContext context, bool isStartDate) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -55,8 +79,8 @@ class _NewPromotionState extends State<NewPromotion> {
         title: _titleController.text,
         description: _descriptionController.text,
         contentMarkdown: _contentMarkdownController.text,
-        startDate: '${_startDate?.day}/${_startDate?.month}/${_startDate?.year}',
-        endDate: '${_endDate?.day}/${_endDate?.month}/${_endDate?.year}',
+        startDate: '${_startDate?.year}-${_startDate?.month}-${_startDate?.day}',
+        endDate: '${_endDate?.year}-${_endDate?.month}-${_endDate?.day}',
         banner: pickedFile?.map((e) => e.path).toList()
       );
       PromotionService.NewPromotion(promotion).then((value) {
@@ -73,6 +97,34 @@ class _NewPromotionState extends State<NewPromotion> {
       });
   }
 
+  void _changeForm() {
+    PromotionRequest promotion = PromotionRequest(
+        title: _titleController.text,
+        description: _descriptionController.text,
+        contentMarkdown: _contentMarkdownController.text,
+        startDate: '${_startDate?.year}-${_startDate?.month}-${_startDate
+            ?.day}',
+        endDate: '${_endDate?.year}-${_endDate?.month}-${_endDate?.day}',
+        banner: pickedFile?.map((e) => e.path).toList()
+    );
+    PromotionService.ChangePromotion(promotion, widget.id!).then((value) {
+      if (value == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('sửa thành công'),
+              backgroundColor: Colors.green,
+            )
+        );
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.id!= null) GetPromotion();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +140,7 @@ class _NewPromotionState extends State<NewPromotion> {
             children: <Widget>[
               TextFormField(
                 controller: _titleController,
+                //initialValue: promotion == null ? "" :promotion?.title?? "",
                 decoration: InputDecoration(labelText: 'Title'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -99,6 +152,7 @@ class _NewPromotionState extends State<NewPromotion> {
               TextFormField(
                 controller: _descriptionController,
                 decoration: InputDecoration(labelText: 'Description'),
+                //initialValue: promotion == null ? "" :promotion?.description ?? "",
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -110,6 +164,7 @@ class _NewPromotionState extends State<NewPromotion> {
               TextFormField(
                 controller: _contentMarkdownController,
                 decoration: InputDecoration(labelText: 'Content (Markdown)'),
+                //initialValue: promotion == null ? "" :promotion?.contentMarkdown ?? "",
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -121,14 +176,14 @@ class _NewPromotionState extends State<NewPromotion> {
               ListTile(
                 title: Text(_startDate == null
                     ? 'Start Date: Not selected'
-                    : 'Start Date: ${_startDate!.toLocal()}'.split(' ')[0]),
+                    : 'Start Date: ${_startDate!.toLocal()}'),
                 trailing: Icon(Icons.calendar_today),
                 onTap: () => _pickDate(context, true),
               ),
               ListTile(
                 title: Text(_endDate == null
                     ? 'End Date: Not selected'
-                    : 'End Date: ${_endDate!.toLocal()}'.split(' ')[0]),
+                    : 'End Date: ${_endDate!.toLocal()}'),
                 trailing: Icon(Icons.calendar_today),
                 onTap: () => _pickDate(context, false),
               ),
@@ -144,7 +199,10 @@ class _NewPromotionState extends State<NewPromotion> {
                       : Text('${pickedFile!.length} ảnh đã chọn')
               ),
               SizedBox(height: 20),
-              ElevatedButton(
+              widget.id != null ? ElevatedButton(
+                onPressed: _changeForm,//_submitForm,
+                child: Text('Change'),
+              ): ElevatedButton(
                 onPressed: _submitForm,
                 child: Text('Submit'),
               ),

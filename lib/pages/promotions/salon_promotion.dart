@@ -115,7 +115,7 @@ class PromotionCard extends StatelessWidget {
                 children: [
                   IconButton(
                       onPressed: () {
-
+                        Navigator.push(context, MaterialPageRoute(builder: ((context) {return NewPromotion(id: id);})));
                       }, icon: Icon(Icons.edit)),
                   IconButton(
                       onPressed: () {
