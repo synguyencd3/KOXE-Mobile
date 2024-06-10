@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 //import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:mobile/model/login_request_model.dart';
 import 'package:mobile/services/api_service.dart';
+import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/shared_service.dart';
+import 'package:mobile/socket/socket_manager.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,10 +20,19 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _password;
   late final TextEditingController _email;
   bool isAPIcallProcess = false;
+
   void Login() {
     setState(() {
       isAPIcallProcess = true;
     });
+    Future<void> initSocket() async {
+      final Map<String, dynamic> userProfile =
+          await APIService.getUserProfile();
+      String salonId = await SalonsService.isSalon();
+      await SocketManager().initSocket(userProfile['user_id'], salonId, (data) {
+        print(data);
+      });
+    }
 
     LoginRequest model =
         LoginRequest(username: _username.text, password: _password.text);
@@ -30,7 +41,8 @@ class _LoginPageState extends State<LoginPage> {
           if (response)
             {
               Navigator.pushNamedAndRemoveUntil(
-                  context, '/mhome', (route) => false)
+                  context, '/mhome', (route) => false),
+              initSocket()
             }
           else
             {
@@ -132,38 +144,47 @@ class _LoginPageState extends State<LoginPage> {
             //Forgot Password Text
             GestureDetector(
               onTap: () {
-                showDialog(context: context, builder:  (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Nhập email khôi phục'),
-                    content: TextField(
-                      controller: _email,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(Radius.circular(7))),
-                        hintText: 'Email',
-                        // labelStyle: FlutterFlowTheme.of(context).labelMedium,
-                        //hintStyle: FlutterFlowTheme.of(context).labelMedium,
-                      ),
-                    ) ,
-                    actions: [
-                      TextButton(onPressed: (){
-                        Navigator.of(context).pop();
-                      }, child: Text('Hủy')),
-                      TextButton(onPressed: () async{
-                        bool response = await APIService.forgotPassword(_email.text);
-                        if (response)
-                          {
-                            Navigator.pushNamed(context, '/verify_password', arguments: _email.text);
-                          }
-                        else
-                          {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Email không tồn tại')));
-                          }
-
-                      }, child: Text('Gửi mã xác nhận')),
-                    ],
-                  );
-                });
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Nhập email khôi phục'),
+                        content: TextField(
+                          controller: _email,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(7))),
+                            hintText: 'Email',
+                            // labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                            //hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Hủy')),
+                          TextButton(
+                              onPressed: () async {
+                                bool response = await APIService.forgotPassword(
+                                    _email.text);
+                                if (response) {
+                                  Navigator.pushNamed(
+                                      context, '/verify_password',
+                                      arguments: _email.text);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text('Email không tồn tại')));
+                                }
+                              },
+                              child: Text('Gửi mã xác nhận')),
+                        ],
+                      );
+                    });
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
