@@ -54,7 +54,7 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Administration'),
+        title: Text('Quản lý nhân viên'),
       ),
       body: users.isEmpty && !isCalling ? Loading() : Padding(
         padding: const EdgeInsets.all(8.0),
@@ -62,11 +62,9 @@ class _AdminPageState extends State<AdminPage> {
           itemCount: users.length,
           itemBuilder: (context, index) {
             final user = users[index];
-
             return GestureDetector(
               child: ListTile(
                 title: Text(user.fullname!),
-                subtitle: Text("permission"),
                 trailing: IconButton(
                   icon: Icon(Icons.delete),
                   onPressed: () => removeEmployee(user),
@@ -81,10 +79,10 @@ class _AdminPageState extends State<AdminPage> {
                       content: SingleChildScrollView(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(user.fullname!),
-                            SizedBox(height: 16),
-                            Text('Các quyền:'),
+                            Text(user.fullname!, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                            Text('Các quyền', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                             for (MapEntry<String, String> entries in {
                               'Nhân viên': 'EMP',
                               'Salon': 'SL',
@@ -97,11 +95,11 @@ class _AdminPageState extends State<AdminPage> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(entries.key),
+                                  Text(entries.key, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                   StatefulBuilder(
                                     builder: (BuildContext context, StateSetter setState) {
                                       return CheckboxListTile(
-                                        title: Text('Create'),
+                                        title: Text('Cho phép tạo'),
                                         value: user.permissions?.contains('C_${entries.value}'),
                                          onChanged: (value) {
                                           setState(() {
@@ -118,7 +116,7 @@ class _AdminPageState extends State<AdminPage> {
                                   StatefulBuilder(
                                     builder: (BuildContext context, StateSetter setState) {
                                       return CheckboxListTile(
-                                        title: Text('Read'),
+                                        title: Text('Cho phép đọc'),
                                          value:  user.permissions?.contains('R_${entries.value}'),
                                         onChanged: (value) {
                                           setState(() {
@@ -135,7 +133,7 @@ class _AdminPageState extends State<AdminPage> {
                                   StatefulBuilder(
                                     builder: (BuildContext context, StateSetter setState) {
                                       return CheckboxListTile(
-                                        title: Text('Update'),
+                                        title: Text('Cho phép cập nhật'),
                                          value:user.permissions?.contains('U_${entries.value}'),
                                         onChanged: (value) {
                                           setState(() {
@@ -152,7 +150,7 @@ class _AdminPageState extends State<AdminPage> {
                                   StatefulBuilder(
                                     builder: (BuildContext context, StateSetter setState) {
                                       return CheckboxListTile(
-                                        title: Text('Delete'),
+                                        title: Text('Cho phép xóa'),
                                         value: user.permissions?.contains('D_${entries.value}'),
                                         onChanged: (value) {
                                           setState(() {
@@ -174,16 +172,15 @@ class _AdminPageState extends State<AdminPage> {
                       ),
                       actions: [
                         TextButton(
-                          child: Text('Done'),
+                          child: Text('Hủy'),
+                          onPressed: () {
+                            Navigator.pop(context);},
+                        ), TextButton(
+                          child: Text('OK'),
                           onPressed: () {
                             print(user.fullname);
                             print(jsonEncode(user.permissions));
                             SalonsService.setPermission(user.permissions!, user.userId!);
-                            Navigator.pop(context);},
-                        ),
-                        TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () {
                             Navigator.pop(context);},
                         ),
                       ],

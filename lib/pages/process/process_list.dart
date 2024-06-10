@@ -24,8 +24,10 @@ class _ProcessesState extends State<Processes> {
     getProcesses();
   }
 
-  Future<void> deleteProcess(String id) async {
-    ProcessService.DeleteProcess(id).then((value) {getProcesses();});
+  void deleteProcess(String id) async {
+    ProcessService.DeleteProcess(id).then((value) {
+      getProcesses();
+    });
   }
 
   void getProcesses() async {
@@ -33,8 +35,8 @@ class _ProcessesState extends State<Processes> {
     setState(() {
       processes = data;
     });
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,32 +45,42 @@ class _ProcessesState extends State<Processes> {
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton(onPressed: () {
-              Navigator.pushNamed(context, '/new_process').then((value) {getProcesses();});
-            }, child: Text('Tạo quy trình mới')),
-          ),
+          TextButton.icon(
+            icon: Icon(Icons.add),
+              onPressed: () {
+                Navigator.pushNamed(context, '/new_process').then((value) {
+                  getProcesses();
+                });
+              },
+              label: Text('Tạo quy trình mới')),
           Expanded(
-              child: processes.isEmpty && !isCalling ? Loading(): ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemCount: processes.length,
-                  physics: ClampingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                        padding: EdgeInsets.all(10),
-                        child: ProcessCard(processModel: processes[index], delete: deleteProcess,));
-                  })),
-          ],
+              child: processes.isEmpty && !isCalling
+                  ? Loading()
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: processes.length,
+                      physics: ClampingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Padding(
+                            padding: EdgeInsets.all(10),
+                            child: ProcessCard(
+                              processModel: processes[index],
+                              delete: deleteProcess,
+                            ));
+                      })),
+        ],
       ),
     );
   }
 }
 
 class ProcessCard extends StatelessWidget {
-  const ProcessCard({super.key, required this.processModel, required this.delete});
+  const ProcessCard(
+      {super.key, required this.processModel, required this.delete});
+
   final process processModel;
 
   final Function delete;
@@ -76,35 +88,40 @@ class ProcessCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(padding: EdgeInsets.all(12),
+      child: Padding(
+        padding: EdgeInsets.all(12),
         child: Align(
           alignment: AlignmentDirectional(-1, 0),
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Align(
                   alignment: AlignmentDirectional(-1, 0),
-                  child: Text(
-                      '${processModel.name}',
+                  child: Text('${processModel.name}',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16))),
+                          fontWeight: FontWeight.bold, fontSize: 16))),
               Align(
-                  alignment: AlignmentDirectional(-1,0),
+                  alignment: AlignmentDirectional(-1, 0),
                   child: Text(processModel.description!)),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(onPressed: () {
-                      Navigator.pushNamed(context, '/new_process', arguments: {'process': processModel});
-                    }, icon: Icon(Icons.edit),),
-                    IconButton(onPressed: () {
-                      delete(processModel.id);
-                    }, icon: Icon(Icons.delete)),
-                  ],),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/new_process',
+                            arguments: {'process': processModel});
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          delete(processModel.id);
+                        },
+                        icon: Icon(Icons.delete)),
+                  ],
+                ),
               )
             ],
           ),
@@ -113,4 +130,3 @@ class ProcessCard extends StatelessWidget {
     );
   }
 }
-

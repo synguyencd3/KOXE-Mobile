@@ -8,11 +8,17 @@ import 'package:mobile/model/chat_user_model.dart';
 import 'package:mobile/model/salon_model.dart';
 import 'package:google_geocoding_api/google_geocoding_api.dart';
 import 'package:google_geocoding_api/src/utils/pretty_address_mapper.dart';
+import 'package:mobile/pages/news/promotion_card.dart';
+import 'package:mobile/pages/salon/Salon_Car.dart';
+import 'package:mobile/pages/salon/salon_promotion.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/widgets/button.dart';
 import '../../model/car_model.dart';
 import 'package:mobile/widgets/car_card.dart';
 import 'package:mobile/pages/loading.dart';
+
+import '../../model/promotion_model.dart';
+import '../../services/news_service.dart';
 
 class SalonDetail extends StatefulWidget {
   const SalonDetail({super.key});
@@ -27,6 +33,7 @@ class _SalonDetailState extends State<SalonDetail> {
 
   LatLng sourceLocation = new LatLng(0, 0);
   List<Marker> markers = <Marker>[];
+  List<Promotion> promotions = [];
 
   Salon salon = new Salon();
 
@@ -41,6 +48,13 @@ class _SalonDetailState extends State<SalonDetail> {
           moveCamera();
         },
       );
+    });
+  }
+
+  Future<void> getPromotions() async {
+    var list = await NewsService.getSalonPromotions(salon.salonId!);
+    setState(() {
+      promotions.addAll(list);
     });
   }
 
@@ -80,6 +94,7 @@ class _SalonDetailState extends State<SalonDetail> {
     setState(() {
       salon = data['salon'];
     });
+    getPromotions();
   }
 
   Future<void> initCar() async {
@@ -211,11 +226,41 @@ class _SalonDetailState extends State<SalonDetail> {
             TextButton.icon(
               onPressed: () {
                 //print(salon.cars.length);
-                Navigator.pushNamed(context, '/listing/manage', arguments: salon.cars);
+                //Navigator.pushNamed(context, '/listing/manage', arguments: salon.cars);
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => SalonCar(salonCars: salon.cars)),
+                );
               },
               label: Text('Xem tất cả'),
               icon: Icon(Icons.arrow_forward),
             ) : SizedBox(height: 5,),
+
+            Container(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  "Khuyến mãi",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            ),
+            promotions.length > 0 ? PromotionCard(
+              title: promotions[0].title,
+              description: promotions[0].title,
+              id: promotions[0].id) : Loading(),
+            promotions.length > 0 ?
+            TextButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => SalonPromotions(salonPromotions: promotions,)),
+                );
+              },
+              label: Text('Xem tất cả'),
+              icon: Icon(Icons.arrow_forward),
+            ) : SizedBox(height: 5,),
+
             Divider(height: 5),
             Padding(
               padding: EdgeInsets.all(8.0),

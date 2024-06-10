@@ -37,7 +37,6 @@ class _MainHomeState extends State<MainHome> {
     PageModule(page: Home(), label: 'Xin chào'),
     PageModule(page: IntroCar(), label: 'Sản phẩm'),
     PageModule(page: Appointment(), label: 'Lịch hẹn'),
-    PageModule(page: PostPage(), label: 'Bài viết'),
     PageModule(page: User(), label: 'Tài khoản'),
   ];
   int _currentIndex = 0;
@@ -50,7 +49,6 @@ class _MainHomeState extends State<MainHome> {
   @override
   void initState() {
     super.initState();
-    initSocket();
     initCallService();
     getAllNotification();
     getAllMessageNotSeen();
@@ -91,13 +89,6 @@ class _MainHomeState extends State<MainHome> {
     );
   }
 
-  Future<void> initSocket() async {
-    final Map<String, dynamic> userProfile = await APIService.getUserProfile();
-    String salonId = await SalonsService.isSalon();
-    await SocketManager().initSocket(userProfile['user_id'], salonId, (data) {
-      print(data);
-    });
-  }
 
   Future<void> getAllNotification() async {
     String salonId = await SalonsService.isSalon();

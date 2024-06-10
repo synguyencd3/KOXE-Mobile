@@ -43,62 +43,95 @@ class _ManageState extends State<Manage> {
           title: Text('Quản lý'),
           backgroundColor: Colors.lightBlue,
         ),
-        body: Column(
-          children: [
-            text_card(
-                title: 'Quản lý gói',
-                onTap: () {
-                 Navigator.pushNamed(context, '/package/manage');
-                }),
-            permission.contains("OWNER") ?
-            text_card(
-                title: 'Quản lý người dùng',
-                onTap: () {
-                  Navigator.pushNamed(context, '/employee_management');
-                }) : Container(),
-            text_card(
-                title: 'Quản lý hoa tiêu bị chặn',
-                onTap: () {
-                  Navigator.pushNamed(context, '/blocked_user');
-                }),
-            text_card(
-                title: 'Quản lý xe',
-                onTap: () {
-                Navigator.pushNamed(context, '/listing/manage',arguments: cars);
-                }),
-            text_card(
-                title: 'Quản lý bảo hành',
-                onTap: () {
-                  Navigator.pushNamed(context, '/warranty_list');
-                }),
-            text_card(
-                title: 'Quản lý bảo dưỡng',
-                onTap: () {
-                  Navigator.pushNamed(context, '/maintaince_manage');
-                }),
-            text_card(
-                title: 'Quản lý phụ tùng',
-                onTap: () {
-                 Navigator.pushNamed(context, '/accessory_manage');
-                }),
-            permission.contains("OWNER") || permission.contains("R_IV") ?
-            text_card(
-                title: 'Báo cáo doanh thu',
-                onTap: () {
-                  Navigator.pushNamed(context, '/statistic');
-                }): Container(),
-            text_card(
-                title: 'Quản lý qui trình',
-                onTap: () {
-                  Navigator.pushNamed(context, '/process_list');
-                }),
-            permission.contains("OWNER") || permission.contains("R_IV") ?
-            text_card(
-                title: 'Quản lý giao dịch',
-                onTap: () {
-                  Navigator.pushNamed(context, '/transaction_manage');
-                }): Container(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              text_card(
+                headingIcon: Icons.inventory,
+                  title: 'Quản lý gói',
+                  onTap: () {
+                   Navigator.pushNamed(context, '/package/manage');
+                  }),
+              permission.contains("OWNER") || permission.contains("R_EMP") ?
+              text_card(
+                headingIcon: Icons.person,
+                  title: 'Quản lý nhân viên',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/employee_management');
+                  }) : Container(),
+              text_card(
+                headingIcon: Icons.block,
+                  title: 'Quản lý hoa tiêu bị chặn',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/blocked_user');
+                  }),
+              text_card(
+                headingIcon: Icons.post_add,
+                  title: 'Quản lý bài đăng kết nối',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/post');
+                  }),
+              text_card(
+                headingIcon: Icons.connect_without_contact,
+                  title: 'Quản lý kết nối với hoa tiêu',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/connection');
+                  }),
+              permission.contains("OWNER") || permission.contains("R_CAR") ?
+              text_card(
+                  headingIcon: Icons.directions_car_filled,
+                  title: 'Quản lý xe',
+                  onTap: () {
+                  Navigator.pushNamed(context, '/listing/manage',arguments: cars);
+                  }): Container(),
+              permission.contains("OWNER") || permission.contains("R_WRT") ?
+              text_card(
+                headingIcon: Icons.shield,
+                  title: 'Quản lý bảo hành',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/warranty_list');
+                  }): Container(),
+              permission.contains("OWNER") || permission.contains("R_MT") ?
+              text_card(
+                headingIcon: Icons.build,
+                  title: 'Quản lý bảo dưỡng',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/maintaince_manage');
+                  }): Container(),
+              text_card(
+                headingIcon: Icons.toys,
+                  title: 'Quản lý phụ tùng',
+                  onTap: () {
+                   Navigator.pushNamed(context, '/accessory_manage');
+                  }),
+              permission.contains("OWNER") || permission.contains("R_IV") ?
+              text_card(
+                headingIcon: Icons.area_chart,
+                  title: 'Báo cáo doanh thu',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/statistic');
+                  }): Container(),
+              text_card(
+                headingIcon: Icons.sync,
+                  title: 'Quản lý qui trình',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/process_list');
+                  }),
+              permission.contains("OWNER") || permission.contains("R_IV") ?
+              text_card(
+                headingIcon: Icons.payment,
+                  title: 'Quản lý giao dịch',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/transaction_manage');
+                  }): Container(),
+              text_card(
+                  headingIcon: Icons.discount,
+                  title: 'Quản lý khuyến mãi',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/salon_promotion');
+                  }),
+            ],
+          ),
         ));
   }
 }

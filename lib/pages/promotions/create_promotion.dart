@@ -2,26 +2,50 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile/model/promotion_request.dart';
+import 'package:mobile/pages/news/PromotionArticle.dart';
+import 'package:mobile/services/news_service.dart';
+import 'package:mobile/services/promotion_service.dart';
 
-Widget preview() {
-    return NewObjectForm();
-}
+import '../../model/promotion_article_model.dart';
 
-class NewObjectForm extends StatefulWidget {
+class NewPromotion extends StatefulWidget {
+  NewPromotion({this.id});
+
   @override
-  _NewObjectFormState createState() => _NewObjectFormState();
+  _NewPromotionState createState() => _NewPromotionState();
+  late final String? id;
 }
 
-class _NewObjectFormState extends State<NewObjectForm> {
+class _NewPromotionState extends State<NewPromotion> {
   final _formKey = GlobalKey<FormState>();
+  late final PromotionArticleModel? promotion;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _contentHtmlController = TextEditingController();
+  //final TextEditingController _contentHtmlController = TextEditingController();
   final TextEditingController _contentMarkdownController = TextEditingController();
   DateTime? _startDate;
   DateTime? _endDate;
-  File? _bannerImage;
+  List<File>? image;
+  List<XFile>? pickedFile;
+  final picker = ImagePicker();
+
+
+  Future<void> GetPromotion() async {
+    var data = await NewsService.getPromotion(widget.id!);
+    setState(() {
+      promotion=data;
+    });
+    
+    _titleController.text = promotion?.title ?? "";
+    _descriptionController.text = promotion?.description ?? "";
+    _contentMarkdownController.text = promotion?.contentMarkdown ?? "";
+    _startDate = new DateFormat("dd/MM/yyyy").parse(promotion!.startDate!);//DateTime.parse(promotion!.startDate!);
+    _endDate = new DateFormat("dd/MM/yyyy").parse(promotion!.endDate!);
+  }
 
   Future<void> _pickDate(BuildContext context, bool isStartDate) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -41,32 +65,65 @@ class _NewObjectFormState extends State<NewObjectForm> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+  Future<void> pickImage() async {
+    pickedFile =  await picker.pickMultiImage();
+    if (pickedFile !=null) {
       setState(() {
-        _bannerImage = File(image.path);
+        image = pickedFile!.map((e) => File(e.path)).toList();
       });
     }
   }
 
   void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      // Form is valid, proceed with creating the new object
-      final newObject = {
-        'title': _titleController.text,
-        'description': _descriptionController.text,
-        'contentHtml': _contentHtmlController.text,
-        'contentMarkdown': _contentMarkdownController.text,
-        'startDate': _startDate,
-        'endDate': _endDate,
-        'banner': _bannerImage,
-      };
+      PromotionRequest promotion = PromotionRequest(
+        title: _titleController.text,
+        description: _descriptionController.text,
+        contentMarkdown: _contentMarkdownController.text,
+        startDate: '${_startDate?.year}-${_startDate?.month}-${_startDate?.day}',
+        endDate: '${_endDate?.year}-${_endDate?.month}-${_endDate?.day}',
+        banner: pickedFile?.map((e) => e.path).toList()
+      );
+      PromotionService.NewPromotion(promotion).then((value) {
+        if (value==true)
+        {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Tạo thành công'),
+                backgroundColor: Colors.green,
+              )
+          );
+          Navigator.pop(context);
+        }
+      });
+  }
 
-      // Handle form submission (e.g., send to a server or save locally)
-      print('Form submitted successfully: $newObject');
-    }
+  void _changeForm() {
+    PromotionRequest promotion = PromotionRequest(
+        title: _titleController.text,
+        description: _descriptionController.text,
+        contentMarkdown: _contentMarkdownController.text,
+        startDate: '${_startDate?.year}-${_startDate?.month}-${_startDate
+            ?.day}',
+        endDate: '${_endDate?.year}-${_endDate?.month}-${_endDate?.day}',
+        banner: pickedFile?.map((e) => e.path).toList()
+    );
+    PromotionService.ChangePromotion(promotion, widget.id!).then((value) {
+      if (value == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('sửa thành công'),
+              backgroundColor: Colors.green,
+            )
+        );
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.id!= null) GetPromotion();
   }
 
   @override
@@ -83,6 +140,7 @@ class _NewObjectFormState extends State<NewObjectForm> {
             children: <Widget>[
               TextFormField(
                 controller: _titleController,
+                //initialValue: promotion == null ? "" :promotion?.title?? "",
                 decoration: InputDecoration(labelText: 'Title'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -94,6 +152,7 @@ class _NewObjectFormState extends State<NewObjectForm> {
               TextFormField(
                 controller: _descriptionController,
                 decoration: InputDecoration(labelText: 'Description'),
+                //initialValue: promotion == null ? "" :promotion?.description ?? "",
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -103,19 +162,9 @@ class _NewObjectFormState extends State<NewObjectForm> {
                 },
               ),
               TextFormField(
-                controller: _contentHtmlController,
-                decoration: InputDecoration(labelText: 'Content (HTML)'),
-                maxLines: 3,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter HTML content';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
                 controller: _contentMarkdownController,
                 decoration: InputDecoration(labelText: 'Content (Markdown)'),
+                //initialValue: promotion == null ? "" :promotion?.contentMarkdown ?? "",
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -127,27 +176,33 @@ class _NewObjectFormState extends State<NewObjectForm> {
               ListTile(
                 title: Text(_startDate == null
                     ? 'Start Date: Not selected'
-                    : 'Start Date: ${_startDate!.toLocal()}'.split(' ')[0]),
+                    : 'Start Date: ${_startDate!.toLocal()}'),
                 trailing: Icon(Icons.calendar_today),
                 onTap: () => _pickDate(context, true),
               ),
               ListTile(
                 title: Text(_endDate == null
                     ? 'End Date: Not selected'
-                    : 'End Date: ${_endDate!.toLocal()}'.split(' ')[0]),
+                    : 'End Date: ${_endDate!.toLocal()}'),
                 trailing: Icon(Icons.calendar_today),
                 onTap: () => _pickDate(context, false),
               ),
               ListTile(
                 title: Text('Banner Image'),
                 trailing: Icon(Icons.image),
-                onTap: _pickImage,
+                onTap: () =>pickImage(),
               ),
-              _bannerImage == null
-                  ? Text('No image selected.')
-                  : Image.file(_bannerImage!),
+              Container(
+                  width: double.infinity,
+                  child: pickedFile==null
+                      ? const Text('Vui lòng chọn ảnh')
+                      : Text('${pickedFile!.length} ảnh đã chọn')
+              ),
               SizedBox(height: 20),
-              ElevatedButton(
+              widget.id != null ? ElevatedButton(
+                onPressed: _changeForm,//_submitForm,
+                child: Text('Change'),
+              ): ElevatedButton(
                 onPressed: _submitForm,
                 child: Text('Submit'),
               ),

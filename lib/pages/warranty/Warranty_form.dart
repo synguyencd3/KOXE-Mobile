@@ -140,7 +140,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Car Object Form'),
+        title: Text('Thêm gói bảo hành'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -150,43 +150,43 @@ class _WarrantyFormState extends State<WarrantyForm> {
             child: Column(
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Name'),
+                  decoration: InputDecoration(labelText: 'Tên gói bảo hành'),
                   controller: _name,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter a name';
+                      return 'Vui lòng không bỏ trống';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Limit Kilometers'),
+                  decoration: InputDecoration(labelText: 'Số kilometer giới hạn'),
                   keyboardType: TextInputType.number,
                   controller: _limitKilometers,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter a limit in kilometers';
+                      return 'Vui lòng không bỏ trống';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Months'),
+                  decoration: InputDecoration(labelText: 'Số tháng bảo hành'),
                   keyboardType: TextInputType.number,
                   controller: _months,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter the number of months';
+                      return 'Vui lòng không bỏ trống';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Policy'),
+                  decoration: InputDecoration(labelText: 'Chính sách'),
                   controller: _policy,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter a policy';
+                      return 'Vui lòng không bỏ trống';
                     }
                     return null;
                   },
@@ -203,7 +203,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
                 //   },
                 // ),
                 DropdownButtonFormField<Car>(
-                  decoration: InputDecoration(labelText: 'Select a Car'),
+                  decoration: InputDecoration(labelText: 'Chọn xe'),
                   value: _selectedCar,
                   items: cars.map((car) {
                     return DropdownMenuItem<Car>(
@@ -234,7 +234,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
                       _formKey.currentState!.reset();
                     }
                   },
-                  child: Text('Submit'),
+                  child: Text('Tạo'),
                 ) :
                 TextButton(
                   onPressed: () {

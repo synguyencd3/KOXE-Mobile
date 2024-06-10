@@ -111,6 +111,7 @@ class Config {
   static const String newProcess = '/legals/create-process';
   static const String updateProcessName = '/legals/update-process';
   static const String deleteProcess = '/legals/delete-documents';
+  static const String updateProcessDoc = '/legals/update-documents';
   static const String checkDetailProcess = '/legals/check-details-user';
   static const String updatePeriodProcess = '/legals/update-period-user';
 
@@ -152,4 +153,5 @@ static const String accessoryInvoiceAPI = "/buy-accessory";
 
 //Promotion
 static const String promotionAPI = "/promotions";
+static const String salonPromotionAPI = "/promotions/salon";
 }

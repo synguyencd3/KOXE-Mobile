@@ -39,7 +39,7 @@ class _ManagePackageState extends State<ManagePackage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quản lý gói'),
+        title: Text('Gói đang sử dụng'),
       ),
       body: packages.isEmpty
           ? Loading()

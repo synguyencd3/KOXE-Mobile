@@ -9,7 +9,7 @@ class PromotionCard extends StatelessWidget {
       required this.title,
       required this.description,
       required this.id,
-      required this.imageUrl});
+      this.imageUrl});
 
   final String? title;
   final String? description;
@@ -31,11 +31,11 @@ class PromotionCard extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Padding(
+              imageUrl != null ?  Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(child: Image.network(imageUrl!),
                 borderRadius: BorderRadius.circular(8),),
-              ),
+              ): Container(height: 10,),
               Align(
                 alignment: AlignmentDirectional(-1, 0),
                 child: Column(

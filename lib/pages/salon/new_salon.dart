@@ -111,12 +111,6 @@ class _NewSalonState extends State<NewSalon> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Thêm salon',
-                //   style: FlutterFlowTheme.of(context).titleLarge.override(
-                //   fontFamily: 'Outfit',
-                //   color: Color(0xFF15161E),
-                //   fontSize: 22,
-                //   fontWeight: FontWeight.w500,
-                // ),
         ),
       ),
       body: Padding(
@@ -256,12 +250,6 @@ class _NewSalonState extends State<NewSalon> {
                     child: Text(
                       'Chọn hình ảnh',
                       textAlign: TextAlign.center,
-                      // style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      //       fontFamily: 'Plus Jakarta Sans',
-                      //       color: Color(0xFF15161E),
-                      //       fontSize: 14,
-                      //       fontWeight: FontWeight.w500,
-                      //     ),
                     ),
                   ),
                 ],

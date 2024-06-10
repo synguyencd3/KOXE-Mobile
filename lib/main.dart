@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/model/salon_model.dart';
 import 'package:mobile/pages/Car%20Invoice/car_invoice.dart';
 import 'package:mobile/pages/Car%20Invoice/newCar_invoice.dart';
 import 'package:mobile/pages/Car%20Invoice/user_car_invoice.dart';
-import 'package:mobile/pages/Payment.dart';
 import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
 import 'package:mobile/pages/car/edit_car.dart';
@@ -13,6 +11,7 @@ import 'package:mobile/pages/news/promotion.dart';
 import 'package:mobile/pages/permission/Employee_permission.dart';
 import 'package:mobile/pages/process/create_process.dart';
 import 'package:mobile/pages/process/process_list.dart';
+import 'package:mobile/pages/promotions/salon_promotion.dart';
 import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';
 import 'package:mobile/pages/salon/new_salon.dart';
@@ -61,6 +60,7 @@ import 'package:mobile/pages/salon_group/salon_group.dart';
 import 'package:mobile/pages/user_accessory.dart';
 import 'package:mobile/pages/accessory_invoice_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_invoice_manage.dart';
+import 'package:mobile/pages/post/post.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -155,6 +155,8 @@ class _MyAppState extends State<MyApp> {
         '/accessory_invoice_manage' : (context) => AccessoryInvoiceManage(),
         '/maintaince_invoice_manage' : (context) => MaintainceInvoiceManage(),
         '/promotions' : (context) => PromotionBoard(),
+        '/post' : (context) => PostPage(),
+        '/salon_promotion' : (context) =>SAlonPromotionBoard()
       },
     );
   }

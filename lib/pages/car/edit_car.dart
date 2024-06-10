@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/warranty_service.dart';
@@ -25,6 +26,7 @@ class _EditCarState extends State<EditCar> {
   final picker = ImagePicker();
   List<Warranty> warranties= [];
   Warranty? selectedWarranty;
+  DateTime time = DateTime.now().subtract(Duration(days: 30));
 
   late final TextEditingController _name  = TextEditingController();
   late final TextEditingController _description  = TextEditingController();
@@ -38,7 +40,7 @@ class _EditCarState extends State<EditCar> {
   late final TextEditingController _seat = TextEditingController();
   late final TextEditingController _kilometer  = TextEditingController();
   late final TextEditingController _gear = TextEditingController();
-  late final TextEditingController _mfg  = TextEditingController();
+  //late final TextEditingController _mfg  = TextEditingController();
   late final TextEditingController _outColor = TextEditingController();
 
   Future<void> pickImage() async {
@@ -63,7 +65,7 @@ class _EditCarState extends State<EditCar> {
         seat: int.parse(_seat.text),
         kilometer: int.parse(_kilometer.text),
         gear: _gear.text,
-        mfg: _mfg.text,
+        mfg: time.toString(),
         outColor: _outColor.text,
         image: pickedFile?.map((e) => e.path).toList());
 
@@ -94,7 +96,7 @@ class _EditCarState extends State<EditCar> {
          seat: int.parse(_seat.text),
          kilometer: int.parse(_kilometer.text),
         gear: _gear.text,
-        mfg: _mfg.text,
+        mfg: time.toString(),//_mfg.text,
         outColor: _outColor.text,
         image: pickedFile?.map((e) => e.path).toList());
     if (selectedWarranty!=null) WarrantyService.pushWarranty(selectedWarranty!.warrantyId!, car!.id!);
@@ -143,8 +145,21 @@ class _EditCarState extends State<EditCar> {
     _seat.text = car?.seat.toString() ?? "";
     _kilometer.text = car?.kilometer.toString() ?? "";
     _gear.text = car?.gear ?? "";
-    _mfg.text = car?.mfg ?? "";
+    //_mfg.text = car?.mfg ?? "";
     _outColor.text = car?.outColor ?? "";
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: time,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != time) {
+      setState(() {
+        time = picked;
+      });
+    }
   }
 
   @override
@@ -163,8 +178,9 @@ class _EditCarState extends State<EditCar> {
         body: Padding(
           padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
           child: SingleChildScrollView(
-            child: Column(children: [
+            child: Column(
 
+              children: [
               TextFormField(
                 controller: _name,
                 decoration: InputDecoration(labelText: 'Tên xe',
@@ -184,7 +200,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _price,
-                decoration: InputDecoration(labelText: 'giá',
+                decoration: InputDecoration(labelText: 'Giá',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),
@@ -220,7 +236,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _origin,
-                decoration: InputDecoration(labelText: 'Xuất sứ',
+                decoration: InputDecoration(labelText: 'Xuất xứ',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),
@@ -238,7 +254,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _model,
-                decoration: InputDecoration(labelText: 'Model',
+                decoration: InputDecoration(labelText: 'Mẫu mã xe',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),
@@ -292,6 +308,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _door,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Số cửa',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
@@ -310,6 +327,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _seat,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Số chỗ ngồi',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
@@ -328,7 +346,8 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _kilometer,
-                decoration: InputDecoration(labelText: 'Odo',
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: 'Số km đã đi',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),
@@ -346,7 +365,7 @@ class _EditCarState extends State<EditCar> {
 
               TextFormField(
                 controller: _gear,
-                decoration: InputDecoration(labelText: 'Số',
+                decoration: InputDecoration(labelText: 'Hộp số',
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)
                   ),
@@ -362,21 +381,24 @@ class _EditCarState extends State<EditCar> {
 
               SizedBox(height: 20),
 
-              TextFormField(
-                controller: _mfg,
-                decoration: InputDecoration(labelText: 'tiêu hao nhiên liệu/lít',
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      // color: Color(0xFF6F61EF),
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
+              // TextFormField(
+              //   controller: _mfg,
+              //   decoration: InputDecoration(labelText: 'Năm sản xuất',
+              //     enabledBorder: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(12)
+              //     ),
+              //     focusedBorder: OutlineInputBorder(
+              //       borderSide: BorderSide(
+              //         // color: Color(0xFF6F61EF),
+              //         width: 2,
+              //       ),
+              //       borderRadius: BorderRadius.circular(12),
+              //     ),
+              //   ),
+              // ),
+              GestureDetector(
+                onTap: () =>_selectDate(context),
+                  child: Text('Sản xuất: ${time.day}/${time.month}/${time.year}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
 
               SizedBox(height: 20),
 

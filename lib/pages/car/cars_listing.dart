@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:mobile/model/car_model.dart';
-import 'package:mobile/services/cars_service.dart';
-import 'package:mobile/services/salon_service.dart';
 
+import '../../services/cars_service.dart';
 import '../loading.dart';
 
 class CarsListing extends StatefulWidget {
@@ -43,10 +41,9 @@ class _CarState extends State<CarsListing> {
           ),
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-                child: TextButton(onPressed: () {Navigator.pushNamed(context, '/new_car');}, child: Text('Thêm xe'))),
+           TextButton.icon(onPressed: () {Navigator.pushNamed(context, '/new_car');}, icon: Icon(Icons.add), label:Text('Thêm xe')),
             Expanded(
                 child:cars.isEmpty && !isCalling ? Loading(): ListView.builder(
                     shrinkWrap: true,
@@ -57,12 +54,6 @@ class _CarState extends State<CarsListing> {
                       return Column(
                         children: [
                           CarCard(car: cars[index], getCars: getCars,),
-                          // Row(
-                          //   children: [
-                          //     TextButton(onPressed: () => { Navigator.pushNamed(context, '/new_car', arguments: {'car':cars[index]}).then((value) => getCars())}, child: Text('edit'))
-                          //   ],
-                          //   mainAxisAlignment: MainAxisAlignment.end,
-                          // )
                         ],
                       );
                     }))
@@ -71,16 +62,11 @@ class _CarState extends State<CarsListing> {
   }
 }
 
-class CarCard extends StatefulWidget {
+class CarCard extends StatelessWidget {
   final Car car;
   final Function getCars;
   CarCard({required this.car, required this.getCars});
 
-  @override
-  State<CarCard> createState() => _CarCardState();
-}
-
-class _CarCardState extends State<CarCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -94,9 +80,9 @@ class _CarCardState extends State<CarCard> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
                 child:
-                (widget.car.image != null && widget.car.image!.isNotEmpty && widget.car.image![0] != "null")
+                (car.image != null && car.image!.isNotEmpty && car.image![0] != "null")
                     ? Image.network(
-                  widget.car.image![0],
+                  car.image![0],
                   height: 230,
                   width: double.infinity,
                 )
@@ -104,32 +90,34 @@ class _CarCardState extends State<CarCard> {
               ),
               SizedBox(height: 10),
               Text(
-                'Tên xe: ${widget.car.name}',
+                'Tên xe: ${car.name}',
               ),
               SizedBox(height: 10),
               Text(
-                'Mô tả: ${widget.car.description}',
+                'Mô tả: ${car.description}',
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Giá: ${widget.car.price?.toInt()}',
+                    'Giá: ${car.price}',
                   ),
                   Row(
                     children: [
-                      // IconButton(
-                      //     onPressed: () {
-                      //       //Navigator.pushNamed(context, '/new_car', arguments: {'car':widget.car}).then((value) => widget.getCars);
-                      //     }, icon: Icon(Icons.delete)),
                       IconButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/new_car', arguments: {'car':widget.car}).then((value) => widget.getCars);
+                            CarsService.DeleteCar(car.id!).then((value) => {
+                              if (value==true) Navigator.pop(context)
+                            });
+                          }, icon: Icon(Icons.delete)),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/new_car', arguments: {'car':car}).then((value) => getCars);
                           }, icon: Icon(Icons.edit)),
                       IconButton(
                           onPressed: () {
                             Navigator.pushNamed(context, '/car_detail',
-                                arguments: {'car': widget.car ,'id': widget.car.id});
+                                arguments: {'car': car ,'id': car.id});
                           },
                           icon: Icon(Icons.arrow_forward)),
                     ],
