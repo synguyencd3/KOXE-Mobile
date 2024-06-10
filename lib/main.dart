@@ -11,6 +11,7 @@ import 'package:mobile/pages/news/promotion.dart';
 import 'package:mobile/pages/permission/Employee_permission.dart';
 import 'package:mobile/pages/process/create_process.dart';
 import 'package:mobile/pages/process/process_list.dart';
+import 'package:mobile/pages/promotions/salon_promotion.dart';
 import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';
 import 'package:mobile/pages/salon/new_salon.dart';
@@ -155,6 +156,7 @@ class _MyAppState extends State<MyApp> {
         '/maintaince_invoice_manage' : (context) => MaintainceInvoiceManage(),
         '/promotions' : (context) => PromotionBoard(),
         '/post' : (context) => PostPage(),
+        '/salon_promotion' : (context) =>SAlonPromotionBoard()
       },
     );
   }

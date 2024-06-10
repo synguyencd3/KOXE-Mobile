@@ -120,7 +120,7 @@ class _MaintainceManageState extends State<MaintainceManage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quản lý bảo dưỡng'),
+        title: Text('Quản lí bảo dưỡng'),
         backgroundColor: Colors.lightBlue,
       ),
       body: Padding(

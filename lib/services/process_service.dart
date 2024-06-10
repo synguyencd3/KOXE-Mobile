@@ -68,6 +68,64 @@ class ProcessService {
     return null;
   }
 
+  static Future<bool?> changeProcess(process model,String id) async {
+    await UpdateProcessName(model,id);
+    await UpdateProcessDocument(model,id );
+    return true;
+  }
+
+  static Future<bool?> UpdateProcessName(process model, String id) async {
+    await APIService.refreshToken();
+
+    String mySalon = await SalonsService.isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.updateProcessName);
+    var reqBody = model.toJson();
+    reqBody['salonId'] = mySalon;
+    reqBody['processId'] = id;
+    print('resuest: '+ jsonEncode(reqBody));
+    var response = await http.patch(url,headers: requestHeaders, body: jsonEncode(reqBody));
+    var responseData = jsonDecode(response.body);
+    print('response:' + response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool?> UpdateProcessDocument(process model,id) async {
+    await APIService.refreshToken();
+
+    String mySalon = await SalonsService.isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.updateProcessDoc);
+    var reqBody = model.toJson();
+    reqBody['salonId'] = mySalon;
+    reqBody['period'] = id;
+    print('resuest: '+ jsonEncode(reqBody));
+    var response = await http.patch(url,headers: requestHeaders, body: jsonEncode(reqBody));
+    var responseData = jsonDecode(response.body);
+    print('response:' + response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
   static Future<bool?> NewProcess(process model) async {
     await APIService.refreshToken();
 

@@ -59,7 +59,7 @@ class _CarCardState extends State<CarCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Giá: ${widget.car.price?.toInt()}',
+                    'Giá: ${widget.car.price}',
                     // style: FlutterFlowTheme.of(context).labelMedium.override(
                     //       fontFamily: 'Outfit',
                     //       color: Color(0xFF606A85),
