@@ -1,5 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools" 
+            >
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.GET_PACKAGE_SIZE"/>
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,11 +21,20 @@
 <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="mobile"
-        android:name="${applicationName}"
+        android:name="SalonOto"
         android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="312164338180427"/>
+        <meta-data android:name="com.facebook.sdk.ApplicationName" android:value="SalonOto"/>
+        <activity android:name="com.facebook.FacebookActivity" android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="SalonOto" />
+        <provider android:authorities="com.facebook.app.FacebookContentProvider312164338180427" android:name="com.facebook.FacebookContentProvider" android:exported="true"/>
+        <provider android:name="androidx.core.content.FileProvider" android:authorities="312164338180427.social.share.fileprovider" android:grantUriPermissions="true" android:exported="false">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/provider_paths"/>
+        </provider>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -89,5 +101,9 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+        <package android:name="com.twitter.android" />
+        <package android:name="com.facebook.katana" />
+        <package android:name="com.instagram.android" />
     </queries>
+    
 </manifest>
