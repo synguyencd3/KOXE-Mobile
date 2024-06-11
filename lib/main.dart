@@ -61,6 +61,7 @@ import 'package:mobile/pages/user_accessory.dart';
 import 'package:mobile/pages/accessory_invoice_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_invoice_manage.dart';
 import 'package:mobile/pages/post/post.dart';
+import 'package:mobile/pages/transaction/transaction_detail_navigator.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -140,6 +141,7 @@ class _MyAppState extends State<MyApp> {
         '/car_invoice/new': (context) => CarInvoiceForm(),
         '/transaction': (context) => Transaction(),
         '/transaction_detail': (context) => TransactionDetail(),
+        '/transaction_detail_navigator': (context) => TransactionDetailNavigator(),
         '/customer/car_voice' : (context) => UserCarInvoiceList(),
         '/blocked_user' : (context) => BlockedUser(),
         '/change_password' : (context) => ChangePassword(),

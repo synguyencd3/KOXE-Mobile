@@ -124,4 +124,17 @@ class TransactionService {
     }
     return 0;
   }
+
+  static Future<bool> deleteTransaction(String transactionId) async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+    var url =
+        Uri.https(Config.apiURL, Config.transactionsAPI + '/$transactionId');
+    var response = await http.delete(url, headers: requestHeaders);
+    return response.statusCode == 200;
+  }
 }

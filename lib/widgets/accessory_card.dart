@@ -134,9 +134,9 @@ class _AccessoryCardState extends State<AccessoryCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              IconButton(onPressed: () {
-
-              }, icon: Icon(Icons.info)),
+              // IconButton(onPressed: () {
+              //
+              // }, icon: Icon(Icons.info)),
               IconButton(onPressed: () {
                 showUpdateAccessoryDialog(context);
               }, icon: Icon(Icons.edit)),
