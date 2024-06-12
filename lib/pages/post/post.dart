@@ -22,7 +22,7 @@ class _PostPageState extends State<PostPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPosts();
+   // getPosts();
   }
 
   Future<void> getPosts() async {
@@ -31,10 +31,10 @@ class _PostPageState extends State<PostPage> {
     if (salonIdAPI == '') {
       return;
     } else {
-      List<PostModel> postsAPI = await PostService.getAllPosts(index, 5);
+      List<PostModel> postsAPI = await PostService.getAllPosts(index, 8);
       posts.addAll(postsAPI);
       if (postsAPI.length>0) index++;
-      print("intex"+index.toString());
+      print("index "+index.toString());
     }
   }
 

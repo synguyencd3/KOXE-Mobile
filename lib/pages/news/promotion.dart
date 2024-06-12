@@ -29,7 +29,7 @@ class _PromotionBoardState extends State<PromotionBoard> {
     var list = await NewsService.getPromotions(index, 5);
     setState(() {
       if (list.length>0) index++;
-      promotions.addAll(list);
+      promotions=list;
       isCalling =true;
     });
   }
@@ -41,14 +41,11 @@ class _PromotionBoardState extends State<PromotionBoard> {
           'Khuyến mãi',
         ),
       ),
-      body: promotions.isEmpty && !isCalling ? Loading() : LazyLoadScrollView(
-        onEndOfPage: () { getPromotions(); },
-        child: SingleChildScrollView(
-          child:
-                Column(
-                  children: promotions.map((e) => PromotionCard(title: e.title, description: e.description, id: e.id, imageUrl: e.thumbnail)).toList(),
-                )
-          ),
+      body: promotions.isEmpty && !isCalling ? Loading() : SingleChildScrollView(
+        child:
+              Column(
+                children: promotions.map((e) => PromotionCard(title: e.title, description: e.description, id: e.id, imageUrl: e.thumbnail)).toList(),
+              )
         ),
       );
   }

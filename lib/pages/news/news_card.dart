@@ -38,10 +38,13 @@ class NewsCard extends StatelessWidget {
               Align(
                 alignment: AlignmentDirectional(-1, 0),
                 child: Column(
-                  children: [Text(title!, style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
-                  ),),
+                  children: [Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                    child: Text(title!, style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    ),),
+                  ),
                     SizedBox(height: 3),
                    Padding(
                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
