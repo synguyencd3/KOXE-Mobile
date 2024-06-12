@@ -23,6 +23,7 @@ class _AppointmentState extends State<Appointment>
   List<AppointmentModel> appointmentsHistory = [];
   late final TabController _tabController;
   String salonId = '';
+  Set<String> permission = {};
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _AppointmentState extends State<Appointment>
     _tabController = TabController(length: tabs.length, vsync: this);
     Future.delayed(Duration.zero, () {
       isSalon();
+      getPermission();
       getAllAppointments();
     });
     _tabController.addListener(() {
@@ -40,6 +42,13 @@ class _AppointmentState extends State<Appointment>
         // Call setState to rebuild the widget
         getAllAppointments();
       }
+    });
+  }
+
+  void getPermission() async {
+    var data = await SalonsService.getPermission();
+    setState(() {
+      permission = data;
     });
   }
 
@@ -55,17 +64,21 @@ class _AppointmentState extends State<Appointment>
       List<AppointmentModel> appointmentAPI;
       if (salonId == '') {
         appointmentAPI = await AppointmentService.getAll();
-      } else {
+      } else if (permission.contains("OWNER") || permission.contains("R_APM")) {
         appointmentAPI =
             await AppointmentService.getAllSalonAppointments(salonId);
+      } else {
+        appointmentAPI = [];
       }
       //print(appointmentAPI[0].datetime);
+      if (appointmentAPI.isEmpty) {
+        return;
+      }
       appointmentsCurrent = [];
       appointmentsHistory = [];
       for (var appointment in appointmentAPI) {
-        int daysDifference = appointment.datetime
-            .difference(DateTime.now())
-            .inDays ;
+        int daysDifference =
+            appointment.datetime.difference(DateTime.now()).inDays;
         appointment.dayDiff = daysDifference + 1;
         if (appointment.dayDiff >= 0) {
           appointmentsCurrent.add(appointment);
@@ -116,7 +129,8 @@ class _AppointmentState extends State<Appointment>
                               padding: EdgeInsets.only(top: 1),
                               itemBuilder: (context, index) {
                                 return AppointmentCard(
-                                    appointment: appointmentsCurrent[index], isSalon: salonId);
+                                    appointment: appointmentsCurrent[index],
+                                    isSalon: salonId);
                               }),
                       appointmentsHistory.isEmpty
                           ? Center(
@@ -129,7 +143,8 @@ class _AppointmentState extends State<Appointment>
                               padding: EdgeInsets.only(top: 1),
                               itemBuilder: (context, index) {
                                 return AppointmentCard(
-                                    appointment: appointmentsHistory[index], isSalon: salonId);
+                                    appointment: appointmentsHistory[index],
+                                    isSalon: salonId);
                               },
                             ),
                     ],

@@ -31,7 +31,7 @@ class _PostPageState extends State<PostPage> {
     if (salonIdAPI == '') {
       return;
     } else {
-      List<PostModel> postsAPI = await PostService.getAllPosts(index, 5);
+      List<PostModel> postsAPI = await PostService.getAllPosts(index, 10);
       posts.addAll(postsAPI);
       if (postsAPI.length>0) index++;
       print("intex"+index.toString());
@@ -42,7 +42,7 @@ class _PostPageState extends State<PostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bài viết'),
+        title: Text('Các bài đăng kết nối'),
         backgroundColor: Colors.lightBlue,
       ),
       body: FutureBuilder(
