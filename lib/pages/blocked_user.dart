@@ -18,9 +18,6 @@ class _BlockedUserState extends State<BlockedUser> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero, () {
-      getBlockedUser();
-    });
   }
 
   Future<void> getBlockedUser() async {

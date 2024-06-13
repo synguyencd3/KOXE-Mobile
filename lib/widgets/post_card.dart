@@ -43,9 +43,9 @@ class _PostCardState extends State<PostCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.post.title ?? ''),
+                  Text(widget.post.title ?? 'Không có tiêu đề'),
                   Text(widget.post.createAt.toString()),
-                  Text('Người đăng: ' + widget.post.user!.fullname ?? ''),
+                  Text('Người đăng: ' + widget.post.user!.fullname),
                 ],
               ),
             )

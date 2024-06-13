@@ -37,13 +37,13 @@ class _BlockedUserCardState extends State<BlockedUserCard> {
                   bool response = await unblockUser();
                   if (response) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('User has been unblocked')));
+                        SnackBar(content: Text('Hoa tiêu đã được bỏ chặn')));
                     setState(() {
                       isShowCard = false;
                     });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to unblock user')));
+                        SnackBar(content: Text('Bỏ chặn hoa tiêu thất bại')));
                   }
                 },
               ),

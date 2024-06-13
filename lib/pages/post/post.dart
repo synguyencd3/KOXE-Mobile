@@ -22,7 +22,6 @@ class _PostPageState extends State<PostPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-   // getPosts();
   }
 
   Future<void> getPosts() async {
@@ -31,7 +30,7 @@ class _PostPageState extends State<PostPage> {
     if (salonIdAPI == '') {
       return;
     } else {
-      List<PostModel> postsAPI = await PostService.getAllPosts(index, 8);
+      List<PostModel> postsAPI = await PostService.getAllPosts(index, 10);
       posts.addAll(postsAPI);
       if (postsAPI.length>0) index++;
       print("index "+index.toString());
@@ -42,7 +41,7 @@ class _PostPageState extends State<PostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bài viết'),
+        title: Text('Các bài đăng kết nối'),
         backgroundColor: Colors.lightBlue,
       ),
       body: FutureBuilder(

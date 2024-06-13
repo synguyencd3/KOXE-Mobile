@@ -88,7 +88,7 @@ class _AccessoryCardState extends State<AccessoryCard> {
                 if (response) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Cập nhật gói bảo dưỡng thành công'),
+                      content: Text('Cập nhật phụ tùng thành công'),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -98,7 +98,7 @@ class _AccessoryCardState extends State<AccessoryCard> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Cập nhật gói bảo dưỡng thất bại'),
+                      content: Text('Cập nhật phụ tùng thất bại'),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -134,9 +134,9 @@ class _AccessoryCardState extends State<AccessoryCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              IconButton(onPressed: () {
-
-              }, icon: Icon(Icons.info)),
+              // IconButton(onPressed: () {
+              //
+              // }, icon: Icon(Icons.info)),
               IconButton(onPressed: () {
                 showUpdateAccessoryDialog(context);
               }, icon: Icon(Icons.edit)),

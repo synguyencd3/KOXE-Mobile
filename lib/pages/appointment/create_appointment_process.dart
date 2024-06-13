@@ -181,7 +181,7 @@ class _CreateAppointProcessState extends State<CreateAppointProcess> {
                       Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+                        content: Text('Tạo lịch hẹn thất bại'),
                         backgroundColor: Colors.red,
                       ));
                     }

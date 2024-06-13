@@ -126,18 +126,20 @@ class _UserState extends State<User> {
               onTap: () {
                 Navigator.pushNamed(context, '/manage');
               }) : Container(),
+          permissions.length <= 0 ?
           text_card(
               title: 'Xe của tôi',
               headingIcon: Icons.car_crash,
               onTap: () {
                 Navigator.pushNamed(context, '/my_car');
-              }),
+              }): Container(),
+          permissions.length <= 0 ?
           text_card(
               title: 'Hoa tiêu',
               headingIcon: Icons.manage_accounts,
               onTap: () {
                 Navigator.pushNamed(context, '/navigator_manage');
-              }),
+              }): Container(),
           text_card(
               title: 'Đăng xuất',
               headingIcon: Icons.logout,

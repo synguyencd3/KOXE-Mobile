@@ -18,21 +18,18 @@ class _MessageState extends State<Message> {
   late List<ChatUserModel> users = [];
 
   StreamSubscription? _messageStreamSubscription;
+
   @override
-
-
-
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAllUsers();
-
+    //getAllUsers();
     _messageStreamSubscription = SocketManager().messageStream.listen((event) {
       print('Received event: $event');
       getAllUsers();
     });
-
   }
+
   @override
   void dispose() {
     _messageStreamSubscription?.cancel();
@@ -41,37 +38,30 @@ class _MessageState extends State<Message> {
 
   Future<void> getAllUsers() async {
     List<ChatUserModel> usersAPI = await ChatService.getAllChatedUsers();
-      users = usersAPI;
+    users = usersAPI;
   }
 
   @override
   Widget build(BuildContext context) {
-    return
-             Scaffold(
-               appBar: AppBar(
-                 title: Text('Tin nhắn'),
-               ),
-               body: FutureBuilder(
-                 future: getAllUsers(),
-                 builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Loading();
-                    }
-                    else if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    }
-                   return ListView.builder(
-                      itemCount: users.length,
-                      physics: BouncingScrollPhysics(),
-                      padding: EdgeInsets.only(top: 1),
-                      itemBuilder: (context, index) {
-                        return ChatUserCard(user: users[index]);
-                      },
-                    );
-                 }
-               ),
-             );
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Tin nhắn'),
+      ),
+      body: FutureBuilder(
+          future: getAllUsers(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Loading();
+            }
+            return ListView.builder(
+              itemCount: users.length,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.only(top: 1),
+              itemBuilder: (context, index) {
+                return ChatUserCard(user: users[index]);
+              },
+            );
+          }),
+    );
   }
 }

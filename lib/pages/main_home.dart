@@ -49,7 +49,6 @@ class _MainHomeState extends State<MainHome> {
   @override
   void initState() {
     super.initState();
-    initSocket();
     initCallService();
     getAllNotification();
     getAllMessageNotSeen();
@@ -90,13 +89,6 @@ class _MainHomeState extends State<MainHome> {
     );
   }
 
-  Future<void> initSocket() async {
-    final Map<String, dynamic> userProfile = await APIService.getUserProfile();
-    String salonId = await SalonsService.isSalon();
-    await SocketManager().initSocket(userProfile['user_id'], salonId, (data) {
-      print(data);
-    });
-  }
 
   Future<void> getAllNotification() async {
     String salonId = await SalonsService.isSalon();

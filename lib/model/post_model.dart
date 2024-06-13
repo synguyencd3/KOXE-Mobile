@@ -57,6 +57,7 @@ class PostModel {
     );
 
     return PostModel(
+      title: json['title'],
       postId: json['post_id'],
       text: json['text'],
       createAt: DateTime.parse(json['createdAt']),
@@ -67,7 +68,7 @@ class PostModel {
       licensePlate: json['licensePlate'],
       ownerNumber: json['ownerNumber'],
       //accessory: json['accessory'],
-      //registrationDeadline: json['registrationDeadline'],
+      registrationDeadline: json['registrationDeadline'],
       address: json['address'],
       image: json['image'] != null ? List<String>.from(json['image']) : [],
       car: carA,

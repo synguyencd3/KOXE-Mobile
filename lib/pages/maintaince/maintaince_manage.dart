@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mobile/model/invoice_model.dart';
 import 'package:mobile/services/maintaince_service.dart';
 import 'package:mobile/model/maintaince_model.dart';
 import 'package:mobile/pages/loading.dart';
+import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/widgets/maintaince_card.dart';
-import 'package:mobile/services/invoice_service.dart';
-import '../../model/accessory_model.dart';
-import '../../services/accessory_service.dart';
 
 class MaintainceManage extends StatefulWidget {
   const MaintainceManage({super.key});
@@ -20,18 +17,29 @@ class MaintainceManage extends StatefulWidget {
 class _MaintainceManageState extends State<MaintainceManage>
     with SingleTickerProviderStateMixin {
   List<MaintainceModel> maintainces = [];
+  Set<String> permission = {};
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Future.delayed(Duration.zero, () {
+      getPermission();
+    });
   }
 
   Future<void> getAllMaintainces() async {
     List<MaintainceModel> maintaincesAPI =
-        await MaintainceService().getAllMaintainces();
+    await MaintainceService().getAllMaintainces();
     print(maintaincesAPI.length);
     maintainces = maintaincesAPI;
+  }
+
+  void getPermission() async {
+    var data = await SalonsService.getPermission();
+    setState(() {
+      permission = data;
+    });
   }
 
   Future<bool> addMaintaincePackage(MaintainceModel maintaince) async {
@@ -136,38 +144,41 @@ class _MaintainceManageState extends State<MaintainceManage>
                     }
                     return maintainces.isEmpty
                         ? Center(
-                            child: TextButton.icon(
-                                icon: Icon(Icons.add),
-                                onPressed: () {
-                                  showAddMaintainceDialog(context);
-                                },
-                                label: Text(
-                                  'Thêm gói bảo dưỡng',
-                                )),
-                          )
+                      child: TextButton.icon(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            showAddMaintainceDialog(context);
+                          },
+                          label: Text(
+                            'Thêm gói bảo dưỡng',
+                          )),
+                    )
                         : Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              TextButton.icon(
-                                  icon: Icon(Icons.add),
-                                  onPressed: () {
-                                    showAddMaintainceDialog(context);
-                                  },
-                                  label: Text(
-                                    'Thêm gói bảo dưỡng',
-                                  )),
-                              Expanded(
-                                child: ListView.builder(
-                                    itemCount: maintainces.length,
-                                    physics: BouncingScrollPhysics(),
-                                    padding: EdgeInsets.only(top: 1),
-                                    itemBuilder: (context, index) {
-                                      return MaintainceCard(
-                                          maintaince: maintainces[index]);
-                                    }),
-                              ),
-                            ],
-                          );
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        permission.contains("OWNER") ||
+                            permission.contains("C_MT")
+                            ?
+                        TextButton.icon(
+                            icon: Icon(Icons.add),
+                            onPressed: () {
+                              showAddMaintainceDialog(context);
+                            },
+                            label: Text(
+                              'Thêm gói bảo dưỡng',
+                            )): Container(),
+                        Expanded(
+                          child: ListView.builder(
+                              itemCount: maintainces.length,
+                              physics: BouncingScrollPhysics(),
+                              padding: EdgeInsets.only(top: 1),
+                              itemBuilder: (context, index) {
+                                return MaintainceCard(
+                                    maintaince: maintainces[index]);
+                              }),
+                        ),
+                      ],
+                    );
                   }),
             ),
           ],
