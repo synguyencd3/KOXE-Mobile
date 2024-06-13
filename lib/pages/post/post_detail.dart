@@ -122,11 +122,15 @@ class _PostDetailState extends State<PostDetail> {
                         ),
                         ListTile(
                           leading: Icon(Icons.star),
-                          title: Text((post.user?.avgRating.toString() ?? '0') + ' tỉ lệ hoàn thành'),
+                          title: Text((post.user?.avgRating.toString() ?? '0') +
+                              ' tỉ lệ hoàn thành'),
                         ),
                         ListTile(
                           leading: Icon(Icons.check_circle),
-                          title: Text((post.user?.completedTransactions.toString() ?? '0') + ' giao dịch hoàn thành'),
+                          title: Text(
+                              (post.user?.completedTransactions.toString() ??
+                                      '0') +
+                                  ' giao dịch hoàn thành'),
                         ),
                         Text('Thông tin xe'),
                         ListTile(
@@ -281,13 +285,15 @@ class _PostDetailState extends State<PostDetail> {
                                     if (response) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
-                                              content:
-                                                  Text('Kết nối thành công')));
+                                        content: Text('Kết nối thành công'),
+                                        backgroundColor: Colors.green,
+                                      ));
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
-                                              content:
-                                                  Text('Kết nối thất bại')));
+                                        content: Text('Kết nối thất bại'),
+                                        backgroundColor: Colors.red,
+                                      ));
                                     }
                                     Navigator.of(context).pop();
                                   },
@@ -317,15 +323,18 @@ class _PostDetailState extends State<PostDetail> {
             Expanded(
               child: FloatingActionButton(
                 heroTag: null,
-                onPressed: () async{
+                onPressed: () async {
                   print(post.postId ?? '');
-                  bool response = await PostService.blockUser(post.postId ?? '');
+                  bool response =
+                      await PostService.blockUser(post.postId ?? '');
                   if (response) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('Chặn hoa tiêu thành công')));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Chặn hoa tiêu thành công'),
+                        backgroundColor: Colors.green));
                   } else {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('Chặn hoa tiêu thất bại')));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Chặn hoa tiêu thất bại'),
+                        backgroundColor: Colors.red));
                   }
                 },
                 child: Text('Chặn hoa tiêu'),
