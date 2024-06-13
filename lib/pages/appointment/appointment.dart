@@ -34,7 +34,6 @@ class _AppointmentState extends State<Appointment>
     Future.delayed(Duration.zero, () {
       isSalon();
       getPermission();
-      getAllAppointments();
     });
     _tabController.addListener(() {
       // Check if the 'Lịch hẹn' tab is selected

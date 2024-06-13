@@ -107,6 +107,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
     if (response) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Xóa thành công'),
+        backgroundColor: Colors.green,
       ));
       setState(() {
         isShow = false;
@@ -114,6 +115,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Xóa thất bại'),
+        backgroundColor: Colors.red,
       ));
     }
   }

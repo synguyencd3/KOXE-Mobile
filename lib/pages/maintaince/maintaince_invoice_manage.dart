@@ -171,7 +171,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                   if (response) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Thêm gói bảo dưỡng thành công'),
+                        content: Text('Thêm hóa đơn bảo dưỡng thành công'),
                         backgroundColor: Colors.green,
                       ),
                     );
@@ -181,7 +181,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Thêm gói bảo dưỡng thất bại'),
+                        content: Text('Thêm hóa đơn bảo dưỡng thất bại'),
                         backgroundColor: Colors.red,
                       ),
                     );

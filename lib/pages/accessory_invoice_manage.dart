@@ -28,7 +28,6 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
-      getAllAccessoryInvoice();
       getAllAccessories();
     });
   }
@@ -64,10 +63,12 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Xóa hóa đơn thành công'),
+        backgroundColor: Colors.green,
       ));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Xóa hóa đơn không thành công'),
+        backgroundColor: Colors.red,
       ));
     }
   }
@@ -303,6 +304,7 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
                                                     'Thêm hóa đơn thành công'),
+                                                backgroundColor: Colors.green,
                                               ));
                                               setState(() {
                                                 accessoryInvoices
@@ -313,6 +315,7 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
                                                     'Thêm hóa đơn không thành công'),
+                                                backgroundColor: Colors.red,
                                               ));
                                             }
                                             Navigator.of(context).pop();
