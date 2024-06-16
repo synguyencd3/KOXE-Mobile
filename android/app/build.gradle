@@ -18,6 +18,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id("com.google.gms.google-services")
 }
 
 def localProperties = new Properties()
@@ -37,6 +38,8 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
+
+//apply plugin: 'com.google.gms.google-services'
 
 android {
     namespace "com.example.mobile"
@@ -97,4 +100,5 @@ flutter {
 dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation 'com.facebook.android:facebook-login:latest.release'
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
 }
