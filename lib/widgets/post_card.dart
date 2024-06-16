@@ -2,22 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/model/post_model.dart';
+import 'package:mobile/utils/utils.dart';
 
-class PostCard extends StatefulWidget {
-  PostModel post;
 
-  PostCard({super.key, required this.post});
+class PostCard extends StatelessWidget {
+  final PostModel post;
 
-  @override
-  State<PostCard> createState() => _PostCardState();
-}
+  const PostCard({super.key, required this.post});
 
-class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-       Navigator.pushNamed(context, '/post_detail', arguments: widget.post.postId);
+       Navigator.pushNamed(context, '/post_detail', arguments: post.postId);
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -35,7 +32,7 @@ class _PostCardState extends State<PostCard> {
             Expanded(
               flex: 1,
               child: CircleAvatar(
-                backgroundImage: NetworkImage(widget.post.user?.avatar ?? ''),
+                backgroundImage: NetworkImage(post.user?.avatar ?? ''),
               ),
             ),
             Expanded(
@@ -43,9 +40,9 @@ class _PostCardState extends State<PostCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.post.title ?? 'Không có tiêu đề'),
-                  Text(widget.post.createAt.toString()),
-                  Text('Người đăng: ' + widget.post.user!.fullname),
+                  Text(post.title ?? 'Không có tiêu đề'),
+                  Text('Ngày đăng: ' + formatDate(post.createAt!)),
+                  Text('Người đăng: ' + post.user!.fullname),
                 ],
               ),
             )

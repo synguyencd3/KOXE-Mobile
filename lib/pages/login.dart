@@ -200,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
               child: Text(
-                'Or',
+                'Hoặc',
                 // style: FlutterFlowTheme.of(context).bodyMedium,
               ),
             ),
@@ -228,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Chưa có tài khoản?"),
+                  const Text("Chưa có tài khoản ? "),
                   const SizedBox(
                     width: 2,
                   ),

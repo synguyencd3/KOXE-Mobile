@@ -6,6 +6,7 @@ import 'package:mobile/services/salon_service.dart';
 
 import '../../services/cars_service.dart';
 import '../loading.dart';
+import 'package:mobile/utils/utils.dart';
 
 class CarsListing extends StatefulWidget {
   const CarsListing({Key? key}) : super(key: key);
@@ -126,13 +127,13 @@ class CarCard extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'Mô tả: ${car.description}',
+                car.description != null ? ('Mô tả: ${car.description}') : ('Mô tả: Chưa có mô tả'),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Giá: ${car.price}',
+                    'Giá: ${formatCurrency(car.price!)}',
                   ),
                   Row(
                     children: [

@@ -8,6 +8,7 @@ import 'package:mobile/widgets/button.dart';
 import 'package:mobile/services/cars_service.dart';
 
 import '../loading.dart';
+import 'package:mobile/utils/utils.dart';
 
 class CarDetail extends StatefulWidget {
   @override
@@ -82,7 +83,7 @@ class _CarDetailState extends State<CarDetail> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                   ),
                   Text(
-                    '${car.price} VNĐ',
+                    '${formatCurrency(car.price!)}',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                   ),
                   Container(
@@ -133,7 +134,7 @@ class _CarDetailState extends State<CarDetail> {
                           title: Text('Mẫu xe',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           trailing: Text(
-                              car.model != ''
+                              car.model != null
                                   ? '${car.model}'
                                   : 'Chưa cập nhật',
                               style: TextStyle(
@@ -211,7 +212,7 @@ class _CarDetailState extends State<CarDetail> {
                                       fontSize: 20),
                                 ),
                                 Text(
-                                  '${car.description}',
+                                  car.description!= null ? '${car.description}' : 'Chưa cập nhật',
                                   style: TextStyle(
                                       color: Colors.grey[800], fontSize: 16),
                                 ),
@@ -265,6 +266,7 @@ class _CarDetailState extends State<CarDetail> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 20),
                         ButtonCustom(
                           onPressed: () async {
                             print(car.id);
