@@ -5,6 +5,7 @@ import 'package:mobile/model/accessory_invoice_model.dart';
 import 'package:mobile/model/accessory_model.dart';
 import 'package:mobile/pages/loading.dart';
 import 'package:mobile/services/accessory_service.dart';
+import 'package:mobile/utils/utils.dart';
 
 class AccessoryInvoiceManage extends StatefulWidget {
   const AccessoryInvoiceManage({super.key});
@@ -164,7 +165,8 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                   )
                 : Column(
                     children: [
-                      TextButton(
+                      TextButton.icon(
+                        icon: Icon(Icons.add),
                           onPressed: () {
                             showDialog(
                                 context: context,
@@ -325,7 +327,7 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                                   );
                                 });
                           },
-                          child: Text('Thêm hóa đơn')),
+                          label: Text('Thêm hóa đơn')),
                       Expanded(
                         child: ListView.builder(
                           physics: BouncingScrollPhysics(),
@@ -413,7 +415,7 @@ Widget simpleInvoiceCard(AccessoryInvoiceModel invoice) {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           trailing:
-              Text(invoice.total.toString(), style: TextStyle(fontSize: 16)),
+              Text(formatCurrency(invoice.total!).toString(), style: TextStyle(fontSize: 16)),
         ),
       ],
     ),

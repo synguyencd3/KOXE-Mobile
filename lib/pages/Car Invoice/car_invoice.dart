@@ -51,15 +51,15 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             permissions.contains("OWNER") || permissions.contains("C_IV") ?
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(onPressed: () {
+             TextButton.icon(onPressed: () {
                 Navigator.pushNamed(context, '/car_invoice/new').then((value) {
                   getInvoices();
                 });
-              }, child: Text("Thêm giao dịch"),),
+              }, label: Text("Thêm giao dịch"),
+               icon: Icon(Icons.add),
             ) : Container(),
             ListView.builder(
               shrinkWrap: true,
@@ -83,9 +83,9 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Customer: ${invoice.fullname}'),
+                          Text('Tên khách hàng: ${invoice.fullname}'),
                           SizedBox(height: 5),
-                          Text('Phone: ${invoice.phone}'),
+                          Text('Số điện thoại: ${invoice.phone}'),
                         ],
                       ),
                     ),

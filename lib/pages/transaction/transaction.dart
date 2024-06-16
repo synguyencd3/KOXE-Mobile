@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/model/transaction_model.dart';
+import 'package:mobile/model/transaction_revenue_model.dart';
 import 'package:mobile/widgets/transaction_card.dart';
 import '../../services/transaction_service.dart';
 import 'package:mobile/pages/loading.dart';
+import 'package:mobile/services/salon_service.dart';
+import 'package:mobile/utils/utils.dart';
 
 class Transaction extends StatefulWidget {
   const Transaction({super.key});
@@ -12,19 +15,27 @@ class Transaction extends StatefulWidget {
 }
 
 class _TransactionState extends State<Transaction> {
-  List<TransactionModel> transactions = [];
+  TransactionRevenueModel transactions = TransactionRevenueModel();
+  String isSalon = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getTransactions();
+    getIsSalon();
   }
 
   Future<void> getTransactions() async {
-    List<TransactionModel> transactionsAPI =
+    TransactionRevenueModel transactionsAPI =
         await TransactionService.getTransactions();
     transactions = transactionsAPI;
+  }
+
+  Future<void> getIsSalon() async {
+    String isSalonAPI = await SalonsService.isSalon();
+    setState(() {
+      isSalon = isSalonAPI;
+    });
   }
 
   @override
@@ -39,12 +50,26 @@ class _TransactionState extends State<Transaction> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Loading();
             }
-            return ListView.builder(
-                itemCount: transactions.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return TransactionCard(transaction: transactions[index]);
-                });
+            return Column(
+              children: [
+                Text(
+                    (isSalon != ''
+                            ? 'Tổng chi cho hoa tiêu: '
+                            : 'Tổng tiền nhận từ salon: ') +
+                        '${formatCurrency(transactions.revenue!)}',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: transactions.transaction!.length,
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return TransactionCard(
+                            transaction: transactions.transaction![index]);
+                      }),
+                ),
+              ],
+            );
           }),
     );
   }

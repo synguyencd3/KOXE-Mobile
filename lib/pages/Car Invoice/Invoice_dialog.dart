@@ -240,11 +240,11 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
           },
         ),
         TextButton(
-          child: Text('Cancel'),
+          child: Text('Hủy'),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: Text('Submit'),
+          child: Text('Cập nhật'),
           onPressed: submitForm,
         ),
       ],

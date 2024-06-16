@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/invoice_model.dart';
 import 'package:mobile/services/invoice_service.dart';
 import 'package:mobile/services/salon_service.dart';
+import 'package:mobile/utils/utils.dart';
 
 class InvoiceCard extends StatefulWidget {
   final InvoiceModel invoice;
@@ -188,7 +189,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
               'Tổng chi phí',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            trailing: Text(invoice.expense.toString(),
+            trailing: Text(formatCurrency(invoice.expense ?? 0).toString(),
                 style: TextStyle(fontSize: 16)),
           ),
         ],

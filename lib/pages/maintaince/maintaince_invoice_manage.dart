@@ -32,7 +32,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
   Future<void> getAllMaintainces() async {
     List<MaintainceModel> maintaincesAPI =
     await MaintainceService().getAllMaintainces();
-    print(maintaincesAPI.length);
+    //print(maintaincesAPI.length);
     maintainces = maintaincesAPI;
   }
 
@@ -208,20 +208,22 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
             }
             return invoices.isEmpty
                 ? Center(
-                child: TextButton(
+                child: TextButton.icon(
+                  icon: Icon(Icons.add),
                     onPressed: () {
                       showAddInvoiceDialog(context);
                     },
-                    child: Text(
+                    label: Text(
                       'Thêm hóa đơn bảo dưỡng',
                     )))
                 : Column(
               children: [
-                TextButton(
+                TextButton.icon(
+                  icon: Icon(Icons.add),
                     onPressed: () {
                       showAddInvoiceDialog(context);
                     },
-                    child: Text(
+                    label: Text(
                       'Thêm hóa đơn bảo dưỡng',
                     )),
                 Expanded(
