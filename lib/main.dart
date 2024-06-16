@@ -1,4 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/config.dart';
 import 'package:mobile/pages/Car%20Invoice/car_invoice.dart';
 import 'package:mobile/pages/Car%20Invoice/newCar_invoice.dart';
 import 'package:mobile/pages/Car%20Invoice/user_car_invoice.dart';
@@ -19,6 +22,7 @@ import 'package:mobile/pages/salon/salon_list.dart';
 import 'package:mobile/pages/statistic/statistic_page.dart';
 import 'package:mobile/pages/warranty/Warranty_form.dart';
 import 'package:mobile/pages/warranty/warranty_list.dart';
+import 'package:mobile/services/Firebase_service.dart';
 import 'package:mobile/widgets/introduction_car.dart';
 import 'package:mobile/pages/manage.dart';
 import 'package:mobile/pages/chat/list_chat_users.dart';
@@ -62,11 +66,21 @@ import 'package:mobile/pages/accessory_invoice_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_invoice_manage.dart';
 import 'package:mobile/pages/post/post.dart';
 import 'package:mobile/pages/transaction/transaction_detail_navigator.dart';
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+        apiKey: Config.firebaseApiKey,
+        appId: Config.firebaseAppId,
+        messagingSenderId: Config.firebaseSenderId,
+        projectId: Config.firebaseProjectId)
+  );
+  await FirebaseServices().initNotification();
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
 
   ZegoUIKit().initLog().then((value) {

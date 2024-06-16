@@ -154,4 +154,11 @@ static const String accessoryInvoiceAPI = "/buy-accessory";
 //Promotion
 static const String promotionAPI = "/promotions";
 static const String salonPromotionAPI = "/promotions/salon";
+
+
+//FIREBASE
+static const String firebaseApiKey = "AIzaSyCbfy8s5vE9W1ZkHWzpmBgGeKypSNDg82M";
+static const String firebaseAppId = "1:193303518481:android:f625498ebfb22d70f900b0";
+static const String firebaseProjectId = "k20-oto";
+static const String firebaseSenderId = "193303518481";
 }
