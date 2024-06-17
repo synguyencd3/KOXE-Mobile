@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/chat_user_model.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/services/salon_service.dart';
+import 'package:mobile/utils/utils.dart';
 
 class ChatUserCard extends StatefulWidget {
   final ChatUserModel user;
@@ -13,6 +14,7 @@ class ChatUserCard extends StatefulWidget {
 }
 
 class _ChatUserCardState extends State<ChatUserCard> {
+  DateFormat format = DateFormat("dd-MM-yyyy HH:mm:ss");
   @override
   void initState() {
     // TODO: implement initState
@@ -21,7 +23,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return widget.user.message!.message == null ? Container() :Card(
         margin: EdgeInsets.symmetric(vertical: 1, horizontal: 1),
         color: widget.user.message?.status != null
             ? widget.user.message!.status
@@ -41,22 +43,22 @@ class _ChatUserCardState extends State<ChatUserCard> {
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 subtitle: Text(
-                  ((widget.user.message?.sender != '' ? (widget.user.message!.sender + ': ') : ''))  + (widget.user.message?.message ?? ''),
+                  ((widget.user.message?.sender != ''
+                          ? (widget.user.message!.sender + ': ')
+                          : '')) +
+                      (widget.user.message?.message ?? ''),
                   maxLines: 1,
                 ),
-                trailing: Text(widget.user.message?.createdAt != null
-                    ? widget.user.message!.createdAt
-                    : ''),
+                trailing: Text(widget.user.message!.createdAt!='' ? formatDate(format.parse(widget.user.message!.createdAt)): ''),
                 onTap: () async {
                   var result = await Navigator.pushNamed(context, '/chat',
                       arguments: widget.user);
-                  if (result =='rebuild')
-                    {
-                      setState(() {
-                        print('rebuild');
-                        widget.user.message!.status = true;
-                      });
-                    }
+                  if (result == 'rebuild') {
+                    setState(() {
+                      print('rebuild');
+                      widget.user.message!.status = true;
+                    });
+                  }
                 }),
           ),
         ));

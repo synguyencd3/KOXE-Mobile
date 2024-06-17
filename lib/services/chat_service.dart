@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/chat_model.dart';
+import 'package:mobile/model/user_search_model.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/model/chat_user_model.dart';
@@ -69,18 +70,35 @@ class ChatService {
 
     if (images.isNotEmpty) {
       for (var imagePath in images) {
-      var multipartFile = await http.MultipartFile.fromPath(
-        'imgList',
-        imagePath,
-        contentType: MediaType('image', 'jpeg'),
-      );
-      request.files.add(multipartFile);
-
+        var multipartFile = await http.MultipartFile.fromPath(
+          'imgList',
+          imagePath,
+          contentType: MediaType('image', 'jpeg'),
+        );
+        request.files.add(multipartFile);
       }
     }
 
     var response = await request.send();
 
     return response.statusCode == 201;
+  }
+
+  static Future<List<UserSearchModel>> searchUser(String search) async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+    var queryParameters = {
+      'q': search,
+    };
+    var url = Uri.https(Config.apiURL, Config.searchUserAPI, queryParameters);
+    var response = await http.get(url, headers: requestHeaders);
+    var data = jsonDecode(response.body);
+  if (response.statusCode == 200) {
+    return userSearchFromJson(data);
+  }
+    return [];
   }
 }

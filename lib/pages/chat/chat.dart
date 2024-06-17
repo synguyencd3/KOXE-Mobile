@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
@@ -31,6 +32,7 @@ class _ChatState extends State<ChatPage> {
   late types.User _receiver = types.User(id: '');
   StreamSubscription? _messageSubscription;
   StreamSubscription? _onlineUsersSubscription;
+  DateFormat format = DateFormat("dd-MM-yyyy HH:mm:ss");
 
   @override
   void initState() {
@@ -126,7 +128,7 @@ class _ChatState extends State<ChatPage> {
     for (int i = 0; i < chatAPI.length; i++) {
       //print(chatAPI[i].sender);
       final createAt =
-          DateTime.parse(chatAPI[i].createdAt ?? DateTime.now().toString());
+          format.parse(chatAPI[i].createdAt ?? DateTime.now().toString());
       if (chatAPI[i].message != '') {
         if (chatAPI[i].sender == _sender.id) {
           final message = types.TextMessage(
@@ -356,7 +358,7 @@ class _ChatState extends State<ChatPage> {
                       ),
                     ),
                     Text(
-                      'Đang hoạt động',
+                      'Không hoạt động',
                       style: TextStyle(
                         fontSize: 12,
                       ),
