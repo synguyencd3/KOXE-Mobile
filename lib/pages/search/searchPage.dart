@@ -3,7 +3,9 @@ import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/salon/salon_list.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/widgets/car_card.dart';
+
 
 import '../../services/cars_service.dart';
 import '../../services/salon_service.dart';

@@ -66,6 +66,7 @@ import 'package:mobile/pages/accessory_invoice_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_invoice_manage.dart';
 import 'package:mobile/pages/post/post.dart';
 import 'package:mobile/pages/transaction/transaction_detail_navigator.dart';
+import 'package:mobile/pages/search/searchUserPage.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -166,6 +167,7 @@ class _MyAppState extends State<MyApp> {
         '/transaction_manage' : (context) => TransactionManage(),
         '/navigator_manage' : (context) => NavigatorManage(),
         '/search' : (context) => SearchPage(),
+        '/search_user' : (context) => SearchUserPage(),
         '/salon_group' : (context) => SalonGroup(),
         '/user_accessory' : (context) => UserAccessory(),
         '/accessory_invoice_manage' : (context) => AccessoryInvoiceManage(),

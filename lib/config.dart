@@ -75,6 +75,7 @@ class Config {
   static const String getChatsAPI = "/messages";
   static const String getAllChatUsersAPI = "/messages/chatting-users";
   static const String sendMessageAPI = "/messages/send";
+  static const String searchUserAPI = "/messages/search";
 
   //Notification API
   static const String getNotificationAPI =

@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/chat_user_card.dart';
 import 'package:mobile/model/chat_user_model.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/pages/loading.dart';
 import 'package:mobile/socket/socket_manager.dart';
+
 
 class Message extends StatefulWidget {
   const Message({super.key});
@@ -53,13 +55,27 @@ class _MessageState extends State<Message> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Loading();
             }
-            return ListView.builder(
-              itemCount: users.length,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.only(top: 1),
-              itemBuilder: (context, index) {
-                return ChatUserCard(user: users[index]);
-              },
+            return Column(
+              children: [
+                TextButton.icon(
+                    onPressed: ()  {
+                      // var result = await ChatService.searchUser('h');
+                      // print(result);
+                      Navigator.pushNamed(context,  '/search_user');
+                    },
+                    icon: Icon(Icons.search),
+                    label: Text('Tìm kiếm')),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: users.length,
+                    physics: BouncingScrollPhysics(),
+                    padding: EdgeInsets.only(top: 1),
+                    itemBuilder: (context, index) {
+                      return ChatUserCard(user: users[index]);
+                    },
+                  ),
+                ),
+              ],
             );
           }),
     );
