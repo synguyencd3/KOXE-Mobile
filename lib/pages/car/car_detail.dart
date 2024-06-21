@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
 //import 'package:panorama/panorama.dart';
 import 'package:mobile/model/chat_user_model.dart';
+import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/widgets/button.dart';
 import 'package:mobile/services/cars_service.dart';
 
@@ -17,6 +19,7 @@ class CarDetail extends StatefulWidget {
 
 class _CarDetailState extends State<CarDetail> {
   Car car = Car();
+  Set<String> permission = {};
 
   // late final PageController pageController;
 
@@ -24,8 +27,16 @@ class _CarDetailState extends State<CarDetail> {
   void initState() {
     Future.delayed(Duration.zero, () {
       initCar();
+      getPermission();
     });
     super.initState();
+  }
+
+  void getPermission() async {
+    var data = await SalonsService.getPermission();
+    setState(() {
+      permission = data;
+    });
   }
 
   void initCar() async {
@@ -54,8 +65,7 @@ class _CarDetailState extends State<CarDetail> {
                         height: 200.0,
                         aspectRatio: 2.0,
                         enableInfiniteScroll: false,
-                        autoPlay: true
-                    ),
+                        autoPlay: true),
                     items: car.image != null
                         ? car.image!.map((i) {
                             return Builder(
@@ -66,9 +76,9 @@ class _CarDetailState extends State<CarDetail> {
                                         EdgeInsets.symmetric(horizontal: 5.0),
                                     decoration:
                                         BoxDecoration(color: Colors.amber),
-                                    child:
-                                    Image.network(
-                                      i ?? 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.meadowbrookventuresinc.com%2Fvehicle%2F2007-chevrolet-impala-5547%2F&psig=AOvVaw1F85gFMkxnOc3ZhOCqGg-Y&ust=1716219588856000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCLDtmauGmoYDFQAAAAAdAAAAABAE',
+                                    child: Image.network(
+                                      i ??
+                                          'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.meadowbrookventuresinc.com%2Fvehicle%2F2007-chevrolet-impala-5547%2F&psig=AOvVaw1F85gFMkxnOc3ZhOCqGg-Y&ust=1716219588856000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCLDtmauGmoYDFQAAAAAdAAAAABAE',
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: 200.0,
@@ -212,7 +222,9 @@ class _CarDetailState extends State<CarDetail> {
                                       fontSize: 20),
                                 ),
                                 Text(
-                                  car.description!= null ? '${car.description}' : 'Chưa cập nhật',
+                                  car.description != null
+                                      ? '${car.description}'
+                                      : 'Chưa cập nhật',
                                   style: TextStyle(
                                       color: Colors.grey[800], fontSize: 16),
                                 ),
@@ -267,21 +279,25 @@ class _CarDetailState extends State<CarDetail> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        ButtonCustom(
-                          onPressed: () async {
-                            print(car.id);
-                            Car? carDetail =
-                                await CarsService.getDetail(car.id ?? '');
-                            print(carDetail?.salon?.salonId ?? '');
-                            ChatUserModel user = ChatUserModel(
-                                id: carDetail?.salon?.salonId ?? '',
-                                name: carDetail?.salon?.name ?? '',
-                                carId: car.id);
-                            Navigator.pushNamed(context, '/create_appointment',
-                                arguments: user);
-                          },
-                          title: 'Đặt lịch hẹn để xem xe này',
-                        ),
+                        permission.contains("OWNER") ||
+                                permission.contains("R_CAR")
+                            ? Container()
+                            : ButtonCustom(
+                                onPressed: () async {
+                                  print(car.id);
+                                  Car? carDetail =
+                                      await CarsService.getDetail(car.id ?? '');
+                                  print(carDetail?.salon?.salonId ?? '');
+                                  ChatUserModel user = ChatUserModel(
+                                      id: carDetail?.salon?.salonId ?? '',
+                                      name: carDetail?.salon?.name ?? '',
+                                      carId: car.id);
+                                  Navigator.pushNamed(
+                                      context, '/create_appointment',
+                                      arguments: user);
+                                },
+                                title: 'Đặt lịch hẹn để xem xe này',
+                              ),
                         SizedBox(
                           height: 20,
                         )

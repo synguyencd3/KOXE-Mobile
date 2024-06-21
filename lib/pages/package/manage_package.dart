@@ -86,17 +86,17 @@ class _ManagePackageState extends State<ManagePackage> {
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            TextButton(
-                                onPressed: () {}, child: Text('Nâng cấp gói')),
-                            TextButton(
-                                onPressed: () {}, child: Text('Gia hạn gói')),
-                            TextButton(
-                                onPressed: () {}, child: Text('Hủy gói')),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //   children: [
+                        //     TextButton(
+                        //         onPressed: () {}, child: Text('Nâng cấp gói')),
+                        //     TextButton(
+                        //         onPressed: () {}, child: Text('Gia hạn gói')),
+                        //     TextButton(
+                        //         onPressed: () {}, child: Text('Hủy gói')),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),

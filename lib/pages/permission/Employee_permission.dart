@@ -63,11 +63,13 @@ class _AdminPageState extends State<AdminPage> {
           itemBuilder: (context, index) {
             final user = users[index];
             return GestureDetector(
-              child: ListTile(
-                title: Text(user.fullname!),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () => removeEmployee(user),
+              child: Card(
+                child: ListTile(
+                  title: Text(user.fullname!),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () => removeEmployee(user),
+                  ),
                 ),
               ),
               onTap: () {

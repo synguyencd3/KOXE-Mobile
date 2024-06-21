@@ -18,16 +18,19 @@ class _MyCarState extends State<MyCar> {
       body: Column(
         children: <Widget>[
           text_card(
+            headingIcon: Icons.history,
               title: 'Lịch sử mua xe',
               onTap: () {
                 Navigator.pushNamed(context, '/customer/car_voice');
               }),
           text_card(
+            headingIcon: Icons.receipt,
               title: 'Hóa đơn bảo dưỡng',
               onTap: () {
                 Navigator.pushNamed(context, '/user_maintaince');
               }),
           text_card(
+            headingIcon: Icons.receipt,
               title: 'Hóa đơn phụ tùng',
               onTap: () {
                 Navigator.pushNamed(context,  '/user_accessory');
