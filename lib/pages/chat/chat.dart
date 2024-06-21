@@ -33,6 +33,7 @@ class _ChatState extends State<ChatPage> {
   StreamSubscription? _messageSubscription;
   StreamSubscription? _onlineUsersSubscription;
   DateFormat format = DateFormat("dd-MM-yyyy HH:mm:ss");
+  Set<String> permission = {};
 
   @override
   void initState() {
@@ -47,7 +48,7 @@ class _ChatState extends State<ChatPage> {
           id: user?.id ?? '',
         );
       });
-      callAPI();
+      //callAPI();
       //initStatus();
       List<dynamic> onlineUsers = SocketManager().onlineUsers;
       print('userid: ${user?.id}');
@@ -101,9 +102,17 @@ class _ChatState extends State<ChatPage> {
     _onlineUsersSubscription?.cancel();
   }
 
+  void getPermission() async {
+    var data = await SalonsService.getPermission();
+    //setState(() {
+    permission = data;
+    //});
+  }
+
   Future<void> callAPI() async {
     await getUserInfo();
     await getMessages();
+    getPermission();
   }
 
   Future<void> getUserInfo() async {
@@ -137,7 +146,7 @@ class _ChatState extends State<ChatPage> {
             id: const Uuid().v4(),
             text: chatAPI[i].message,
           );
-          _addMessage(message);
+          _addMessageWithoutSetState(message);
         } else {
           final message = types.TextMessage(
             author: _receiver,
@@ -145,7 +154,7 @@ class _ChatState extends State<ChatPage> {
             id: const Uuid().v4(),
             text: chatAPI[i].message,
           );
-          _addMessage(message);
+          _addMessageWithoutSetState(message);
         }
       } else {
         for (String image in chatAPI[i].images ?? []) {
@@ -160,7 +169,7 @@ class _ChatState extends State<ChatPage> {
               size: 100,
               uri: image,
             );
-            _addMessage(message);
+            _addMessageWithoutSetState(message);
           } else {
             final message = types.ImageMessage(
               author: _receiver,
@@ -172,11 +181,9 @@ class _ChatState extends State<ChatPage> {
               size: 50,
               uri: image,
             );
-            _addMessage(message);
-
+            _addMessageWithoutSetState(message);
           }
         }
-
       }
     }
   }
@@ -185,24 +192,36 @@ class _ChatState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            flexibleSpace: _appBar(),
-          ),
-          body: Chat(
-            //customMessageBuilder: _customMessageBuilder,
-            messages: _messages,
-            onAttachmentPressed: _handleAttachmentPressed,
-            onSendPressed: _handleSendPressed,
-            user: _sender,
-
-          ),
+      child: Container(
+        color: Colors.white,
+        child: SafeArea(
+          child: FutureBuilder(
+              future: callAPI(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return Scaffold(
+                  appBar: AppBar(
+                    automaticallyImplyLeading: false,
+                    flexibleSpace: _appBar(),
+                  ),
+                  body: Chat(
+                    //customMessageBuilder: _customMessageBuilder,
+                    messages: _messages,
+                    onAttachmentPressed: _handleAttachmentPressed,
+                    onSendPressed: _handleSendPressed,
+                    user: _sender,
+                  ),
+                );
+              }),
         ),
       ),
     );
   }
+
   // Widget _customMessageBuilder(types.Message message, {required int messageWidth}) {
   //   if (message is MultipleImageMessage) {
   //     return Row(
@@ -215,6 +234,10 @@ class _ChatState extends State<ChatPage> {
     setState(() {
       _messages.insert(0, message);
     });
+  }
+
+  void _addMessageWithoutSetState(types.Message message) {
+    _messages.insert(0, message);
   }
 
   void _handleSendPressed(types.PartialText message) async {
@@ -328,112 +351,71 @@ class _ChatState extends State<ChatPage> {
   }
 
   Widget _appBar() {
-    return FutureBuilder(
-        future: getUserInfo(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pop(context, 'rebuild');
-                  },
+    return Container(
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context, 'rebuild');
+            },
+          ),
+          CircleAvatar(
+            backgroundImage: NetworkImage(user?.image ??
+                'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
+          ),
+          SizedBox(
+            width: 15,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                user!.name,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-                CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
+              ),
+              Text(
+                user?.isOnline == true ? 'Đang hoạt động' : 'Không hoạt động',
+                style: TextStyle(
+                  fontSize: 12,
                 ),
-                SizedBox(
-                  width: 15,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'User Name',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Không hoạt động',
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          } else {
-            return Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pop(context, 'rebuild');
-                  },
-                ),
-                CircleAvatar(
-                  backgroundImage: NetworkImage(user?.image ??
-                      'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      user!.name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      user?.isOnline == true
-                          ? 'Đang hoạt động'
-                          : 'Không hoạt động',
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                Expanded(child: Container()),
-                // Padding(
-                //   padding: EdgeInsets.only(right: 10),
-                //   // child: GestureDetector(
-                //   //   onTap: () {Navigator.pushNamed(context, '/call_page');},
-                //   //   child: Icon(
-                //   //     Icons.video_call_rounded,
-                //   //     size: 30,
-                //   //   ),
-                //   // ),
-                // ),
-                GestureDetector(
+              ),
+            ],
+          ),
+          Expanded(child: Container()),
+          // Padding(
+          //   padding: EdgeInsets.only(right: 10),
+          //   // child: GestureDetector(
+          //   //   onTap: () {Navigator.pushNamed(context, '/call_page');},
+          //   //   child: Icon(
+          //   //     Icons.video_call_rounded,
+          //   //     size: 30,
+          //   //   ),
+          //   // ),
+          // ),
+          permission.length <= 0
+              ? GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, '/create_appointment',
                         arguments: user);
                   },
                   child: CircleAvatar(child: Icon(Icons.event)),
-                ),
-                ZegoSendCallInvitationButton(
-                  iconSize: Size.fromHeight(40),
-                  isVideoCall: true,
-                  resourceID: "zegouikit_call",
-                  //You need to use the resourceID that you created in the subsequent steps. Please continue reading this document.
-                  invitees: [
-                    ZegoUIKitUser(
-                        id: user!.id.substring(0, 8), name: user!.name),
-                  ],
-                ),
-              ],
-            );
-          }
-        });
+                )
+              : Container(),
+          ZegoSendCallInvitationButton(
+            iconSize: Size.fromHeight(40),
+            isVideoCall: true,
+            resourceID: "zegouikit_call",
+            //You need to use the resourceID that you created in the subsequent steps. Please continue reading this document.
+            invitees: [
+              ZegoUIKitUser(id: user!.id.substring(0, 8), name: user!.name),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

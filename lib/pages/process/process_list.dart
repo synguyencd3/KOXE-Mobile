@@ -65,7 +65,7 @@ class _ProcessesState extends State<Processes> {
                       physics: ClampingScrollPhysics(),
                       itemBuilder: (context, index) {
                         return Padding(
-                            padding: EdgeInsets.all(10),
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ProcessCard(
                               processModel: processes[index],
                               delete: deleteProcess,

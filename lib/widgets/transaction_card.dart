@@ -15,6 +15,7 @@ class TransactionCard extends StatefulWidget {
 class _TransactionCardState extends State<TransactionCard> {
   bool isDeleted = false;
   Set<String> permission = {};
+  double trailingSize = 14;
 
   Future<bool> deleteTransaction(String transactionId) async {
     bool response = await TransactionService.deleteTransaction(transactionId);
@@ -45,17 +46,17 @@ class _TransactionCardState extends State<TransactionCard> {
             child: Column(
               children: [
                 ListTile(
-                  title: Text('Tên qui trình'),
-                  trailing: Text(widget.transaction.processData!.name!),
+                  title: Text('Tên qui trình',),
+                  trailing: Text(widget.transaction.processData!.name!,style: TextStyle(fontSize: trailingSize)),
                 ),
                 ListTile(
                   title: Text('Trạng thái'),
-                  trailing: Text(widget.transaction.status!),
+                  trailing: Text(widget.transaction.status!, style: TextStyle(fontSize: trailingSize)),
                 ),
                 ListTile(
                   title: Text('Hoa tiêu'),
                   trailing:
-                      Text(widget.transaction.userTransaction?.name ?? 'Bạn'),
+                      Text(widget.transaction.userTransaction?.name ?? 'Bạn', style: TextStyle(fontSize: trailingSize)),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
