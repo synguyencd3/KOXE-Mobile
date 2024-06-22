@@ -59,6 +59,13 @@ class _ManageState extends State<Manage> {
                   onTap: () {
                     Navigator.pushNamed(context, '/employee_management');
                   }) : Container(),
+              permission.contains("OWNER")  ?
+              text_card(
+                  headingIcon: Icons.warning,
+                  title: 'Quản lý quyền',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/authorities');
+                  }) : Container(),
               text_card(
                 headingIcon: Icons.block,
                   title: 'Quản lý hoa tiêu bị chặn',

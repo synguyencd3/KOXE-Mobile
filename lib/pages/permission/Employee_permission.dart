@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/services/salon_service.dart';
 
+import '../../model/authority_model.dart';
 import '../../model/employee_model.dart';
+import '../../services/authorities_service.dart';
 import '../loading.dart';
 
 class AdminPage extends StatefulWidget {
@@ -15,10 +17,22 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   List<Employee> users = [];
   bool isCalling = false;
+  authority _selectedValue = authority();
+  List<authority> authorities = [];
 
   void addEmployee(Employee user) {
     setState(() {
       users.add(user);
+    });
+  }
+
+  Future<void> getAuthorities() async {
+    var data = await AuthorityService.getRoles();
+    setState(() {
+      authorities = data;
+      //authorities.forEach((element) {print(element.permissions);});
+      _selectedValue = authorities[0];
+      isCalling = true;
     });
   }
 
@@ -39,6 +53,7 @@ class _AdminPageState extends State<AdminPage> {
     // TODO: implement initState
     super.initState();
     getEmployees();
+    getAuthorities();
   }
 
   Future<void> getEmployees() async {
@@ -84,6 +99,21 @@ class _AdminPageState extends State<AdminPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(user.fullname!, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                            DropdownButtonFormField<authority>(
+                                decoration: InputDecoration(labelText: 'Quyền'),
+                                value: _selectedValue,
+                                items: authorities.map((_authority) {
+                                  return DropdownMenuItem<authority>(
+                                    value: _authority,
+                                    child: Text(_authority.name!),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedValue = value!;
+                                  });
+                                }),
+                            SizedBox(height: 20,),
                             Text('Các quyền', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                             for (MapEntry<String, String> entries in {
                               'Nhân viên': 'EMP',
@@ -104,13 +134,13 @@ class _AdminPageState extends State<AdminPage> {
                                         title: Text('Cho phép tạo'),
                                         value: user.permissions?.contains('C_${entries.value}'),
                                          onChanged: (value) {
-                                          setState(() {
-                                            if (value!) {
-                                              user.permissions?.add('C_${entries.value}');
-                                            } else {
-                                              user.permissions?.remove('C_${entries.value}');
-                                            }
-                                          });
+                                          // setState(() {
+                                          //   if (value!) {
+                                          //     user.permissions?.add('C_${entries.value}');
+                                          //   } else {
+                                          //     user.permissions?.remove('C_${entries.value}');
+                                          //   }
+                                          // });
                                         },
                                       );
                                     }
@@ -121,13 +151,13 @@ class _AdminPageState extends State<AdminPage> {
                                         title: Text('Cho phép đọc'),
                                          value:  user.permissions?.contains('R_${entries.value}'),
                                         onChanged: (value) {
-                                          setState(() {
-                                            if (value!) {
-                                              user.permissions?.add('R_${entries.value}');
-                                            } else {
-                                              user.permissions?.remove('R_${entries.value}');
-                                            }
-                                          });
+                                          // setState(() {
+                                          //   if (value!) {
+                                          //     user.permissions?.add('R_${entries.value}');
+                                          //   } else {
+                                          //     user.permissions?.remove('R_${entries.value}');
+                                          //   }
+                                          // });
                                          },
                                       );
                                     }
@@ -138,13 +168,13 @@ class _AdminPageState extends State<AdminPage> {
                                         title: Text('Cho phép cập nhật'),
                                          value:user.permissions?.contains('U_${entries.value}'),
                                         onChanged: (value) {
-                                          setState(() {
-                                            if (value!) {
-                                              user.permissions?.add('U_${entries.value}');
-                                            } else {
-                                              user.permissions?.remove('U_${entries.value}');
-                                            }
-                                          });
+                                          // setState(() {
+                                          //   if (value!) {
+                                          //     user.permissions?.add('U_${entries.value}');
+                                          //   } else {
+                                          //     user.permissions?.remove('U_${entries.value}');
+                                          //   }
+                                          //});
                                         },
                                       );
                                     }
@@ -155,13 +185,13 @@ class _AdminPageState extends State<AdminPage> {
                                         title: Text('Cho phép xóa'),
                                         value: user.permissions?.contains('D_${entries.value}'),
                                         onChanged: (value) {
-                                          setState(() {
-                                            if (value!) {
-                                              user.permissions?.add('D_${entries.value}');
-                                            } else {
-                                              user.permissions?.remove('D_${entries.value}');
-                                            }
-                                          });
+                                          // setState(() {
+                                          //   if (value!) {
+                                          //     user.permissions?.add('D_${entries.value}');
+                                          //   } else {
+                                          //     user.permissions?.remove('D_${entries.value}');
+                                          //   }
+                                         // });
                                         },
                                       );
                                     }
@@ -182,8 +212,11 @@ class _AdminPageState extends State<AdminPage> {
                           onPressed: () {
                             print(user.fullname);
                             print(jsonEncode(user.permissions));
-                            SalonsService.setPermission(user.permissions!, user.userId!);
-                            Navigator.pop(context);},
+                            //SalonsService.setPermission(user.permissions!, user.userId!);
+                            AuthorityService.assingRole(_selectedValue.id!, user.userId!);
+                            Navigator.pop(context);
+                            getEmployees();
+                            },
                         ),
                       ],
                     );

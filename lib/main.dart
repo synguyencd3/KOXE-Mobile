@@ -5,6 +5,7 @@ import 'package:mobile/config.dart';
 import 'package:mobile/pages/Car%20Invoice/car_invoice.dart';
 import 'package:mobile/pages/Car%20Invoice/newCar_invoice.dart';
 import 'package:mobile/pages/Car%20Invoice/user_car_invoice.dart';
+import 'package:mobile/pages/authorize/authorities.dart';
 import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
 import 'package:mobile/pages/car/edit_car.dart';
@@ -174,7 +175,8 @@ class _MyAppState extends State<MyApp> {
         '/maintaince_invoice_manage' : (context) => MaintainceInvoiceManage(),
         '/promotions' : (context) => PromotionBoard(),
         '/post' : (context) => PostPage(),
-        '/salon_promotion' : (context) =>SAlonPromotionBoard()
+        '/salon_promotion' : (context) =>SAlonPromotionBoard(),
+        '/authorities' : (context) =>Authorities()
       },
     );
   }
