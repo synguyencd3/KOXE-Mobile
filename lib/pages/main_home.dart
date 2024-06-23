@@ -153,8 +153,7 @@ class _MainHomeState extends State<MainHome> {
                           child: Icon(Icons.notifications_outlined, size: iconsSize))
                       : Icon(Icons.notifications_outlined, size: iconsSize),
                   onTap: () {
-                    Navigator.pushNamed(context, '/notification',
-                        arguments: notifications);
+                    Navigator.pushNamed(context, '/notification');
                     setState(() {
                       _count = 0;
                     });

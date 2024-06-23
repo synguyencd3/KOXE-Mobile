@@ -7,6 +7,7 @@ import 'package:mobile/services/notification_service.dart';
 import 'package:mobile/services/salon_service.dart';
 
 import '../socket/socket_manager.dart';
+import 'package:mobile/pages/loading.dart';
 
 class Noti extends StatefulWidget {
   @override
@@ -20,22 +21,31 @@ class _NotiState extends State<Noti> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero, () {
-      getNotifications();
-    });
     _notificationSubscription = SocketManager().notificationStream.listen((data) {
-     getNotifications();
+      getAllNotification();
     });
 
   }
-  Future<void> getNotifications() async {
-    List<NotificationModel> notificationsArgument = ModalRoute.of(context)!.settings.arguments as List<NotificationModel>;
-    if (notificationsArgument.isNotEmpty) {
-      setState(() {
-        notifications= notificationsArgument;
-      });
+  // Future<void> getNotifications() async {
+  //   List<NotificationModel> notificationsArgument = ModalRoute.of(context)!.settings.arguments as List<NotificationModel>;
+  //   if (notificationsArgument.isNotEmpty) {
+  //     setState(() {
+  //       notifications= notificationsArgument;
+  //     });
+  //   }
+  // }
+  Future<void> getAllNotification() async {
+    String salonId = await SalonsService.isSalon();
+    List<NotificationModel> notificationAPI = [];
+    if (salonId == '') {
+      notificationAPI = await NotificationService.getAllNotification();
+    } else {
+      notificationAPI =
+      await NotificationService.getAllNotificationSalon(salonId);
     }
+    notifications = notificationAPI;
   }
+
 
 
   @override
@@ -46,13 +56,21 @@ class _NotiState extends State<Noti> {
           backgroundColor: Colors.lightBlue,
         ),
         body:
-             ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: notifications.length,
-              itemBuilder: (context, index) {
-                return NotificationCard(notification: notifications[index]);
-              },
+             FutureBuilder(
+               future: getAllNotification(),
+               builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                   return Loading();
+                  }
+                 return ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: notifications.length,
+                  itemBuilder: (context, index) {
+                    return NotificationCard(notification: notifications[index]);
+                  },
 
-        ));
+                         );
+               }
+             ));
   }
 }
