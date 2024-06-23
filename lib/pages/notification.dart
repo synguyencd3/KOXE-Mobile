@@ -7,6 +7,7 @@ import 'package:mobile/services/notification_service.dart';
 import 'package:mobile/services/salon_service.dart';
 
 import '../socket/socket_manager.dart';
+import 'package:mobile/pages/loading.dart';
 
 class Noti extends StatefulWidget {
   @override
@@ -58,6 +59,9 @@ class _NotiState extends State<Noti> {
              FutureBuilder(
                future: getAllNotification(),
                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                   return Loading();
+                  }
                  return ListView.builder(
                   physics: BouncingScrollPhysics(),
                   itemCount: notifications.length,
