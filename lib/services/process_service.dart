@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:mobile/model/document_model.dart';
 import 'package:mobile/model/process_model.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/salon_service.dart';
@@ -68,11 +69,11 @@ class ProcessService {
     return null;
   }
 
-  static Future<bool?> changeProcess(process model,String id) async {
-    await UpdateProcessName(model,id);
-    await UpdateProcessDocument(model,id );
-    return true;
-  }
+  // static Future<bool?> changeProcess(process model,String id) async {
+  //   await UpdateProcessName(model,id);
+  //   await UpdateProcessDocument(model,id );
+  //   return true;
+  // }
 
   static Future<bool?> UpdateProcessName(process model, String id) async {
     await APIService.refreshToken();
@@ -100,7 +101,7 @@ class ProcessService {
     return false;
   }
 
-  static Future<bool?> UpdateProcessDocument(process model,id) async {
+  static Future<bool?> UpdateProcessDocument(Document model) async {
     await APIService.refreshToken();
 
     String mySalon = await SalonsService.isSalon();
@@ -115,8 +116,7 @@ class ProcessService {
     var url = Uri.https(Config.apiURL, Config.updateProcessDoc);
     var reqBody = model.toJson();
     reqBody['salonId'] = mySalon;
-    reqBody['period'] = id;
-    print('resuest: '+ jsonEncode(reqBody));
+    print('request: '+ jsonEncode(reqBody));
     var response = await http.patch(url,headers: requestHeaders, body: jsonEncode(reqBody));
     var responseData = jsonDecode(response.body);
     print('response:' + response.body);
