@@ -50,15 +50,16 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$mySalon');
+    var url = Uri.https(Config.apiURL, '${Config.salonCarsAPI}/$mySalon');
     if (salonId != null)
-      url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$salonId');
+      url = Uri.https(Config.apiURL, '${Config.salonCarsAPI}/$salonId');
 
     var response = await http.get(url, headers: requestHeaders);
+    print (response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      //print(data);
-      return carsFromJson(data['salon']['cars']);
+      print("salon cars: $data");
+      return carsFromJson(data['cars']);
     }
     return [];
   }

@@ -14,6 +14,7 @@ class Config {
 
   //Salon
   static const String SalonsAPI = "/salons";
+  static const String salonCarsAPI = "/cars/salon";
   static const String getIsSalonAPI = "salons/salonId";
   static const String sendInvite = "salons/invite";
   static const String acceptInviteAPI = "salons/verifyInviteUser";

@@ -36,6 +36,8 @@ class _SalonDetailState extends State<SalonDetail> {
   List<Promotion> promotions = [];
 
   Salon salon = new Salon();
+  bool isCallingCar = false;
+  bool isCallingPromotion = false;
 
   @override
   void initState() {
@@ -52,10 +54,19 @@ class _SalonDetailState extends State<SalonDetail> {
   }
 
   Future<void> getPromotions() async {
-    var list = await NewsService.getSalonPromotions(salon.salonId!);
     setState(() {
-      promotions.addAll(list);
+      isCallingPromotion = true;
     });
+    try {
+      var list = await NewsService.getSalonPromotions(salon.salonId!);
+      setState(() {
+        promotions.addAll(list);
+        isCallingPromotion =false;
+      });
+    }
+    catch (e) {
+      isCallingPromotion = false;
+    }
   }
 
   Future<void> moveCamera() async {
@@ -99,10 +110,25 @@ class _SalonDetailState extends State<SalonDetail> {
 
   Future<void> initCar() async {
     print(salon.salonId);
-    List<Car>? data = await SalonsService.getDetail(salon.salonId ?? '');
+    List<Car>? data = [];
+    setState(() {
+      isCallingCar = true;
+      print("is calling: $isCallingCar");
+    });
+    try {
+      data = await SalonsService.getDetail(salon.salonId ?? '');
+    }
+    catch (e) {
+      print("error fetching salon cars");
+      setState(() {
+        isCallingCar = false;
+      });
+    }
     print("length " + data!.length.toString());
     setState(() {
-      salon.cars = data;
+      salon.cars = data!;
+      isCallingCar = false;
+      print("is calling: $isCallingCar");
     });
   }
 
@@ -221,7 +247,9 @@ class _SalonDetailState extends State<SalonDetail> {
                 ),
               ),
             ),
-            salon.cars.length > 0 ? CarCard(car: salon.cars[0]) : Loading(),
+           // salon.cars.length > 0 ? CarCard(car: salon.cars[0]) : Loading(),
+            isCallingCar ? Loading() :
+                isCallingCar == false && salon.cars.length> 0 ? CarCard(car: salon.cars[0]): Text("Salon hiện thời chưa đăng bán xe"),
             salon.cars.length > 0 ?
             TextButton.icon(
               onPressed: () {
@@ -246,10 +274,11 @@ class _SalonDetailState extends State<SalonDetail> {
                 ),
               ),
             ),
-            promotions.length > 0 ? PromotionCard(
-              title: promotions[0].title,
-              description: promotions[0].title,
-              id: promotions[0].id) : Loading(),
+            isCallingPromotion ?  Loading() :
+            !isCallingPromotion && promotions.length>0 ? PromotionCard(
+                title: promotions[0].title,
+                description: promotions[0].title,
+                id: promotions[0].id) : Text("Salon hiện chưa có khuyến mãi"),
             promotions.length > 0 ?
             TextButton.icon(
               onPressed: () {
