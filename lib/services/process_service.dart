@@ -126,6 +126,61 @@ class ProcessService {
     return false;
   }
 
+  static Future<bool?> CreateProcessDocument(Document model) async {
+    await APIService.refreshToken();
+
+    String mySalon = await SalonsService.isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.createProcessDoc);
+    var reqBody = model.toJson();
+    reqBody['salonId'] = mySalon;
+    reqBody.remove('period');
+    print('request: '+ jsonEncode(reqBody));
+    var response = await http.post(url,headers: requestHeaders, body: jsonEncode(reqBody));
+    var responseData = jsonDecode(response.body);
+    print('response:' + response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool?> DeleteProcessDocument(Document model) async {
+    await APIService.refreshToken();
+
+    String mySalon = await SalonsService.isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      //'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.deleteProcessDoc);
+    var reqBody = model.toJson();
+    reqBody['salonId'] = mySalon;
+    reqBody.remove('period');
+    print('request: '+ jsonEncode(reqBody));
+    var response = await http.delete(url, headers: requestHeaders, body: {
+      'salonId' : mySalon,
+      'period' : model.period
+    });
+    var responseData = jsonDecode(response.body);
+    print('response:' + response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
   static Future<bool?> NewProcess(process model) async {
     await APIService.refreshToken();
 

@@ -137,18 +137,50 @@ class _NewProcessState extends State<NewProcess> {
       _formCards[index].details?.add(Details());
     });
   }
+
+  void _deleteDetailField(Document formCard) {
+
+      ProcessService.DeleteProcessDocument(formCard).then((value) {
+        if (value!) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tạo thành công'),
+                backgroundColor: Colors.green,
+              )
+          );
+          Navigator.pop(context);
+        }
+      });
+
+  }
+
   void _updateDetailField(Document formCard) {
-    ProcessService.UpdateProcessDocument(formCard).then((value) {
-      if (value!) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Tạo thành công'),
-              backgroundColor: Colors.green,
-            )
-        );
-        Navigator.pop(context);
-      }
-    });
+    if (formCard.period == null) {
+      ProcessService.CreateProcessDocument(formCard).then((value) {
+        if (value!) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tạo thành công'),
+                backgroundColor: Colors.green,
+              )
+          );
+          Navigator.pop(context);
+        }
+      });
+    }
+    else {
+      ProcessService.UpdateProcessDocument(formCard).then((value) {
+        if (value!) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tạo thành công'),
+                backgroundColor: Colors.green,
+              )
+          );
+          Navigator.pop(context);
+        }
+      });
+    }
   }
 
   @override
@@ -282,11 +314,23 @@ class _NewProcessState extends State<NewProcess> {
                               },
                             ),
                             _process == null ?  Container():
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                _updateDetailField(formCard);
-                              },
+                            Row(
+                              children: [
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    formCard.order = index;
+                                    _updateDetailField(formCard);
+                                  },
+                                ),
+                                IconButton(
+                                  icon : Icon(Icons.delete),
+                                  onPressed: () {
+                                    formCard.order = index;
+                                    _deleteDetailField(formCard);
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),

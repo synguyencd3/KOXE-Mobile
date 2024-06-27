@@ -112,8 +112,10 @@ class Config {
   static const String getProcess = '/legals/process';
   static const String newProcess = '/legals/create-process';
   static const String updateProcessName = '/legals/update-process';
-  static const String deleteProcess = '/legals/delete-documents';
+  static const String deleteProcess = '/legals/delete-process';
+  static const String deleteProcessDoc = '/legals/delete-documents';
   static const String updateProcessDoc = '/legals/update-documents';
+  static const String createProcessDoc = '/legals/create-documents';
   static const String checkDetailProcess = '/legals/check-details-user';
   static const String updatePeriodProcess = '/legals/update-period-user';
 
