@@ -20,7 +20,7 @@ class _NewProcessState extends State<NewProcess> {
   Car? _selectedObject;
   int type=0;
   List<Document> _formCards = [];
-  List<Car> _cars = [];
+  //List<Car> _cars = [];
   bool isLoading =false;
   process? _process;
 
@@ -39,8 +39,6 @@ class _NewProcessState extends State<NewProcess> {
       isLoading = true;
     });
     try {
-      var salonId = await SalonsService.isSalon();
-      var data = await SalonsService.getDetail(salonId);
       var arg = ModalRoute
           .of(context)!
           .settings
@@ -50,17 +48,18 @@ class _NewProcessState extends State<NewProcess> {
           .arguments as Map;
       setState(() {
         _process = arg?['process'];
-        _cars = data;
       });
       _nameController.text = _process?.name ?? "";
       _descriptionController.text = _process?.description ?? "";
       if (_process != null) {
         setState(() {
           _formCards = _process!.documents!;
-          isLoading =false;
         });
         print(_formCards);
       }
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
       setState(() {
         isLoading = false;
