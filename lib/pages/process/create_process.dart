@@ -289,7 +289,7 @@ class _NewProcessState extends State<NewProcess> {
                           },
                         ),
                         TextFormField(
-                          initialValue: formCard.order.toString(),
+                          initialValue: '',
                           decoration: const InputDecoration(labelText: 'Độ ưu tiên'),
                           onChanged: (value) {
                             //formCard['order'] = value;

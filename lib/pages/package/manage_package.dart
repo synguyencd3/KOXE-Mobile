@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mobile/services/package_service.dart';
 
 import '../../model/package_model.dart';
@@ -98,8 +99,11 @@ class _ManagePackageState extends State<ManagePackage> {
                         //   children: [
                         //     TextButton(
                         //         onPressed: () {}, child: Text('Nâng cấp gói')),
-                        //     TextButton(
-                        //         onPressed: () {}, child: Text('Gia hạn gói')),
+                            Container(
+                              alignment: Alignment.center,
+                              child: TextButton(
+                                  onPressed: () {}, child: Text('Gia hạn gói')),
+                            ),
                         //     TextButton(
                         //         onPressed: () {}, child: Text('Hủy gói')),
                         //   ],
