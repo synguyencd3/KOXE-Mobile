@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/model/salon_model.dart';
+import 'package:mobile/model/salon_payment_response.dart';
 import 'package:mobile/model/user_model.dart';
 import 'package:mobile/model/user_post_model.dart';
 import 'package:mobile/services/api_service.dart';
@@ -361,5 +362,21 @@ class SalonsService {
   static Future<Set<String>> getPermission() async {
     var LoginInfo = await SharedService.loginDetails();
     return Set.from(LoginInfo!.user?.permissions ?? []);
+  }
+
+  static Future<List<SalonPaymentModel>> getPayment()  async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    var url = Uri.https(Config.apiURL, Config.SalonPaymentAPI);
+    var response = await http.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return PaymentsFromJson(data['data']['data']);
+    }
+    return [];
   }
 }

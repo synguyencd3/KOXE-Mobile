@@ -20,6 +20,7 @@ import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';
 import 'package:mobile/pages/salon/new_salon.dart';
 import 'package:mobile/pages/salon/salon_list.dart';
+import 'package:mobile/pages/salon_payment/salonPayment.dart';
 import 'package:mobile/pages/statistic/statistic_page.dart';
 import 'package:mobile/pages/warranty/Warranty_form.dart';
 import 'package:mobile/pages/warranty/warranty_list.dart';
@@ -176,7 +177,8 @@ class _MyAppState extends State<MyApp> {
         '/promotions' : (context) => PromotionBoard(),
         '/post' : (context) => PostPage(),
         '/salon_promotion' : (context) =>SAlonPromotionBoard(),
-        '/authorities' : (context) =>Authorities()
+        '/authorities' : (context) =>Authorities(),
+        '/salon_payment' : (context) =>SalonPaymentPage()
       },
     );
   }
