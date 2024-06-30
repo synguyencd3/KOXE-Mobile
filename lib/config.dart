@@ -21,6 +21,7 @@ class Config {
   static const String mySalon = "salons/my-salon";
   static const String getEmployees = "salons/user";
   static const String Permission = "/salons/permission";
+  static const String SalonPaymentAPI = "/salon-payment";
 
   //Appointment
   static const String getAppointmentsAPI = "/appointment/get-appoint-user";
