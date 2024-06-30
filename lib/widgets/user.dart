@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile/services/payment_service.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/socket/socket_manager.dart';
@@ -19,7 +20,7 @@ class _UserState extends State<User> {
   Map<String, dynamic> userProfile = {};
   late TextEditingController controller;
   Set<String> permissions = {};
-
+  Set<String> keyMap = {};
   @override
   void initState() {
     // TODO: implement initState
@@ -27,6 +28,7 @@ class _UserState extends State<User> {
     controller = TextEditingController();
     getUserProfile();
     getPermissions();
+    getKeyMap();
   }
 
   void getPermissions() async {
@@ -36,6 +38,12 @@ class _UserState extends State<User> {
       permissions = data;
     });
 }
+  void getKeyMap() async {
+    var data = await PaymentService.getKeySet();
+    setState(() {
+      keyMap = data;
+    });
+  }
 
   Future<void> getUserProfile() async {
     try {
@@ -133,7 +141,7 @@ class _UserState extends State<User> {
               onTap: () {
                 Navigator.pushNamed(context, '/my_car');
               }): Container(),
-          permissions.length <= 0 ?
+          keyMap.contains("f11") ?
           text_card(
               title: 'Hoa tiêu',
               headingIcon: Icons.manage_accounts,

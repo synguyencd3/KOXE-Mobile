@@ -25,6 +25,7 @@ class _NotiState extends State<Noti> {
     _notificationSubscription =
         SocketManager().notificationStream.listen((data) {
       getAllNotification();
+      setState(() {});
     });
   }
 
@@ -48,6 +49,20 @@ class _NotiState extends State<Noti> {
     notifications = notificationAPI;
   }
 
+  Future<void> readAllNotification() async {
+    String salonId = await SalonsService.isSalon();
+    for (var notification in notifications) {
+      if (notification.isRead == false) {
+        if (salonId == '') {
+          await NotificationService.markAsRead(notification.id);
+        } else {
+          await NotificationService.markAsReadSalon(notification.id, salonId);
+        }
+      }
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,12 +79,17 @@ class _NotiState extends State<Noti> {
               return Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Tất cả thông báo'),
-                        TextButton(onPressed: () {}, child: Text('Xem tất cả')),
+                        TextButton(
+                            onPressed: () {
+                              readAllNotification();
+                            },
+                            child: Text('Xem tất cả')),
                       ],
                     ),
                   ),

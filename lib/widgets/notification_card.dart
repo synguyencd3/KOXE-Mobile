@@ -46,7 +46,7 @@ class _NotificationCardState extends State<NotificationCard> {
       padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
       child: Card(
         color: !widget.notification.isRead
-            ? Colors.grey[200]
+            ? Colors.white10
             : widget.notification.isAccepted == 1
                 ? Colors.green[200]
                 : widget.notification.isAccepted == 2
