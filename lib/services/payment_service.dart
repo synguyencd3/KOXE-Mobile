@@ -101,4 +101,21 @@ class PaymentService {
 
     return Set.from(keyMaps);
    }
+   static Future<List<PurchasedPackage>> getPurchasedPackages() async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+      Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    var url = Uri.https(Config.apiURL, Config.Purchase);
+    var response = await client.get(url, headers: requestHeaders);
+    var data =jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return packagesFromJson(data['purchasedPackages']);
+    }
+    return [];
+   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/package_model.dart';
 import 'package:mobile/services/package_service.dart';
 import 'package:mobile/services/payment_service.dart';
+import 'package:mobile/utils/utils.dart';
 
 class AllPackages extends StatefulWidget {
   const AllPackages({super.key});
@@ -28,7 +29,6 @@ class _AllPackagesState extends State<AllPackages> {
 
   Future<void> getPurchased() async {
     var set = await PaymentService.getPurchasedSet();
-    
     setState(() {
       purchasedSet = set;
     });
@@ -74,7 +74,7 @@ class _AllPackagesState extends State<AllPackages> {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(15.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
@@ -83,7 +83,7 @@ class _AllPackagesState extends State<AllPackages> {
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.blue)),
-                              Text('Giá: ${e.price}'),
+                              Text('Giá: ${formatCurrency(e.price)}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                               const Text('Các tính năng:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                               ListView(
                                 shrinkWrap: true,
@@ -97,7 +97,7 @@ class _AllPackagesState extends State<AllPackages> {
                                     )
                                     .toList(),
                               ),
-                              Text(e.description),
+                              Text('Mô tả: ${e.description}', style: TextStyle(fontStyle: FontStyle.italic),),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pushNamed(context, '/buy_package', arguments: {

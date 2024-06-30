@@ -10,6 +10,8 @@ class PackageModel {
   late String description;
   late int price;
   late List<FeatureModel> features;
+  String? purchasedTime;
+  String? expirationTime;
 
   PackageModel({
     required this.id,

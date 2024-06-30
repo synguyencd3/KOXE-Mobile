@@ -59,7 +59,7 @@ class _SalonListState extends State<SalonList> {
       body: Column(
         children: [
           keySet.contains(Config.SalonKeyMap) ?
-          TextButton(onPressed: () { Navigator.pushNamed(context, '/my_salon').then((value) {getSalons();});}, child: const Text('Your salon')): const SizedBox(height: 20) ,
+          TextButton(onPressed: () { Navigator.pushNamed(context, '/my_salon').then((value) {getSalons();});}, child: const Text('Salon của bạn')): const SizedBox(height: 20) ,
           Expanded(
             child: salons.isEmpty && !isCalling ? Loading() :LazyLoadScrollView(
               onEndOfPage: () { getSalons(); },

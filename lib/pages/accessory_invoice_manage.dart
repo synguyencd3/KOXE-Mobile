@@ -177,6 +177,7 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                                         builder: (context, setState) {
                                       return SingleChildScrollView(
                                         child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             TextField(
                                               decoration: InputDecoration(
@@ -202,7 +203,9 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                                               ),
                                               controller: noteController,
                                             ),
-                                            Text('Chọn phụ tùng'),
+                                            const SizedBox(height: 10),
+                                            Text('Chọn phụ tùng', style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+
                                             for (var accessory in accessories)
                                               Row(
                                                 children: [

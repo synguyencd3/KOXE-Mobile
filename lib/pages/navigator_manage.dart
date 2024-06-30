@@ -15,6 +15,12 @@ class NavigatorManage extends StatelessWidget {
       body: Column(
         children: [
           text_card(
+              headingIcon: Icons.inventory,
+              title: 'Gói đang sử dụng',
+              onTap: () {
+                Navigator.pushNamed(context, '/package/manage');
+              }),
+          text_card(
             headingIcon: Icons.payment,
               title: 'Quản lý giao dịch với salon',
               onTap: () {

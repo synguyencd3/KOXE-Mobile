@@ -29,7 +29,6 @@ class _PostDetailState extends State<PostDetail> {
     super.initState();
     Future.delayed(Duration.zero, () {
       //print('postid' + postId);
-      getDetailPost();
       getProcess();
     });
   }
@@ -38,7 +37,7 @@ class _PostDetailState extends State<PostDetail> {
     String postId = ModalRoute.of(context)!.settings.arguments as String;
     PostModel postAPI = await PostService.getPostDetail(postId);
     post = postAPI;
-    //print('cc${post.postId}' ?? '');
+ print(post.image!.length);
   }
 
   Future<void> getProcess() async {
@@ -70,10 +69,6 @@ class _PostDetailState extends State<PostDetail> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Loading();
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
                 }
                 return SingleChildScrollView(
                   child: Padding(

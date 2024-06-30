@@ -17,15 +17,18 @@ class Noti extends StatefulWidget {
 class _NotiState extends State<Noti> {
   late List<NotificationModel> notifications = [];
   StreamSubscription? _notificationSubscription;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _notificationSubscription = SocketManager().notificationStream.listen((data) {
+    _notificationSubscription =
+        SocketManager().notificationStream.listen((data) {
       getAllNotification();
+      setState(() {});
     });
-
   }
+
   // Future<void> getNotifications() async {
   //   List<NotificationModel> notificationsArgument = ModalRoute.of(context)!.settings.arguments as List<NotificationModel>;
   //   if (notificationsArgument.isNotEmpty) {
@@ -41,12 +44,24 @@ class _NotiState extends State<Noti> {
       notificationAPI = await NotificationService.getAllNotification();
     } else {
       notificationAPI =
-      await NotificationService.getAllNotificationSalon(salonId);
+          await NotificationService.getAllNotificationSalon(salonId);
     }
     notifications = notificationAPI;
   }
 
-
+  Future<void> readAllNotification() async {
+    String salonId = await SalonsService.isSalon();
+    for (var notification in notifications) {
+      if (notification.isRead == false) {
+        if (salonId == '') {
+          await NotificationService.markAsRead(notification.id);
+        } else {
+          await NotificationService.markAsReadSalon(notification.id, salonId);
+        }
+      }
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,22 +70,41 @@ class _NotiState extends State<Noti> {
           title: Text('Thông báo'),
           backgroundColor: Colors.lightBlue,
         ),
-        body:
-             FutureBuilder(
-               future: getAllNotification(),
-               builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                   return Loading();
-                  }
-                 return ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: notifications.length,
-                  itemBuilder: (context, index) {
-                    return NotificationCard(notification: notifications[index]);
-                  },
-
-                         );
-               }
-             ));
+        body: FutureBuilder(
+            future: getAllNotification(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Loading();
+              }
+              return Column(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Tất cả thông báo'),
+                        TextButton(
+                            onPressed: () {
+                              readAllNotification();
+                            },
+                            child: Text('Xem tất cả')),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: notifications.length,
+                      itemBuilder: (context, index) {
+                        return NotificationCard(
+                            notification: notifications[index]);
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }));
   }
 }
