@@ -3,6 +3,7 @@ import 'package:mobile/model/salon_payment_response.dart';
 
 import '../../services/salon_service.dart';
 import '../loading.dart';
+import 'createPayment.dart';
 
 class SalonPaymentPage extends StatefulWidget {
   @override
@@ -52,7 +53,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
     ),
   ];
 
-  void _createNewObject() {
+  void _createNewObject(String createDate) {
     // For simplicity, let's add a dummy object. You can implement a form to take input from the user.
     setState(() {
       objects.add(SalonPaymentModel(
@@ -75,6 +76,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
     getPayment();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +89,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
               ? TextButton.icon(
               onPressed: () {
                // Navigator.pushNamed(context, '/new_car');
+                showForm(context);
               },
               icon: Icon(Icons.add),
               label: Text('Tạo phiếu thanh toán'))

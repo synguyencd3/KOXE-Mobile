@@ -141,6 +141,12 @@ class _UserState extends State<User> {
               onTap: () {
                 Navigator.pushNamed(context, '/my_car');
               }): Container(),
+          text_card(
+              headingIcon: Icons.payment,
+              title: 'Quản lý thanh toán',
+              onTap: () {
+                Navigator.pushNamed(context, '/salon_payment');
+              }),
           keyMap.contains("f11") ?
           text_card(
               title: 'Hoa tiêu',
