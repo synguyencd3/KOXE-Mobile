@@ -1,0 +1,5 @@
+Hướng dẫn sử dụng
+	-Mở source code bằng android studio
+	-chạy command dart pub get trong console
+	-chọn thiết bị hoặc máy ảo để chạy project (kế bên nút run)
+	-chạy command flutter run trong console (hoặc nút run trong android studio)

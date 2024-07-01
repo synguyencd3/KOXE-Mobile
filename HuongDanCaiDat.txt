@@ -1,0 +1,15 @@
+Hướng dẫn cài đặt 
+
+Flutter:
+    -Tải Flutter SDK : https://docs.flutter.dev/get-started/install/windows/desktop
+    -Giải nén file zip
+    -Thiết lập Environment Variable tới thư mục flutter/bin
+    -Chạy command ‘flutter doctor’ để kiểm tra cài đặt đúng
+Android Studio
+    -Tải Android Studio : https://developer.android.com/studio
+    -Kết nối thiết bị android bằng cổng USB hoặc tạo máy ảo mới: https://developer.android.com/studio/run/managing-avds
+Setup thiết bị android (Nếu không sử dụng máy ảo android)
+    -Vào Setting -> About Phone -> Build number (có thể sẽ khác đối với từng dòng máy nhưng miễn là có được build number) ( Đối với điện thoại Xiaomi thì sẽ là MIUI version)
+    -Bấm vào Build Number 7 lần cho tới khi màn hình xuất hiện dòng chữ “You are now a developer!”
+    -Vào mục Developer Option và mở USB Debugging
+
