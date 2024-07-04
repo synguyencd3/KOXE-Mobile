@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/pages/Car%20Invoice/Invoice_dialog.dart';
+import 'package:mobile/pages/loading.dart';
 import 'package:mobile/services/CarInvoice_Service.dart';
 import 'package:mobile/services/salon_service.dart';
 
@@ -15,13 +16,17 @@ class CarInvoiceList extends StatefulWidget {
 
 class _CarInvoiceListState extends State<CarInvoiceList> {
 
-
+  bool isLoading= false;
   List<CarInvoice> invoices = [];
   Set<String> permissions = {};
   void getInvoices() async {
+    setState(() {
+      isLoading = true;
+    });
     var data = await CarInvoiceService.getAll(null);
     setState(() {
       invoices = data;
+      isLoading = false;
     });
   }
 
@@ -61,6 +66,7 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
               }, label: Text("Thêm giao dịch"),
                icon: Icon(Icons.add),
             ) : Container(),
+            (isLoading) ?  Loading():
             ListView.builder(
               shrinkWrap: true,
               itemCount: invoices.length,
