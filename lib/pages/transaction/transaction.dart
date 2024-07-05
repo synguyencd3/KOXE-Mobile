@@ -18,6 +18,7 @@ class _TransactionState extends State<Transaction> {
   TransactionRevenueModel transactions = TransactionRevenueModel();
   String isSalon = '';
 
+
   @override
   void initState() {
     // TODO: implement initState
