@@ -11,6 +11,7 @@ class Config {
 
   //Car
   static const String getCarsAPI = "/cars";
+  static const String getCarsOfSalonAPI = "/cars/salon";
 
   //Salon
   static const String SalonsAPI = "/salons";
@@ -74,7 +75,7 @@ class Config {
   static const SalonKeyMap =
       "f1"; //key map phải có trong purchase để có thể sử dụng quản lí salon
 
-//Chap API
+//Chat API
   static const String getChatsAPI = "/messages";
   static const String getAllChatUsersAPI = "/messages/chatting-users";
   static const String sendMessageAPI = "/messages/send";
@@ -105,6 +106,7 @@ class Config {
 //Invoice API
   static const String invoiceAPI = "/invoice";
   static const String getInvoiceAPI = "/invoice/get-invoice-maintenance";
+  static const String getInvoiceLicenseAPI = "/invoice/by-license";
 
 // Accessory API
   static const String getSalonAccessoriesApi = "/accessory/salon";

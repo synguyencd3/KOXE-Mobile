@@ -18,7 +18,6 @@ class _CarInvoiceListState extends State<UserCarInvoiceList> {
 
   Future<void> getInvoices() async {
     var data = await CarInvoiceService.getAllCustomer();
-
     invoices = data;
   }
 

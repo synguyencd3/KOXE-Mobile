@@ -27,6 +27,12 @@ class NavigatorManage extends StatelessWidget {
                 Navigator.pushNamed(context, '/transaction');
               }),
           text_card(
+              headingIcon: Icons.payment,
+              title: 'Quản lý thanh toán',
+              onTap: () {
+                Navigator.pushNamed(context, '/salon_payment');
+              }),
+          text_card(
             headingIcon: Icons.post_add,
               title: 'Tạo bài kết nối với salon',
               onTap: () {
@@ -44,6 +50,7 @@ class NavigatorManage extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(context, '/salon_group');
               }),
+
         ],
       ),
     );

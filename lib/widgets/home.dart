@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/model/articles_model.dart';
+import 'package:mobile/services/news_service.dart';
 import 'package:mobile/services/package_service.dart';
 import 'package:mobile/model/package_model.dart';
 import 'package:mobile/services/salon_service.dart';
 
 import '../model/salon_model.dart';
 import '../services/payment_service.dart';
+import 'package:mobile/pages/loading.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,7 +19,7 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late PackageModel firstPackage = PackageModel(
     name: '',
     price: 400000,
@@ -28,6 +31,9 @@ class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   late bool _isAnimationInitialized = false;
+  late Articles firstArticle = Articles();
+  int index = 1;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -46,7 +52,7 @@ class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
     _isAnimationInitialized = true;
     getAllPackages();
     getAllSalons();
-
+    getNews();
   }
 
   Future<void> getAllPackages() async {
@@ -57,8 +63,9 @@ class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
       });
     });
   }
+
   Future<void> getAllSalons() async {
-    List<Salon> salons = await SalonsService.getAll(1,1,"");
+    List<Salon> salons = await SalonsService.getAll(1, 1, "");
     Future.delayed(Duration(seconds: 0), () {
       setState(() {
         firstSalon = salons[0];
@@ -66,32 +73,47 @@ class _HomeState extends State<Home>with SingleTickerProviderStateMixin {
     });
   }
 
+  Future<void> getNews() async {
+    var list = await NewsService.getArticles(1, 1);
+    setState(() {
+      firstArticle = list[0];
+    });
+  }
 
   Widget build(BuildContext context) {
-    return _isAnimationInitialized ? SlideTransition(
-      position: _offsetAnimation,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            NewsPadding(),
-            SalonPadding(firstSalon: firstSalon,),
-            SizedBox(height: 10),
-            ServiceCard(
-              package: firstPackage,
+    return _isAnimationInitialized
+        ? SlideTransition(
+            position: _offsetAnimation,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  NewsPadding(
+                    firstArticle: firstArticle,
+                  ),
+                  SalonPadding(
+                    firstSalon: firstSalon,
+                  ),
+                  SizedBox(height: 10),
+                  ServiceCard(
+                    package: firstPackage,
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
-    ): Center(
-      child: CircularProgressIndicator(),
-    );
+          )
+        : Center(
+            child: CircularProgressIndicator(),
+          );
   }
 }
 
 class NewsPadding extends StatelessWidget {
+  final Articles firstArticle;
+
   const NewsPadding({
     super.key,
+    required this.firstArticle,
   });
 
   @override
@@ -119,13 +141,28 @@ class NewsPadding extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   )),
               SizedBox(height: 10),
-              Image(
-                image: AssetImage('assets/1.png'),
-                fit: BoxFit.cover,
+              Container(
+                height: 200,
+                width: double.infinity,
+                child: firstArticle.thumbnail == null
+                    ? Loading()
+                    : Image(
+                        image: NetworkImage(firstArticle.thumbnail ?? ''),
+                        fit: BoxFit.cover,
+                      ),
               ),
               SizedBox(height: 20),
-              Text(
-                  'Mới đây, trên trang chủ của hãng VinFast, giá bán của hàng loạt mẫu ô tô điện đã có sự điều chỉnh. Tuy nhiên, thay vì giảm như một số hãng xe khác, VinFast lại tăng giá cho các mẫu ô tô điện của mình.'),
+              ListTile(
+                title: Text(
+                  firstArticle.title ?? '',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  firstArticle.summary ?? '',
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -133,8 +170,9 @@ class NewsPadding extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, '/news');
                     },
-                    label: Text('Xem tất cả', style:TextStyle(color: Colors.black)),
-                    icon: Icon(Icons.arrow_forward, color:Colors.black),
+                    label: Text('Xem tất cả',
+                        style: TextStyle(color: Colors.black)),
+                    icon: Icon(Icons.arrow_forward, color: Colors.black),
                   ),
                 ],
               ),
@@ -148,8 +186,10 @@ class NewsPadding extends StatelessWidget {
 
 class SalonPadding extends StatelessWidget {
   final Salon firstSalon;
+
   const SalonPadding({
-    super.key,required this.firstSalon,
+    super.key,
+    required this.firstSalon,
   });
 
   @override
@@ -180,19 +220,28 @@ class SalonPadding extends StatelessWidget {
               Container(
                 height: 200,
                 width: double.infinity,
-                child: Image(
-                  image: NetworkImage(firstSalon.image ?? ''),
-                  fit: BoxFit.cover,
-                ),
+                child: firstSalon.image == null
+                    ? Loading()
+                    : Image(
+                        image: NetworkImage(firstSalon.image ?? ''),
+                        fit: BoxFit.cover,
+                      ),
               ),
               SizedBox(height: 20),
-              Text(firstSalon.name ?? '', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(firstSalon.name ?? '',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               ListTile(
-                title: Text(firstSalon.address ?? '', style: TextStyle(fontSize: 14),),
+                title: Text(
+                  firstSalon.address ?? '',
+                  style: TextStyle(fontSize: 14),
+                ),
                 leading: Icon(Icons.location_on),
               ),
               ListTile(
-                title: Text(firstSalon.phoneNumber ?? '', style: TextStyle(fontSize: 14),),
+                title: Text(
+                  firstSalon.phoneNumber ?? '',
+                  style: TextStyle(fontSize: 14),
+                ),
                 leading: Icon(Icons.phone),
               ),
               Row(
@@ -266,25 +315,19 @@ class _ServiceCardState extends State<ServiceCard> {
                           color: Colors.blue, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text('Giá: ${widget.package.price}'),
-                    trailing: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/buy_package');
-                      },
-                      child: Text('Mua ngay'),
-                    ),
                   ),
                   widget.package.features.length == 0
-                  ? ListTile(
-                    title: Text('Không có dịch vụ nào'),
-                  ):
-                  Column(
-                    children: widget.package.features
-                        .map((feature) => ListTile(
-                              title: Text(feature.name),
-                             leading: Icon(Icons.check),
-                            ))
-                        .toList(),
-                  ),
+                      ? ListTile(
+                          title: Text('Không có dịch vụ nào'),
+                        )
+                      : Column(
+                          children: widget.package.features
+                              .map((feature) => ListTile(
+                                    title: Text(feature.name),
+                                    leading: Icon(Icons.check),
+                                  ))
+                              .toList(),
+                        ),
                 ],
               ),
             ),

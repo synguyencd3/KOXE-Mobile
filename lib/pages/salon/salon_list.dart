@@ -52,7 +52,7 @@ class _SalonListState extends State<SalonList> {
       appBar: AppBar(
      //   backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         title: Text(
-          'Salons',
+          'Thông tin các salon',
         //  style: FlutterFlowTheme.of(context).titleLarge,
         ),
       ),
@@ -130,7 +130,7 @@ class _MySalonState extends State<MySalon> {
         appBar: AppBar(
         //  backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           title: Text(
-            'Salons',
+            'Salon của bạn',
            // style: FlutterFlowTheme.of(context).titleLarge,
           ),
         ),
@@ -223,10 +223,10 @@ class _MySalonCardState extends State<MySalonCard> {
                           children: [
                           OutlinedButton(onPressed: () {
                             Navigator.pushNamed(context, '/new_salon', arguments: {'salon': salon}).then((value) {getMySalon();}).then((value)  {getMySalon();});
-                            }, child: Text('Edit')),
+                            }, child: Text('Chỉnh sửa')),
                           OutlinedButton(onPressed: () {
                             widget.deletefunc(salon.salonId);
-                          }, child: Text('Delete')),
+                          }, child: Text('Xóa')),
                         ],),
                  )
                 ],

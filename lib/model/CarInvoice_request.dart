@@ -8,6 +8,7 @@ class InvoiceRequest {
   int? expense;
   String? processId;
   String? employeeId;
+  String? licensePlate;
 
   InvoiceRequest(
       {this.carId,
@@ -18,7 +19,8 @@ class InvoiceRequest {
         this.phone,
         this.expense,
         this.processId,
-        this.employeeId});
+        this.employeeId,
+      this.licensePlate});
 
   InvoiceRequest.fromJson(Map<String, dynamic> json) {
     carId = json['carId'];
@@ -43,6 +45,7 @@ class InvoiceRequest {
     data['expense'] = this.expense;
     data['processId'] = this.processId;
     data['employeeId'] = this.employeeId;
+    data['licensePlate'] = this.licensePlate;
     return data;
   }
 }

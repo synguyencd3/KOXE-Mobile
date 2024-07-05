@@ -80,7 +80,7 @@ class _WarrantyState extends State<WarrantyList> {
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return Padding(
-                              padding: EdgeInsets.all(10),
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                               child: WarrantyCard(
                                 warranty: warranties[index],
                                 delete: deleteWarranty,

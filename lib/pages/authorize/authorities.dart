@@ -204,11 +204,13 @@ class _AuthoritiesState extends State<Authorities> {
                 itemBuilder: (context, index) {
                   final authority = authorities[index];
                   return GestureDetector(
-                    child: ListTile(
-                      title: Text(authority.name!),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () => removeAuthority(authority),
+                    child: Card(
+                      child: ListTile(
+                        title: Text(authority.name!),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () => removeAuthority(authority),
+                        ),
                       ),
                     ),
                     onTap: () {
