@@ -58,7 +58,7 @@ import 'package:mobile/pages/password/change_password.dart';
 import 'package:mobile/pages/password/verify_password.dart';
 import 'package:mobile/pages/password/new_password.dart';
 import 'package:mobile/pages/appointment/create_appointment_process.dart';
-import 'package:mobile/pages/my_car.dart';
+import 'package:mobile/pages/my_car/my_car.dart';
 import 'package:mobile/pages/transaction_manage.dart';
 import 'package:mobile/pages/navigator_manage.dart';
 import 'package:mobile/pages/search/searchPage.dart';
@@ -69,8 +69,10 @@ import 'package:mobile/pages/maintaince/maintaince_invoice_manage.dart';
 import 'package:mobile/pages/post/post.dart';
 import 'package:mobile/pages/transaction/transaction_detail_navigator.dart';
 import 'package:mobile/pages/search/searchUserPage.dart';
-import 'package:mobile/pages/car_customer.dart';
-
+import 'package:mobile/pages/my_car/car_customer.dart';
+import 'package:mobile/pages/my_car/car_detail_customer.dart';
+import 'package:mobile/pages/my_car/car_warranty.dart';
+import 'package:mobile/pages/my_car/car_maintaince.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
@@ -181,6 +183,9 @@ class _MyAppState extends State<MyApp> {
         '/authorities' : (context) =>Authorities(),
         '/salon_payment' : (context) =>SalonPaymentPage(),
         '/car_customer': (context) => CarCustomer(),
+        '/car_detail_customer': (context) => CarDetailCustomer(),
+        '/car_warranty': (context) => CarWarranty(),
+        '/car_maintaince': (context) => CarMaintaince(),
       },
     );
   }

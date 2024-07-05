@@ -54,4 +54,19 @@ class InvoiceService{
     var response = await http.delete(url, headers: requestHeaders);
     return response.statusCode == 200;
   }
+  static Future<List<InvoiceModel>> getInvoiceByLicense(String licensePlate) async {
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, '${Config.getInvoiceLicenseAPI}/$licensePlate');
+    var response = await http.get(url, headers: requestHeaders);
+    //print(response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return invoiceFromJson(data['invoices']);
+    }
+    return [];
+  }
 }

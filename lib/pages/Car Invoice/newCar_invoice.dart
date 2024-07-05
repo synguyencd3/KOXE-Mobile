@@ -27,6 +27,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
   var _phoneNumber = TextEditingController();
   var _expense = TextEditingController();
   var _note = TextEditingController();
+  var _licensePlate = TextEditingController();
   Car? _selectedCar;
   process? _selectedProcess;
   Employee? _selectedEmployee;
@@ -40,6 +41,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
     var invoice = InvoiceRequest(
+      licensePlate: _licensePlate.text,
       carId: _selectedCar?.id,
       fullname: _fullName.text,
       email: _email.text,
@@ -110,7 +112,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tạo giao dịch mơi'),
+        title: Text('Tạo giao dịch mới'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -157,7 +159,19 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Note'),
+                  decoration: InputDecoration(labelText: 'Biển số xe'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Vui lòng điền biển số xe của bạn';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _licensePlate.text = value!;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Ghi chú'),
                   onSaved: (value) {
                     _note.text = value!;
                   },
