@@ -123,7 +123,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   decoration: InputDecoration(labelText: 'Họ tên'),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your full name';
+                      return 'Vui lòng điền tên của bạn';
                     }
                     return null;
                   },
@@ -135,7 +135,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   decoration: InputDecoration(labelText: 'Email'),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Vui lòng điền email của bạn';
                     }
                     // You can add additional email validation logic here
                     return null;
@@ -148,7 +148,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   decoration: InputDecoration(labelText: 'Điện thoại'),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your phone number';
+                      return 'Vui lòng điền số điện thoại của bạn';
                     }
                     return null;
                   },
@@ -167,7 +167,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   decoration: InputDecoration(labelText: 'Thanh toán'),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your expense';
+                      return 'Vui lòng điền số tiền thanh toán';
                     }
                     return null;
                   },
@@ -223,7 +223,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                 ),
                 TextButton(
                   onPressed: _submitForm,
-                  child: Text('Submit'),
+                  child: Text('Tạo giao dịch'),
                 ),
               ],
             ),

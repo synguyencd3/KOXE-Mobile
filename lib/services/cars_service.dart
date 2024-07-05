@@ -18,13 +18,10 @@ class CarsService {
       'Access-Control-Allow-Origin': "*",
     };
 
-    var url = Uri.https(Config.apiURL, Config.getCarsAPI, {
-      "page": page.toString(),
-      "per_page": perPage.toString(),
-      "q": search
-    });
+    var url = Uri.https(Config.apiURL, Config.getCarsAPI,
+        {"page": page.toString(), "per_page": perPage.toString(), "q": search});
     var response = await http.get(url);
-    
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       return carsFromJson(data['cars']['car']);
@@ -33,8 +30,7 @@ class CarsService {
   }
 
   static Future<Car?> getDetail(String carId) async {
-
-       Map<String, String> requestHeaders = {
+    Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Accept': '*/*',
       'Access-Control-Allow-Origin': "*",
@@ -43,7 +39,7 @@ class CarsService {
     var url = Uri.https(Config.apiURL, '${Config.getCarsAPI}/$carId');
 
     var response = await http.get(url);
-    
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       //print(data['car']);
@@ -113,7 +109,7 @@ class CarsService {
 
     if (model.image != null) {
       model.image?.forEach(
-            (element) async {
+        (element) async {
           request.files
               .add(await http.MultipartFile.fromPath("image", element));
         },
@@ -129,7 +125,6 @@ class CarsService {
     return false;
   }
 
-
   static Future<bool?> NewCar(Car model) async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
@@ -137,7 +132,7 @@ class CarsService {
     var url = Uri.https(Config.apiURL, Config.getCarsAPI);
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
-     'Accept': '*/*',
+      'Accept': '*/*',
       'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
@@ -150,22 +145,22 @@ class CarsService {
     request.fields['salonSalonId'] = mySalon;
     request.fields['name'] = param['name'];
     request.fields['description'] = param['description'];
-   request.fields['price'] = param['price'];
-  request.fields['type'] = param['type'];
-  request.fields['origin'] = param['origin'];
-  request.fields['model'] = param['model'];
-  request.fields['brand'] = param['brand'];
-  request.fields['capacity'] = param['capacity'];
-  request.fields['door'] = param['door'];
-  request.fields['seat'] = param['seat'];
-  request.fields['kilometer'] = param['kilometer'];
-   request.fields['gear'] = param['gear'];
-   request.fields['mfg'] = param['mfg'];
-   request.fields['outColor'] = param['outColor'];
+    request.fields['price'] = param['price'];
+    request.fields['type'] = param['type'];
+    request.fields['origin'] = param['origin'];
+    request.fields['model'] = param['model'];
+    request.fields['brand'] = param['brand'];
+    request.fields['capacity'] = param['capacity'];
+    request.fields['door'] = param['door'];
+    request.fields['seat'] = param['seat'];
+    request.fields['kilometer'] = param['kilometer'];
+    request.fields['gear'] = param['gear'];
+    request.fields['mfg'] = param['mfg'];
+    request.fields['outColor'] = param['outColor'];
 
     if (model.image != null) {
       model.image?.forEach(
-            (element) async {
+        (element) async {
           request.files
               .add(await http.MultipartFile.fromPath("image", element));
         },
@@ -195,11 +190,26 @@ class CarsService {
     var url = Uri.https(Config.apiURL, '${Config.getCarsAPI}/$id');
 
     var response = await http.delete(url, headers: requestHeaders, body: {
-      'salonId' : mySalon,
+      'salonId': mySalon,
     });
     var data = jsonDecode(response.body);
     print(data);
     if (data['status'] == 'success') return true;
     return false;
+  }
+
+  static Future<List<Car>> getCarsOfSalon() async {
+    String salonId = await SalonsService.isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    var url = Uri.https(Config.apiURL, '${Config.getCarsOfSalonAPI}/$salonId');
+    var response = await http.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return carsFromJson(data['cars']);
+    }
+    return [];
   }
 }

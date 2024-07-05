@@ -69,6 +69,7 @@ import 'package:mobile/pages/maintaince/maintaince_invoice_manage.dart';
 import 'package:mobile/pages/post/post.dart';
 import 'package:mobile/pages/transaction/transaction_detail_navigator.dart';
 import 'package:mobile/pages/search/searchUserPage.dart';
+import 'package:mobile/pages/car_customer.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -178,7 +179,8 @@ class _MyAppState extends State<MyApp> {
         '/post' : (context) => PostPage(),
         '/salon_promotion' : (context) =>SAlonPromotionBoard(),
         '/authorities' : (context) =>Authorities(),
-        '/salon_payment' : (context) =>SalonPaymentPage()
+        '/salon_payment' : (context) =>SalonPaymentPage(),
+        '/car_customer': (context) => CarCustomer(),
       },
     );
   }

@@ -186,7 +186,7 @@ class _NewProcessState extends State<NewProcess> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tạo quy trình mới'),
+        title: const Text('Quy trình',style: TextStyle(fontWeight: FontWeight.bold),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

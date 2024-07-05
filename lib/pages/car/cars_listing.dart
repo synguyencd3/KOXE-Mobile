@@ -37,9 +37,9 @@ class _CarState extends State<CarsListing> {
   }
 
   Future<void> getCars() async {
-    List<Car> list = ModalRoute.of(context)!.settings.arguments as List<Car>;
+    var carsAPI =  await CarsService.getCarsOfSalon();
     setState(() {
-      cars = list;
+      cars = carsAPI;
       isCalling = true;
     });
   }
