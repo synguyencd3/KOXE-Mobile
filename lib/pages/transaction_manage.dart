@@ -43,6 +43,12 @@ class TransactionManage extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(context, '/salon_payment');
               }),
+          text_card(
+              headingIcon: Icons.account_balance_wallet,
+              title: 'Phương thức thanh toán',
+              onTap: () {
+                Navigator.pushNamed(context, '/salon_payment_method');
+              }),
         ],
       ),
     );

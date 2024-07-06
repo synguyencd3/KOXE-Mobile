@@ -38,7 +38,7 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Custom Object List'),
+        title: Text('Phiếu thanh toán'),
       ),
       body: Expanded(
         child: isLoading == true? const Loading() : ListView.builder(

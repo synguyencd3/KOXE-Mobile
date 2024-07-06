@@ -53,21 +53,6 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
     ),
   ];
 
-  void _createNewObject(String createDate) {
-    // For simplicity, let's add a dummy object. You can implement a form to take input from the user.
-    setState(() {
-      objects.add(SalonPaymentModel(
-        createDate: DateTime.now().toString(),
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        custormerPhone: '1122334455',
-        custormerFullname: 'Alice Brown',
-        reason: 'Newly added reason',
-        amount: 150,
-        status: true,
-      ));
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -81,7 +66,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Custom Object List'),
+        title: Text('Phiếu thanh toán'),
       ),
       body: Column(
         children: [
