@@ -32,26 +32,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
       isLoading = false;
     });
   }
-  List<SalonPaymentModel> objects = [
-    SalonPaymentModel(
-      createDate: '2024-06-30',
-      id: '1',
-      custormerPhone: '1234567890',
-      custormerFullname: 'John Doe',
-      reason: 'First mock reason',
-      amount: 100,
-      status: true,
-    ),
-    SalonPaymentModel(
-      createDate: '2024-06-29',
-      id: '2',
-      custormerPhone: '0987654321',
-      custormerFullname: 'Jane Smith',
-      reason: 'Second mock reason',
-      amount: 200,
-      status: false,
-    ),
-  ];
+ 
 
   @override
   void initState() {
@@ -73,7 +54,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
           _permission.contains("OWNER") || _permission.contains("C_PMSL")
               ? TextButton.icon(
               onPressed: () {
-               // Navigator.pushNamed(context, '/new_car');
+                var unpayed = _payments.where((e) => e.status == true).toList();
                 showForm(context);
               },
               icon: Icon(Icons.add),

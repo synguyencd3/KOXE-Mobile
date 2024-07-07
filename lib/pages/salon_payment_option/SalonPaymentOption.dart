@@ -15,7 +15,7 @@ class SalonPaymentMethod extends StatefulWidget {
 }
 
 class _NewObjectListPageState extends State<SalonPaymentMethod> {
-  List<PaymentMethod> objects = [];
+  List<PaymentMethod> _methods = [];
   bool isLoading = false;
   Set<String> _permission = {};
 
@@ -58,7 +58,7 @@ void _fetch() async {
     });
     var data = await SalonsService.getPaymentMethods();
     setState(() {
-      objects = data;
+      _methods = data;
       isLoading = false;
     });
 }
@@ -192,9 +192,9 @@ void _fetch() async {
           isLoading ? Loading() :
           Expanded(
             child: ListView.builder(
-              itemCount: objects.length,
+              itemCount: _methods.length,
               itemBuilder: (context, index) {
-               var obj = objects[index];
+               var obj = _methods[index];
                 return Card(
                   child: ListTile(
                     title: Text(obj.fullname ?? 'No Name'),

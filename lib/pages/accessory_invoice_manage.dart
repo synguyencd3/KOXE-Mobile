@@ -7,6 +7,9 @@ import 'package:mobile/pages/loading.dart';
 import 'package:mobile/services/accessory_service.dart';
 import 'package:mobile/utils/utils.dart';
 
+import '../model/Payment_Method_Response.dart';
+import '../services/salon_service.dart';
+
 class AccessoryInvoiceManage extends StatefulWidget {
   const AccessoryInvoiceManage({super.key});
 
@@ -23,6 +26,9 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController noteController = TextEditingController();
+  List<PaymentMethod> _methods = [];
+  bool _showDropdown = false;
+  String? _selectedOption;
 
   @override
   void initState() {
@@ -30,6 +36,14 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       getAllAccessories();
+      _fetchMethod();
+    });
+  }
+
+  void _fetchMethod() async {
+    var data = await SalonsService.getPaymentMethods();
+    setState(() {
+      _methods = data;
     });
   }
 
@@ -203,9 +217,34 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                                               ),
                                               controller: noteController,
                                             ),
+                                            CheckboxListTile(
+                                              value: _showDropdown,
+                                              title: const Text('Tạo yêu cầu thanh toán'),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _showDropdown = value!;
+                                                });
+                                              },
+                                            ),
+                                            if (_showDropdown)
+                                              Padding(
+                                                padding: EdgeInsets.only(top: 16.0),
+                                                child: DropdownButtonFormField<String>(
+                                                  value: _selectedOption,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      _selectedOption = value;
+                                                    });
+                                                  },
+                                                  items: _methods.map((e) => DropdownMenuItem(child: Text(e.type ?? ""), value: e.id)).toList(),
+                                                  decoration: InputDecoration(
+                                                    labelText: 'Select an option',
+                                                    border: OutlineInputBorder(),
+                                                  ),
+                                                ),
+                                              ),
                                             const SizedBox(height: 10),
                                             Text('Chọn phụ tùng', style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
-
                                             for (var accessory in accessories)
                                               Row(
                                                 children: [
@@ -303,7 +342,7 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                                             bool response =
                                                 await AccessoryService
                                                     .createAccessoryInvoice(
-                                                        accessoryInvocice);
+                                                        accessoryInvocice, _selectedOption!);
                                             if (response) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(

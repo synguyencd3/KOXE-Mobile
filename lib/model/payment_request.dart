@@ -6,9 +6,11 @@ class PaymentRequest {
   String? reason;
   int? amount;
   String? salonId;
+  String? methodPaymentId;
+  String? invoiceId;
 
   PaymentRequest(
-      {this.cusPhone, this.cusName, this.reason, this.amount, this.salonId});
+      {this.cusPhone, this.cusName, this.reason, this.amount, this.salonId, this.invoiceId, this.methodPaymentId});
 
   PaymentRequest.fromJson(Map<String, dynamic> json) {
     cusPhone = json['cusPhone'];
@@ -16,6 +18,8 @@ class PaymentRequest {
     reason = json['reason'];
     amount = json['amount'];
     salonId = json['salonId'];
+    methodPaymentId = json['methodPaymentId'];
+    invoiceId = json['invoiceId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -25,6 +29,8 @@ class PaymentRequest {
     data['reason'] = this.reason;
     data['amount'] = this.amount;
     data['salonId'] = this.salonId;
+    data['invoiceId'] = this.invoiceId;
+    data['methodPaymentId'] = this.methodPaymentId;
     return data;
   }
 }

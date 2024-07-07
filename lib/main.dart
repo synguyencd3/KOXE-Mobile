@@ -21,6 +21,7 @@ import 'package:mobile/pages/main_home.dart';
 import 'package:mobile/pages/salon/new_salon.dart';
 import 'package:mobile/pages/salon/salon_list.dart';
 import 'package:mobile/pages/salon_payment/salonPayment.dart';
+import 'package:mobile/pages/salon_payment/userPayment.dart';
 import 'package:mobile/pages/salon_payment_option/SalonPaymentOption.dart';
 import 'package:mobile/pages/statistic/statistic_page.dart';
 import 'package:mobile/pages/warranty/Warranty_form.dart';
@@ -183,6 +184,7 @@ class _MyAppState extends State<MyApp> {
         '/salon_promotion' : (context) =>SAlonPromotionBoard(),
         '/authorities' : (context) =>Authorities(),
         '/salon_payment' : (context) =>SalonPaymentPage(),
+        '/user_payment' : (context) => UserPaymentPage(),
         '/salon_payment_method' : (context) => SalonPaymentMethod(),
         '/car_customer': (context) => CarCustomer(),
         '/car_detail_customer': (context) => CarDetailCustomer(),
