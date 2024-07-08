@@ -73,9 +73,23 @@ class Config {
   static const String webVNPayCallback = '/payment/vnpay';
 
   //KeyMap
-
-  static const SalonKeyMap =
-      "f1"; //key map phải có trong purchase để có thể sử dụng quản lí salon
+//key map phải có trong purchase để có thể sử dụng quản lí salon
+  static const SalonKeyMap = "f1";
+  static const CarKeyMap="f2";
+  static const UserKeyMap="f3";
+  static const AppointmentKeyMap = "f4";
+  static const WarrantyKeyMap = "f5";
+  static const MaintainKeyMap = "f6";
+  static const TransactionKeyMap = "f7";
+  static const AccessoryKeyMap = "f8";
+  static const ProcessKeyMap = "f9";
+  static const StageKeyMap = "f10";
+  static const PromotionKeyMap = "f11";
+  static const PaymentKeyMap = "f12";
+  static const CreatePostKeyMap = "f13";
+  static const StaticKeyMap = "f14";
+  static const TransactionNavigatorKeyMap = "f15";
+  static const ConnectionKeyMap = "f16";
 
 //Chat API
   static const String getChatsAPI = "/messages";

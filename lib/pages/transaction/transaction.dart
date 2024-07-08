@@ -18,7 +18,6 @@ class _TransactionState extends State<Transaction> {
   TransactionRevenueModel transactions = TransactionRevenueModel();
   String isSalon = '';
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -29,6 +28,7 @@ class _TransactionState extends State<Transaction> {
   Future<void> getTransactions() async {
     TransactionRevenueModel transactionsAPI =
         await TransactionService.getTransactions();
+
     transactions = transactionsAPI;
   }
 
@@ -51,26 +51,31 @@ class _TransactionState extends State<Transaction> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Loading();
             }
-            return Column(
-              children: [
-                Text(
-                    (isSalon != ''
-                            ? 'Tổng chi cho hoa tiêu: '
-                            : 'Tổng tiền nhận từ salon: ') +
-                        '${formatCurrency(transactions.revenue!)}',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: transactions.transaction!.length,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return TransactionCard(
-                            transaction: transactions.transaction![index]);
-                      }),
-                ),
-              ],
-            );
+            return transactions.transaction!.isEmpty
+                ? Center(
+                    child: Text('Không có giao dịch'),
+                  )
+                : Column(
+                    children: [
+                      Text(
+                          (isSalon != ''
+                                  ? 'Tổng chi cho hoa tiêu: '
+                                  : 'Tổng tiền nhận từ salon: ') +
+                              '${formatCurrency(transactions.revenue!)}',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      Expanded(
+                        child: ListView.builder(
+                            itemCount: transactions.transaction!.length,
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return TransactionCard(
+                                  transaction:
+                                      transactions.transaction![index]);
+                            }),
+                      ),
+                    ],
+                  );
           }),
     );
   }

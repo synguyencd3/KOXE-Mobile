@@ -146,7 +146,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                         },
                         items: _methods.map((e) => DropdownMenuItem(child: Text(e.type ?? ""), value: e.id)).toList(),
                         decoration: InputDecoration(
-                          labelText: 'Select an option',
+                          labelText: 'Vui lòng chọn phương thức thanh toán',
                           border: OutlineInputBorder(),
                         ),
                       ),

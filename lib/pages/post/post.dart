@@ -17,7 +17,8 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   List<PostModel> posts = [];
   String salonId = '';
-  int index=1;
+  int index = 1;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -32,8 +33,8 @@ class _PostPageState extends State<PostPage> {
     } else {
       List<PostModel> postsAPI = await PostService.getAllPosts(index, 10);
       posts.addAll(postsAPI);
-      if (postsAPI.length>0) index++;
-      print("index "+index.toString());
+      if (postsAPI.length > 0) index++;
+      print("index " + index.toString());
     }
   }
 
@@ -54,35 +55,42 @@ class _PostPageState extends State<PostPage> {
                 child: Text('Error: ${snapshot.error}'),
               );
             }
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    salonId == ''
-                        ? TextButton.icon(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/create_post');
-                            },
-                            icon: Icon(Icons.post_add),
-                            label: Text('Thêm bài viết'),
-                          ): Container(),
-
-                  ],
-                ),
-                Expanded(
-                  child: LazyLoadScrollView(
-                       onEndOfPage: () { getPosts(); },
-                       child: ListView.builder(
-                        itemCount: posts.length,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return PostCard(post: posts[index]);
-                        }),
-                  ),
-                ),
-              ],
-            );
+            return posts.isEmpty
+                ? Center(
+                    child: Text('Không có bài kết nối nào'),
+                  )
+                : Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          salonId == ''
+                              ? TextButton.icon(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, '/create_post');
+                                  },
+                                  icon: Icon(Icons.post_add),
+                                  label: Text('Thêm bài viết'),
+                                )
+                              : Container(),
+                        ],
+                      ),
+                      Expanded(
+                        child: LazyLoadScrollView(
+                          onEndOfPage: () {
+                            getPosts();
+                          },
+                          child: ListView.builder(
+                              itemCount: posts.length,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return PostCard(post: posts[index]);
+                              }),
+                        ),
+                      ),
+                    ],
+                  );
           }),
     );
   }
