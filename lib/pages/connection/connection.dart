@@ -33,13 +33,17 @@ class _ConnectionState extends State<Connection> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Loading();
             }
-            return ListView.builder(
-                itemCount: connections.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return ConnectionCard(
-                      connectionId: connections[index].id ?? '');
-                });
+            return connections.isEmpty
+                ? Center(
+                    child: Text('Không có kết nối nào'),
+                  )
+                : ListView.builder(
+                    itemCount: connections.length,
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return ConnectionCard(
+                          connectionId: connections[index].id ?? '');
+                    });
           }),
     );
   }

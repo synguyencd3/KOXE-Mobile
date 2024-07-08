@@ -48,7 +48,7 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:mobile/pages/appointment/create_appointment.dart';
 import 'package:mobile/pages/warranty/warranty_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_manage.dart';
-import 'package:mobile/pages/accessory_manage.dart';
+import 'package:mobile/pages/accessory/accessory_manage.dart';
 import 'package:mobile/pages/maintaince/user_maintaince.dart';
 import 'package:mobile/pages/post/post_detail.dart';
 import 'package:mobile/pages/post/create_post.dart';
@@ -66,7 +66,7 @@ import 'package:mobile/pages/navigator_manage.dart';
 import 'package:mobile/pages/search/searchPage.dart';
 import 'package:mobile/pages/salon_group/salon_group.dart';
 import 'package:mobile/pages/user_accessory.dart';
-import 'package:mobile/pages/accessory_invoice_manage.dart';
+import 'package:mobile/pages/accessory/accessory_invoice_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_invoice_manage.dart';
 import 'package:mobile/pages/post/post.dart';
 import 'package:mobile/pages/transaction/transaction_detail_navigator.dart';
@@ -75,6 +75,7 @@ import 'package:mobile/pages/my_car/car_customer.dart';
 import 'package:mobile/pages/my_car/car_detail_customer.dart';
 import 'package:mobile/pages/my_car/car_warranty.dart';
 import 'package:mobile/pages/my_car/car_maintaince.dart';
+import 'package:mobile/pages/salon_manage_navigator.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
@@ -190,6 +191,7 @@ class _MyAppState extends State<MyApp> {
         '/car_detail_customer': (context) => CarDetailCustomer(),
         '/car_warranty': (context) => CarWarranty(),
         '/car_maintaince': (context) => CarMaintaince(),
+        '/salon_manage_navigator': (context) => SalonManageNavigator(),
       },
     );
   }

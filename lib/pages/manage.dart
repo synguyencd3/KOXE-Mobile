@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/config.dart';
 import 'package:mobile/services/cars_service.dart';
 import 'package:mobile/widgets/text_card.dart';
 import 'package:mobile/services/salon_service.dart';
@@ -68,7 +69,7 @@ class _ManageState extends State<Manage> {
                         onTap: () {
                           Navigator.pushNamed(context, '/package/manage');
                         }),
-                    keyMap.contains("f3") &&
+                    keyMap.contains(Config.UserKeyMap) &&
                             (permission.contains("OWNER") ||
                                 permission.contains("R_EMP"))
                         ? text_card(
@@ -88,24 +89,12 @@ class _ManageState extends State<Manage> {
                             })
                         : Container(),
                     text_card(
-                        headingIcon: Icons.block,
-                        title: 'Quản lý hoa tiêu bị chặn',
+                        headingIcon: Icons.manage_accounts,
+                        title: 'Quản lý hoa tiêu',
                         onTap: () {
-                          Navigator.pushNamed(context, '/blocked_user');
+                          Navigator.pushNamed(context, '/salon_manage_navigator');
                         }),
-                    text_card(
-                        headingIcon: Icons.post_add,
-                        title: 'Quản lý bài đăng kết nối',
-                        onTap: () {
-                          Navigator.pushNamed(context, '/post');
-                        }),
-                    text_card(
-                        headingIcon: Icons.connect_without_contact,
-                        title: 'Quản lý kết nối với hoa tiêu',
-                        onTap: () {
-                          Navigator.pushNamed(context, '/connection');
-                        }),
-                    keyMap.contains("f2") &&
+                    keyMap.contains(Config.CarKeyMap) &&
                             (permission.contains("OWNER") ||
                                 permission.contains("R_CAR"))
                         ? text_card(
@@ -115,7 +104,7 @@ class _ManageState extends State<Manage> {
                               Navigator.pushNamed(context, '/listing/manage');
                             })
                         : Container(),
-                    keyMap.contains("f5") &&
+                    keyMap.contains(Config.WarrantyKeyMap) &&
                             (permission.contains("OWNER") ||
                                 permission.contains("R_WRT"))
                         ? text_card(
@@ -125,7 +114,7 @@ class _ManageState extends State<Manage> {
                               Navigator.pushNamed(context, '/warranty_list');
                             })
                         : Container(),
-                    keyMap.contains("f6") && permission.contains("OWNER") ||
+                    keyMap.contains(Config.MaintainKeyMap) && permission.contains("OWNER") ||
                             permission.contains("R_MT")
                         ? text_card(
                             headingIcon: Icons.build,
@@ -135,7 +124,7 @@ class _ManageState extends State<Manage> {
                                   context, '/maintaince_manage');
                             })
                         : Container(),
-                    keyMap.contains("f8")
+                    keyMap.contains(Config.AccessoryKeyMap)
                         ? text_card(
                             headingIcon: Icons.toys,
                             title: 'Quản lý phụ tùng',
@@ -151,13 +140,13 @@ class _ManageState extends State<Manage> {
                               Navigator.pushNamed(context, '/statistic');
                             })
                         : Container(),
-                    text_card(
+                    keyMap.contains(Config.ProcessKeyMap) ? text_card(
                         headingIcon: Icons.sync,
                         title: 'Quản lý qui trình',
                         onTap: () {
                           Navigator.pushNamed(context, '/process_list');
-                        }),
-                    keyMap.contains("f7") &&
+                        }): Container(),
+                    keyMap.contains(Config.TransactionKeyMap) &&
                             (permission.contains("OWNER") ||
                                 permission.contains("R_IV"))
                         ? text_card(
@@ -168,12 +157,12 @@ class _ManageState extends State<Manage> {
                                   context, '/transaction_manage');
                             })
                         : Container(),
-                    text_card(
+                    keyMap.contains(Config.PromotionKeyMap) ? text_card(
                         headingIcon: Icons.discount,
                         title: 'Quản lý khuyến mãi',
                         onTap: () {
                           Navigator.pushNamed(context, '/salon_promotion');
-                        }),
+                        }): Container(),
                   ],
                 ),
               );
