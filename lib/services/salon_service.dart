@@ -4,12 +4,16 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/model/salon_model.dart';
+import 'package:mobile/model/salon_payment_response.dart';
 import 'package:mobile/model/user_model.dart';
 import 'package:mobile/model/user_post_model.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/shared_service.dart';
 
+import '../model/Payment_Method_Request.dart';
+import '../model/Payment_Method_Response.dart';
 import '../model/employee_model.dart';
+import '../model/payment_request.dart';
 
 class SalonsService {
   static var client = http.Client();
@@ -50,15 +54,16 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$mySalon');
+    var url = Uri.https(Config.apiURL, '${Config.salonCarsAPI}/$mySalon');
     if (salonId != null)
-      url = Uri.https(Config.apiURL, '${Config.SalonsAPI}/$salonId');
+      url = Uri.https(Config.apiURL, '${Config.salonCarsAPI}/$salonId');
 
     var response = await http.get(url, headers: requestHeaders);
+    print (response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      //print(data);
-      return carsFromJson(data['salon']['cars']);
+      print("salon cars: $data");
+      return carsFromJson(data['cars']);
     }
     return [];
   }
@@ -360,5 +365,127 @@ class SalonsService {
   static Future<Set<String>> getPermission() async {
     var LoginInfo = await SharedService.loginDetails();
     return Set.from(LoginInfo!.user?.permissions ?? []);
+  }
+
+  static Future<List<SalonPaymentModel>> getPayment()  async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    var url = Uri.https(Config.apiURL, Config.SalonPaymentAPI);
+    var response = await http.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return PaymentsFromJson(data['data']['data']);
+    }
+    return [];
+  }
+
+  static Future<bool?> createPayment(PaymentRequest request) async {
+    await APIService.refreshToken();
+    var salonId = await isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    var url = Uri.https(Config.apiURL, Config.createSalonPaymentAPI);
+    var reqBody = request.toJson();
+    reqBody["salonId"] = salonId;
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+  print(reqBody);
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode(reqBody));
+    var responseData = jsonDecode(response.body);
+    print('response:' + response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<List<PaymentMethod>> getPaymentMethods() async {
+    await APIService.refreshToken();
+    String mySalon = await SalonsService.isSalon();
+    var loginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${loginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.salonPaymentMethodAPI, {
+      "": mySalon
+    });
+
+
+    var response = await http.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return PaymentMethodsFromJson(data['data']);
+    }
+    return [];
+  }
+
+  static Future<bool?> deletePaymentMethod(String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    String mySalon = await isSalon();
+    Map<String, String> requestHeaders = {
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, "${Config.salonPaymentMethodAPI}/$id");
+
+    var response = await http
+        .delete(url, headers: requestHeaders, body: {"salonId": mySalon});
+    print(mySalon);
+    print(response.body);
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'success') return true;
+    return false;
+  }
+
+  static Future<bool?> createPaymentMethod(PaymentMethodRequest request) async {
+    await APIService.refreshToken();
+    var salonId = await isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    var url = Uri.https(Config.apiURL, Config.createSalonPaymentMethodAPI);
+    var reqBody = request.toJson();
+    reqBody["salonId"] = salonId;
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    print(reqBody);
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode(reqBody));
+    var responseData = jsonDecode(response.body);
+    print('response:' + response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool?> updatePaymentMethod(PaymentMethod request) async {
+    await APIService.refreshToken();
+    var salonId = await isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    var url = Uri.https(Config.apiURL, Config.salonPaymentMethodAPI);
+    var reqBody = request.toJson();
+    reqBody["salonId"] = salonId;
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    print(reqBody);
+    var response = await http.patch(url, headers: requestHeaders, body: jsonEncode(reqBody));
+    var responseData = jsonDecode(response.body);
+    print('response:' + response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
   }
 }

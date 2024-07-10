@@ -3,11 +3,12 @@ import 'package:mobile/model/connection_model.dart';
 
 import '../services/connection_service.dart';
 import 'package:mobile/services/salon_service.dart';
+import 'package:mobile/utils/utils.dart';
 
 class ConnectionCard extends StatefulWidget {
-  String connectionId;
+  final String connectionId;
 
-  ConnectionCard({super.key, required this.connectionId});
+  const ConnectionCard({super.key, required this.connectionId});
 
   @override
   State<ConnectionCard> createState() => _ConnectionCardState();
@@ -42,7 +43,7 @@ class _ConnectionCardState extends State<ConnectionCard> {
 
   Future<void> getConnectionDetail() async {
     ConnectionModel connectionAPI =
-        await ConnectionService.getConnectionDetail(widget.connectionId ?? '');
+        await ConnectionService.getConnectionDetail(widget.connectionId);
     if (mounted) {
       setState(() {
         connection = connectionAPI;
@@ -65,7 +66,7 @@ class _ConnectionCardState extends State<ConnectionCard> {
               leading: Icon(Icons.store),
             ),
             ListTile(
-              title: Text(connection.createAt.toString()),
+              title: Text(connection.createAt ?? ''),
               leading: Icon(Icons.calendar_today_rounded),
             ),
             ListTile(

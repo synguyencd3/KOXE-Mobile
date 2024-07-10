@@ -16,4 +16,8 @@ String formatCurrency(int value) {
   final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: 'đ');
   return formatter.format(value);
 }
+String formatDate(DateTime dateStr) {
+  String formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(dateStr);
+  return formattedDate;
+}
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:mobile/model/document_model.dart';
 import 'package:mobile/model/process_model.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/salon_service.dart';
@@ -68,11 +69,11 @@ class ProcessService {
     return null;
   }
 
-  static Future<bool?> changeProcess(process model,String id) async {
-    await UpdateProcessName(model,id);
-    await UpdateProcessDocument(model,id );
-    return true;
-  }
+  // static Future<bool?> changeProcess(process model,String id) async {
+  //   await UpdateProcessName(model,id);
+  //   await UpdateProcessDocument(model,id );
+  //   return true;
+  // }
 
   static Future<bool?> UpdateProcessName(process model, String id) async {
     await APIService.refreshToken();
@@ -100,7 +101,7 @@ class ProcessService {
     return false;
   }
 
-  static Future<bool?> UpdateProcessDocument(process model,id) async {
+  static Future<bool?> UpdateProcessDocument(Document model) async {
     await APIService.refreshToken();
 
     String mySalon = await SalonsService.isSalon();
@@ -115,9 +116,63 @@ class ProcessService {
     var url = Uri.https(Config.apiURL, Config.updateProcessDoc);
     var reqBody = model.toJson();
     reqBody['salonId'] = mySalon;
-    reqBody['period'] = id;
-    print('resuest: '+ jsonEncode(reqBody));
+    print('request: '+ jsonEncode(reqBody));
     var response = await http.patch(url,headers: requestHeaders, body: jsonEncode(reqBody));
+    var responseData = jsonDecode(response.body);
+    print('response:' + response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool?> CreateProcessDocument(Document model) async {
+    await APIService.refreshToken();
+
+    String mySalon = await SalonsService.isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.createProcessDoc);
+    var reqBody = model.toJson();
+    reqBody['salonId'] = mySalon;
+    reqBody.remove('period');
+    print('request: '+ jsonEncode(reqBody));
+    var response = await http.post(url,headers: requestHeaders, body: jsonEncode(reqBody));
+    var responseData = jsonDecode(response.body);
+    print('response:' + response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool?> DeleteProcessDocument(Document model) async {
+    await APIService.refreshToken();
+
+    String mySalon = await SalonsService.isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      //'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.deleteProcessDoc);
+    var reqBody = model.toJson();
+    reqBody['salonId'] = mySalon;
+    reqBody.remove('period');
+    print('request: '+ jsonEncode(reqBody));
+    var response = await http.delete(url, headers: requestHeaders, body: {
+      'salonId' : mySalon,
+      'period' : model.period
+    });
     var responseData = jsonDecode(response.body);
     print('response:' + response.body);
     if (responseData['status'] == 'success') {

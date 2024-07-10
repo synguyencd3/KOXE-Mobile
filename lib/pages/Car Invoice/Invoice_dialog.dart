@@ -33,6 +33,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
   Document? currentPeriod;
   int countSelected = 0;
   int period = 0;
+  bool isCalling = false;
 
   void toggleObjectSelection(String object) {
     if (selectedProcesses.contains(object)) {
@@ -57,9 +58,15 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
   }
 
   void getProcess() async {
+
     if (widget.model.legalsUser?.processId == null) return;
+    print("fetching");
+    setState(() {
+      isCalling = true;
+    });
     var data = await ProcessService.get(widget.model.legalsUser?.processId);
     setState(() {
+      isCalling = false;
       selectedProcessInThisStage = {};
       _process = data;
       for (var detail in widget.model.legalsUser!.details!) {
@@ -72,6 +79,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
           return;
         }
         //selectedProcesses.add(doc);
+        print("finish calling");
       }
     });
   }
@@ -84,6 +92,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
     phoneNumberController.text = widget.model.phone!;
     carNameController.text = widget.model.carName!;
     emailAddressController.text = widget.model.email!;
+    print("getting");
     getProcess();
   }
 
@@ -133,11 +142,11 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
               decoration: InputDecoration(labelText: 'Địa chỉ email'),
             ),
             SizedBox(height: 16),
-            (currentPeriod == null)
+            (isCalling)
                 ? Loading()
                 : Column(
                     children: [
-                      Text(currentPeriod!.name!),
+                  //    Text(currentPeriod!.name!),
                       Column(
                         children: currentPeriod!.details!.map((e) {
                           if (selectedProcesses.contains(e.name))
@@ -240,11 +249,11 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
           },
         ),
         TextButton(
-          child: Text('Cancel'),
+          child: Text('Hủy'),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: Text('Submit'),
+          child: Text('Cập nhật'),
           onPressed: submitForm,
         ),
       ],

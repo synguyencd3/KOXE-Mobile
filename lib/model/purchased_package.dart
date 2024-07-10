@@ -3,15 +3,19 @@ str == null ? [] :
     List<PurchasedPackage>.from((str).map((x) => PurchasedPackage.fromJson(x)));
 class PurchasedPackage {
   late final String package_id;
+  String? purchaseTime;
+  String? expirationTime;
   List<Features>? features;
 
   PurchasedPackage({
     required this.package_id,
-    this.features
+    this.features,
   });
 
   PurchasedPackage.fromJson(Map<String, dynamic> json) {
     package_id = json['package_id'];
+    purchaseTime = json['purchaseDate'];
+    expirationTime = json['expirationDate'];
     if (json['features'] != null) {
       features = <Features>[];
       json['features'].forEach((v) {

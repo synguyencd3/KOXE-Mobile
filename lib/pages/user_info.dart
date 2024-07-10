@@ -10,7 +10,7 @@ import 'package:mobile/model/user_model.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:mobile/utils/utils.dart';
 class UserInfo extends StatefulWidget {
   @override
   State<UserInfo> createState() => _UserInfoState();
@@ -205,12 +205,14 @@ class _UserInfoState extends State<UserInfo> {
                 ),
               ),
               text_card(
+                headingIcon: Icons.person,
                   title: 'Họ và tên',
                   trailingText: userProfile['fullname'] ?? 'Chưa cập nhật',
                   onTap: () {
                     openDialog('fullname', 'Họ và tên');
                   }),
               text_card(
+                headingIcon: Icons.person,
                   title: 'Giới tính',
                   trailingText: userProfile['gender'] != null
                       ? userProfile['gender']
@@ -219,33 +221,38 @@ class _UserInfoState extends State<UserInfo> {
                     openGenderDialog();
                   }),
               text_card(
+                headingIcon: Icons.phone,
                   title: 'Số điện thoại',
                   trailingText: userProfile['phone'] ?? 'Chưa cập nhật',
                   onTap: () {
                     openDialog('phone', 'Số điện thoại');
                   }),
               text_card(
+                  headingIcon: Icons.location_on,
                   title: 'Địa chỉ',
                   trailingText: userProfile['address'] ?? 'Chưa cập nhật',
                   onTap: () {
                     openDialog('address', 'Địa chỉ');
                   }),
               text_card(
+                  headingIcon: Icons.calendar_today,
                   title: 'Ngày sinh',
                   trailingText: userProfile['date_of_birth'] != null
-                      ? DateFormat('dd-MM-yyyy').format(DateFormat('dd-MM-yyyy')
-                          .parse(userProfile['date_of_birth']))
+                      ? DateFormat('dd/MM/yyyy').format(DateTime.parse(
+                          userProfile['date_of_birth'] as String))
                       : 'Chưa cập nhật',
                   onTap: () {
                     openDatePickerDialog('date_of_birth');
                   }),
               text_card(
+                headingIcon: Icons.link,
                 title: 'Liên kết mạng xã hội',
                 onTap: () {
                   Navigator.pushNamed(context, '/social', arguments: {'profile': userProfile});
                 },
               ),
               text_card(
+                headingIcon: Icons.lock,
                 title: 'Đổi mật khẩu',
                 onTap: () {
                   Navigator.pushNamed(context, '/change_password');

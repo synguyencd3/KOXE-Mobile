@@ -114,7 +114,7 @@ class _RegisterState extends State<Register> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
                     child: Text(
-                      'Or',
+                      'Hoặc',
                     //  style: FlutterFlowTheme.of(context).bodyMedium,
                     ),
                   ),
@@ -138,7 +138,7 @@ class _RegisterState extends State<Register> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Đã có tài khoản?',
+                          'Đã có tài khoản ? ',
                         //  style: FlutterFlowTheme.of(context).bodyMedium,
                         ),
                         SizedBox(

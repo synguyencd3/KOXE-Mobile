@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/pages/Car%20Invoice/Invoice_dialog.dart';
+import 'package:mobile/pages/loading.dart';
 import 'package:mobile/services/CarInvoice_Service.dart';
 import 'package:mobile/services/salon_service.dart';
 
@@ -15,13 +16,17 @@ class CarInvoiceList extends StatefulWidget {
 
 class _CarInvoiceListState extends State<CarInvoiceList> {
 
-
+  bool isLoading= false;
   List<CarInvoice> invoices = [];
   Set<String> permissions = {};
   void getInvoices() async {
+    setState(() {
+      isLoading = true;
+    });
     var data = await CarInvoiceService.getAll(null);
     setState(() {
       invoices = data;
+      isLoading = false;
     });
   }
 
@@ -51,16 +56,17 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             permissions.contains("OWNER") || permissions.contains("C_IV") ?
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(onPressed: () {
+             TextButton.icon(onPressed: () {
                 Navigator.pushNamed(context, '/car_invoice/new').then((value) {
                   getInvoices();
                 });
-              }, child: Text("Thêm giao dịch"),),
+              }, label: Text("Thêm giao dịch"),
+               icon: Icon(Icons.add),
             ) : Container(),
+            (isLoading) ?  Loading():
             ListView.builder(
               shrinkWrap: true,
               itemCount: invoices.length,
@@ -83,9 +89,9 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Customer: ${invoice.fullname}'),
+                          Text('Tên khách hàng: ${invoice.fullname}'),
                           SizedBox(height: 5),
-                          Text('Phone: ${invoice.phone}'),
+                          Text('Số điện thoại: ${invoice.phone}'),
                         ],
                       ),
                     ),

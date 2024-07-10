@@ -230,6 +230,14 @@ class _CreateAppointState extends State<CreateAppoint> {
                       ));
                       Navigator.pop(context);
                     }
+                    else
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Tạo lịch hẹn thất bại'),
+                          backgroundColor: Colors.red,
+                        ));
+                        Navigator.pop(context);
+                      }
                   },
                   child: Text('Tạo lịch hẹn'),
                 ),

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/model/accessory_model.dart';
 
-import '../services/accessory_service.dart';
-import '../widgets/accessory_card.dart';
+import '../../services/accessory_service.dart';
+import '../../widgets/accessory_card.dart';
 import 'package:mobile/pages/loading.dart';
 
 class AccessoriesManage extends StatefulWidget {
@@ -24,7 +24,7 @@ class _AccessoriesManageState extends State<AccessoriesManage> {
 
   Future<void> getAllAccessories() async {
     List<AccessoryModel> accessoriesAPI =
-        await AccessoryService().getAccessoriesSalon();
+    await AccessoryService().getAccessoriesSalon();
     print(accessoriesAPI.length);
     accessories = accessoriesAPI;
   }
@@ -126,30 +126,35 @@ class _AccessoriesManageState extends State<AccessoriesManage> {
             }
             return accessories.isEmpty
                 ? Center(
-                    child: Text('Không có phụ tùng'),
-                  )
+                child: TextButton.icon(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      showAddAccessoryDialog(context);
+                    },
+                    label: Text('Thêm phụ tùng')), 
+            )
                 : Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TextButton.icon(
-                        icon: Icon(Icons.add),
-                          onPressed: () {
-                            showAddAccessoryDialog(context);
-                          },
-                          label: Text('Thêm phụ tùng')),
-                      Expanded(
-                        child: ListView.builder(
-                            padding: EdgeInsets.only(top: 1),
-                            physics: BouncingScrollPhysics(),
-                            itemCount: accessories.length,
-                            itemBuilder: (context, index) {
-                              return AccessoryCard(
-                                accessory: accessories[index],
-                              );
-                            }),
-                      ),
-                    ],
-                  );
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextButton.icon(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      showAddAccessoryDialog(context);
+                    },
+                    label: Text('Thêm phụ tùng')),
+                Expanded(
+                  child: ListView.builder(
+                      padding: EdgeInsets.only(top: 1),
+                      physics: BouncingScrollPhysics(),
+                      itemCount: accessories.length,
+                      itemBuilder: (context, index) {
+                        return AccessoryCard(
+                          accessory: accessories[index],
+                        );
+                      }),
+                ),
+              ],
+            );
           }),
     );
   }

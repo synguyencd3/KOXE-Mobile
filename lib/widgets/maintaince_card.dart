@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/maintaince_model.dart';
 import '../services/maintaince_service.dart';
+import 'package:mobile/services/salon_service.dart';
 
 class MaintainceCard extends StatefulWidget {
   late MaintainceModel maintaince;
@@ -12,8 +13,22 @@ class MaintainceCard extends StatefulWidget {
 }
 
 class _MaintainceCardState extends State<MaintainceCard> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      getPermission();
+    });
+  }
   bool isDeleted = false;
-
+  Set<String> permission = {};
+  void getPermission() async {
+    var data = await SalonsService.getPermission();
+    setState(() {
+      permission = data;
+    });
+  }
   Future<void> deleteMaintaince() async {
     bool response =
         await MaintainceService().deleteMaintaincePackage(widget.maintaince.id ?? '');
@@ -144,9 +159,11 @@ class _MaintainceCardState extends State<MaintainceCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              permission.contains("OWNER") || permission.contains("U_MT") ?
               IconButton(onPressed: () {
                 showAddMaintainceDialog(context);
-              }, icon: Icon(Icons.edit)),
+              }, icon: Icon(Icons.edit)): SizedBox.shrink(),
+              permission.contains("OWNER") || permission.contains("D_MT") ?
               IconButton(
                   onPressed: () {
                     showDialog(
@@ -173,7 +190,7 @@ class _MaintainceCardState extends State<MaintainceCard> {
                           );
                         });
                   },
-                  icon: Icon(Icons.delete)),
+                  icon: Icon(Icons.delete)): SizedBox.shrink(),
             ],
           ),
         ],

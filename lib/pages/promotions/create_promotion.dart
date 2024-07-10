@@ -130,7 +130,7 @@ class _NewPromotionState extends State<NewPromotion> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create New Object'),
+        title: Text('Tạo khuyến mãi'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -141,54 +141,54 @@ class _NewPromotionState extends State<NewPromotion> {
               TextFormField(
                 controller: _titleController,
                 //initialValue: promotion == null ? "" :promotion?.title?? "",
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: InputDecoration(labelText: 'Tiêu đề'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a title';
+                    return 'Vui lòng điền tiêu đề';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: InputDecoration(labelText: 'Mô tả'),
                 //initialValue: promotion == null ? "" :promotion?.description ?? "",
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a description';
+                    return 'Vui lòng điền mô tả';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _contentMarkdownController,
-                decoration: InputDecoration(labelText: 'Content (Markdown)'),
+                decoration: InputDecoration(labelText: 'Nội dung (Dạng markdown)'),
                 //initialValue: promotion == null ? "" :promotion?.contentMarkdown ?? "",
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter Markdown content';
+                    return 'Vui lòng điền nội dung';
                   }
                   return null;
                 },
               ),
               ListTile(
                 title: Text(_startDate == null
-                    ? 'Start Date: Not selected'
-                    : 'Start Date: ${_startDate!.toLocal()}'),
+                    ? 'Ngày bắt đầu: Chưa chọn'
+                    : 'Ngày bắt đầu: ${_startDate!.toLocal()}'),
                 trailing: Icon(Icons.calendar_today),
                 onTap: () => _pickDate(context, true),
               ),
               ListTile(
                 title: Text(_endDate == null
-                    ? 'End Date: Not selected'
-                    : 'End Date: ${_endDate!.toLocal()}'),
+                    ? 'Ngày kết thúc: Chưa chọn'
+                    : 'Ngày kết thúc: ${_endDate!.toLocal()}'),
                 trailing: Icon(Icons.calendar_today),
                 onTap: () => _pickDate(context, false),
               ),
               ListTile(
-                title: Text('Banner Image'),
+                title: Text('Ảnh banner'),
                 trailing: Icon(Icons.image),
                 onTap: () =>pickImage(),
               ),
@@ -204,7 +204,7 @@ class _NewPromotionState extends State<NewPromotion> {
                 child: Text('Change'),
               ): ElevatedButton(
                 onPressed: _submitForm,
-                child: Text('Submit'),
+                child: Text('Tạo'),
               ),
             ],
           ),

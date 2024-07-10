@@ -6,13 +6,17 @@ import 'package:mobile/model/accessory_request_model.dart';
 import 'package:mobile/model/invoice_model.dart';
 import 'package:mobile/model/maintaince_model.dart';
 import 'package:mobile/model/maintaince_request_model.dart';
+import 'package:mobile/model/payment_request.dart';
 import 'package:mobile/pages/loading.dart';
 import 'package:mobile/services/accessory_service.dart';
 import 'package:mobile/services/invoice_service.dart';
 import 'package:mobile/services/maintaince_service.dart';
+import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/widgets/accessory_checkbox.dart';
 import 'package:mobile/widgets/invoice_card.dart';
 import 'package:mobile/widgets/maintaince_checkbox.dart';
+
+import '../../model/Payment_Method_Response.dart';
 
 class MaintainceInvoiceManage extends StatefulWidget {
   const MaintainceInvoiceManage({super.key});
@@ -21,18 +25,40 @@ class MaintainceInvoiceManage extends StatefulWidget {
   State<MaintainceInvoiceManage> createState() => _MaintainceInvoiceManageState();
 }
 
+
 class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
   List<InvoiceModel> invoices = [];
   List<MaintainceModel> maintainces = [];
   List<AccessoryModel> accessories = [];
+  List<PaymentMethod> _methods = [];
+  String? _selectedOption;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      getAllAccessories();
+      getAllMaintainces();
+      _fetchMethod();
+    });
+  }
+
   Future<void> getAllInvoices() async {
     List<InvoiceModel> invoicesAPI = await InvoiceService().getAllInvoices();
     invoices = invoicesAPI;
   }
+
+  void _fetchMethod() async {
+    var data = await SalonsService.getPaymentMethods();
+    setState(() {
+      _methods = data;
+    });
+  }
   Future<void> getAllMaintainces() async {
     List<MaintainceModel> maintaincesAPI =
     await MaintainceService().getAllMaintainces();
-    print(maintaincesAPI.length);
+    //print(maintaincesAPI.length);
     maintainces = maintaincesAPI;
   }
 
@@ -48,15 +74,6 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
     return response;
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      getAllAccessories();
-      getAllMaintainces();
-    });
-  }
   void showAddInvoiceDialog(BuildContext context) {
     final licenseController = TextEditingController();
     final carNameController = TextEditingController();
@@ -67,6 +84,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
     List<String?>.filled(maintainces.length, null);
     List<String?> selectedAcessories =
     List<String?>.filled(accessories.length, null);
+    bool _showDropdown = false;
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -107,6 +125,32 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                       labelText: 'Ghi chú',
                     ),
                   ),
+                  CheckboxListTile(
+                    value: _showDropdown,
+                    title: const Text('Tạo yêu cầu thanh toán'),
+                    onChanged: (value) {
+                      setState(() {
+                        _showDropdown = value!;
+                      });
+                    },
+                  ),
+                  if (_showDropdown)
+                    Padding(
+                      padding: EdgeInsets.only(top: 16.0),
+                      child: DropdownButtonFormField<String>(
+                        value: _selectedOption,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedOption = value;
+                          });
+                        },
+                        items: _methods.map((e) => DropdownMenuItem(child: Text(e.type ?? ""), value: e.id)).toList(),
+                        decoration: InputDecoration(
+                          labelText: 'Vui lòng chọn phương thức thanh toán',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
                   SizedBox(height: 10),
                   Text('Chọn gói bảo dưỡng',
                       style:
@@ -133,6 +177,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                       },
                     );
                   }).toList(),
+
                 ],
               ),
             ),
@@ -171,7 +216,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                   if (response) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Thêm gói bảo dưỡng thành công'),
+                        content: Text('Thêm hóa đơn bảo dưỡng thành công'),
                         backgroundColor: Colors.green,
                       ),
                     );
@@ -181,7 +226,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Thêm gói bảo dưỡng thất bại'),
+                        content: Text('Thêm hóa đơn bảo dưỡng thất bại'),
                         backgroundColor: Colors.red,
                       ),
                     );
@@ -208,20 +253,22 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
             }
             return invoices.isEmpty
                 ? Center(
-                child: TextButton(
+                child: TextButton.icon(
+                  icon: Icon(Icons.add),
                     onPressed: () {
                       showAddInvoiceDialog(context);
                     },
-                    child: Text(
+                    label: Text(
                       'Thêm hóa đơn bảo dưỡng',
                     )))
                 : Column(
               children: [
-                TextButton(
+                TextButton.icon(
+                  icon: Icon(Icons.add),
                     onPressed: () {
                       showAddInvoiceDialog(context);
                     },
-                    child: Text(
+                    label: Text(
                       'Thêm hóa đơn bảo dưỡng',
                     )),
                 Expanded(

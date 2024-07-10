@@ -5,6 +5,7 @@ import 'package:mobile/services/process_service.dart';
 import '../../model/car_model.dart';
 import '../../model/process_model.dart';
 import '../../services/salon_service.dart';
+import '../loading.dart';
 
 class NewProcess extends StatefulWidget {
   @override
@@ -19,7 +20,8 @@ class _NewProcessState extends State<NewProcess> {
   Car? _selectedObject;
   int type=0;
   List<Document> _formCards = [];
-  List<Car> _cars = [];
+  //List<Car> _cars = [];
+  bool isLoading =false;
   process? _process;
 
   @override
@@ -33,22 +35,36 @@ class _NewProcessState extends State<NewProcess> {
   }
 
   void initProcess() async {
-    var salonId = await SalonsService.isSalon();
-    var data = await SalonsService.getDetail(salonId);
-    var arg = ModalRoute.of(context)!.settings.arguments == null ? null: ModalRoute.of(context)!.settings.arguments as Map;
     setState(() {
-      _process = arg?['process'];
-      _cars = data;
+      isLoading = true;
     });
-    _nameController.text=_process?.name ?? "";
-    _descriptionController.text = _process?.description ?? "";
-    if (_process!= null)
-      {
+    try {
+      var arg = ModalRoute
+          .of(context)!
+          .settings
+          .arguments == null ? null : ModalRoute
+          .of(context)!
+          .settings
+          .arguments as Map;
+      setState(() {
+        _process = arg?['process'];
+      });
+      _nameController.text = _process?.name ?? "";
+      _descriptionController.text = _process?.description ?? "";
+      if (_process != null) {
         setState(() {
           _formCards = _process!.documents!;
         });
         print(_formCards);
       }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   void EditProcess() {
@@ -59,11 +75,11 @@ class _NewProcessState extends State<NewProcess> {
         description: _descriptionController.text,
         documents: _formCards
     );
-    ProcessService.changeProcess(model, _process!.id!).then((value) {
+    ProcessService.UpdateProcessName(model, _process!.id!).then((value) {
       if (value==true)
       {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('Chỉnh sửa thành công'),
               backgroundColor: Colors.green,
             )
@@ -98,7 +114,7 @@ class _NewProcessState extends State<NewProcess> {
       ProcessService.NewProcess(model).then((value) {
         if (value!) {
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('Tạo thành công'),
                 backgroundColor: Colors.green,
               )
@@ -121,21 +137,66 @@ class _NewProcessState extends State<NewProcess> {
     });
   }
 
+  void _deleteDetailField(Document formCard) {
+
+      ProcessService.DeleteProcessDocument(formCard).then((value) {
+        if (value!) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tạo thành công'),
+                backgroundColor: Colors.green,
+              )
+          );
+          Navigator.pop(context);
+        }
+      });
+
+  }
+
+  void _updateDetailField(Document formCard) {
+    if (formCard.period == null) {
+      ProcessService.CreateProcessDocument(formCard).then((value) {
+        if (value!) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tạo thành công'),
+                backgroundColor: Colors.green,
+              )
+          );
+          Navigator.pop(context);
+        }
+      });
+    }
+    else {
+      ProcessService.UpdateProcessDocument(formCard).then((value) {
+        if (value!) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tạo thành công'),
+                backgroundColor: Colors.green,
+              )
+          );
+          Navigator.pop(context);
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tạo quy trình mới'),
+        title: const Text('Quy trình',style: TextStyle(fontWeight: FontWeight.bold),),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Tên quy trình'),
+                decoration: const InputDecoration(labelText: 'Tên quy trình'),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Vui lòng nhập tên';
@@ -145,7 +206,7 @@ class _NewProcessState extends State<NewProcess> {
               ),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Mô tả'),
+                decoration: const InputDecoration(labelText: 'Mô tả'),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Vui lòng nhập mô tả';
@@ -154,12 +215,12 @@ class _NewProcessState extends State<NewProcess> {
                 },
               ),
  const SizedBox(height: 10),
- Text('Quy trình áp dụng cho',style: TextStyle(fontWeight: FontWeight.bold),),
+ const Text('Quy trình áp dụng cho',style: TextStyle(fontWeight: FontWeight.bold),),
                 Row(
                   children: [
                     Row(
                       children: [
-                        Text('Xe'),
+                        const Text('Xe'),
                         Radio<int>(
                           value: 0,
                           groupValue: type,
@@ -173,7 +234,7 @@ class _NewProcessState extends State<NewProcess> {
                     ),
                     Row(
                       children: [
-                        Text('Hoa tiêu'),
+                        const Text('Hoa tiêu'),
                         Radio<int>(
                           value: 1,
                           groupValue: type,
@@ -188,59 +249,25 @@ class _NewProcessState extends State<NewProcess> {
                   ],
                 ),
 
-              // Row(
-              //   children: [
-              //     Text('Sử dụng lại: '),
-              //     Checkbox(
-              //       value: _reuse,
-              //       onChanged: (value) {
-              //         setState(() {
-              //           _reuse = value!;
-              //         });
-              //       },
-              //     ),
-              //   ],
-              // ),
-              // if (!_reuse)
-              //   DropdownButtonFormField<Car>(
-              //     value: _selectedObject,
-              //     items: _cars.map((Car object) {
-              //       return DropdownMenuItem<Car>(
-              //         value: object,
-              //         child: Text(object.name!),
-              //       );
-              //     }).toList(),
-              //     onChanged: (value) {
-              //       setState(() {
-              //         _selectedObject = value;
-              //       });
-              //     },
-              //     decoration: InputDecoration(labelText: 'Chọn xe áp dụng'),
-              //     validator: (value) {
-              //       if (value == null) {
-              //         return 'Vui lòng chọn xe';
-              //       }
-              //       return null;
-              //     },
-              //   ),
               _process == null ? TextButton(
-                child: Text('Tạo quy trình'),
+                child: const Text('Tạo quy trình'),
                 onPressed: () {
                   _submitForm();
                 },
               ): TextButton(
-                child: Text('Cập nhật quy trình'),
+                child: const Text('Cập nhật quy trình'),
                 onPressed: () {
                   EditProcess();
                 },
               ),
               TextButton(
-                child: Text('Thêm giai đoạn cho quy trình'),
+                child: const Text('Thêm giai đoạn cho quy trình'),
                 onPressed: () {
                   _addFormCard();
                 },
               ),
-              SizedBox(height: 16.0),
+              isLoading ? Loading() : Container(),
+              const SizedBox(height: 16.0),
               ..._formCards.asMap().entries.map((entry) {
                 int index = entry.key;
                 var formCard = entry.value;
@@ -248,21 +275,21 @@ class _NewProcessState extends State<NewProcess> {
 
                 return Card(
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
                           initialValue: formCard.name,
-                          decoration: InputDecoration(labelText: 'Tên chi tiết'),
+                          decoration: const InputDecoration(labelText: 'Tên chi tiết'),
                           onChanged: (value) {
                             //formCard['name']=value;
                             formCard.name=value;
                           },
                         ),
                         TextFormField(
-                          initialValue: formCard.order.toString(),
-                          decoration: InputDecoration(labelText: 'Độ ưu tiên'),
+                          initialValue: '',
+                          decoration: const InputDecoration(labelText: 'Độ ưu tiên'),
                           onChanged: (value) {
                             //formCard['order'] = value;
                             formCard.order=int.parse(value);
@@ -276,11 +303,35 @@ class _NewProcessState extends State<NewProcess> {
                               details[i].name = value;
                             },
                           ),
-                        TextButton(
-                          child: Text('Thêm chi tiết cho giai đoạn'),
-                          onPressed: () {
-                            _addDetailField(index);
-                          },
+                        Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              child: const Text('Thêm chi tiết cho giai đoạn'),
+                              onPressed: () {
+                                _addDetailField(index);
+                              },
+                            ),
+                            _process == null ?  Container():
+                            Row(
+                              children: [
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    formCard.order = index;
+                                    _updateDetailField(formCard);
+                                  },
+                                ),
+                                IconButton(
+                                  icon : Icon(Icons.delete),
+                                  onPressed: () {
+                                    formCard.order = index;
+                                    _deleteDetailField(formCard);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ],
                     ),

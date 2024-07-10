@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile/services/payment_service.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/socket/socket_manager.dart';
 import 'package:mobile/widgets/text_card.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-
+import 'package:mobile/config.dart';
+import 'package:mobile/pages/loading.dart';
 class User extends StatefulWidget {
   const User({super.key});
 
@@ -19,7 +21,7 @@ class _UserState extends State<User> {
   Map<String, dynamic> userProfile = {};
   late TextEditingController controller;
   Set<String> permissions = {};
-
+  Set<String> keyMap = {};
   @override
   void initState() {
     // TODO: implement initState
@@ -27,26 +29,38 @@ class _UserState extends State<User> {
     controller = TextEditingController();
     getUserProfile();
     getPermissions();
+    getKeyMap();
   }
 
-  void getPermissions() async {
+  Future<void> getPermissions() async {
     var data = await SalonsService.getPermission();
     print(data);
-    setState(() {
+    //setState(() {
       permissions = data;
-    });
+    //});
 }
+  Future<void> getKeyMap() async {
+    var data = await PaymentService.getKeySet();
+   // setState(() {
+      keyMap = data;
+   // });
+  }
 
   Future<void> getUserProfile() async {
     try {
       Map<String, dynamic> profile = await APIService.getUserProfile();
       //print(profile);
-      setState(() {
+     // setState(() {
         userProfile = profile;
-      });
+     // });
     } catch (e) {
       print(e);
     }
+  }
+  Future<void> callAPI() async {
+    await getPermissions();
+    await getKeyMap();
+    await getUserProfile();
   }
 
   @override
@@ -75,100 +89,117 @@ class _UserState extends State<User> {
             TextButton(onPressed: ()=>submit(), child: Text('OK')),
           ],
         ));
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(height: 20),
-          Center(
-            child: CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(userProfile['avatar'] != null
-                  ? userProfile['avatar']
-                  : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
-            ),
+    return FutureBuilder(
+      future: callAPI(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Loading();
+        }
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              Center(
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(userProfile['avatar'] != null
+                      ? userProfile['avatar']
+                      : 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                userProfile['fullname'] ?? '',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              text_card(
+                  title: 'Thông tin cá nhân',
+                  headingIcon: Icons.person,
+                  onTap: () async {
+                    final result = await Navigator.pushNamed(context, '/user_info',
+                        arguments: userProfile);
+                    if (result == 'update') {
+                      setState(() {
+                        getUserProfile();
+                      });
+                    }
+                  }),
+              text_card(
+                  title: 'Mời bạn bè',
+                  headingIcon: Icons.person_add,
+                  onTap: openDialog,
+              ),
+              // text_card(
+              //     title: 'Cài đặt',
+              //     headingIcon: Icons.settings,
+              //     onTap: () {
+              //       Navigator.pushNamed(context, '/setting');
+              //     }),
+              keyMap.contains(Config.SalonKeyMap) && permissions.length > 0 ?
+              text_card(
+                  title: 'Quản lý',
+                  headingIcon: Icons.manage_accounts,
+                  onTap: () {
+                    Navigator.pushNamed(context, '/manage');
+                  }) : Container(),
+              permissions.length <= 0 ?
+              text_card(
+                  title: 'Xe của tôi',
+                  headingIcon: Icons.car_crash,
+                  onTap: () {
+                    Navigator.pushNamed(context, '/my_car');
+                  }): Container(),
+              permissions.length == 0 ?
+              text_card(
+                  title: 'Yêu cầu thanh toán',
+                  headingIcon: Icons.credit_card,
+                  onTap: () {
+                    Navigator.pushNamed(context, '/user_payment');
+                  }): Container(),
+              keyMap.contains(Config.CreatePostKeyMap) ?
+              text_card(
+                  title: 'Hoa tiêu',
+                  headingIcon: Icons.manage_accounts,
+                  onTap: () {
+                    Navigator.pushNamed(context, '/navigator_manage');
+                  }): Container(),
+              text_card(
+                  title: 'Đăng xuất',
+                  headingIcon: Icons.logout,
+                  onTap: () {
+                    showDialog(context: context, builder: (context) {
+                      return AlertDialog(
+                        content: Text('Bạn có chắc chắn muốn đăng xuất không?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Không'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              ZegoUIKitPrebuiltCallInvitationService().uninit();
+                              Navigator.pop(context);
+                              SocketManager().disconnectSocket();
+                              SharedService.logout(context);
+                            },
+                            child: Text('Có'),
+                          ),
+                        ],
+                      );
+                    });
+                    //SharedService.logout(context);
+                    //Navigator.pushReplacementNamed(context, '/login');
+                  }),
+            ],
           ),
-          SizedBox(height: 10),
-          Text(
-            userProfile['fullname'] ?? '',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 10),
-          text_card(
-              title: 'Thông tin cá nhân',
-              headingIcon: Icons.person,
-              onTap: () async {
-                final result = await Navigator.pushNamed(context, '/user_info',
-                    arguments: userProfile);
-                if (result == 'update') {
-                  setState(() {
-                    getUserProfile();
-                  });
-                }
-              }),
-          text_card(
-              title: 'Mời bạn bè',
-              headingIcon: Icons.person_add,
-              onTap: openDialog,
-          ),
-          // text_card(
-          //     title: 'Cài đặt',
-          //     headingIcon: Icons.settings,
-          //     onTap: () {
-          //       Navigator.pushNamed(context, '/setting');
-          //     }),
-          permissions.length > 0 ?
-          text_card(
-              title: 'Quản lý',
-              headingIcon: Icons.manage_accounts,
-              onTap: () {
-                Navigator.pushNamed(context, '/manage');
-              }) : Container(),
-          text_card(
-              title: 'Xe của tôi',
-              headingIcon: Icons.car_crash,
-              onTap: () {
-                Navigator.pushNamed(context, '/my_car');
-              }),
-          text_card(
-              title: 'Hoa tiêu',
-              headingIcon: Icons.manage_accounts,
-              onTap: () {
-                Navigator.pushNamed(context, '/navigator_manage');
-              }),
-          text_card(
-              title: 'Đăng xuất',
-              headingIcon: Icons.logout,
-              onTap: () {
-                showDialog(context: context, builder: (context) {
-                  return AlertDialog(
-                    content: Text('Bạn có chắc chắn muốn đăng xuất không?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Không'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          ZegoUIKitPrebuiltCallInvitationService().uninit();
-                          Navigator.pop(context);
-                          SocketManager().disconnectSocket();
-                          SharedService.logout(context);
-                        },
-                        child: Text('Có'),
-                      ),
-                    ],
-                  );
-                });
-                //SharedService.logout(context);
-                //Navigator.pushReplacementNamed(context, '/login');
-              }),
-        ],
-      ),
+        );
+      }
     );
   }
 }

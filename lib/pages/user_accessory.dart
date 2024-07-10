@@ -18,9 +18,6 @@ class _UserAccessoryState extends State<UserAccessory> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero, () {
-      getAllAccessoryInvoice();
-    });
   }
 
   Future<void> getAllAccessoryInvoice() async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mobile/services/package_service.dart';
 
 import '../../model/package_model.dart';
@@ -25,10 +26,17 @@ class _ManagePackageState extends State<ManagePackage> {
   }
 
   Future<void> getPackages() async {
-    Set<String> purchasedSet = await PaymentService.getPurchasedSet();
+    //Set<String> purchasedSet = await PaymentService.getPurchasedSet();
+    var purchasedPackages = await PaymentService.getPurchasedPackages();
     List<PackageModel> packagesAPI = [];
-    for (String i in purchasedSet) {
-      packagesAPI.add(await PackageService.getDetailPackage(i));
+    // for (String i in purchasedSet) {
+    //   packagesAPI.add(await PackageService.getDetailPackage(i));
+    // }
+    for (var i in purchasedPackages) {
+      var package = await PackageService.getDetailPackage(i.package_id);
+      package.purchasedTime = i.purchaseTime;
+      package.expirationTime = i.expirationTime;
+      packagesAPI.add(package);
     }
     setState(() {
       packages = packagesAPI;
@@ -67,12 +75,12 @@ class _ManagePackageState extends State<ManagePackage> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue)),
                         Text(
-                          'Ngày đăng ký: 2021-10-10',
+                          'Ngày đăng ký: ${packages[index].purchasedTime}',
                           style: TextStyle(fontSize: 20),
                         ),
-                        Text('Ngày hết hạn: 2021-10-10',
+                        Text('Ngày hết hạn: ${packages[index].expirationTime}',
                             style: TextStyle(fontSize: 20)),
-                        Text('Các tính năng', style: TextStyle(fontSize: 20)),
+                        Text('Các tính năng:', style: TextStyle(fontSize: 20)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: packages[index]
@@ -86,17 +94,20 @@ class _ManagePackageState extends State<ManagePackage> {
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            TextButton(
-                                onPressed: () {}, child: Text('Nâng cấp gói')),
-                            TextButton(
-                                onPressed: () {}, child: Text('Gia hạn gói')),
-                            TextButton(
-                                onPressed: () {}, child: Text('Hủy gói')),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //   children: [
+                        //     TextButton(
+                        //         onPressed: () {}, child: Text('Nâng cấp gói')),
+                            Container(
+                              alignment: Alignment.center,
+                              child: TextButton(
+                                  onPressed: () {}, child: Text('Gia hạn gói')),
+                            ),
+                        //     TextButton(
+                        //         onPressed: () {}, child: Text('Hủy gói')),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),

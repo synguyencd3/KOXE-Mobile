@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/model/car_model.dart';
+import 'package:mobile/services/salon_service.dart';
 
 import '../../services/cars_service.dart';
 import '../loading.dart';
+import 'package:mobile/utils/utils.dart';
 
 class CarsListing extends StatefulWidget {
   const CarsListing({Key? key}) : super(key: key);
+
   @override
   State<CarsListing> createState() => _CarState();
 }
@@ -15,20 +18,32 @@ class CarsListing extends StatefulWidget {
 class _CarState extends State<CarsListing> {
   List<Car> cars = [];
   bool isCalling = false;
+  Set<String> permission = {};
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       getCars();
+      getPermission();
     });
   }
-  Future<void> getCars() async {
-    List<Car> list = ModalRoute.of(context)!.settings.arguments as List<Car>;
+
+  void getPermission() async {
+    var data = await SalonsService.getPermission();
     setState(() {
-      cars = list;
-      isCalling =true;
+      permission = data;
     });
   }
+
+  Future<void> getCars() async {
+    var carsAPI =  await CarsService.getCarsOfSalon();
+    setState(() {
+      cars = carsAPI;
+      isCalling = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,26 +52,41 @@ class _CarState extends State<CarsListing> {
           //automaticallyImplyLeading: false,
           title: Text(
             'Xe của salon',
-         //   style: FlutterFlowTheme.of(context).titleLarge,
+            //   style: FlutterFlowTheme.of(context).titleLarge,
           ),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-           TextButton.icon(onPressed: () {Navigator.pushNamed(context, '/new_car');}, icon: Icon(Icons.add), label:Text('Thêm xe')),
-            Expanded(
-                child:cars.isEmpty && !isCalling ? Loading(): ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: cars.length,
-                    physics: ClampingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          CarCard(car: cars[index], getCars: getCars,),
-                        ],
-                      );
-                    }))
+            permission.contains("OWNER") || permission.contains("C_CAR")
+                ? TextButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/new_car');
+                    },
+                    icon: Icon(Icons.add),
+                    label: Text('Thêm xe'))
+                : Container(),
+            permission.contains("OWNER") || permission.contains("R_CAR")
+                ? Expanded(
+                    child: cars.isEmpty && !isCalling
+                        ? Loading()
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: cars.length,
+                            physics: ClampingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  CarCard(
+                                    car: cars[index],
+                                    getCars: getCars,
+                                    permission: permission,
+                                  ),
+                                ],
+                              );
+                            }))
+                : Container()
           ],
         ));
   }
@@ -65,7 +95,9 @@ class _CarState extends State<CarsListing> {
 class CarCard extends StatelessWidget {
   final Car car;
   final Function getCars;
-  CarCard({required this.car, required this.getCars});
+  final Set<String> permission;
+
+  CarCard({required this.car, required this.getCars, required this.permission});
 
   @override
   Widget build(BuildContext context) {
@@ -79,13 +111,14 @@ class CarCard extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
-                child:
-                (car.image != null && car.image!.isNotEmpty && car.image![0] != "null")
+                child: (car.image != null &&
+                        car.image!.isNotEmpty &&
+                        car.image![0] != "null")
                     ? Image.network(
-                  car.image![0],
-                  height: 230,
-                  width: double.infinity,
-                )
+                        car.image![0],
+                        height: 230,
+                        width: double.infinity,
+                      )
                     : Image.asset("assets/placeholder-single.png"),
               ),
               SizedBox(height: 10),
@@ -94,30 +127,40 @@ class CarCard extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'Mô tả: ${car.description}',
+                car.description != null ? ('Mô tả: ${car.description}') : ('Mô tả: Chưa có mô tả'),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Giá: ${car.price}',
+                    'Giá: ${formatCurrency(car.price!)}',
                   ),
                   Row(
                     children: [
-                      IconButton(
-                          onPressed: () {
-                            CarsService.DeleteCar(car.id!).then((value) => {
-                              if (value==true) Navigator.pop(context)
-                            });
-                          }, icon: Icon(Icons.delete)),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/new_car', arguments: {'car':car}).then((value) => getCars);
-                          }, icon: Icon(Icons.edit)),
+                      permission.contains("OWNER") ||
+                              permission.contains("D_CAR")
+                          ? IconButton(
+                              onPressed: () {
+                                CarsService.DeleteCar(car.id!).then((value) => {
+                                      if (value == true) Navigator.pop(context)
+                                    });
+                              },
+                              icon: Icon(Icons.delete))
+                          : Container(),
+                      permission.contains("OWNER") ||
+                              permission.contains("U_CAR")
+                          ? IconButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/new_car',
+                                        arguments: {'car': car})
+                                    .then((value) => getCars);
+                              },
+                              icon: Icon(Icons.edit))
+                          : Container(),
                       IconButton(
                           onPressed: () {
                             Navigator.pushNamed(context, '/car_detail',
-                                arguments: {'car': car ,'id': car.id});
+                                arguments: {'car': car, 'id': car.id});
                           },
                           icon: Icon(Icons.arrow_forward)),
                     ],

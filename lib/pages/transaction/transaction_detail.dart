@@ -223,6 +223,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                                                 SnackBar(
                                                           content: Text(
                                                               'Cập nhật thành công'),
+                                                          backgroundColor:
+                                                              Colors.green,
                                                         ));
                                                       } else if (value == 2) {
                                                         ScaffoldMessenger.of(
@@ -231,6 +233,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                                                 SnackBar(
                                                           content: Text(
                                                               'Giao dịch đã hoàn thành'),
+                                                          backgroundColor:
+                                                              Colors.green,
                                                         ));
                                                         setState(() {
                                                           showButton = false;
@@ -242,6 +246,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                                                 SnackBar(
                                                           content: Text(
                                                               'Cập nhật thất bại'),
+                                                          backgroundColor:
+                                                              Colors.red,
                                                         ));
                                                       }
 
@@ -292,7 +298,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text('Giao dịch đã hoàn thành', style: TextStyle(fontSize: 20)),
+                    Text('Giao dịch đã hoàn thành',
+                        style: TextStyle(fontSize: 20)),
                   ],
                 ),
               ),

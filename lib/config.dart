@@ -11,15 +11,21 @@ class Config {
 
   //Car
   static const String getCarsAPI = "/cars";
+  static const String getCarsOfSalonAPI = "/cars/salon";
 
   //Salon
   static const String SalonsAPI = "/salons";
+  static const String salonCarsAPI = "/cars/salon";
   static const String getIsSalonAPI = "salons/salonId";
   static const String sendInvite = "salons/invite";
   static const String acceptInviteAPI = "salons/verifyInviteUser";
   static const String mySalon = "salons/my-salon";
   static const String getEmployees = "salons/user";
   static const String Permission = "/salons/permission";
+  static const String SalonPaymentAPI = "/salon-payment";
+  static const String createSalonPaymentAPI = "/salon-payment/create";
+  static const String createSalonPaymentMethodAPI = "/salon-payment/create-method";
+  static const String salonPaymentMethodAPI = "/salon-payment/method";
 
   //Appointment
   static const String getAppointmentsAPI = "/appointment/get-appoint-user";
@@ -67,14 +73,29 @@ class Config {
   static const String webVNPayCallback = '/payment/vnpay';
 
   //KeyMap
+//key map phải có trong purchase để có thể sử dụng quản lí salon
+  static const SalonKeyMap = "f1";
+  static const CarKeyMap="f2";
+  static const UserKeyMap="f3";
+  static const AppointmentKeyMap = "f4";
+  static const WarrantyKeyMap = "f5";
+  static const MaintainKeyMap = "f6";
+  static const TransactionKeyMap = "f7";
+  static const AccessoryKeyMap = "f8";
+  static const ProcessKeyMap = "f9";
+  static const StageKeyMap = "f10";
+  static const PromotionKeyMap = "f11";
+  static const PaymentKeyMap = "f12";
+  static const CreatePostKeyMap = "f13";
+  static const StaticKeyMap = "f14";
+  static const TransactionNavigatorKeyMap = "f15";
+  static const ConnectionKeyMap = "f16";
 
-  static const SalonKeyMap =
-      "f1"; //key map phải có trong purchase để có thể sử dụng quản lí salon
-
-//Chap API
+//Chat API
   static const String getChatsAPI = "/messages";
   static const String getAllChatUsersAPI = "/messages/chatting-users";
   static const String sendMessageAPI = "/messages/send";
+  static const String searchUserAPI = "/messages/search";
 
   //Notification API
   static const String getNotificationAPI =
@@ -101,6 +122,7 @@ class Config {
 //Invoice API
   static const String invoiceAPI = "/invoice";
   static const String getInvoiceAPI = "/invoice/get-invoice-maintenance";
+  static const String getInvoiceLicenseAPI = "/invoice/by-license";
 
 // Accessory API
   static const String getSalonAccessoriesApi = "/accessory/salon";
@@ -110,8 +132,10 @@ class Config {
   static const String getProcess = '/legals/process';
   static const String newProcess = '/legals/create-process';
   static const String updateProcessName = '/legals/update-process';
-  static const String deleteProcess = '/legals/delete-documents';
+  static const String deleteProcess = '/legals/delete-process';
+  static const String deleteProcessDoc = '/legals/delete-documents';
   static const String updateProcessDoc = '/legals/update-documents';
+  static const String createProcessDoc = '/legals/create-documents';
   static const String checkDetailProcess = '/legals/check-details-user';
   static const String updatePeriodProcess = '/legals/update-period-user';
 
@@ -154,4 +178,16 @@ static const String accessoryInvoiceAPI = "/buy-accessory";
 //Promotion
 static const String promotionAPI = "/promotions";
 static const String salonPromotionAPI = "/promotions/salon";
+
+
+//FIREBASE
+static const String firebaseApiKey = "AIzaSyCbfy8s5vE9W1ZkHWzpmBgGeKypSNDg82M";
+static const String firebaseAppId = "1:193303518481:android:f625498ebfb22d70f900b0";
+static const String firebaseProjectId = "k20-oto";
+static const String firebaseSenderId = "193303518481";
+
+
+//Authority
+static const String roleApi= "/salons/role";
+static const String assignApi = "/salons/assign-role";
 }

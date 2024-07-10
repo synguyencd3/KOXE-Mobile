@@ -1,7 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/config.dart';
 import 'package:mobile/pages/Car%20Invoice/car_invoice.dart';
 import 'package:mobile/pages/Car%20Invoice/newCar_invoice.dart';
 import 'package:mobile/pages/Car%20Invoice/user_car_invoice.dart';
+import 'package:mobile/pages/authorize/authorities.dart';
 import 'package:mobile/pages/call/call_page.dart';
 import 'package:mobile/pages/car/cars_listing.dart';
 import 'package:mobile/pages/car/edit_car.dart';
@@ -16,9 +20,13 @@ import 'package:mobile/pages/register.dart';
 import 'package:mobile/pages/main_home.dart';
 import 'package:mobile/pages/salon/new_salon.dart';
 import 'package:mobile/pages/salon/salon_list.dart';
+import 'package:mobile/pages/salon_payment/salonPayment.dart';
+import 'package:mobile/pages/salon_payment/userPayment.dart';
+import 'package:mobile/pages/salon_payment_option/SalonPaymentOption.dart';
 import 'package:mobile/pages/statistic/statistic_page.dart';
 import 'package:mobile/pages/warranty/Warranty_form.dart';
 import 'package:mobile/pages/warranty/warranty_list.dart';
+import 'package:mobile/services/Firebase_service.dart';
 import 'package:mobile/widgets/introduction_car.dart';
 import 'package:mobile/pages/manage.dart';
 import 'package:mobile/pages/chat/list_chat_users.dart';
@@ -40,7 +48,7 @@ import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import 'package:mobile/pages/appointment/create_appointment.dart';
 import 'package:mobile/pages/warranty/warranty_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_manage.dart';
-import 'package:mobile/pages/accessory_manage.dart';
+import 'package:mobile/pages/accessory/accessory_manage.dart';
 import 'package:mobile/pages/maintaince/user_maintaince.dart';
 import 'package:mobile/pages/post/post_detail.dart';
 import 'package:mobile/pages/post/create_post.dart';
@@ -52,20 +60,36 @@ import 'package:mobile/pages/password/change_password.dart';
 import 'package:mobile/pages/password/verify_password.dart';
 import 'package:mobile/pages/password/new_password.dart';
 import 'package:mobile/pages/appointment/create_appointment_process.dart';
-import 'package:mobile/pages/my_car.dart';
+import 'package:mobile/pages/my_car/my_car.dart';
 import 'package:mobile/pages/transaction_manage.dart';
 import 'package:mobile/pages/navigator_manage.dart';
 import 'package:mobile/pages/search/searchPage.dart';
 import 'package:mobile/pages/salon_group/salon_group.dart';
 import 'package:mobile/pages/user_accessory.dart';
-import 'package:mobile/pages/accessory_invoice_manage.dart';
+import 'package:mobile/pages/accessory/accessory_invoice_manage.dart';
 import 'package:mobile/pages/maintaince/maintaince_invoice_manage.dart';
 import 'package:mobile/pages/post/post.dart';
+import 'package:mobile/pages/transaction/transaction_detail_navigator.dart';
+import 'package:mobile/pages/search/searchUserPage.dart';
+import 'package:mobile/pages/my_car/car_customer.dart';
+import 'package:mobile/pages/my_car/car_detail_customer.dart';
+import 'package:mobile/pages/my_car/car_warranty.dart';
+import 'package:mobile/pages/my_car/car_maintaince.dart';
+import 'package:mobile/pages/salon_manage_navigator.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+        apiKey: Config.firebaseApiKey,
+        appId: Config.firebaseAppId,
+        messagingSenderId: Config.firebaseSenderId,
+        projectId: Config.firebaseProjectId)
+  );
+  await FirebaseServices().initNotification();
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
 
   ZegoUIKit().initLog().then((value) {
@@ -140,6 +164,7 @@ class _MyAppState extends State<MyApp> {
         '/car_invoice/new': (context) => CarInvoiceForm(),
         '/transaction': (context) => Transaction(),
         '/transaction_detail': (context) => TransactionDetail(),
+        '/transaction_detail_navigator': (context) => TransactionDetailNavigator(),
         '/customer/car_voice' : (context) => UserCarInvoiceList(),
         '/blocked_user' : (context) => BlockedUser(),
         '/change_password' : (context) => ChangePassword(),
@@ -150,13 +175,23 @@ class _MyAppState extends State<MyApp> {
         '/transaction_manage' : (context) => TransactionManage(),
         '/navigator_manage' : (context) => NavigatorManage(),
         '/search' : (context) => SearchPage(),
+        '/search_user' : (context) => SearchUserPage(),
         '/salon_group' : (context) => SalonGroup(),
         '/user_accessory' : (context) => UserAccessory(),
         '/accessory_invoice_manage' : (context) => AccessoryInvoiceManage(),
         '/maintaince_invoice_manage' : (context) => MaintainceInvoiceManage(),
         '/promotions' : (context) => PromotionBoard(),
         '/post' : (context) => PostPage(),
-        '/salon_promotion' : (context) =>SAlonPromotionBoard()
+        '/salon_promotion' : (context) =>SAlonPromotionBoard(),
+        '/authorities' : (context) =>Authorities(),
+        '/salon_payment' : (context) =>SalonPaymentPage(),
+        '/user_payment' : (context) => UserPaymentPage(),
+        '/salon_payment_method' : (context) => SalonPaymentMethod(),
+        '/car_customer': (context) => CarCustomer(),
+        '/car_detail_customer': (context) => CarDetailCustomer(),
+        '/car_warranty': (context) => CarWarranty(),
+        '/car_maintaince': (context) => CarMaintaince(),
+        '/salon_manage_navigator': (context) => SalonManageNavigator(),
       },
     );
   }

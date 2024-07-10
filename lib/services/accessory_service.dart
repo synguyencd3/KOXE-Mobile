@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:mobile/model/accessory_invoice_model.dart';
 import 'package:mobile/model/accessory_model.dart';
+import 'package:mobile/model/payment_request.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:http/http.dart' as http;
@@ -116,7 +117,7 @@ class AccessoryService {
     var response = await http.delete(url, headers: requestHeaders);
     return response.statusCode == 200;
   }
-  static Future<bool> createAccessoryInvoice(AccessoryInvoiceModel invoice) async {
+  static Future<bool> createAccessoryInvoice(AccessoryInvoiceModel invoice, String paymentMethodId) async {
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
@@ -129,6 +130,15 @@ class AccessoryService {
     var url = Uri.https(Config.apiURL, Config.accessoryInvoiceAPI);
 
     var response = await http.post(url, headers: requestHeaders, body: jsonEncode(invoice.toJson()));
+    print(response.body);
+    var invoiceId = jsonDecode(response.body)['accessoryInvoice']['invoice_id'];
+    var paymentRequestResponse = await SalonsService.createPayment(PaymentRequest(
+      cusName: invoice.fullname,
+      cusPhone: invoice.phone,
+      reason: "Thanh toán hóa đơn phụ tùng: ${invoiceId}",
+      methodPaymentId: paymentMethodId,
+      invoiceId: invoiceId
+    ));
     return response.statusCode == 201;
   }
 }

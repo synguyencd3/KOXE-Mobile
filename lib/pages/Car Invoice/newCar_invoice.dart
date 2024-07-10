@@ -27,6 +27,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
   var _phoneNumber = TextEditingController();
   var _expense = TextEditingController();
   var _note = TextEditingController();
+  var _licensePlate = TextEditingController();
   Car? _selectedCar;
   process? _selectedProcess;
   Employee? _selectedEmployee;
@@ -40,6 +41,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
     var invoice = InvoiceRequest(
+      licensePlate: _licensePlate.text,
       carId: _selectedCar?.id,
       fullname: _fullName.text,
       email: _email.text,
@@ -110,7 +112,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tạo giao dịch mơi'),
+        title: Text('Tạo giao dịch mới'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -123,7 +125,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   decoration: InputDecoration(labelText: 'Họ tên'),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your full name';
+                      return 'Vui lòng điền tên của bạn';
                     }
                     return null;
                   },
@@ -135,7 +137,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   decoration: InputDecoration(labelText: 'Email'),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Vui lòng điền email của bạn';
                     }
                     // You can add additional email validation logic here
                     return null;
@@ -148,7 +150,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   decoration: InputDecoration(labelText: 'Điện thoại'),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your phone number';
+                      return 'Vui lòng điền số điện thoại của bạn';
                     }
                     return null;
                   },
@@ -157,7 +159,19 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Note'),
+                  decoration: InputDecoration(labelText: 'Biển số xe'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Vui lòng điền biển số xe của bạn';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _licensePlate.text = value!;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Ghi chú'),
                   onSaved: (value) {
                     _note.text = value!;
                   },
@@ -167,7 +181,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   decoration: InputDecoration(labelText: 'Thanh toán'),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your expense';
+                      return 'Vui lòng điền số tiền thanh toán';
                     }
                     return null;
                   },
@@ -223,7 +237,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                 ),
                 TextButton(
                   onPressed: _submitForm,
-                  child: Text('Submit'),
+                  child: Text('Tạo giao dịch'),
                 ),
               ],
             ),

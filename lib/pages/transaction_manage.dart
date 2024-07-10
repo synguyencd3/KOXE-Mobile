@@ -37,6 +37,18 @@ class TransactionManage extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(context, '/maintaince_invoice_manage');
               }),
+          text_card(
+              headingIcon: Icons.payment,
+              title: 'Quản lý thanh toán',
+              onTap: () {
+                Navigator.pushNamed(context, '/salon_payment');
+              }),
+          text_card(
+              headingIcon: Icons.account_balance_wallet,
+              title: 'Phương thức thanh toán',
+              onTap: () {
+                Navigator.pushNamed(context, '/salon_payment_method');
+              }),
         ],
       ),
     );
