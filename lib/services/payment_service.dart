@@ -28,8 +28,6 @@ class PaymentService {
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
     'Content-Type': 'application/json',
-    'Accept': '*/*',
-    'Access-Control-Allow-Origin': "*",
     HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
@@ -39,10 +37,11 @@ class PaymentService {
     'months': 1.toString()
     };
 
-    var url = Uri.https(Config.apiURL, Config.VNPayAPI, param);
+    var url = Uri.https(Config.apiURL, Config.VNPayAPI);
 
 
     var response = await client.post(url, headers: requestHeaders, body: jsonEncode(param));
+    print(response.body);
     if (jsonDecode(response.body)['status']=="failed")
     {
       return "";

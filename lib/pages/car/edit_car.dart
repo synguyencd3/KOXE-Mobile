@@ -520,31 +520,31 @@ class _EditCarState extends State<EditCar> {
 
                 SizedBox(height: 20),
 
-                DropdownButtonFormField<Warranty>(
-                    decoration: InputDecoration(
-                      labelText: 'Bảo hành',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    value: selectedWarranty,
-                    items: warranties.map((warranty) {
-                      return DropdownMenuItem<Warranty>(
-                        value: warranty,
-                        child: Text(warranty.name!),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedWarranty = value;
-                      });
-                    }),
+                // DropdownButtonFormField<Warranty>(
+                //     decoration: InputDecoration(
+                //       labelText: 'Bảo hành',
+                //       enabledBorder: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(12),
+                //       ),
+                //       focusedBorder: OutlineInputBorder(
+                //         borderSide: BorderSide(
+                //           width: 2,
+                //         ),
+                //         borderRadius: BorderRadius.circular(12),
+                //       ),
+                //     ),
+                //     value: selectedWarranty,
+                //     items: warranties.map((warranty) {
+                //       return DropdownMenuItem<Warranty>(
+                //         value: warranty,
+                //         child: Text(warranty.name!),
+                //       );
+                //     }).toList(),
+                //     onChanged: (value) {
+                //       setState(() {
+                //         selectedWarranty = value;
+                //       });
+                //     }),
                 car == null
                     ? Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),

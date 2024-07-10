@@ -18,6 +18,7 @@ class _MaintainceManageState extends State<MaintainceManage>
     with SingleTickerProviderStateMixin {
   List<MaintainceModel> maintainces = [];
   Set<String> permission = {};
+  bool isCalling = false;
 
   @override
   void initState() {
