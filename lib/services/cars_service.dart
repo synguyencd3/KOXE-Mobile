@@ -14,8 +14,6 @@ class CarsService {
   static Future<List<Car>> getAll(int page, int perPage, String search) async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
     };
 
     var url = Uri.https(Config.apiURL, Config.getCarsAPI,
@@ -32,8 +30,6 @@ class CarsService {
   static Future<Car?> getDetail(String carId) async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
     };
 
     var url = Uri.https(Config.apiURL, '${Config.getCarsAPI}/$carId');
@@ -56,8 +52,7 @@ class CarsService {
     print(url.toString());
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
+
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
     // Map<String, dynamic> remain = {'salonId': mySalon};
@@ -91,7 +86,7 @@ class CarsService {
     var request = http.MultipartRequest("PATCH", url);
     request.headers.addAll(requestHeaders);
     request.fields['salonId'] = mySalon;
-    request.fields['salonSalonId'] = mySalon;
+    //request.fields['salonSalonId'] = mySalon;
     request.fields['name'] = param['name'];
     request.fields['description'] = param['description'];
     request.fields['price'] = param['price'];
@@ -131,9 +126,6 @@ class CarsService {
     var mySalon = await SalonsService.isSalon();
     var url = Uri.https(Config.apiURL, Config.getCarsAPI);
     Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
@@ -142,7 +134,6 @@ class CarsService {
     var request = http.MultipartRequest("POST", url);
     request.headers.addAll(requestHeaders);
     request.fields['salonId'] = mySalon;
-    request.fields['salonSalonId'] = mySalon;
     request.fields['name'] = param['name'];
     request.fields['description'] = param['description'];
     request.fields['price'] = param['price'];

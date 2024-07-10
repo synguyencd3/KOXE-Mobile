@@ -37,10 +37,13 @@ class _CarState extends State<CarsListing> {
   }
 
   Future<void> getCars() async {
+    setState(() {
+      isCalling = true;
+    });
     var carsAPI =  await CarsService.getCarsOfSalon();
     setState(() {
       cars = carsAPI;
-      isCalling = true;
+      isCalling = false;
     });
   }
 
@@ -61,14 +64,14 @@ class _CarState extends State<CarsListing> {
             permission.contains("OWNER") || permission.contains("C_CAR")
                 ? TextButton.icon(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/new_car');
+                      Navigator.pushNamed(context, '/new_car').then((value) => getCars());
                     },
                     icon: Icon(Icons.add),
                     label: Text('Thêm xe'))
                 : Container(),
             permission.contains("OWNER") || permission.contains("R_CAR")
                 ? Expanded(
-                    child: cars.isEmpty && !isCalling
+                    child: isCalling
                         ? Loading()
                         : ListView.builder(
                             shrinkWrap: true,
@@ -133,7 +136,7 @@ class CarCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Giá: ${formatCurrency(car.price!)}',
+                    'Giá: ${formatCurrency(car.price ?? 0)}',
                   ),
                   Row(
                     children: [
@@ -141,8 +144,8 @@ class CarCard extends StatelessWidget {
                               permission.contains("D_CAR")
                           ? IconButton(
                               onPressed: () {
-                                CarsService.DeleteCar(car.id!).then((value) => {
-                                      if (value == true) Navigator.pop(context)
+                                CarsService.DeleteCar(car.id ?? "").then((value) => {
+                                      if (value == true) getCars()
                                     });
                               },
                               icon: Icon(Icons.delete))

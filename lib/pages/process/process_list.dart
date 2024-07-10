@@ -31,9 +31,13 @@ class _ProcessesState extends State<Processes> {
   }
 
   void getProcesses() async {
+    setState(() {
+      isCalling = true;
+    });
     var data = await ProcessService.getAll();
     setState(() {
       processes = data;
+      isCalling = false;
     });
   }
 
@@ -56,7 +60,7 @@ class _ProcessesState extends State<Processes> {
               },
               label: Text('Tạo quy trình mới')),
           Expanded(
-              child: processes.isEmpty && !isCalling
+              child: isCalling
                   ? Loading()
                   : ListView.builder(
                       shrinkWrap: true,

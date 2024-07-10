@@ -216,12 +216,6 @@ class _WarrantyFormState extends State<WarrantyForm> {
                       _selectedCar = value;
                     });
                   },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select a car';
-                    }
-                    return null;
-                  },
                 ),
                 warranty == null ?
                 TextButton(
