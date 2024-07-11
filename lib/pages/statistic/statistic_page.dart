@@ -5,11 +5,6 @@ import 'package:pie_chart/pie_chart.dart';
 
 import '../loading.dart';
 
-// var dataMap = <String, dynamic>{
-//   'Toyota Corolla': [12,2412043],
-//   'Honda crv': [4,139111],
-//   'name 1': [4, 22456]
-// };
 
 class ChartData {
   ChartData(this.x, this.y);
@@ -172,7 +167,7 @@ class _StatisticState extends State<Statistic> {
                )
                ).toList(),),
             ),
-            pieData.isEmpty ? SizedBox(height: 0,): Card(child: Padding(
+            pieData.isEmpty  ? SizedBox(height: 0,): Card(child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: PieChart(dataMap: pieData['buyCarTop']),
             )),

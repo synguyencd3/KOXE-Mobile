@@ -33,6 +33,7 @@ class StatisticService {
     if (responseData['status'] == 'success') {
      map['maintenances'] = getTableList(invoiceStatFromJson(responseData["maintenances"]["invoiceDb"]));
      map['buyCars'] = getTableList(invoiceStatFromJson(responseData["buyCars"]["invoiceDb"]));
+     map['buyAccessory'] = getTableList(invoiceStatFromJson(responseData["buyAccessory"]["invoiceDb"]));
      map['yearly'] = getYearly(responseData['year']);
      return map;
     }

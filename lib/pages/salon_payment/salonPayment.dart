@@ -91,9 +91,15 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
                         ),
                         Row(
                           children: [
+                            const Text('Phương thức: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text(obj.payment_method ?? ""),
+                          ],
+                        ),
+                        Row(
+                          children: [
                             Text('Trạng thái: ', style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text('${obj.status ?? false ? 'Chưa thanh toán' : 'Đã thanh toán'}',
-                              style: TextStyle(color: obj.status ?? false ? Colors.red : Colors.green ),),
+                            Text('${obj.status ?? false ? 'Đã thanh toán': 'Chưa thanh toán' }',
+                              style: TextStyle(color: obj.status ?? false ? Colors.green : Colors.red ),),
                           ],
                         ),
                         Row(
