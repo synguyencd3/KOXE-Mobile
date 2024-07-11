@@ -189,7 +189,7 @@ class SalonsService {
     var request = http.MultipartRequest("PATCH", url);
     request.headers.addAll(requestHeaders);
     request.fields['name'] = param['name'];
-    request.fields['addess'] = param['address'];
+    request.fields['address'] = param['address'];
     request.fields['email'] = param['email'];
     request.fields['phoneNumber'] = param['phoneNumber'];
     request.fields['introductionMarkdown'] = param['introductionMarkdown'];
@@ -221,17 +221,13 @@ class SalonsService {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
-    var url = Uri.https(Config.apiURL, Config.getIsSalonAPI);
+    var url = Uri.https(Config.apiURL, Config.mySalon);
 
     var response = await http.get(url, headers: requestHeaders);
     var responseData = jsonDecode(response.body);
-
+    print('salon: ${response.body}');
     if (responseData['status'] == 'success') {
-      if (responseData['salonId'] == null) {
-        return '';
-      } else {
-        return responseData['salonId'];
-      }
+        return responseData['salon']['salon_id'];
     } else {
       return '';
     }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/salon_payment_response.dart';
 
@@ -31,6 +32,10 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
       _payments = data;
       isLoading = false;
     });
+  }
+
+  void confirmPayment() async {
+
   }
  
 
@@ -107,6 +112,24 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
                             Text('Ngày tạo: ',style: TextStyle(fontWeight: FontWeight.bold),),
                             Text(obj.createDate ?? 'Không có'),
                           ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () {},
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.check),
+                                    Text('xác nhận thanh toán')
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+
                         ),
                       ],
                     ),

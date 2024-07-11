@@ -12,7 +12,8 @@ class authority {
   authority.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    json["permissions"] == null ? permissions = <String>[] : permissions = permission(json["permissions"]);
+    //json["permissions"] == null ? permissions = <String>[] : permissions = permission(json["permissions"]);
+    permissions = json['permissions'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {

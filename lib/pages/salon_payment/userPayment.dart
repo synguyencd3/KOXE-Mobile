@@ -82,6 +82,24 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
                         Text(obj.createDate ?? 'Không có'),
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Icon(Icons.check),
+                                Text('xác nhận thanh toán')
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+
+                    ),
                   ],
                 ),
               ),
