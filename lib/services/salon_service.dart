@@ -484,4 +484,44 @@ class SalonsService {
     }
     return false;
   }
+
+  static Future<bool> userConfirm(String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    var url = Uri.https(Config.apiURL, Config.userConfirmAPI);
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    print(id);
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({
+      'id': id
+    }));
+    print(response.body);
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> salonConfirm(String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    var url = Uri.https(Config.apiURL, Config.salonConfirmAPI);
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({
+      'id': id
+    }));
+    print(response.body);
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
 }

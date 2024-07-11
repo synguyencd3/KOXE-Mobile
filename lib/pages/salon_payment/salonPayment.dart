@@ -34,8 +34,21 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
     });
   }
 
-  void confirmPayment() async {
-
+  void confirmPayment(String id) async {
+    await SalonsService.salonConfirm(id).then((value) => {
+      if (value) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Xác nhận thành công'),
+          backgroundColor: Colors.green,
+        ))
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+          backgroundColor: Colors.red,
+        ))
+      }
+    });
+    getPayment();
   }
  
 
@@ -117,7 +130,9 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                confirmPayment(obj.id ?? "");
+                              },
                               child: const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Row(

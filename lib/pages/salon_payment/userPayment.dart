@@ -33,6 +33,23 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
     getPayment();
   }
 
+  void confirmPayment(String id) async {
+      await SalonsService.userConfirm(id).then((value) => {
+      if (value) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Xác nhận thành công, vui lòng đợi liên hệ từ salon'),
+            backgroundColor: Colors.green,
+          ))
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+        backgroundColor: Colors.red,
+        ))
+    }
+      });
+      getPayment();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +103,9 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            confirmPayment(obj.id ?? "");
+                          },
                           child: const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Row(
