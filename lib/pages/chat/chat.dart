@@ -48,7 +48,7 @@ class _ChatState extends State<ChatPage> {
           id: user?.id ?? '',
         );
       });
-      //callAPI();
+      callAPI();
       //initStatus();
       List<dynamic> onlineUsers = SocketManager().onlineUsers;
       print('userid: ${user?.id}');
@@ -146,7 +146,7 @@ class _ChatState extends State<ChatPage> {
             id: const Uuid().v4(),
             text: chatAPI[i].message,
           );
-          _addMessageWithoutSetState(message);
+          _addMessage(message);
         } else {
           final message = types.TextMessage(
             author: _receiver,
@@ -154,7 +154,7 @@ class _ChatState extends State<ChatPage> {
             id: const Uuid().v4(),
             text: chatAPI[i].message,
           );
-          _addMessageWithoutSetState(message);
+          _addMessage(message);
         }
       } else {
         for (String image in chatAPI[i].images ?? []) {
@@ -169,7 +169,7 @@ class _ChatState extends State<ChatPage> {
               size: 100,
               uri: image,
             );
-            _addMessageWithoutSetState(message);
+            _addMessage(message);
           } else {
             final message = types.ImageMessage(
               author: _receiver,
@@ -181,7 +181,7 @@ class _ChatState extends State<ChatPage> {
               size: 50,
               uri: image,
             );
-            _addMessageWithoutSetState(message);
+            _addMessage(message);
           }
         }
       }
@@ -195,28 +195,19 @@ class _ChatState extends State<ChatPage> {
       child: Container(
         color: Colors.white,
         child: SafeArea(
-          child: FutureBuilder(
-              future: callAPI(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return Scaffold(
-                  appBar: AppBar(
-                    automaticallyImplyLeading: false,
-                    flexibleSpace: _appBar(),
-                  ),
-                  body: Chat(
-                    //customMessageBuilder: _customMessageBuilder,
-                    messages: _messages,
-                    onAttachmentPressed: _handleAttachmentPressed,
-                    onSendPressed: _handleSendPressed,
-                    user: _sender,
-                  ),
-                );
-              }),
+          child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              flexibleSpace: _appBar(),
+            ),
+            body: Chat(
+              //customMessageBuilder: _customMessageBuilder,
+              messages: _messages,
+              onAttachmentPressed: _handleAttachmentPressed,
+              onSendPressed: _handleSendPressed,
+              user: _sender,
+            ),
+          ),
         ),
       ),
     );
