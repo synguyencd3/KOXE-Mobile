@@ -344,39 +344,44 @@ class _ChatState extends State<ChatPage> {
   Widget _appBar() {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context, 'rebuild');
-            },
-          ),
-          CircleAvatar(
-            backgroundImage: NetworkImage(user?.image ??
-                'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
-          ),
-          SizedBox(
-            width: 15,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
             children: [
-              Text(
-                user!.name,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+              IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context, 'rebuild');
+                },
               ),
-              Text(
-                user?.isOnline == true ? 'Đang hoạt động' : 'Không hoạt động',
-                style: TextStyle(
-                  fontSize: 12,
-                ),
+              CircleAvatar(
+                backgroundImage: NetworkImage(user?.image ??
+                    'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'),
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user!.name.length > 10 ? user!.name.substring(0, 10) + '...' : user!.name,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    user?.isOnline == true ? 'Đang hoạt động' : 'Không hoạt động',
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          Expanded(child: Container()),
+          //Expanded(child: Container()),
           // Padding(
           //   padding: EdgeInsets.only(right: 10),
           //   // child: GestureDetector(
@@ -387,24 +392,34 @@ class _ChatState extends State<ChatPage> {
           //   //   ),
           //   // ),
           // ),
-          permission.length <= 0
-              ? GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/create_appointment',
-                        arguments: user);
-                  },
-                  child: CircleAvatar(child: Icon(Icons.event)),
-                )
-              : Container(),
-          ZegoSendCallInvitationButton(
-            iconSize: Size.fromHeight(40),
-            isVideoCall: true,
-            resourceID: "zegouikit_call",
-            //You need to use the resourceID that you created in the subsequent steps. Please continue reading this document.
-            invitees: [
-              ZegoUIKitUser(id: user!.id.substring(0, 8), name: user!.name),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                width: 50,
+                child: ZegoSendCallInvitationButton(
+                  iconSize: Size.fromHeight(40),
+                  isVideoCall: true,
+                  resourceID: "zegouikit_call",
+                  //You need to use the resourceID that you created in the subsequent steps. Please continue reading this document.
+                  invitees: [
+                    ZegoUIKitUser(id: user!.id.substring(0, 8), name: user!.name),
+                  ],
+                ),
+              ),
+              permission.length <= 0
+                  ? GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/create_appointment',
+                            arguments: user);
+                      },
+                      child: CircleAvatar(child: Icon(Icons.event)),
+                    )
+                  : Container(),
+
             ],
           ),
+
         ],
       ),
     );

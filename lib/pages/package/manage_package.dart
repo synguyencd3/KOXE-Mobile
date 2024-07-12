@@ -76,11 +76,11 @@ class _ManagePackageState extends State<ManagePackage> {
                                 color: Colors.blue)),
                         Text(
                           'Ngày đăng ký: ${packages[index].purchasedTime}',
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 16),
                         ),
                         Text('Ngày hết hạn: ${packages[index].expirationTime}',
-                            style: TextStyle(fontSize: 20)),
-                        Text('Các tính năng:', style: TextStyle(fontSize: 20)),
+                            style: TextStyle(fontSize:16 )),
+                        Text('Các tính năng:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: packages[index]
