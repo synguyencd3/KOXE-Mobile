@@ -90,96 +90,100 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Thêm hóa đơn bảo dưỡng'),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextField(
-                    controller: licenseController,
-                    decoration: InputDecoration(
-                      labelText: 'Biển số xe',
-                    ),
-                  ),
-                  TextField(
-                    controller: carNameController,
-                    decoration: InputDecoration(
-                      labelText: 'Tên xe',
-                    ),
-                  ),
-                  TextField(
-                    controller: fullNameController,
-                    decoration: InputDecoration(
-                      labelText: 'Họ tên khách hàng',
-                    ),
-                  ),
-                  TextField(
-                    controller: phoneController,
-                    decoration: InputDecoration(
-                      labelText: 'Số điện thoại khách hàng',
-                    ),
-                  ),
-                  TextField(
-                    controller: noteController,
-                    decoration: InputDecoration(
-                      labelText: 'Ghi chú',
-                    ),
-                  ),
-                  CheckboxListTile(
-                    value: _showDropdown,
-                    title: const Text('Tạo yêu cầu thanh toán'),
-                    onChanged: (value) {
-                      setState(() {
-                        _showDropdown = value!;
-                      });
-                    },
-                  ),
-                  if (_showDropdown)
-                    Padding(
-                      padding: EdgeInsets.only(top: 16.0),
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedOption,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedOption = value;
-                          });
-                        },
-                        items: _methods.map((e) => DropdownMenuItem(child: Text(e.type ?? ""), value: e.id)).toList(),
+            content: StatefulBuilder(
+              builder: (context, setState) {
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        controller: licenseController,
                         decoration: InputDecoration(
-                          labelText: 'Vui lòng chọn phương thức thanh toán',
-                          border: OutlineInputBorder(),
+                          labelText: 'Biển số xe',
                         ),
                       ),
-                    ),
-                  SizedBox(height: 10),
-                  Text('Chọn gói bảo dưỡng',
-                      style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  ...maintainces.map((maintaince) {
-                    int index = maintainces.indexOf(maintaince);
-                    return MaintainceCheckbox(
-                      maintaince: maintaince,
-                      onSelectedChanged: (String? selectedId) {
-                        selectedMaintainces[index] = selectedId;
-                      },
-                    );
-                  }).toList(),
-                  SizedBox(height: 10),
-                  Text('Chọn phụ tùng sử dụng',
-                      style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  ...accessories.map((accessory) {
-                    int index = accessories.indexOf(accessory);
-                    return AccessoryCheckbox(
-                      accessory: accessory,
-                      onSelectedChanged: (String? selectedId) {
-                        selectedAcessories[index] = selectedId;
-                      },
-                    );
-                  }).toList(),
+                      TextField(
+                        controller: carNameController,
+                        decoration: InputDecoration(
+                          labelText: 'Tên xe',
+                        ),
+                      ),
+                      TextField(
+                        controller: fullNameController,
+                        decoration: InputDecoration(
+                          labelText: 'Họ tên khách hàng',
+                        ),
+                      ),
+                      TextField(
+                        controller: phoneController,
+                        decoration: InputDecoration(
+                          labelText: 'Số điện thoại khách hàng',
+                        ),
+                      ),
+                      TextField(
+                        controller: noteController,
+                        decoration: InputDecoration(
+                          labelText: 'Ghi chú',
+                        ),
+                      ),
+                      CheckboxListTile(
+                        value: _showDropdown,
+                        title: const Text('Tạo yêu cầu thanh toán'),
+                        onChanged: (value) {
+                          setState(() {
+                            _showDropdown = value!;
+                          });
+                        },
+                      ),
+                      if (_showDropdown)
+                        Padding(
+                          padding: EdgeInsets.only(top: 16.0),
+                          child: DropdownButtonFormField<String>(
+                            value: _selectedOption,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedOption = value;
+                              });
+                            },
+                            items: _methods.map((e) => DropdownMenuItem(child: Text(e.type ?? ""), value: e.id)).toList(),
+                            decoration: InputDecoration(
+                              labelText: 'Vui lòng chọn phương thức thanh toán',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      SizedBox(height: 10),
+                      Text('Chọn gói bảo dưỡng',
+                          style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      ...maintainces.map((maintaince) {
+                        int index = maintainces.indexOf(maintaince);
+                        return MaintainceCheckbox(
+                          maintaince: maintaince,
+                          onSelectedChanged: (String? selectedId) {
+                            selectedMaintainces[index] = selectedId;
+                          },
+                        );
+                      }).toList(),
+                      SizedBox(height: 10),
+                      Text('Chọn phụ tùng sử dụng',
+                          style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      ...accessories.map((accessory) {
+                        int index = accessories.indexOf(accessory);
+                        return AccessoryCheckbox(
+                          accessory: accessory,
+                          onSelectedChanged: (String? selectedId) {
+                            selectedAcessories[index] = selectedId;
+                          },
+                        );
+                      }).toList(),
 
-                ],
-              ),
+                    ],
+                  ),
+                );
+              }
             ),
             actions: [
               TextButton(

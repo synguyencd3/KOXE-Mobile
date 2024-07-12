@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:flutter/widgets.dart';
 //import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:mobile/utils/utils.dart';
 
 class CarCard extends StatefulWidget {
   final Car car;
@@ -59,7 +60,7 @@ class _CarCardState extends State<CarCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Giá: ${widget.car.price}',
+                    'Giá: ${formatCurrency(widget.car.price!)}',
                     // style: FlutterFlowTheme.of(context).labelMedium.override(
                     //       fontFamily: 'Outfit',
                     //       color: Color(0xFF606A85),
