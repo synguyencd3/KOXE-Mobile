@@ -35,9 +35,11 @@ class _PostDetailState extends State<PostDetail> {
 
   Future<void> getDetailPost() async {
     String postId = ModalRoute.of(context)!.settings.arguments as String;
+    //print('object');
     PostModel postAPI = await PostService.getPostDetail(postId);
-    post = postAPI;
- print(post.image!.length);
+    //print('postAPI' + '${postAPI.text}');
+      post = postAPI;
+    //print(post.image!.length);
   }
 
   Future<void> getProcess() async {
@@ -62,15 +64,15 @@ class _PostDetailState extends State<PostDetail> {
         appBar: AppBar(
           title: Text('Chi tiết bài kết nối'),
         ),
-        body: FractionallySizedBox(
-          heightFactor: 0.95,
-          child: FutureBuilder(
-              future: getDetailPost(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Loading();
-                }
-                return SingleChildScrollView(
+        body: FutureBuilder(
+            future: getDetailPost(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Loading();
+              }
+              return FractionallySizedBox(
+                heightFactor: 0.95,
+                child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
@@ -127,7 +129,9 @@ class _PostDetailState extends State<PostDetail> {
                                       '0') +
                                   ' giao dịch hoàn thành'),
                         ),
-                        Text('Thông tin xe'),
+                        Text('Thông tin xe',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
                         ListTile(
                           leading: Text(
                             'Hãng xe',
@@ -238,9 +242,9 @@ class _PostDetailState extends State<PostDetail> {
                       ],
                     ),
                   ),
-                );
-              }),
-        ),
+                ),
+              );
+            }),
         bottomNavigationBar: Row(
           children: [
             Expanded(
@@ -259,6 +263,7 @@ class _PostDetailState extends State<PostDetail> {
                                   builder: (context, StateSetter setState) {
                                 return Column(
                                   children: processes.map((process) {
+                                    print('process name' + '${process.name}');
                                     return RadioListTile<String>(
                                       title: Text(process.name ?? ''),
                                       value: process.id ?? '',

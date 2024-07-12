@@ -18,10 +18,8 @@ class PostService {
       'Authorization': 'Bearer ${loginDetail?.accessToken}',
     };
 
-    var url = Uri.https(Config.apiURL, Config.getPosts, {
-      "page": page.toString(),
-      "per_page": perPage.toString()
-    });
+    var url = Uri.https(Config.apiURL, Config.getPosts,
+        {"page": page.toString(), "per_page": perPage.toString()});
 
     var response = await http.get(url, headers: requestHeaders);
 
@@ -38,7 +36,6 @@ class PostService {
     await APIService.refreshToken();
     var loginDetail = await SharedService.loginDetails();
 
-
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Accept': '*/*',
@@ -47,7 +44,7 @@ class PostService {
     };
 
     var url = Uri.https(Config.apiURL, Config.posts);
-print(jsonEncode(postModel.toJson()));
+    print(jsonEncode(postModel.toJson()));
     var response = await http.post(url,
         headers: requestHeaders, body: jsonEncode(postModel.toJson()));
 
@@ -68,10 +65,11 @@ print(jsonEncode(postModel.toJson()));
     var url = Uri.https(Config.apiURL, '${Config.posts}/$id');
 
     var response = await http.get(url, headers: requestHeaders);
-
+    //print(response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-    return PostModel.fromJson(data['post']);
+      print(data);
+      return PostModel.fromJson(data['post']);
     }
     return PostModel(text: 'Error');
   }
@@ -88,8 +86,8 @@ print(jsonEncode(postModel.toJson()));
     };
 
     var url = Uri.https(Config.apiURL, Config.blocksAPI);
-    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({'postId ': postId}));
+    var response = await http.post(url,
+        headers: requestHeaders, body: jsonEncode({'postId ': postId}));
     return response.statusCode == 200;
   }
-
 }

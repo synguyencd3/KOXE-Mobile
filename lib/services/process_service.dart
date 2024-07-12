@@ -18,9 +18,6 @@ class ProcessService {
     String mySalon = await SalonsService.isSalon();
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
@@ -31,8 +28,8 @@ class ProcessService {
     };
 
     //if (id != null ) requestBody['processId'] = id;
-    var response = await http.post(url, body: requestBody);
-    print(response.body);
+    var response = await http.post(url, body: requestBody, headers: requestHeaders);
+    //print(response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       return processFromJson(data['data']);
