@@ -29,7 +29,7 @@ class PaymentRequest {
     data['reason'] = this.reason;
     data['amount'] = this.amount;
     data['salonId'] = this.salonId;
-    data['invoiceId'] = this.invoiceId;
+    invoiceId != null || invoiceId!="" ? data['invoiceId'] = this.invoiceId :{};
     data['methodPaymentId'] = this.methodPaymentId;
     return data;
   }

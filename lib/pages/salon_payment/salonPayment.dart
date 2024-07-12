@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/salon_payment_response.dart';
 
+import '../../model/Payment_Method_Response.dart';
 import '../../services/salon_service.dart';
 import '../loading.dart';
 import 'createPayment.dart';
@@ -14,11 +16,19 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
   Set<String> _permission = {};
   List<SalonPaymentModel> _payments = [];
   bool isLoading = false;
+  List<PaymentMethod> _methods = [];
 
   void getPermission() async {
     var data = await SalonsService.getPermission();
     setState(() {
       _permission = data;
+    });
+  }
+
+  void _fetchMethod() async {
+    var data = await SalonsService.getPaymentMethods();
+    setState(() {
+      _methods = data;
     });
   }
 
@@ -32,6 +42,23 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
       isLoading = false;
     });
   }
+
+  void confirmPayment(String id) async {
+    await SalonsService.salonConfirm(id).then((value) => {
+      if (value) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Xác nhận thành công'),
+          backgroundColor: Colors.green,
+        ))
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+          backgroundColor: Colors.red,
+        ))
+      }
+    });
+    getPayment();
+  }
  
 
   @override
@@ -40,6 +67,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
     super.initState();
     getPermission();
     getPayment();
+    _fetchMethod();
   }
 
 
@@ -54,8 +82,8 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
           _permission.contains("OWNER") || _permission.contains("C_PMSL")
               ? TextButton.icon(
               onPressed: () {
-                var unpayed = _payments.where((e) => e.status == true).toList();
-                showForm(context);
+                //var unpayed = _payments.where((e) => e.status == true).toList();
+                showForm(context, _methods);
               },
               icon: Icon(Icons.add),
               label: Text('Tạo phiếu thanh toán'))
@@ -107,6 +135,26 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
                             Text('Ngày tạo: ',style: TextStyle(fontWeight: FontWeight.bold),),
                             Text(obj.createDate ?? 'Không có'),
                           ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                confirmPayment(obj.id ?? "");
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.check),
+                                    Text('xác nhận thanh toán')
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+
                         ),
                       ],
                     ),

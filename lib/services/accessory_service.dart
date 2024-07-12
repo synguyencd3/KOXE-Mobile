@@ -131,6 +131,7 @@ class AccessoryService {
 
     var response = await http.post(url, headers: requestHeaders, body: jsonEncode(invoice.toJson()));
     print(response.body);
+    if (paymentMethodId=="") return response.statusCode == 201;
     var invoiceId = jsonDecode(response.body)['accessoryInvoice']['invoice_id'];
     var paymentRequestResponse = await SalonsService.createPayment(PaymentRequest(
       cusName: invoice.fullname,

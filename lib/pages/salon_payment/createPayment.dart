@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/payment_request.dart';
-import 'package:mobile/model/salon_payment_response.dart';
 import 'package:mobile/services/salon_service.dart';
+import '../../model/Payment_Method_Response.dart';
 
-Future<void> _createPayment(String createDate,  String custormerPhone, String custormerFullname, String reason, int amount, bool status) async {
-  // For simplicity, let's add a dummy object. You can implement a form to take input from the user.
+
+Future<void> createPayment(String createDate,  String custormerPhone, String custormerFullname, String reason, int amount, bool status, String method) async {
   var payment = PaymentRequest(
       cusPhone: custormerPhone,
       cusName: custormerFullname,
       reason: reason,
+      methodPaymentId: method,
       amount: amount,
     );
 
   await SalonsService.createPayment(payment);
 }
 
-void showForm(BuildContext context) {
+void showForm(BuildContext context, List<PaymentMethod> _methods) {
   final _formKey = GlobalKey<FormState>();
   String createDate = DateTime.now().toString();
   String custormerPhone = '';
@@ -23,6 +24,7 @@ void showForm(BuildContext context) {
   String reason = '';
   int amount = 0;
   bool status = false;
+  String? selectedOption;
 
   showModalBottomSheet(
     context: context,
@@ -81,11 +83,25 @@ void showForm(BuildContext context) {
                     return null;
                   },
                 ),
+                Padding(
+                  padding: EdgeInsets.only(top: 16.0),
+                  child: DropdownButtonFormField<String>(
+                    value: selectedOption,
+                    onChanged: (value) {
+                        selectedOption = value;
+                    },
+                    items: _methods.map((e) => DropdownMenuItem(child: Text(e.type ?? ""), value: e.id)).toList(),
+                    decoration: InputDecoration(
+                      labelText: 'Vui lòng chọn phương thức thanh toán',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                       _createPayment(createDate, custormerPhone, custormerFullname, reason, amount, status);
+                       createPayment(createDate, custormerPhone, custormerFullname, reason, amount, status, selectedOption!);
                       Navigator.pop(context);
                     }
                   },

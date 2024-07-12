@@ -147,6 +147,7 @@ class APIService {
   }
 
   static Future<bool> googleSignIn() async {
+    await GoogleSignIn().signOut();
     const List<String> scopes = <String>[
       'email',
       'https://www.googleapis.com/auth/contacts.readonly',
@@ -168,8 +169,6 @@ class APIService {
 
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
     };
 
     final Map<String, String?> param = <String, String?>{
@@ -183,6 +182,7 @@ class APIService {
       headers: requestHeaders,
     );
     var responsemodel = loginResponseJson(response.body);
+    print(response.body);
     if (responsemodel.status == "success") {
       // API ko chạy trên nền web đc, uncomment khi chạy emulator
       await SharedService.setLoginDetails(loginResponseJson(response.body));

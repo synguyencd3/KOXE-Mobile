@@ -26,6 +26,8 @@ class Config {
   static const String createSalonPaymentAPI = "/salon-payment/create";
   static const String createSalonPaymentMethodAPI = "/salon-payment/create-method";
   static const String salonPaymentMethodAPI = "/salon-payment/method";
+  static const String salonConfirmAPI = "/salon-payment/confirm-salon";
+  static const String userConfirmAPI = "/salon-payment/confirm-user";
 
   //Appointment
   static const String getAppointmentsAPI = "/appointment/get-appoint-user";
