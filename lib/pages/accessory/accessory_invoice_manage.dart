@@ -302,7 +302,7 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                     );
                     bool response =
                         await AccessoryService.createAccessoryInvoice(
-                            accessoryInvocice, _selectedOption!);
+                            accessoryInvocice, _selectedOption?? "");
                     if (response) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('Thêm hóa đơn thành công'),

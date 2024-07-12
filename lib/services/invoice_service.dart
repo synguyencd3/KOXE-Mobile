@@ -31,7 +31,7 @@ class InvoiceService{
     return [];
   }
 
-  Future<bool> addInvoice(InvoiceModel invoice) async {
+  Future<bool> addInvoice(InvoiceModel invoice, String paymentMethodId) async {
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -41,7 +41,16 @@ class InvoiceService{
     };
     var url = Uri.https(Config.apiURL, Config.invoiceAPI);
     var response = await http.post(url, headers: requestHeaders, body: jsonEncode(invoice.toJson()));
+    if (paymentMethodId=="") return response.statusCode == 201;
     print(response.body);
+    var invoiceId = jsonDecode(response.body)['maintain']['invoice_id'];
+    var paymentRequestResponse = await SalonsService.createPayment(PaymentRequest(
+        cusName: invoice.fullName,
+        cusPhone: invoice.phone,
+        reason: "Thanh toán hóa bảo dưỡng: ${invoiceId}",
+        methodPaymentId: paymentMethodId,
+        invoiceId: invoiceId
+    ));
     return response.statusCode == 201;
   }
   static Future<bool> deleteInvoice(String id) async {

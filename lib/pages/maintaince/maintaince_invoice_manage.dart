@@ -69,8 +69,8 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
       accessories = accessoriesAPI;
     });
   }
-  Future<bool> addInvoice(InvoiceModel invoice) async {
-    bool response = await InvoiceService().addInvoice(invoice);
+  Future<bool> addInvoice(InvoiceModel invoice, String paymentMethodId) async {
+    bool response = await InvoiceService().addInvoice(invoice, paymentMethodId);
     return response;
   }
 
@@ -216,7 +216,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                     services: nonNullSelectedMaintainces,
                     accessoriesRequest: nonNullSelectedAccessories,
                   );
-                  bool response = await addInvoice(invoice);
+                  bool response = await addInvoice(invoice, _selectedOption ?? "");
                   if (response) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
