@@ -90,7 +90,7 @@ class _PostDetailState extends State<PostDetail> {
                                 ),
                               )
                             : Container(),
-                        Text(post.title ?? '',
+                        Text(post.title ?? 'Không có tiêu đề',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                         Text(formatCurrency(post.car?.price ?? 0),
@@ -98,7 +98,7 @@ class _PostDetailState extends State<PostDetail> {
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.red)),
-                        Text(post.text ?? ''),
+                        Text(post.text ?? 'Không có lời nhắn'),
                         ListTile(
                           leading: CircleAvatar(
                             backgroundImage:
@@ -109,7 +109,7 @@ class _PostDetailState extends State<PostDetail> {
                         ListTile(
                           leading: Icon(Icons.calendar_today),
                           title:
-                              Text(post.createAt.toString() ?? 'Chưa cập nhật'),
+                              Text(formatDate(post.createAt ?? DateTime.now())),
                         ),
                         ListTile(
                           leading: Icon(Icons.location_pin),

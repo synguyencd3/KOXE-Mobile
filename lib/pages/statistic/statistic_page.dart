@@ -5,11 +5,6 @@ import 'package:pie_chart/pie_chart.dart';
 
 import '../loading.dart';
 
-// var dataMap = <String, dynamic>{
-//   'Toyota Corolla': [12,2412043],
-//   'Honda crv': [4,139111],
-//   'name 1': [4, 22456]
-// };
 
 class ChartData {
   ChartData(this.x, this.y);
@@ -26,7 +21,7 @@ class Statistic extends StatefulWidget {
 class _StatisticState extends State<Statistic> {
   Map<String, Map<String, dynamic>> invoicesMap= {};
   List<ChartData> chartData = [];
-  DateTime time = DateTime.now().subtract(Duration(days: 30));
+  DateTime time = DateTime.now();
   Map<String, dynamic> pieData ={};
 
   @override
@@ -38,7 +33,7 @@ class _StatisticState extends State<Statistic> {
 
   void getStat() async {
     var data = await StatisticService.getStatistic("${time.year}-${time.month}-${time.day}");
-    var topData = await StatisticService.getTop("${time.year}-${time.month}-${time.day}");
+    var topData = await StatisticService.getTop(time.year,time.month,time.day);
     print(topData);
     setState(() {
       invoicesMap=data;
@@ -172,7 +167,7 @@ class _StatisticState extends State<Statistic> {
                )
                ).toList(),),
             ),
-            pieData.isEmpty ? SizedBox(height: 0,): Card(child: Padding(
+            pieData.isEmpty  ? SizedBox(height: 0,): Card(child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: PieChart(dataMap: pieData['buyCarTop']),
             )),

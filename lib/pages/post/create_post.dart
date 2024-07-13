@@ -565,7 +565,6 @@ class _CreatePostState extends State<CreatePost> {
                 const SizedBox(height: 20),
                 TextField(
                   controller: _text,
-                  autofocus: true,
                   obscureText: false,
                   decoration: InputDecoration(
                     hintText: 'Lời nhắn cho salon',

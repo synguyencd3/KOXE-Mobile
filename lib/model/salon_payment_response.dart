@@ -8,6 +8,7 @@ class SalonPaymentModel {
   String? custormerFullname;
   String? reason;
   String? creator;
+  String? payment_method;
   int? amount;
   bool? status;
   Salon? salon;
@@ -20,6 +21,7 @@ class SalonPaymentModel {
         this.reason,
         this.creator,
         this.amount,
+        this.payment_method,
         this.status,
         this.salon});
 
@@ -31,6 +33,7 @@ class SalonPaymentModel {
     reason = json['reason'];
     creator = json['creator'];
     amount = json['amount'];
+    payment_method = json['payment_method'];
     status = json['status'];
     salon = json['salon'] != null ? new Salon.fromJson(json['salon']) : null;
   }
@@ -45,6 +48,7 @@ class SalonPaymentModel {
     data['creator'] = this.creator;
     data['amount'] = this.amount;
     data['status'] = this.status;
+    data['payment_method'] = this.payment_method;
     if (this.salon != null) {
       data['salon'] = this.salon!.toJson();
     }

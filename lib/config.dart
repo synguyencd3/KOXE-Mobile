@@ -26,6 +26,8 @@ class Config {
   static const String createSalonPaymentAPI = "/salon-payment/create";
   static const String createSalonPaymentMethodAPI = "/salon-payment/create-method";
   static const String salonPaymentMethodAPI = "/salon-payment/method";
+  static const String salonConfirmAPI = "/salon-payment/confirm-salon";
+  static const String userConfirmAPI = "/salon-payment/confirm-user";
 
   //Appointment
   static const String getAppointmentsAPI = "/appointment/get-appoint-user";
@@ -107,9 +109,9 @@ class Config {
       "/notification/read-notification-admin";
 
 //Zego
-  static const int zegoAppID = 52749659;
-  static const String zegoAppSign =
-      '686508249a354437ee8f22ad801b016981d3d62206cff615804d23559dc1eb99';
+  static const int zegoAppID = 988759543;//52749659;
+  static const String zegoAppSign = '74d217a12ea3d3f7e0414304f02815f42b6666780363cd5b499f782717cd95c9';
+    // '686508249a354437ee8f22ad801b016981d3d62206cff615804d23559dc1eb99';
 
 //statistic
   static const String statistic = "/invoice/statistics";

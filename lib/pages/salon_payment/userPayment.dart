@@ -33,6 +33,23 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
     getPayment();
   }
 
+  void confirmPayment(String id) async {
+      await SalonsService.userConfirm(id).then((value) => {
+      if (value) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Xác nhận thành công, vui lòng đợi liên hệ từ salon'),
+            backgroundColor: Colors.green,
+          ))
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Có lỗi xảy ra, vui lòng thử lại sau'),
+        backgroundColor: Colors.red,
+        ))
+    }
+      });
+      getPayment();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +89,8 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
                     Row(
                       children: [
                         Text('Trạng thái: ', style: TextStyle(fontWeight: FontWeight.bold),),
-                        Text('${obj.status ?? false ? 'Chưa thanh toán' : 'Đã thanh toán'}',
-                          style: TextStyle(color: obj.status ?? false ? Colors.red : Colors.green ),),
+                        Text('${obj.status ?? false ? 'Đã thanh toán': 'Chưa thanh toán' }',
+                          style: TextStyle(color: obj.status ?? false ? Colors.green : Colors.red ),),
                       ],
                     ),
                     Row(
@@ -81,6 +98,26 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
                         Text('Ngày tạo: ',style: TextStyle(fontWeight: FontWeight.bold),),
                         Text(obj.createDate ?? 'Không có'),
                       ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            confirmPayment(obj.id ?? "");
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Icon(Icons.check),
+                                Text('xác nhận thanh toán')
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+
                     ),
                   ],
                 ),

@@ -189,7 +189,7 @@ class SalonsService {
     var request = http.MultipartRequest("PATCH", url);
     request.headers.addAll(requestHeaders);
     request.fields['name'] = param['name'];
-    request.fields['addess'] = param['address'];
+    request.fields['address'] = param['address'];
     request.fields['email'] = param['email'];
     request.fields['phoneNumber'] = param['phoneNumber'];
     request.fields['introductionMarkdown'] = param['introductionMarkdown'];
@@ -221,17 +221,13 @@ class SalonsService {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
-    var url = Uri.https(Config.apiURL, Config.getIsSalonAPI);
+    var url = Uri.https(Config.apiURL, Config.mySalon);
 
     var response = await http.get(url, headers: requestHeaders);
     var responseData = jsonDecode(response.body);
-
+    print('salon: ${response.body}');
     if (responseData['status'] == 'success') {
-      if (responseData['salonId'] == null) {
-        return '';
-      } else {
-        return responseData['salonId'];
-      }
+        return responseData['salon']['salon_id'];
     } else {
       return '';
     }
@@ -483,6 +479,46 @@ class SalonsService {
     var response = await http.patch(url, headers: requestHeaders, body: jsonEncode(reqBody));
     var responseData = jsonDecode(response.body);
     print('response:' + response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> userConfirm(String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    var url = Uri.https(Config.apiURL, Config.userConfirmAPI);
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    print(id);
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({
+      'id': id
+    }));
+    print(response.body);
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> salonConfirm(String id) async {
+    await APIService.refreshToken();
+    var LoginInfo = await SharedService.loginDetails();
+    var url = Uri.https(Config.apiURL, Config.salonConfirmAPI);
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode({
+      'id': id
+    }));
+    print(response.body);
+    var responseData = jsonDecode(response.body);
     if (responseData['status'] == 'success') {
       return true;
     }

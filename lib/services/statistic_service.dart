@@ -33,6 +33,7 @@ class StatisticService {
     if (responseData['status'] == 'success') {
      map['maintenances'] = getTableList(invoiceStatFromJson(responseData["maintenances"]["invoiceDb"]));
      map['buyCars'] = getTableList(invoiceStatFromJson(responseData["buyCars"]["invoiceDb"]));
+     map['buyAccessory'] = getTableList(invoiceStatFromJson(responseData["buyAccessory"]["invoiceDb"]));
      map['yearly'] = getYearly(responseData['year']);
      return map;
     }
@@ -45,7 +46,7 @@ class StatisticService {
     };
     invoices.forEach((element) {
       if (!map.containsKey(element.carName)){
-       map[element.carName!]= [1, element.expense];
+       map[element.carName ?? "null"]= [1, element.expense];
       }
       else
       {
@@ -83,7 +84,7 @@ class StatisticService {
     return map;
   }
 
-  static Future<Map<String, dynamic>> getTop (String fromDate) async {
+  static Future<Map<String, dynamic>> getTop (int year, int month, int date) async {
     await APIService.refreshToken();
     String mySalon = await SalonsService.isSalon();
     var LoginInfo = await SharedService.loginDetails();
@@ -93,11 +94,12 @@ class StatisticService {
     };
 
     var url = Uri.https(Config.apiURL, Config.getTop);
-
+    print("year: ${year}");
+    print("months: ${month}");
     var response = await http.post(url,
     headers: requestHeaders,
-    body: jsonEncode({"salonId": mySalon, "fromDate": fromDate}));
-
+    body: jsonEncode({"salonId": mySalon, "year": year, "months": month}));
+    print(response.body);
     var responseData = jsonDecode(response.body);
     var map = <String, dynamic>{};
     if (responseData['status'] == 'success') {
