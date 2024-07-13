@@ -61,7 +61,7 @@ class _TransactionState extends State<Transaction> {
                           (isSalon != ''
                                   ? 'Tổng chi cho hoa tiêu: '
                                   : 'Tổng tiền nhận từ salon: ') +
-                              '${formatCurrency(transactions.revenue!)}',
+                              '${formatCurrency(transactions.revenue ?? 0)}',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                       Expanded(
