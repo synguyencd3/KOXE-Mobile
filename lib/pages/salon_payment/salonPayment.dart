@@ -43,6 +43,30 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
     });
   }
 
+  void showInvoiceDialog(BuildContext context, SalonPaymentModel obj) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Chi tiết'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  ListTile(title: Text('Ngày tạo'), subtitle: Text(obj.createDate ?? ""),),
+                  ListTile(title: Text('Số điện thoại'), subtitle: Text(obj.custormerPhone ?? "")),
+                  ListTile(title: Text('Tên khách hàng'), subtitle: Text(obj.custormerFullname ?? "")),
+                  ListTile(title: Text('Nội dung'), subtitle: Text(obj.reason ?? "")),
+                  // ListTile(title: Text('Creator'), subtitle: Text(obj.creator ?? "")),
+                  ListTile(title: Text('Phương thức'), subtitle: Text(obj.payment_method ?? "")),
+                  ListTile(title: Text('Số tiền'), subtitle: Text(obj.amount.toString() ?? "")),
+                  ListTile(title: Text('Trạng thái'), subtitle: Text(obj.status == true ? 'Hoàn thành' : 'Chưa hoàn thành')),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   void confirmPayment(String id) async {
     await SalonsService.salonConfirm(id).then((value) => {
       if (value) {
@@ -93,70 +117,73 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
               itemCount: _payments.length,
               itemBuilder: (context, index) {
                 SalonPaymentModel obj = _payments[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(obj.custormerFullname ?? 'No Name', style: const TextStyle(fontWeight: FontWeight.bold),),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Text('Điện thoại: ',style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text(obj.custormerPhone ?? 'Không có'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text('Đơn thanh toán: ',style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text(obj.reason ?? 'Không có'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text('Thành tiền: ', style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text('\$${obj.amount ?? 0}'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text('Phương thức: ', style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text(obj.payment_method ?? ""),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Trạng thái: ', style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text('${obj.status ?? false ? 'Đã thanh toán': 'Chưa thanh toán' }',
-                              style: TextStyle(color: obj.status ?? false ? Colors.green : Colors.red ),),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Ngày tạo: ',style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text(obj.createDate ?? 'Không có'),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                confirmPayment(obj.id ?? "");
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.check),
-                                    Text('xác nhận thanh toán')
-                                  ],
+                return GestureDetector(
+                  onTap: () {showInvoiceDialog(context, obj);},
+                  child: Card(
+                    child: ListTile(
+                      title: Text(obj.custormerFullname ?? 'No Name', style: const TextStyle(fontWeight: FontWeight.bold),),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Text('Điện thoại: ',style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text(obj.custormerPhone ?? 'Không có'),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text('Đơn thanh toán: ',style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text(obj.reason ?? 'Không có'),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text('Thành tiền: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text('\$${obj.amount ?? 0}'),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text('Phương thức: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text(obj.payment_method ?? ""),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text('Trạng thái: ', style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text('${obj.status ?? false ? 'Đã thanh toán': 'Chưa thanh toán' }',
+                                style: TextStyle(color: obj.status ?? false ? Colors.green : Colors.red ),),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text('Ngày tạo: ',style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text(obj.createDate ?? 'Không có'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  confirmPayment(obj.id ?? "");
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.check),
+                                      Text('xác nhận thanh toán')
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
 
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
