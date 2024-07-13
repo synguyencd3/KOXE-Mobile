@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mobile/model/salon_payment_response.dart';
 
 import '../../model/Payment_Method_Response.dart';
 import '../../services/salon_service.dart';
 import '../loading.dart';
 import 'createPayment.dart';
+import 'package:mobile/utils/utils.dart';
 
 class SalonPaymentPage extends StatefulWidget {
   @override
@@ -95,7 +97,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
                 SalonPaymentModel obj = _payments[index];
                 return Card(
                   child: ListTile(
-                    title: Text(obj.custormerFullname ?? 'No Name', style: const TextStyle(fontWeight: FontWeight.bold),),
+                    title: Text(obj.custormerFullname ?? 'Chưa có tên', style: const TextStyle(fontWeight: FontWeight.bold),),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -114,13 +116,13 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
                         Row(
                           children: [
                             const Text('Thành tiền: ', style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text('\$${obj.amount ?? 0}'),
+                            Text('${formatCurrency(obj.amount?? 0) }'),
                           ],
                         ),
                         Row(
                           children: [
                             const Text('Phương thức: ', style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text(obj.payment_method ?? ""),
+                            SingleChildScrollView(scrollDirection: Axis.horizontal,child: Text(obj.payment_method ?? "")),
                           ],
                         ),
                         Row(
@@ -133,7 +135,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
                         Row(
                           children: [
                             Text('Ngày tạo: ',style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text(obj.createDate ?? 'Không có'),
+                            Text(formatDate(DateTime.parse(obj.createDate ?? '')) ),
                           ],
                         ),
                         Row(

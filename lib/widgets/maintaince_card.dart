@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/maintaince_model.dart';
 import '../services/maintaince_service.dart';
 import 'package:mobile/services/salon_service.dart';
-
+import 'package:mobile/utils/utils.dart';
 class MaintainceCard extends StatefulWidget {
   late MaintainceModel maintaince;
 
@@ -149,7 +149,7 @@ class _MaintainceCardState extends State<MaintainceCard> {
             ),
           ),
           ListTile(
-            title: Text('Giá: ${widget.maintaince.cost}'),
+            title: Text('Giá: ${formatCurrency(widget.maintaince.cost)}'),
             leading: Icon(Icons.money),
           ),
           ListTile(

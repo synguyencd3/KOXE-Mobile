@@ -76,6 +76,7 @@ class _CreateAppointState extends State<CreateAppoint> {
       int initialPage = carsApi.indexWhere((car) => car.id == user.carId);
       //print(initialPage);
       carouselController.animateToPage(initialPage);
+      selectedCar = user.carId!;
     }
     setState(() {
       cars = carsApi;

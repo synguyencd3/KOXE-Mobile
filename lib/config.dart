@@ -116,6 +116,7 @@ class Config {
 //statistic
   static const String statistic = "/invoice/statistics";
   static const String getTop = 'invoice/get-top';
+  static const statisticNavigatorAPI = "/transactions/statistics";
 
 //Maintaince API
   static const String getAllMaintaincesAPI = "maintenance/salon";
@@ -192,4 +193,5 @@ static const String firebaseSenderId = "193303518481";
 //Authority
 static const String roleApi= "/salons/role";
 static const String assignApi = "/salons/assign-role";
+
 }
