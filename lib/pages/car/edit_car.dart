@@ -534,7 +534,7 @@ class _EditCarState extends State<EditCar> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    value: selectedWarranty != null ? selectedWarranty: null,
+                    value: selectedWarranty,
                     items: warranties.map((warranty) {
                       return DropdownMenuItem<Warranty>(
                         value: warranty,
