@@ -76,6 +76,7 @@ import 'package:mobile/pages/my_car/car_detail_customer.dart';
 import 'package:mobile/pages/my_car/car_warranty.dart';
 import 'package:mobile/pages/my_car/car_maintaince.dart';
 import 'package:mobile/pages/salon_manage_navigator.dart';
+import 'package:mobile/pages/statistic/statistic_navigator.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
@@ -192,6 +193,7 @@ class _MyAppState extends State<MyApp> {
         '/car_warranty': (context) => CarWarranty(),
         '/car_maintaince': (context) => CarMaintaince(),
         '/salon_manage_navigator': (context) => SalonManageNavigator(),
+        '/statistic_navigator': (context) => StatisticNavigator(),
       },
     );
   }

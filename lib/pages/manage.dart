@@ -167,7 +167,7 @@ class _ManageState extends State<Manage> {
                         headingIcon: Icons.discount,
                         title: 'Thống kê giao dịch hoa tiêu',
                         onTap: () {
-                          Navigator.pushNamed(context, '/salon_promotion');
+                          Navigator.pushNamed(context,'/statistic_navigator');
                         })
                   ],
                 ),
