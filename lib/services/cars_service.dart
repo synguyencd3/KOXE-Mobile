@@ -5,6 +5,7 @@ import 'package:mobile/config.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/shared_service.dart';
+import 'package:mobile/services/warranty_service.dart';
 
 import 'api_service.dart';
 
@@ -38,13 +39,12 @@ class CarsService {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      //print(data['car']);
       return Car.fromJson(data['car']); //carsFromJson(data['data']['cars']);
     }
     return null;
   }
 
-  static Future<bool?> EditCar(Car model, String id) async {
+  static Future<bool?> EditCar(Car model, String id, String? warranty) async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
     var mySalon = await SalonsService.isSalon();
@@ -116,11 +116,12 @@ class CarsService {
     var responseString = String.fromCharCodes(responseData);
     print(responseString);
     var data = jsonDecode(responseString);
+    if (warranty != null) WarrantyService.pushWarranty(warranty, id);
     if (data['status'] == 'success') return true;
     return false;
   }
 
-  static Future<bool?> NewCar(Car model) async {
+  static Future<bool?> NewCar(Car model, String? warranty) async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
     var mySalon = await SalonsService.isSalon();
@@ -163,6 +164,7 @@ class CarsService {
     var responseString = String.fromCharCodes(responseData);
     print(responseString);
     var data = jsonDecode(responseString);
+    if (warranty != null) WarrantyService.pushWarranty(warranty, data['car']['car_id']);
     if (data['status'] == 'success') return true;
     return false;
   }

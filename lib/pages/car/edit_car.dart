@@ -72,7 +72,7 @@ class _EditCarState extends State<EditCar> {
         outColor: _outColor.text,
         image: pickedFile?.map((e) => e.path).toList());
 
-    CarsService.NewCar(car).then((value) {
+    CarsService.NewCar(car, selectedWarranty?.warrantyId ).then((value) {
       if (value == true) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Tạo thành công'),
@@ -103,7 +103,7 @@ class _EditCarState extends State<EditCar> {
         image: pickedFile?.map((e) => e.path).toList());
     if (selectedWarranty != null)
       WarrantyService.pushWarranty(selectedWarranty!.warrantyId!, car!.id!);
-    CarsService.EditCar(carForm, car!.id!).then((value) {
+    CarsService.EditCar(carForm, car!.id!, selectedWarranty?.warrantyId).then((value) {
       if (value == true) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Chỉnh sửa thành công'),
@@ -116,10 +116,10 @@ class _EditCarState extends State<EditCar> {
 
   @override
   void initState() {
+    super.initState();
     Future.delayed(Duration.zero, () {
       initCar();
     });
-    super.initState();
   }
 
   void initCar() async {
@@ -129,6 +129,7 @@ class _EditCarState extends State<EditCar> {
         : ModalRoute.of(context)!.settings.arguments as Map;
     Car? oldCar = arg?['car'];
     var warrantyData = await WarrantyService.getAll();
+    warrantyData = warrantyData.where((element) => element.reuse==true).toList();
     Car? data = oldCar == null ? null : await CarsService.getDetail(oldCar.id!);
     print('set state');
     setState(() {
@@ -520,31 +521,31 @@ class _EditCarState extends State<EditCar> {
 
                 SizedBox(height: 20),
 
-                // DropdownButtonFormField<Warranty>(
-                //     decoration: InputDecoration(
-                //       labelText: 'Bảo hành',
-                //       enabledBorder: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(12),
-                //       ),
-                //       focusedBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(
-                //           width: 2,
-                //         ),
-                //         borderRadius: BorderRadius.circular(12),
-                //       ),
-                //     ),
-                //     value: selectedWarranty,
-                //     items: warranties.map((warranty) {
-                //       return DropdownMenuItem<Warranty>(
-                //         value: warranty,
-                //         child: Text(warranty.name!),
-                //       );
-                //     }).toList(),
-                //     onChanged: (value) {
-                //       setState(() {
-                //         selectedWarranty = value;
-                //       });
-                //     }),
+                DropdownButtonFormField<Warranty>(
+                    decoration: InputDecoration(
+                      labelText: 'Bảo hành',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    value: selectedWarranty != null ? selectedWarranty: null,
+                    items: warranties.map((warranty) {
+                      return DropdownMenuItem<Warranty>(
+                        value: warranty,
+                        child: Text(warranty.name!),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedWarranty = value;
+                      });
+                    }),
                 car == null
                     ? Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
