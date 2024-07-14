@@ -67,6 +67,10 @@ class _CarInvoiceListState extends State<UserCarInvoiceList> {
                                       Text('Customer: ${invoice.fullname}'),
                                       SizedBox(height: 5),
                                       Text('Phone: ${invoice.phone}'),
+                                      SizedBox(height: 5),
+                                      Text('Biển số: ${invoice.licensePlate}'),
+                                      SizedBox(height: 5),
+                                      Text('Chi phí: ${invoice.expense}')
                                     ],
                                   ),
                                 ),

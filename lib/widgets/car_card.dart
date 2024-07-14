@@ -48,6 +48,16 @@ class _CarCardState extends State<CarCard> {
               ),
               SizedBox(height: 10),
               Text(
+                'Mã số: ${widget.car.id?.substring(0,6)}',
+                // style: FlutterFlowTheme.of(context).bodyLarge.override(
+                //       fontFamily: 'Plus Jakarta Sans',
+                //       color: Color(0xFF15161E),
+                //       fontSize: 16,
+                //       fontWeight: FontWeight.w600,
+                //     ),
+              ),
+              SizedBox(height: 10),
+              Text(
                 'Mô tả: ${widget.car.description}',
                 // style: FlutterFlowTheme.of(context).labelMedium.override(
                 //       fontFamily: 'Outfit',

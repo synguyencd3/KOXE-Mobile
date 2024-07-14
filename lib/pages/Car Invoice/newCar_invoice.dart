@@ -209,7 +209,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
                   items: cars.map((Car value) {
                     return DropdownMenuItem<Car>(
                       value: value,
-                      child: Text(value.name?? ""),
+                      child: Text('${value.name} (${value.id?.substring(0,6)})'),
                     );
                   }).toList(),
                   onChanged: (value) {
