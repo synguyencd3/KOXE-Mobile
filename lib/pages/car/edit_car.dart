@@ -10,6 +10,8 @@ import 'package:mobile/services/warranty_service.dart';
 import '../../model/car_model.dart';
 import '../../model/warranty_model.dart';
 import '../../services/cars_service.dart';
+import '../../utils/utils.dart';
+import '../loading.dart';
 
 class EditCar extends StatefulWidget {
   const EditCar({super.key});
@@ -20,6 +22,7 @@ class EditCar extends StatefulWidget {
 
 class _EditCarState extends State<EditCar> {
   Car? car;
+  bool isLoading = false;
 
   //late final PageController pageController;
   List<File>? image;
@@ -27,7 +30,7 @@ class _EditCarState extends State<EditCar> {
   final picker = ImagePicker();
   List<Warranty> warranties = [];
   Warranty? selectedWarranty;
-  DateTime time = DateTime.now().subtract(Duration(days: 30));
+  DateTime time = DateTime.now().subtract(const Duration(days: 30));
 
   late final TextEditingController _name = TextEditingController();
   late final TextEditingController _description = TextEditingController();
@@ -74,7 +77,7 @@ class _EditCarState extends State<EditCar> {
 
     CarsService.NewCar(car, selectedWarranty?.warrantyId ).then((value) {
       if (value == true) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Tạo thành công'),
           backgroundColor: Colors.green,
         ));
@@ -105,7 +108,7 @@ class _EditCarState extends State<EditCar> {
       WarrantyService.pushWarranty(selectedWarranty!.warrantyId!, car!.id!);
     CarsService.EditCar(carForm, car!.id!, selectedWarranty?.warrantyId).then((value) {
       if (value == true) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Chỉnh sửa thành công'),
           backgroundColor: Colors.green,
         ));
@@ -123,6 +126,9 @@ class _EditCarState extends State<EditCar> {
   }
 
   void initCar() async {
+    setState(() {
+      isLoading = true;
+    });
     //var data = ModalRoute.of(context)!.settings.arguments as Map;
     var arg = ModalRoute.of(context)!.settings.arguments == null
         ? null
@@ -135,14 +141,15 @@ class _EditCarState extends State<EditCar> {
     setState(() {
       car = data;
       warranties = warrantyData;
+      isLoading = false;
     });
     _name.text = car?.name ?? "";
     _description.text = car?.description ?? "";
     _price.text = car?.price.toString() ?? "";
-    _brand.text = car?.brand ?? "";
+    _brand.text = car?.brand ?? carBrands[0];
     _origin.text = car?.origin ?? "";
     _model.text = car?.origin ?? "";
-    _type.text = car?.type ?? "";
+    _type.text = car?.type ?? carTypes[0];
     _capacity.text = car?.capacity.toString() ?? "";
     _door.text = car?.door.toString() ?? "";
     _seat.text = car?.seat.toString() ?? "";
@@ -169,7 +176,7 @@ class _EditCarState extends State<EditCar> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Thêm xe',
             //   style: FlutterFlowTheme.of(context).titleLarge.override(
             //   fontFamily: 'Outfit',
@@ -180,11 +187,11 @@ class _EditCarState extends State<EditCar> {
           ),
         ),
         body: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+              children: isLoading ? [Loading()] :[
                 TextFormField(
                   controller: _name,
                   decoration: InputDecoration(
@@ -192,7 +199,7 @@ class _EditCarState extends State<EditCar> {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         //  color: Color(0xFF6F61EF),
                         width: 2,
                       ),
@@ -200,7 +207,7 @@ class _EditCarState extends State<EditCar> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _price,
@@ -209,7 +216,7 @@ class _EditCarState extends State<EditCar> {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         // color: Color(0xFF6F61EF),
                         width: 2,
                       ),
@@ -218,25 +225,52 @@ class _EditCarState extends State<EditCar> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-                TextFormField(
-                  controller: _type,
+                // TextFormField(
+                //   controller: _type,
+                //   decoration: InputDecoration(
+                //     labelText: 'Loại',
+                //     enabledBorder: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(12)),
+                //     focusedBorder: OutlineInputBorder(
+                //       borderSide: const BorderSide(
+                //         // color: Color(0xFF6F61EF),
+                //         width: 2,
+                //       ),
+                //       borderRadius: BorderRadius.circular(12),
+                //     ),
+                //   ),
+                // ),
+
+                DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    labelText: 'Loại',
+                    labelText: 'Dòng xe',
                     enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        // color: Color(0xFF6F61EF),
+                      borderSide: const BorderSide(
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
+                  value: car==null? carTypes[0] : _type.text,
+                  items: carTypes.map((String brand) {
+                    return DropdownMenuItem<String>(
+                      value: brand,
+                      child: Text(brand),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _type.text = newValue ?? "";
+                    });
+                  },
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _origin,
@@ -245,7 +279,7 @@ class _EditCarState extends State<EditCar> {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         // color: Color(0xFF6F61EF),
                         width: 2,
                       ),
@@ -253,44 +287,52 @@ class _EditCarState extends State<EditCar> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
 
-                SizedBox(height: 20),
+                // TextFormField(
+                //   controller: _brand,
+                //   decoration: InputDecoration(
+                //     labelText: 'Hãng',
+                //     enabledBorder: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(12)),
+                //     focusedBorder: OutlineInputBorder(
+                //       borderSide: BorderSide(
+                //         // color: Color(0xFF6F61EF),
+                //         width: 2,
+                //       ),
+                //       borderRadius: BorderRadius.circular(12),
+                //     ),
+                //   ),
+                // ),
 
-                TextFormField(
-                  controller: _model,
+                DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    labelText: 'Mẫu mã xe',
+                    labelText: 'Hãng xe',
                     enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        // color: Color(0xFF6F61EF),
+                      borderSide: const BorderSide(
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
+                  value: car==null? carBrands[0] :_brand.text,
+                  items: carBrands.map((String brand) {
+                    return DropdownMenuItem<String>(
+                      value: brand,
+                      child: Text(brand),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _brand.text = newValue ?? "";
+                    });
+                  },
                 ),
 
-                SizedBox(height: 20),
-
-                TextFormField(
-                  controller: _brand,
-                  decoration: InputDecoration(
-                    labelText: 'Hãng',
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        // color: Color(0xFF6F61EF),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _capacity,
@@ -299,7 +341,7 @@ class _EditCarState extends State<EditCar> {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         // color: Color(0xFF6F61EF),
                         width: 2,
                       ),
@@ -308,7 +350,7 @@ class _EditCarState extends State<EditCar> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _door,
@@ -318,7 +360,7 @@ class _EditCarState extends State<EditCar> {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         // color: Color(0xFF6F61EF),
                         width: 2,
                       ),
@@ -327,7 +369,7 @@ class _EditCarState extends State<EditCar> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _seat,
@@ -337,7 +379,7 @@ class _EditCarState extends State<EditCar> {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         // color: Color(0xFF6F61EF),
                         width: 2,
                       ),
@@ -346,7 +388,7 @@ class _EditCarState extends State<EditCar> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _kilometer,
@@ -356,7 +398,7 @@ class _EditCarState extends State<EditCar> {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         // color: Color(0xFF6F61EF),
                         width: 2,
                       ),
@@ -365,7 +407,7 @@ class _EditCarState extends State<EditCar> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _gear,
@@ -374,7 +416,7 @@ class _EditCarState extends State<EditCar> {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         // color: Color(0xFF6F61EF),
                         width: 2,
                       ),
@@ -383,7 +425,7 @@ class _EditCarState extends State<EditCar> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // TextFormField(
                 //   controller: _mfg,
@@ -406,14 +448,14 @@ class _EditCarState extends State<EditCar> {
                       children: [
                         Text(
                             'Năm sản xuất: ${time.day}/${time.month}/${time.year}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                         const SizedBox(width: 10),
-                        Icon(Icons.edit),
+                        const Icon(Icons.edit),
                       ],
                     )),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _outColor,
@@ -422,7 +464,7 @@ class _EditCarState extends State<EditCar> {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12)),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         // color: Color(0xFF6F61EF),
                         width: 2,
                       ),
@@ -431,7 +473,7 @@ class _EditCarState extends State<EditCar> {
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 TextFormField(
                   controller: _description,
@@ -443,13 +485,13 @@ class _EditCarState extends State<EditCar> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(16, 24, 16, 12),
+                        const EdgeInsetsDirectional.fromSTEB(16, 24, 16, 12),
                   ),
                   // style: FlutterFlowTheme.of(context).bodyMedium.override(
                   //       fontFamily: 'Plus Jakarta Sans',
@@ -461,17 +503,17 @@ class _EditCarState extends State<EditCar> {
                   minLines: 6,
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
 
                 GestureDetector(
                   onTap: () => pickImage(),
                   child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                       child: Container(
                         width: double.infinity,
-                        constraints: BoxConstraints(
+                        constraints: const BoxConstraints(
                           maxWidth: 500,
                         ),
                         decoration: BoxDecoration(
@@ -482,7 +524,7 @@ class _EditCarState extends State<EditCar> {
                             width: 1,
                           ),
                         ),
-                        child: Padding(
+                        child: const Padding(
                           padding: EdgeInsets.all(8),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
@@ -511,7 +553,7 @@ class _EditCarState extends State<EditCar> {
                       )),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 Container(
                     width: double.infinity,
@@ -519,7 +561,7 @@ class _EditCarState extends State<EditCar> {
                         ? const Text('Vui lòng chọn ảnh')
                         : Text('${pickedFile!.length} ảnh đã chọn')),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 DropdownButtonFormField<Warranty>(
                     decoration: InputDecoration(
@@ -528,7 +570,7 @@ class _EditCarState extends State<EditCar> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(12),
@@ -548,9 +590,9 @@ class _EditCarState extends State<EditCar> {
                     }),
                 car == null
                     ? Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
                         child: OutlinedButton(
-                          child: Text('Thêm xe'),
+                          child: const Text('Thêm xe'),
                           onPressed: () {
                             NewCar();
                           },
@@ -579,9 +621,9 @@ class _EditCarState extends State<EditCar> {
                         // ),
                       )
                     : Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
                         child: OutlinedButton(
-                          child: Text('thay đổi'),
+                          child: const Text('thay đổi'),
                           onPressed: () {
                             EditCar();
                           },

@@ -92,6 +92,10 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                           Text('Tên khách hàng: ${invoice.fullname}'),
                           SizedBox(height: 5),
                           Text('Số điện thoại: ${invoice.phone}'),
+                          SizedBox(height: 5),
+                          Text('Biển số: ${invoice.licensePlate}'),
+                          SizedBox(height: 5),
+                          Text('Chi phí: ${invoice.expense}')
                         ],
                       ),
                     ),

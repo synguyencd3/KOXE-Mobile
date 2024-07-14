@@ -21,3 +21,42 @@ String formatDate(DateTime dateStr) {
   return formattedDate;
 }
 
+final List<String> carBrands = [
+  'Toyota',
+  'Honda',
+  'Nissan',
+  'Subaru',
+  'Ford',
+  'Chevrolet',
+  'BMW',
+  'Mercedes',
+  'Audi',
+  'Volkswagen',
+  'Ferrari',
+  'Aston Martin',
+  'Saab',
+  'Alfa Romeo',
+  'Renault',
+  'Lamborghini',
+  'Khác'
+];
+
+final List<String> carTypes = [
+  'Sedan',
+  'SUV',
+  'Crossover',
+  'Coupe',
+  'Convertible',
+  'Hatchback',
+  'Wagon',
+  'Van',
+  'Truck',
+  'Minivan',
+  'Crew Cab Pickup',
+  'Extended Cab Pickup',
+  'Regular Cab Pickup',
+  'Cargo Van',
+  'Passenger Van',
+  'Compact',
+  'Subcompact',
+];
