@@ -35,6 +35,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
   late final _months= TextEditingController();
   late final _policy= TextEditingController();
  // late final _note = TextEditingController();
+  bool _showDropdown = false;
   Car? _selectedCar;
 
   Warranty? warranty;
@@ -111,6 +112,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
       limitKilometer: int.parse(_limitKilometers.text),
       months: int.parse(_months.text),
       policy: _policy.text,
+      reuse: _showDropdown,
      // car: _selectedCar
       //note: _note.text
     );
@@ -192,16 +194,16 @@ class _WarrantyFormState extends State<WarrantyForm> {
                   },
 
                 ),
-                // TextFormField(
-                //   decoration: InputDecoration(labelText: 'Note'),
-                //   controller: _note,
-                //   validator: (value) {
-                //     if (value!.isEmpty) {
-                //       return 'Please enter a policy';
-                //     }
-                //     return null;
-                //   },
-                // ),
+                CheckboxListTile(
+                  value: _showDropdown,
+                  title: const Text('Sử dụng riêng cho xe bất kì'),
+                  onChanged: (value) {
+                    setState(() {
+                      _showDropdown = value!;
+                    });
+                  },
+                ),
+                _showDropdown ?
                 DropdownButtonFormField<Car>(
                   decoration: InputDecoration(labelText: 'Chọn xe'),
                   value: _selectedCar,
@@ -216,7 +218,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
                       _selectedCar = value;
                     });
                   },
-                ),
+                ) : Container(),
                 warranty == null ?
                 TextButton(
                   onPressed: () {
