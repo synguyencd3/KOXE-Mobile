@@ -163,6 +163,7 @@ class _ManageState extends State<Manage> {
                         onTap: () {
                           Navigator.pushNamed(context, '/salon_promotion');
                         }): Container(),
+
                   ],
                 ),
               );

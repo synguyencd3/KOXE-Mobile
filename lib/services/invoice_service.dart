@@ -13,9 +13,9 @@ class InvoiceService{
   Future<List<InvoiceModel>> getAllInvoices() async {
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
+      // 'Content-Type': 'application/json',
+      // 'Accept': '*/*',
+      // 'Access-Control-Allow-Origin': "*",
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 

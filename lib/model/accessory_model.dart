@@ -20,9 +20,9 @@ class AccessoryModel {
   });
 
   AccessoryModel.fromJson(Map<String, dynamic> json)
-      : id = json['accessory_id'],
+      : id = json.containsKey('accessory_id') ? json['accessory_id'] : null,
         name = json['name'],
-        manufacturer = json['manufacturer'],
+        manufacturer =json.containsKey('manufacturer')  ? json['manufacturer']: null,
         quantity = json['quantity'],
         price = json['price'];
 

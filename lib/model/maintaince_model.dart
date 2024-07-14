@@ -15,9 +15,9 @@ class MaintainceModel {
   });
 
   MaintainceModel.fromJson(Map<String, dynamic> json)
-      : description =  json['description'] != null ? json['description'] : '',
+      : description =  json.containsKey('description') ? json['description'] : '',
         name = json['name'],
-        id = json['maintenance_id'],
+        id = json.containsKey('maintenance_id') ? json['maintenance_id'] : null,
         cost = json['cost'];
 
   Map<String, dynamic> toJson() => {

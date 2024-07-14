@@ -31,6 +31,12 @@ class SalonManageNavigator extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(context, '/connection');
               }),
+          text_card(
+              headingIcon: Icons.area_chart,
+              title: 'Thống kê giao dịch hoa tiêu',
+              onTap: () {
+                Navigator.pushNamed(context,'/statistic_navigator');
+              })
         ],
       )
     );

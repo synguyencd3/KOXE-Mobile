@@ -7,7 +7,7 @@ class UserPostModel {
   String userId;
   String fullname;
   String? avatar;
-  int? avgRating;
+  double? avgRating;
   int? completedTransactions;
 
   UserPostModel(

@@ -57,13 +57,13 @@ class _TransactionState extends State<Transaction> {
                   )
                 : Column(
                     children: [
-                      Text(
-                          (isSalon != ''
-                                  ? 'Tổng chi cho hoa tiêu: '
-                                  : 'Tổng tiền nhận từ salon: ') +
-                              '${formatCurrency(transactions.revenue ?? 0)}',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      // Text(
+                      //     (isSalon != ''
+                      //             ? 'Tổng chi cho hoa tiêu: '
+                      //             : 'Tổng tiền nhận từ salon: ') +
+                      //         '${formatCurrency(transactions.revenue!)}',
+                      //     style: TextStyle(
+                      //         fontSize: 20, fontWeight: FontWeight.bold)),
                       Expanded(
                         child: ListView.builder(
                             itemCount: transactions.transaction!.length,

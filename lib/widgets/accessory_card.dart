@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/accessory_model.dart';
 
 import '../services/accessory_service.dart';
+import 'package:mobile/utils/utils.dart';
 
 class AccessoryCard extends StatefulWidget {
   late AccessoryModel accessory;
@@ -126,7 +127,7 @@ class _AccessoryCardState extends State<AccessoryCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Nhà sản xuất: ' + (widget.accessory.manufacturer ?? ''), style: TextStyle(fontSize: 16),),
-                Text('Giá: ' + widget.accessory.price.toString(), style: TextStyle(fontSize: 16),),
+                Text('Giá: ' + '${formatCurrency(widget.accessory.price ?? 0) }', style: TextStyle(fontSize: 16),),
               ],
             ),
 

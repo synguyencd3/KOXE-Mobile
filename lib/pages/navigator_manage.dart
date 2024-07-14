@@ -72,6 +72,12 @@ class _NavigatorManageState extends State<NavigatorManage> {
                     onTap: () {
                       Navigator.pushNamed(context, '/salon_group');
                     }),
+                text_card(
+                    headingIcon: Icons.area_chart,
+                    title: 'Thống kê giao dịch hoa tiêu',
+                    onTap: () {
+                      Navigator.pushNamed(context,'/statistic_navigator');
+                    })
               ],
             );
           }),

@@ -11,6 +11,7 @@ import 'package:mobile/services/cars_service.dart';
 
 import '../loading.dart';
 import 'package:mobile/utils/utils.dart';
+import 'package:mobile/utils/utils.dart';
 
 class CarDetail extends StatefulWidget {
   @override
@@ -181,7 +182,7 @@ class _CarDetailState extends State<CarDetail> {
                                   color: Colors.grey[800], fontSize: 16)),
                         ),
                         ListTile(
-                          title: Text('Gear',
+                          title: Text('Hộp số',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           trailing: Text(
                               car.gear != null
@@ -194,7 +195,7 @@ class _CarDetailState extends State<CarDetail> {
                           title: Text('Ngày sản xuất',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           trailing: Text(
-                              car.mfg != null ? '${car.mfg}' : 'Chưa cập nhật',
+                              car.mfg != null ? '${formatDate(DateTime.parse(car.mfg ?? ''))}' : 'Chưa cập nhật',
                               style: TextStyle(
                                   color: Colors.grey[800], fontSize: 16)),
                         ),

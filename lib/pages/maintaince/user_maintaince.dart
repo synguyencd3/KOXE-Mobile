@@ -16,15 +16,14 @@ class UserMaintaince extends StatefulWidget {
 class _UserMaintainceState extends State<UserMaintaince> {
   late List<InvoiceModel> invoices = [];
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   Future<void> getAllInvoices() async {
-    List<InvoiceModel> invoicesAPI = await InvoiceService().getAllInvoices();
-    invoices = invoicesAPI;
+    List<InvoiceModel>? data = ModalRoute.of(context)!.settings.arguments as List<InvoiceModel>?;
+    if (data != null) {
+      print('data is not null');
+    } else {
+      List<InvoiceModel> invoicesAPI = await InvoiceService().getAllInvoices();
+      invoices = invoicesAPI;
+    }
   }
 
   @override
@@ -33,19 +32,18 @@ class _UserMaintainceState extends State<UserMaintaince> {
         appBar: AppBar(
           title: Text('Lịch sử bảo dưỡng'),
         ),
-        body: invoices.isEmpty
-            ? FutureBuilder(
-                future: getAllInvoices(),
-                builder: (context, snapshot) {
-                  return Center(
-                    child: Text('Không có lịch sử bảo dưỡng'),
-                  );
-                })
-            : ListView.builder(
-                itemCount: invoices.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return InvoiceCard(invoice: invoices[index]);
-                }));
+        body: FutureBuilder(
+            future: getAllInvoices(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Loading();
+              }
+              return ListView.builder(
+                  itemCount: invoices.length,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return InvoiceCard(invoice: invoices[index]);
+                  });
+            }));
   }
 }

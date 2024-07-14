@@ -1,4 +1,6 @@
+
 import 'package:mobile/model/accessory_request_model.dart';
+import 'package:mobile/model/maintain_invoice_model.dart';
 import 'package:mobile/model/maintaince_request_model.dart';
 import 'package:mobile/model/maintaince_model.dart';
 import 'package:mobile/model/accessory_model.dart';
@@ -9,7 +11,6 @@ List<InvoiceModel> invoiceFromJson(dynamic str) =>
 class InvoiceModel {
   String? invoiceId;
   String? id;
-  String? type;
   int? expense;
   String? createAt;
   String fullName;
@@ -21,10 +22,9 @@ class InvoiceModel {
   List<MaintainceRequestModel>? services;
   List<AccessoryRequestModel>? accessoriesRequest;
   List<AccessoryModel>? accessories;
-  late List<MaintainceModel> maintainces = [];
+  late List<MaintainInvoiceModel> maintainces = [];
 
   InvoiceModel({
-    this.type,
     this.invoiceId,
     this.expense,
     this.createAt,
@@ -39,26 +39,22 @@ class InvoiceModel {
   });
 
   InvoiceModel.fromJson(Map<String, dynamic> json)
-      : type = json['type'],
-        id = json['invoice_id'],
+      : id = json['invoice_id'],
         expense = json['total'],
         createAt = json['invoiceDate'],
         fullName = json['fullname'],
         email = json['email'],
         phone = json['phone'],
         note = json['note'],
-        maintainces = List<MaintainceModel>.from(json['maintenanceServices']
-            .map((x) => MaintainceModel.fromJson(x))),
         licensePlate = json['licensePlate'],
-        accessories = json['accessories'] != null
-            ? List<AccessoryModel>.from(
-                json['accessories'].map((x) => AccessoryModel.fromJson(x)))
-            : [],
-        carName = json['carName'];
+        carName = json['carName'],
+        maintainces = maintainceInvoiceFromJson(json['maintenanceServices']),
+        accessories = accessoriesFromJson(json['accessories']);
+
+
 
   Map<String, dynamic> toJson() => {
-        'invoiceId' : invoiceId,
-        'type': type,
+        'invoiceId': invoiceId,
         'expense': expense,
         'fullname': fullName,
         'email': email,
