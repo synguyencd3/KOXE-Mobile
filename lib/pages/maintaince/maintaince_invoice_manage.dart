@@ -6,6 +6,7 @@ import 'package:mobile/model/accessory_request_model.dart';
 import 'package:mobile/model/invoice_model.dart';
 import 'package:mobile/model/maintaince_model.dart';
 import 'package:mobile/model/maintaince_request_model.dart';
+import 'package:mobile/model/payment_request.dart';
 import 'package:mobile/pages/loading.dart';
 import 'package:mobile/services/accessory_service.dart';
 import 'package:mobile/services/invoice_service.dart';
@@ -70,6 +71,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
   Future<void> getAllMaintainces() async {
     List<MaintainceModel> maintaincesAPI =
     await MaintainceService().getAllMaintainces();
+    //print(maintaincesAPI.length);
     maintainces = maintaincesAPI;
   }
 
@@ -123,9 +125,9 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                         dropdownMenuEntries:
                         carInvoices.map<DropdownMenuEntry<CarInvoice>>((CarInvoice menu) {
                           return DropdownMenuEntry<CarInvoice>(
-                              value: menu,
-                              label: '${menu.phone}\n${menu.invoiceId}',
-                              );
+                            value: menu,
+                            label: '${menu.phone}\n${menu.invoiceId}',
+                          );
                         }).toList(),
                       ),
                       TextField(
