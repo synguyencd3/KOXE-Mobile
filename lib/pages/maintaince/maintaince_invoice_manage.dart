@@ -6,7 +6,6 @@ import 'package:mobile/model/accessory_request_model.dart';
 import 'package:mobile/model/invoice_model.dart';
 import 'package:mobile/model/maintaince_model.dart';
 import 'package:mobile/model/maintaince_request_model.dart';
-import 'package:mobile/model/payment_request.dart';
 import 'package:mobile/pages/loading.dart';
 import 'package:mobile/services/accessory_service.dart';
 import 'package:mobile/services/invoice_service.dart';
@@ -16,7 +15,9 @@ import 'package:mobile/widgets/accessory_checkbox.dart';
 import 'package:mobile/widgets/invoice_card.dart';
 import 'package:mobile/widgets/maintaince_checkbox.dart';
 
+import '../../model/CarInvoice_response.dart';
 import '../../model/Payment_Method_Response.dart';
+import '../../services/CarInvoice_Service.dart';
 
 class MaintainceInvoiceManage extends StatefulWidget {
   const MaintainceInvoiceManage({super.key});
@@ -32,6 +33,8 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
   List<AccessoryModel> accessories = [];
   List<PaymentMethod> _methods = [];
   String? _selectedOption;
+  List<CarInvoice> carInvoices = [];
+  CarInvoice? selectedInvoice ;
 
   @override
   void initState() {
@@ -41,6 +44,15 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
       getAllAccessories();
       getAllMaintainces();
       _fetchMethod();
+      getInvoices();
+    });
+  }
+
+  void getInvoices() async {
+    var data = await CarInvoiceService.getAll(null);
+    data=data.where((element) => element.done==true).toList();
+    setState(() {
+      carInvoices = data;
     });
   }
 
@@ -58,7 +70,6 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
   Future<void> getAllMaintainces() async {
     List<MaintainceModel> maintaincesAPI =
     await MaintainceService().getAllMaintainces();
-    //print(maintaincesAPI.length);
     maintainces = maintaincesAPI;
   }
 
@@ -97,6 +108,26 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      DropdownMenu<CarInvoice>(
+                        hintText: "Chọn phiếu thanh toán",
+                        width: 286,
+                        label: const Text('Phiếu thanh toán'),
+                        onSelected: (CarInvoice? menu) {
+                          selectedInvoice = menu!;
+                          licenseController.text = selectedInvoice?.licensePlate ?? "";
+                          carNameController.text = selectedInvoice?.carName ?? "";
+                          noteController.text = selectedInvoice?.note ?? "";
+                          fullNameController.text = selectedInvoice?.fullname ?? "";
+                          phoneController.text = selectedInvoice?.phone ?? "";
+                        },
+                        dropdownMenuEntries:
+                        carInvoices.map<DropdownMenuEntry<CarInvoice>>((CarInvoice menu) {
+                          return DropdownMenuEntry<CarInvoice>(
+                              value: menu,
+                              label: '${menu.phone}\n${menu.invoiceId}',
+                              );
+                        }).toList(),
+                      ),
                       TextField(
                         controller: licenseController,
                         decoration: InputDecoration(
@@ -215,6 +246,7 @@ class _MaintainceInvoiceManageState extends State<MaintainceInvoiceManage> {
                     note: noteController.text,
                     services: nonNullSelectedMaintainces,
                     accessoriesRequest: nonNullSelectedAccessories,
+                    invoiceId : selectedInvoice?.invoiceId
                   );
                   bool response = await addInvoice(invoice, _selectedOption ?? "");
                   if (response) {

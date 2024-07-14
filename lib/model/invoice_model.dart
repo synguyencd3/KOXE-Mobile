@@ -7,6 +7,7 @@ List<InvoiceModel> invoiceFromJson(dynamic str) =>
     List<InvoiceModel>.from((str).map((x) => InvoiceModel.fromJson(x)));
 
 class InvoiceModel {
+  String? invoiceId;
   String? id;
   String? type;
   int? expense;
@@ -24,6 +25,7 @@ class InvoiceModel {
 
   InvoiceModel({
     this.type,
+    this.invoiceId,
     this.expense,
     this.createAt,
     required this.fullName,
@@ -55,6 +57,7 @@ class InvoiceModel {
         carName = json['carName'];
 
   Map<String, dynamic> toJson() => {
+        'invoiceId' : invoiceId,
         'type': type,
         'expense': expense,
         'fullname': fullName,
