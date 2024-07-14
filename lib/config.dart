@@ -116,7 +116,8 @@ class Config {
 //statistic
   static const String statistic = "/invoice/statistics";
   static const String getTop = 'invoice/get-top';
-  static const statisticNavigatorAPI = "/transactions/statistics";
+  static const String statisticNavigatorAPI = "/transactions/statistics";
+  static const String statisticInvoiceAPI = "/invoice/get-invoice";
 
 //Maintaince API
   static const String getAllMaintaincesAPI = "maintenance/salon";

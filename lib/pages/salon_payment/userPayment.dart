@@ -4,6 +4,7 @@ import 'package:mobile/model/salon_payment_response.dart';
 import '../../services/salon_service.dart';
 import '../loading.dart';
 import 'createPayment.dart';
+import 'package:mobile/utils/utils.dart';
 
 class UserPaymentPage extends StatefulWidget {
   @override
@@ -125,7 +126,7 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
                                   'Thành tiền: ',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Text('\$${obj.amount ?? 0}'),
+                                Text(formatCurrency(obj.amount ?? 0)),
                               ],
                             ),
                             Row(
@@ -149,7 +150,7 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
                                   'Ngày tạo: ',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Text(obj.createDate ?? 'Không có'),
+                                Text(formatDate(DateTime.parse(obj.createDate ?? ""))),
                               ],
                             ),
                             Row(

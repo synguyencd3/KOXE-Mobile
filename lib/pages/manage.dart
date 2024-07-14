@@ -163,12 +163,7 @@ class _ManageState extends State<Manage> {
                         onTap: () {
                           Navigator.pushNamed(context, '/salon_promotion');
                         }): Container(),
-                    text_card(
-                        headingIcon: Icons.discount,
-                        title: 'Thống kê giao dịch hoa tiêu',
-                        onTap: () {
-                          Navigator.pushNamed(context,'/statistic_navigator');
-                        })
+
                   ],
                 ),
               );

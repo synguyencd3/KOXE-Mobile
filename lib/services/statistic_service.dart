@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/config.dart';
 import 'package:mobile/model/car_model.dart';
 import 'package:mobile/model/invoice_stat_model.dart';
+import 'package:mobile/model/statistic_user_model.dart';
 import 'package:mobile/model/transaction_navigator_model.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/salon_service.dart';
@@ -152,9 +153,47 @@ class StatisticService {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      //print(data);
       return TransactionNavigatorModel.fromJson(data['transaction']);
     }
     return TransactionNavigatorModel(
         navigators: [], totalAmount: 0, totalComplete: 0);
+  }
+
+  static Future<StatisticUserModel> getTotalInvoice(
+      String? year, String? month, String? quarter) async {
+    await APIService.refreshToken();
+    var loginDetail = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer ${loginDetail?.accessToken}',
+    };
+    if (year=='Năm'){
+      year = null;
+    }
+    if (month == 'Tháng'){
+      month = null;
+    }
+    if (quarter == 'Quý'){
+      quarter = null;
+    }
+    final queryParameters = {
+      'year': year,
+      'month': month,
+      'quarter' : quarter,
+    };
+    print(queryParameters);
+    var url =
+        Uri.https(Config.apiURL, Config.statisticInvoiceAPI, queryParameters);
+    var response = await http.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      //print(data);
+      return StatisticUserModel.fromJson(data);
+    }
+    return StatisticUserModel(
+        totalExpense: 0,
+        totalBuyCar: 0,
+        totalAccessory: 0,
+        totalMaintenance: 0);
   }
 }

@@ -8,12 +8,12 @@ class NavigatorModel{
   final String phone;
   final int numComplete;
 
-  NavigatorModel({required this.amount, required this.name, required this.phone, required this.numComplete});
+  NavigatorModel({required this.amount, required this.numComplete, required this.name, required this.phone});
 
   NavigatorModel.fromJson(Map<String, dynamic> json)
       : amount = json['amount'],
-        name = json.containsKey('user') ? json['user']['name'] : json['salon']['name'],
-        phone = json.containsKey('user') ? json['user']['phone'] : json['salon']['phone'],
+        name =  json['user']['name'] ,
+        phone =  json['user']['phone'] ,
         numComplete = json['numOfCompletedTran'];
 
 }

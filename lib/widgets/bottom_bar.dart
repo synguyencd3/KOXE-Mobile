@@ -22,19 +22,19 @@ class _BottomBarState extends State<BottomBar> {
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Home',
+          label: 'Trang chủ',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.car_crash),
-          label: 'Car',
+          label: 'Xem xe',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.calendar_today),
-          label: 'Appointment',
+          label: 'Lịch hẹn',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
-          label: 'Profile',
+          label: 'Hồ sơ',
         ),
       ],
     );
