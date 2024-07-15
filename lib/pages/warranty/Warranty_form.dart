@@ -108,7 +108,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
       policy: _policy.text,
    //   car: _selectedCar
     );
-    var maintenanceList = _controller.selectedOptions.map((e) => e.value).toList();
+    var maintenanceList = _controller.selectedOptions.map((e) => e.value).toList() ;
     WarrantyService.updateWarranty(warrantyForm, warranty!.warrantyId!, maintenanceList).then((value) {
       if (value!) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -139,8 +139,8 @@ class _WarrantyFormState extends State<WarrantyForm> {
      // car: _selectedCar
       //note: _note.text
     );
-    var maintenanceList = _controller.selectedOptions.map((e) => e.value).toList();
-    WarrantyService.NewWarranty(model, maintenanceList).then((value) {
+   // var maintenanceList = _controller.selectedOptions.map((e) => e.value).toList();
+    WarrantyService.NewWarranty(model).then((value) {
       if (value!) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -226,7 +226,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
                 ),
                 warranty==null? Container() :
                 MultiSelectDropDown(
-                  showClearIcon: true,
+                  //showClearIcon: true,
                   controller: _controller,
                   borderRadius: 0,
                   options: maintainces.map((e) => ValueItem(label: e.name, value: e.id)).toList(),
@@ -235,7 +235,12 @@ class _WarrantyFormState extends State<WarrantyForm> {
                   dropdownHeight: 300,
                   optionTextStyle: const TextStyle(fontSize: 16),
                   selectedOptionIcon: const Icon(Icons.check_circle),
-                  onOptionSelected: (List<ValueItem> selectedOptions) {  }
+                  onOptionSelected: (List<ValueItem> selectedOptions) {  },
+                  onOptionRemoved: (index, option) {
+                    if (warranty != null) {
+                      WarrantyService.removeMaintenance(warranty!.warrantyId ?? "", option.value);
+                    }
+                  }
                 ),
                 CheckboxListTile(
                   value: _showDropdown,
