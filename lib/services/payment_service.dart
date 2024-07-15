@@ -5,7 +5,7 @@ import 'package:mobile/config.dart';
 import 'package:mobile/model/purchased_package.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:mobile/services/shared_service.dart';
-import 'package:http_retry/http_retry.dart';
+//import 'package:http_retry/http_retry.dart';
 
 class PaymentService {
    static var client = http.Client();

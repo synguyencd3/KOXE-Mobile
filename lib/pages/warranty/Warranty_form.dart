@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/warranty_service.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 import '../../model/car_model.dart';
+import '../../model/maintaince_model.dart';
 import '../../model/warranty_model.dart';
+import '../../services/maintaince_service.dart';
 
 
 
@@ -37,6 +42,8 @@ class _WarrantyFormState extends State<WarrantyForm> {
  // late final _note = TextEditingController();
   bool _showDropdown = false;
   Car? _selectedCar;
+  List<MaintainceModel> maintainces = [];
+  final MultiSelectController _controller = MultiSelectController();
 
   Warranty? warranty;
 
@@ -45,6 +52,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
+      getAllMaintainces();
       initWarranty();
       getCars();
     }); 
@@ -59,6 +67,18 @@ class _WarrantyFormState extends State<WarrantyForm> {
     });
   }
 
+  Future<void> getAllMaintainces() async {
+    List<MaintainceModel> maintaincesAPI =
+    await MaintainceService().getAllMaintainces();
+    print(maintaincesAPI.length);
+    setState(() {
+      maintainces = maintaincesAPI;
+      _controller.setOptions(maintainces.map((e) => ValueItem(label: e.name, value: e.id)).toList());
+      var selectedSet = warranty?.maintenance?.map((e) => e.id).toSet();
+      _controller.setSelectedOptions(_controller.options.where((element) => selectedSet?.contains(element.value) == true).toList());
+    });
+  }
+
   void initWarranty() {
     try {
       var data = ModalRoute
@@ -67,7 +87,9 @@ class _WarrantyFormState extends State<WarrantyForm> {
           .arguments as Map;
       setState(() {
         warranty = data['warranty'];
+       // _controller.setOptions(warranty?.maintenance!.map((e) => ValueItem(label: e.name, value: e.id)).toList() ?? []);
       });
+      print(jsonEncode(warranty));
       _name.text = warranty?.name ?? "";
       _limitKilometers.text = warranty?.limitKilometer.toString() ?? "";
       _months.text = warranty?.months.toString() ?? "";
@@ -86,7 +108,8 @@ class _WarrantyFormState extends State<WarrantyForm> {
       policy: _policy.text,
    //   car: _selectedCar
     );
-    WarrantyService.updateWarranty(warrantyForm, warranty!.warrantyId!).then((value) {
+    var maintenanceList = _controller.selectedOptions.map((e) => e.value).toList() ;
+    WarrantyService.updateWarranty(warrantyForm, warranty!.warrantyId!, maintenanceList).then((value) {
       if (value!) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -116,6 +139,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
      // car: _selectedCar
       //note: _note.text
     );
+   // var maintenanceList = _controller.selectedOptions.map((e) => e.value).toList();
     WarrantyService.NewWarranty(model).then((value) {
       if (value!) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -194,6 +218,30 @@ class _WarrantyFormState extends State<WarrantyForm> {
                   },
 
                 ),
+                warranty==null? Container() :
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Các gói bảo dưỡng đi kèm'),
+                  enabled: false,
+                  readOnly: true,
+                ),
+                warranty==null? Container() :
+                MultiSelectDropDown(
+                  //showClearIcon: true,
+                  controller: _controller,
+                  borderRadius: 0,
+                  options: maintainces.map((e) => ValueItem(label: e.name, value: e.id)).toList(),
+                  selectionType: SelectionType.multi,
+                  chipConfig: const ChipConfig(wrapType: WrapType.wrap),
+                  dropdownHeight: 300,
+                  optionTextStyle: const TextStyle(fontSize: 16),
+                  selectedOptionIcon: const Icon(Icons.check_circle),
+                  onOptionSelected: (List<ValueItem> selectedOptions) {  },
+                  onOptionRemoved: (index, option) {
+                    if (warranty != null) {
+                      WarrantyService.removeMaintenance(warranty!.warrantyId ?? "", option.value);
+                    }
+                  }
+                ),
                 CheckboxListTile(
                   value: _showDropdown,
                   title: const Text('Sử dụng riêng cho xe bất kì'),
@@ -220,6 +268,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
                   },
                 ) : Container(),
                 warranty == null ?
+
                 TextButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {

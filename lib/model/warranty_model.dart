@@ -1,5 +1,7 @@
 
 
+import 'maintaince_model.dart';
+
 List<Warranty> warrantiesFromJson(dynamic str) =>
     List<Warranty>.from((str).map((x) => Warranty.fromJson(x)));
 
@@ -13,7 +15,10 @@ class Warranty {
   String? policy;
   String? note;
 //  Car? car;
- // Salon? salon;
+ // Salon?
+  List<MaintainceModel>? maintenance;
+
+
 
   Warranty(
       {this.warrantyId,
@@ -37,6 +42,7 @@ class Warranty {
     policy = json['policy'];
     note = json['note'];
    // salon = json['salon'] != null ? new Salon.fromJson(json['salon']) : null;
+    maintenance = maintainceFromJson(json['maintenance']);
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +54,7 @@ class Warranty {
     data['limit_kilometer'] = this.limitKilometer ;
     data['months'] = this.months;
     data['policy'] = this.policy;
+    data['maintenance'] = this.maintenance;
    // data['carId'] = this.car?.id;
    // data['note'] = this.note;
     // if (this.salon != null) {
