@@ -61,6 +61,7 @@ class Config {
   static const String updateWarranty = '/warranty/update';
   static const String deleteWarranty = '/warranty/delete';
   static const String pushWarranty = '/warranty/push-warranty';
+  static const String addMaintencance = '/warranty/add-maintenance';
 
   //Google API
   static const String client_id =
