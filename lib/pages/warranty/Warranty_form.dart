@@ -67,11 +67,16 @@ class _WarrantyFormState extends State<WarrantyForm> {
     });
   }
 
-  void getAllMaintainces() async {
+  Future<void> getAllMaintainces() async {
     List<MaintainceModel> maintaincesAPI =
     await MaintainceService().getAllMaintainces();
     print(maintaincesAPI.length);
-    maintainces = maintaincesAPI;
+    setState(() {
+      maintainces = maintaincesAPI;
+      _controller.setOptions(maintainces.map((e) => ValueItem(label: e.name, value: e.id)).toList());
+      var selectedSet = warranty?.maintenance?.map((e) => e.id).toSet();
+      _controller.setSelectedOptions(_controller.options.where((element) => selectedSet?.contains(element.value) == true).toList());
+    });
   }
 
   void initWarranty() {
@@ -83,9 +88,6 @@ class _WarrantyFormState extends State<WarrantyForm> {
       setState(() {
         warranty = data['warranty'];
        // _controller.setOptions(warranty?.maintenance!.map((e) => ValueItem(label: e.name, value: e.id)).toList() ?? []);
-       _controller.setOptions(maintainces.map((e) => ValueItem(label: e.name, value: e.id)).toList());
-       
-        _controller.setSelectedOptions()
       });
       print(jsonEncode(warranty));
       _name.text = warranty?.name ?? "";
@@ -216,25 +218,24 @@ class _WarrantyFormState extends State<WarrantyForm> {
                   },
 
                 ),
+                warranty==null? Container() :
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Các gói bảo dưỡng đi kèm'),
                   enabled: false,
                   readOnly: true,
                 ),
+                warranty==null? Container() :
                 MultiSelectDropDown(
                   showClearIcon: true,
                   controller: _controller,
                   borderRadius: 0,
-
-                  onOptionSelected: (options) {
-                    debugPrint(options.toString());
-                  },
                   options: maintainces.map((e) => ValueItem(label: e.name, value: e.id)).toList(),
                   selectionType: SelectionType.multi,
                   chipConfig: const ChipConfig(wrapType: WrapType.wrap),
                   dropdownHeight: 300,
                   optionTextStyle: const TextStyle(fontSize: 16),
                   selectedOptionIcon: const Icon(Icons.check_circle),
+                  onOptionSelected: (List<ValueItem> selectedOptions) {  }
                 ),
                 CheckboxListTile(
                   value: _showDropdown,

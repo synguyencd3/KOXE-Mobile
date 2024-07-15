@@ -78,7 +78,7 @@ class WarrantyService {
     print(jsonEncode(reqBody));
     var response = await http.post(url,headers: requestHeaders, body: jsonEncode(reqBody));
     var responseData = jsonDecode(response.body);
-    if (maintenanceList.isNotEmpty) addMaintenance(responseData['warranty_id'], maintenanceList);
+    //if (maintenanceList.isNotEmpty) addMaintenance(responseData['warranty_id'], maintenanceList);
     if (responseData['status'] == 'success') {
       return true;
     }
