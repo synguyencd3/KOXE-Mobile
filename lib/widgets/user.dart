@@ -148,7 +148,7 @@ class _UserState extends State<User> {
                   }) : Container(),
               permissions.length <= 0 ?
               text_card(
-                  title: 'Xe của tôi',
+                  title: 'Quản lý cá nhân',
                   headingIcon: Icons.car_crash,
                   onTap: () {
                     Navigator.pushNamed(context, '/my_car');

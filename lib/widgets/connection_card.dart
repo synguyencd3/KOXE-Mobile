@@ -102,7 +102,7 @@ class _ConnectionCardState extends State<ConnectionCard> {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      FilledButton(
+                      FilledButton.icon(
                         onPressed: () async {
                           bool response =
                               await updateStatusConnection('accepted');
@@ -112,12 +112,13 @@ class _ConnectionCardState extends State<ConnectionCard> {
                             });
                           }
                         },
-                        child: Text('Đồng ý'),
+                        icon:Icon(Icons.check_circle),
+                        label: Text('Đồng ý'),
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.green)),
                       ),
-                      FilledButton(
+                      FilledButton.icon(
                         onPressed: () async {
                           bool response =
                               await updateStatusConnection('rejected');
@@ -127,7 +128,8 @@ class _ConnectionCardState extends State<ConnectionCard> {
                             });
                           }
                         },
-                        child: Text('Từ chối'),
+                        label: Text('Từ chối'),
+                        icon: Icon(Icons.do_not_disturb_on_rounded),
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.red)),

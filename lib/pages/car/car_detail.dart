@@ -290,6 +290,7 @@ class _CarDetailState extends State<CarDetail> {
                                       await CarsService.getDetail(car.id ?? '');
                                   print(carDetail?.salon?.salonId ?? '');
                                   ChatUserModel user = ChatUserModel(
+                                    reason: 'Xem xe',
                                       id: carDetail?.salon?.salonId ?? '',
                                       name: carDetail?.salon?.name ?? '',
                                       carId: car.id);

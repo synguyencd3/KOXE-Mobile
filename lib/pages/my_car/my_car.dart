@@ -13,7 +13,7 @@ class _MyCarState extends State<MyCar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Xe của tôi'),
+        title: Text('Quản lý cá nhân'),
       ),
       body: Column(
         children: <Widget>[
