@@ -164,7 +164,7 @@ class CarsService {
     var responseString = String.fromCharCodes(responseData);
     print(responseString);
     var data = jsonDecode(responseString);
-    if (warranty != null) WarrantyService.pushWarranty(warranty, data['car']['car_id']);
+    if (warranty != null && warranty.isNotEmpty) WarrantyService.pushWarranty(warranty, data['car']['car_id']);
     if (data['status'] == 'success') return true;
     return false;
   }
