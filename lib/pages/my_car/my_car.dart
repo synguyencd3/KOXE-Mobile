@@ -13,7 +13,7 @@ class _MyCarState extends State<MyCar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Xe của tôi'),
+        title: Text('Quản lý cá nhân'),
       ),
       body: Column(
         children: <Widget>[
@@ -40,6 +40,12 @@ class _MyCarState extends State<MyCar> {
               title: 'Xe của tôi',
               onTap: () {
                 Navigator.pushNamed(context,  '/car_customer');
+              }),
+          text_card(
+              title: 'Yêu cầu thanh toán',
+              headingIcon: Icons.credit_card,
+              onTap: () {
+                Navigator.pushNamed(context, '/user_payment');
               }),
           text_card(
               headingIcon: Icons.area_chart,

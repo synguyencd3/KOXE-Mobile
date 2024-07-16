@@ -74,7 +74,7 @@ class _PostDetailState extends State<PostDetail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  post.image!.isNotEmpty
+                  post.image != null
                       ? CarouselSlider.builder(
                           itemCount: post.image?.length,
                           itemBuilder:
@@ -252,6 +252,7 @@ class _PostDetailState extends State<PostDetail> {
                               content: StatefulBuilder(
                                   builder: (context, StateSetter setState) {
                                 return Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: processes.map((process) {
                                     print('process name' + '${process.name}');
                                     return RadioListTile<String>(

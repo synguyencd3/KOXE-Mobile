@@ -15,6 +15,7 @@ class _CarWarrantyState extends State<CarWarranty> {
   Future<void> getWarranty() async {
     var arg = ModalRoute.of(context)!.settings.arguments as String;
     var data = await CarsService.getDetail(arg);
+    print(data);
     warranty = data!.warranty!;
   }
 
@@ -31,20 +32,35 @@ class _CarWarrantyState extends State<CarWarranty> {
               return Center(child: CircularProgressIndicator());
             }
             return warranty.name != null
-                ? Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${warranty.name}',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                              '${warranty.limitKilometer} Km đầu tiên trong vòng ${warranty.months} tháng'),
-                        ],
+                ? Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${warranty.name}',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            Text('Mô tả: ${warranty.policy}',
+                                style: TextStyle(fontStyle: FontStyle.italic)),
+                            Text(
+                                'Chính sách áp dụng: ${warranty.limitKilometer} Km đầu tiên trong vòng ${warranty.months} tháng'),
+                            warranty.maintenance!.isNotEmpty
+                                ? Column(
+                                    children: warranty.maintenance!
+                                        .map((e) => ListTile(
+                                              title: Text(e.name),
+                                              trailing: Icon(Icons.check),
+                                            ))
+                                        .toList(),
+                                  )
+                                : Text('Không bao gồm bảo dưỡng'),
+                          ],
+                        ),
                       ),
                     ),
                   )

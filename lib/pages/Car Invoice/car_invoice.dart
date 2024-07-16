@@ -7,7 +7,7 @@ import 'package:mobile/services/CarInvoice_Service.dart';
 import 'package:mobile/services/salon_service.dart';
 
 import '../../model/CarInvoice_response.dart';
-
+import 'package:mobile/utils/utils.dart';
 
 class CarInvoiceList extends StatefulWidget {
   @override
@@ -93,9 +93,9 @@ class _CarInvoiceListState extends State<CarInvoiceList> {
                           SizedBox(height: 5),
                           Text('Số điện thoại: ${invoice.phone}'),
                           SizedBox(height: 5),
-                          Text('Biển số: ${invoice.licensePlate}'),
+                          Text('Biển số: ${invoice.licensePlate ?? 'Chưa có'}'),
                           SizedBox(height: 5),
-                          Text('Chi phí: ${invoice.expense}')
+                          Text('Chi phí: ${formatCurrency(invoice.expense?? 0)}')
                         ],
                       ),
                     ),

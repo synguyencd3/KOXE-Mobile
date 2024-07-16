@@ -99,7 +99,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      FilledButton(
+                      FilledButton.icon(
                         onPressed: () async {
                           bool check = false;
                           if (isFromUser()) {
@@ -108,8 +108,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                     widget.isSalon, widget.appointment.id, 1);
                           }
                           if (isFromSalon()) {
-                            check =
-                                await AppointmentService.updateAppointmentProcess(
+                            check = await AppointmentService
+                                .updateAppointmentProcess(
                                     widget.appointment.id, 1);
                           }
                           if (check) {
@@ -118,18 +118,13 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             });
                           }
                         },
-                        child: Row(
-                          children: [
-                            Icon(Icons.check_circle),
-                            SizedBox(width: 10),
-                            Text('Chấp nhận'),
-                          ],
-                        ),
+                        label: Text('Chấp nhận'),
+                        icon: Icon(Icons.check_circle),
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.green)),
                       ),
-                      FilledButton(
+                      FilledButton.icon(
                         onPressed: () async {
                           bool check = false;
                           if (isFromUser()) {
@@ -138,9 +133,9 @@ class _AppointmentCardState extends State<AppointmentCard> {
                                     widget.isSalon, widget.appointment.id, 2);
                           }
                           if (isFromSalon()) {
-                            check =
-                                await AppointmentService.updateAppointmentProcess(
-                                   widget.appointment.id, 2);
+                            check = await AppointmentService
+                                .updateAppointmentProcess(
+                                    widget.appointment.id, 2);
                           }
                           if (check) {
                             setState(() {
@@ -148,13 +143,8 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             });
                           }
                         },
-                        child: Row(
-                          children: [
-                            Icon(Icons.do_not_disturb_on_rounded),
-                            SizedBox(width: 10),
-                            Text('Từ chối'),
-                          ],
-                        ),
+                        icon: Icon(Icons.do_not_disturb_on_rounded),
+                        label: Text('Từ chối'),
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.red)),

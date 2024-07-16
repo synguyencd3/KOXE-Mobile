@@ -148,17 +148,10 @@ class _UserState extends State<User> {
                   }) : Container(),
               permissions.length <= 0 ?
               text_card(
-                  title: 'Xe của tôi',
+                  title: 'Quản lý cá nhân',
                   headingIcon: Icons.car_crash,
                   onTap: () {
                     Navigator.pushNamed(context, '/my_car');
-                  }): Container(),
-              permissions.length == 0 ?
-              text_card(
-                  title: 'Yêu cầu thanh toán',
-                  headingIcon: Icons.credit_card,
-                  onTap: () {
-                    Navigator.pushNamed(context, '/user_payment');
                   }): Container(),
               keyMap.contains(Config.CreatePostKeyMap) ?
               text_card(

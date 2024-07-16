@@ -410,6 +410,7 @@ class _ChatState extends State<ChatPage> {
               permission.length <= 0
                   ? GestureDetector(
                       onTap: () {
+                        user?.reason = 'Xem xe';
                         Navigator.pushNamed(context, '/create_appointment',
                             arguments: user);
                       },

@@ -14,6 +14,7 @@ import '../../services/salon_group_service.dart';
 import '../../model/car_model.dart';
 import '../../model/post_model.dart';
 import '../../services/salon_group_service.dart';
+import 'package:mobile/utils/utils.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -216,44 +217,59 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                       ),
                       const SizedBox(height: _distanceSize),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _brand,
-                              decoration: InputDecoration(
-                                labelText: 'Hãng xe',
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    // color: Color(0xFF6F61EF),
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
+
+                        DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            labelText: 'Hãng xe',
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 2,
                               ),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          const SizedBox(width: 20),
-                          Expanded(
-                            child: TextFormField(
-                              controller: _type,
-                              decoration: InputDecoration(
-                                labelText: 'Dòng xe',
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    // color: Color(0xFF6F61EF),
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ),
+                          value: carBrands[0],
+                          items: carBrands.map((String brand) {
+                            return DropdownMenuItem<String>(
+                              value: brand,
+                              child: Text(brand),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _brand.text = newValue ?? "";
+                            });
+                          },
+                        ),
+                      const SizedBox(height: 20),
+                    DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'Dòng xe',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                        ],
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        value: carTypes[0],
+                        items: carTypes.map((String brand) {
+                          return DropdownMenuItem<String>(
+                            value: brand,
+                            child: Text(brand),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _type.text = newValue ?? "";
+                          });
+                        },
                       ),
                       const SizedBox(height: 20),
                       Row(
@@ -442,6 +458,7 @@ class _CreatePostState extends State<CreatePost> {
                           const SizedBox(width: 20),
                           Expanded(
                             child: TextFormField(
+                              keyboardType: TextInputType.number,
                               controller: _price,
                               decoration: InputDecoration(
                                 labelText: 'Giá',
@@ -474,6 +491,7 @@ class _CreatePostState extends State<CreatePost> {
                               ],
                             ),
                           ),
+                          const SizedBox(width: 20),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -502,6 +520,7 @@ class _CreatePostState extends State<CreatePost> {
                               ],
                             ),
                           ),
+                          const SizedBox(width: 20),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -632,9 +651,11 @@ class _CreatePostState extends State<CreatePost> {
                                                   }).toList(),
                                                 ),
                                                 actions: [
-                                                  TextButton(onPressed: (){
-                                                    Navigator.pop(context);
-                                                  }, child: Text('Hủy')),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text('Hủy')),
                                                   TextButton(
                                                     child: Text('OK'),
                                                     onPressed: () async {

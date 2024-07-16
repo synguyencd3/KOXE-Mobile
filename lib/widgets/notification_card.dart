@@ -11,6 +11,7 @@ import 'package:mobile/model/appointment_model.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/widgets/connection_card.dart';
 import 'package:mobile/pages/loading.dart';
+import 'package:mobile/utils/utils.dart';
 
 class NotificationCard extends StatefulWidget {
   final NotificationModel notification;
@@ -46,10 +47,7 @@ class _NotificationCardState extends State<NotificationCard> {
     return FutureBuilder(
       future: getSalonId(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
-          {
-            return Loading();
-          }
+
         return Padding(
           padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
           child: Card(
@@ -78,8 +76,7 @@ class _NotificationCardState extends State<NotificationCard> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
-                        DateFormat('dd/MM/yyyy HH:mm')
-                            .format(widget.notification.createAt),
+                      formatDate(widget.notification.createAt),
                         maxLines: 1,
                         style: TextStyle(fontSize: 12),
                       ),
@@ -92,6 +89,7 @@ class _NotificationCardState extends State<NotificationCard> {
                               context: context,
                               builder: (BuildContext context) {
                                 return Dialog(
+                                  insetPadding: EdgeInsets.all(10),
                                     backgroundColor: Colors.transparent,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -104,14 +102,17 @@ class _NotificationCardState extends State<NotificationCard> {
                                     ));
                               },
                             );
+                            setState(() {
+                              widget.notification.isRead = true;
+                            });
                           }
-                          setState(() {
-                            widget.notification.isRead = true;
-                          });
+
                         } else {
                           await NotificationService.markAsReadSalon(
                               widget.notification.id, salonId);
                           if (widget.notification.types == 'appointment') {
+                            // print(salonId);
+                            // print(widget.notification.data);
                             AppointmentModel appointment =
                                 await AppointmentService.getAppointmentById(
                                     salonId, widget.notification.data ?? '');
@@ -123,15 +124,18 @@ class _NotificationCardState extends State<NotificationCard> {
                               context: context,
                               builder: (BuildContext context) {
                                 return Dialog(
+                                  insetPadding: EdgeInsets.all(10),
                                     backgroundColor: Colors.transparent,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        AppointmentCard(
-                                          appointment: appointment,
-                                          isSalon: salonId,
-                                        ),
-                                      ],
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          AppointmentCard(
+                                            appointment: appointment,
+                                            isSalon: salonId,
+                                          ),
+                                        ],
+                                      ),
                                     ));
                               },
                             );

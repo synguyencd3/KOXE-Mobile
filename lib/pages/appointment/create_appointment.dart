@@ -20,7 +20,6 @@ class CreateAppoint extends StatefulWidget {
 
 class _CreateAppointState extends State<CreateAppoint> {
   Map<String, String> salonNameToId = {};
-  late TextEditingController controller;
   ChatUserModel user = ChatUserModel(
     name: '',
     id: '',
@@ -39,7 +38,6 @@ class _CreateAppointState extends State<CreateAppoint> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller = TextEditingController();
     Future.delayed(Duration.zero, () {
       getSalon();
       getCars().then((value) => getTimeBusy());
@@ -55,13 +53,6 @@ class _CreateAppointState extends State<CreateAppoint> {
     });
   }
 
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    controller.dispose();
-    super.dispose();
-  }
-
   Future<void> getSalon() async {
     ChatUserModel userApi =
         ModalRoute.of(context)!.settings.arguments as ChatUserModel;
@@ -72,7 +63,7 @@ class _CreateAppointState extends State<CreateAppoint> {
 
   Future<void> getCars() async {
     List<Car>? carsApi = await SalonsService.getDetail(user.id);
-    if (user.carId != '' && carsApi!.isNotEmpty) {
+    if (user.carId != '' && carsApi.isNotEmpty) {
       int initialPage = carsApi.indexWhere((car) => car.id == user.carId);
       //print(initialPage);
       carouselController.animateToPage(initialPage);
@@ -195,17 +186,8 @@ class _CreateAppointState extends State<CreateAppoint> {
               ),
               SizedBox(height: 10),
               Text(
-                'Bạn đặt lịch hẹn để làm gì?',
+                'Lý do đặt lịch hẹn: ' + user.reason!,
                 style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                minLines: 1,
-                maxLines: 5,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-                controller: controller,
               ),
               SizedBox(height: 10),
               Container(
@@ -216,12 +198,13 @@ class _CreateAppointState extends State<CreateAppoint> {
                     DateTime combined = DateTime(
                         today.year, today.month, today.day, hour, minute);
                     print(combined);
+                    print(user.id);
                     var result = await AppointmentService.createAppointment(
                         AppointmentModel(
                       salon: user.id,
                       carId: selectedCar,
                       datetime: combined,
-                      description: controller.text,
+                      description: user.reason,
                     ));
                     print(result);
                     if (result) {

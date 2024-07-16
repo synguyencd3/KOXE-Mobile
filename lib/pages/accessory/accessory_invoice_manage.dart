@@ -9,6 +9,8 @@ import 'package:mobile/utils/utils.dart';
 
 import '../../model/Payment_Method_Response.dart';
 import '../../services/salon_service.dart';
+import 'package:mobile/utils/utils.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class AccessoryInvoiceManage extends StatefulWidget {
   const AccessoryInvoiceManage({super.key});
@@ -20,8 +22,6 @@ class AccessoryInvoiceManage extends StatefulWidget {
 class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
   List<AccessoryInvoiceModel> accessoryInvoices = [];
   List<AccessoryModel> accessories = [];
-  List<String> selectedAccessoryIds = [];
-  Map<String, int> accessoryQuantities = {};
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -29,6 +29,8 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
   List<PaymentMethod> _methods = [];
   bool _showDropdown = false;
   String? _selectedOption;
+  List<AccessoryModel> selectedAccessories = [];
+  List<TextEditingController> quantityControllers = [];
 
   @override
   void initState() {
@@ -53,6 +55,9 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
     phoneController.dispose();
     emailController.dispose();
     noteController.dispose();
+    quantityControllers.forEach((element) {
+      element.dispose();
+    });
     super.dispose();
   }
 
@@ -137,9 +142,11 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                       title: Text(service.name ?? ''),
                       trailing: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Số lượng: ' + service.quantity.toString()),
-                          Text('Giá: ' + service.price.toString()),
+                          Text('Tổng tiền: ' +
+                              formatCurrency(service.price ?? 0)),
                         ],
                       ),
                     ),
@@ -220,63 +227,78 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                                   child: Text(e.type ?? ""), value: e.id))
                               .toList(),
                           decoration: InputDecoration(
-                            labelText: 'Select an option',
+                            labelText: 'Chọn phương thức thanh toán',
                             border: OutlineInputBorder(),
                           ),
                         ),
                       ),
                     const SizedBox(height: 10),
-                    Text(
-                      'Chọn phụ tùng',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    for (var accessory in accessories)
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CheckboxListTile(
-                              title: Text(accessory.name ?? ''),
-                              value:
-                                  selectedAccessoryIds.contains(accessory.id),
-                              onChanged: (value) {
-                                if (value == true) {
-                                  setState(() {
-                                    selectedAccessoryIds
-                                        .add(accessory.id ?? '');
-                                  });
-                                } else {
-                                  setState(() {
-                                    selectedAccessoryIds.remove(accessory.id);
-                                  });
-                                }
-                              },
-                            ),
+                    DropdownSearch<AccessoryModel>.multiSelection(
+                      dropdownDecoratorProps: DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          labelText: 'Chọn phụ tùng',
+                          contentPadding: EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0),
                           ),
-                          if (selectedAccessoryIds.contains(accessory
-                              .id)) // Only show quantity selector if checked
-                            DropdownButton<int>(
-                              value: accessoryQuantities[accessory.id ?? ''],
-                              items: List.generate(
-                                      10,
-                                      (index) =>
-                                          index +
-                                          1) // Change this to your desired range
-                                  .map<DropdownMenuItem<int>>((int value) {
-                                return DropdownMenuItem<int>(
-                                  value: value,
-                                  child: Text(value.toString()),
+                        ),
+                      ),
+                      compareFn: (AccessoryModel? i, AccessoryModel? s) =>
+                          i!.id == s!.id,
+                      asyncItems: (String filter) =>
+                          AccessoryService.getAccessoriesSalonSearch(filter),
+                      itemAsString: (AccessoryModel u) => u.name ?? '',
+                      //items: accessories,
+                      popupProps: PopupPropsMultiSelection.dialog(
+                        showSearchBox: true,
+                        showSelectedItems: false,
+                        searchFieldProps: TextFieldProps(
+                          decoration: InputDecoration(
+                            labelText: 'Nhập tên phụ tùng',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )
+                          ),
+                        ),
+                      ),
+                      onChanged: (List<AccessoryModel> values) {
+                        setState(() {
+                          selectedAccessories = values;
+                        });
+                      },
+                    ),
+                    selectedAccessories.isNotEmpty
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Phụ tùng đã chọn',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                              ...selectedAccessories.map((e) {
+                                selectedAccessories.forEach((_) {
+                                  quantityControllers
+                                      .add(TextEditingController());
+                                });
+                                int index = selectedAccessories.indexOf(e);
+                                return ListTile(
+                                  title: Text(e.name ?? ''),
+                                  trailing: Container(
+                                    width: 100,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      controller: quantityControllers[index],
+                                      decoration: InputDecoration(
+                                        labelText: 'Số lượng',
+                                      ),
+                                    ),
+                                  ),
                                 );
                               }).toList(),
-                              onChanged: (int? newValue) {
-                                setState(() {
-                                  accessoryQuantities[accessory.id ?? ''] =
-                                      newValue!;
-                                });
-                              },
-                            ),
-                        ],
-                      ),
+                            ],
+                          )
+                        : Container(),
                   ],
                 ),
               );
@@ -284,6 +306,8 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
             actions: [
               TextButton(
                   onPressed: () {
+                    selectedAccessories.clear();
+                    quantityControllers.clear();
                     Navigator.of(context).pop();
                   },
                   child: Text('Hủy')),
@@ -295,14 +319,17 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                       phone: phoneController.text,
                       email: emailController.text,
                       note: noteController.text,
-                      accessories: selectedAccessoryIds
-                          .map((id) => AccessoryModel(
-                              id: id, quantity: accessoryQuantities[id]))
+                      accessories: selectedAccessories
+                          .map((e) => AccessoryModel(
+                              id: e.id,
+                              quantity: int.parse(quantityControllers[
+                                      selectedAccessories.indexOf(e)]
+                                  .text)))
                           .toList(),
                     );
                     bool response =
                         await AccessoryService.createAccessoryInvoice(
-                            accessoryInvocice, _selectedOption?? "");
+                            accessoryInvocice, _selectedOption ?? "");
                     if (response) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('Thêm hóa đơn thành công'),
@@ -317,6 +344,8 @@ class _AccessoryInvoiceManageState extends State<AccessoryInvoiceManage> {
                         backgroundColor: Colors.red,
                       ));
                     }
+                    selectedAccessories.clear();
+                    quantityControllers.clear();
                     Navigator.of(context).pop();
                   },
                   child: Text('Xác nhận')),

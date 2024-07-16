@@ -3,6 +3,7 @@ import 'package:mobile/model/invoice_model.dart';
 import 'package:mobile/services/invoice_service.dart';
 import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/utils/utils.dart';
+import 'package:mobile/utils/utils.dart';
 
 class InvoiceCard extends StatefulWidget {
   final InvoiceModel invoice;
@@ -53,7 +54,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
                   for (var service in widget.invoice.maintainces)
                     ListTile(
                       title: Text(service.name ?? ''),
-                      trailing: Text(service.cost.toString()),
+                      trailing: Text(formatCurrency(service.cost)),
                     ),
                   Divider(
                     height: 20,
@@ -67,7 +68,14 @@ class _InvoiceCardState extends State<InvoiceCard> {
                   for (var accessory in widget.invoice.accessories ?? [])
                     ListTile(
                       title: Text(accessory.name ?? ''),
-                      trailing: Text(accessory.price.toString()),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Số lượng: ' + accessory.quantity.toString()),
+                          Text('Tổng tiền: ' + formatCurrency(accessory.price)),
+                        ],
+                      ),
                     ),
                   Divider(
                     height: 20,
