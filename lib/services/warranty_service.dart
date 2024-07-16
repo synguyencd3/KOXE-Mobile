@@ -35,6 +35,56 @@ class WarrantyService {
     return [];
   }
 
+  static Future<bool?> addMaintenance(String warrantyId, List maintenanceArray) async {
+    await APIService.refreshToken();
+
+    String mySalon = await SalonsService.isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.addMaintenance);
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode(
+        {
+          'warrantyId' : warrantyId,
+          'maintenanceArray' : maintenanceArray
+        }));
+    print(response.body);
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool?> removeMaintenance(String warrantyId, String maintenanceId) async {
+    await APIService.refreshToken();
+
+    String mySalon = await SalonsService.isSalon();
+    var LoginInfo = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+
+      HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+
+    var url = Uri.https(Config.apiURL, Config.removeMaintenance);
+    var response = await http.post(url, headers: requestHeaders, body: jsonEncode(
+        {
+          'warrantyId' : warrantyId,
+          'maintenanceId' : maintenanceId
+        }));
+    print(response.body);
+    var responseData = jsonDecode(response.body);
+    if (responseData['status'] == 'success') {
+      return true;
+    }
+    return false;
+  }
+
   static Future<bool?> NewWarranty(Warranty model) async {
     await APIService.refreshToken();
 
@@ -53,13 +103,14 @@ class WarrantyService {
     print(jsonEncode(reqBody));
     var response = await http.post(url,headers: requestHeaders, body: jsonEncode(reqBody));
     var responseData = jsonDecode(response.body);
+    //if (maintenanceList.isNotEmpty) addMaintenance(responseData['warranty_id'], maintenanceList);
     if (responseData['status'] == 'success') {
       return true;
     }
     return false;
   }
 
-  static Future<bool?> updateWarranty(Warranty model, String id) async {
+  static Future<bool?> updateWarranty(Warranty model, String id, List maintenanceArray) async {
     await APIService.refreshToken();
     var LoginInfo = await SharedService.loginDetails();
     String mySalon = await SalonsService.isSalon();
@@ -81,6 +132,7 @@ class WarrantyService {
     var response = await http.patch(url, headers: requestHeaders, body: jsonEncode(reqBody));
     var responseData = jsonDecode(response.body);
     print(responseData);
+    if (maintenanceArray.isNotEmpty) addMaintenance(id, maintenanceArray);
     if (responseData['status'] == 'success') {
       return true;
     }
