@@ -54,8 +54,8 @@ class NewsService {
   static Future<List<Promotion>> getSalonPromotions(String salonId) async {
     var url = Uri.https(Config.apiURL, '${Config.promotionAPI}/salon/$salonId');
     var response = await http.get(url);
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+    var data = jsonDecode(response.body);
+    if (data['status'] == 'success') {
       return promotionsFromJson(data['promotion']);
     }
     return [];
