@@ -49,9 +49,9 @@ class _CarWarrantyState extends State<CarWarranty> {
                                 style: TextStyle(fontStyle: FontStyle.italic)),
                             Text(
                                 'Chính sách áp dụng: ${warranty.limitKilometer} Km đầu tiên trong vòng ${warranty.months} tháng'),
-                            warranty.maintainces!.isNotEmpty
+                            warranty.maintenance!.isNotEmpty
                                 ? Column(
-                                    children: warranty.maintainces!
+                                    children: warranty.maintenance!
                                         .map((e) => ListTile(
                                               title: Text(e.name),
                                               trailing: Icon(Icons.check),

@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:mobile/model/accessory_invoice_model.dart';
@@ -24,7 +23,32 @@ class AccessoryService {
       'Access-Control-Allow-Origin': "*",
     };
 
-    var url = Uri.https(Config.apiURL, '${Config.getSalonAccessoriesApi}/$salonId');
+    var url =
+        Uri.https(Config.apiURL, '${Config.getSalonAccessoriesApi}/$salonId');
+
+    var response = await http.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return accessoriesFromJson(data['accessory']);
+    }
+    return [];
+  }
+
+  static Future<List<AccessoryModel>> getAccessoriesSalonSearch(
+      String accessoryName) async {
+    String salonId = await SalonsService.isSalon();
+   print('call');
+    if (salonId == '') {
+      return [];
+    }
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+    };
+    Map<String, dynamic> queryParameters = {'q': accessoryName};
+    var url = Uri.https(Config.apiURL,
+        '${Config.getSalonAccessoriesApi}/$salonId', queryParameters);
 
     var response = await http.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
@@ -46,7 +70,8 @@ class AccessoryService {
 
     var url = Uri.https(Config.apiURL, Config.accessoryAPI);
 
-    var response = await http.post(url, headers: requestHeaders, body: jsonEncode(accessory.toJson()));
+    var response = await http.post(url,
+        headers: requestHeaders, body: jsonEncode(accessory.toJson()));
     return response.statusCode == 201;
   }
 
@@ -75,11 +100,13 @@ class AccessoryService {
       'Access-Control-Allow-Origin': "*",
       'Authorization': 'Bearer ${loginDetails?.accessToken}',
     };
-    print(accessory.toJson());
+    //(accessory.toJson());
 
-    var url = Uri.https(Config.apiURL, '${Config.accessoryAPI}/${accessory.id}');
+    var url =
+        Uri.https(Config.apiURL, '${Config.accessoryAPI}/${accessory.id}');
 
-    var response = await http.patch(url, headers: requestHeaders, body: jsonEncode(accessory.toJson()));
+    var response = await http.patch(url,
+        headers: requestHeaders, body: jsonEncode(accessory.toJson()));
     return response.statusCode == 200;
   }
 
@@ -102,6 +129,7 @@ class AccessoryService {
     }
     return [];
   }
+
   static Future<bool> deleteAcessoryInvoice(String id) async {
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
@@ -117,7 +145,9 @@ class AccessoryService {
     var response = await http.delete(url, headers: requestHeaders);
     return response.statusCode == 200;
   }
-  static Future<bool> createAccessoryInvoice(AccessoryInvoiceModel invoice, String paymentMethodId) async {
+
+  static Future<bool> createAccessoryInvoice(
+      AccessoryInvoiceModel invoice, String paymentMethodId) async {
     await APIService.refreshToken();
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
@@ -129,17 +159,18 @@ class AccessoryService {
 
     var url = Uri.https(Config.apiURL, Config.accessoryInvoiceAPI);
 
-    var response = await http.post(url, headers: requestHeaders, body: jsonEncode(invoice.toJson()));
-    print(response.body);
-    if (paymentMethodId=="") return response.statusCode == 201;
+    var response = await http.post(url,
+        headers: requestHeaders, body: jsonEncode(invoice.toJson()));
+    //print(response.body);
+    if (paymentMethodId == "") return response.statusCode == 201;
     var invoiceId = jsonDecode(response.body)['accessoryInvoice']['invoice_id'];
-    var paymentRequestResponse = await SalonsService.createPayment(PaymentRequest(
-      cusName: invoice.fullname,
-      cusPhone: invoice.phone,
-      reason: "Thanh toán hóa đơn phụ tùng: ${invoiceId}",
-      methodPaymentId: paymentMethodId,
-      invoiceId: invoiceId
-    ));
+    var paymentRequestResponse = await SalonsService.createPayment(
+        PaymentRequest(
+            cusName: invoice.fullname,
+            cusPhone: invoice.phone,
+            reason: "Thanh toán hóa đơn phụ tùng: ${invoiceId}",
+            methodPaymentId: paymentMethodId,
+            invoiceId: invoiceId));
     return response.statusCode == 201;
   }
 }

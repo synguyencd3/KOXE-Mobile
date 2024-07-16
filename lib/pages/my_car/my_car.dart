@@ -42,6 +42,12 @@ class _MyCarState extends State<MyCar> {
                 Navigator.pushNamed(context,  '/car_customer');
               }),
           text_card(
+              title: 'Yêu cầu thanh toán',
+              headingIcon: Icons.credit_card,
+              onTap: () {
+                Navigator.pushNamed(context, '/user_payment');
+              }),
+          text_card(
               headingIcon: Icons.area_chart,
               title: 'Thống kê của bạn',
               onTap: () {

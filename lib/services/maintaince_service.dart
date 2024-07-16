@@ -28,6 +28,27 @@ class MaintainceService{
     }
     return [];
   }
+  static Future<List<MaintainceModel>> getAllMaintaincesSearch(String name) async {
+    //var LoginInfo = await SharedService.loginDetails();
+    String salonId = await SalonsService.isSalon();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Access-Control-Allow-Origin': "*",
+      // HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
+    };
+    Map<String, String> queryParam = {
+      'q': name
+    };
+    var url = Uri.https(Config.apiURL, '${Config.getAllMaintaincesAPI}/$salonId', queryParam);
+    var response = await http.get(url, headers: requestHeaders);
+    print(response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return maintainceFromJson(data['maintenance']);
+    }
+    return [];
+  }
 
   Future<bool> addMaintaincePackage(MaintainceModel maintaince) async {
     var LoginInfo = await SharedService.loginDetails();

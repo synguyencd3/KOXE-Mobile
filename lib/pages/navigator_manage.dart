@@ -73,6 +73,12 @@ class _NavigatorManageState extends State<NavigatorManage> {
                       Navigator.pushNamed(context, '/salon_group');
                     }),
                 text_card(
+                    title: 'Yêu cầu thanh toán',
+                    headingIcon: Icons.credit_card,
+                    onTap: () {
+                      Navigator.pushNamed(context, '/user_payment');
+                    }),
+                text_card(
                     headingIcon: Icons.area_chart,
                     title: 'Thống kê giao dịch hoa tiêu',
                     onTap: () {

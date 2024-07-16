@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 
 class InvoiceService{
-  Future<List<InvoiceModel>> getAllInvoices() async {
+   Future<List<InvoiceModel>> getAllInvoices() async {
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       // 'Content-Type': 'application/json',
