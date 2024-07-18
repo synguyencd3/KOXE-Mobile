@@ -94,7 +94,7 @@ class _CarCustomerState extends State<CarCustomer> {
                                           case 'appointment':
                                             print(invoice.legalsUser!.carId!);
                                             ChatUserModel user = ChatUserModel(
-                                              reason: 'Bảo dưỡng xe',
+                                              reason: 'Bảo dưỡng xe (${invoice.invoiceId})',
                                               id: invoice.seller?.salonId ?? '',
                                               carId: invoice.legalsUser!.carId!,
                                               name: invoice.seller?.name ?? '',

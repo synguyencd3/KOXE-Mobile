@@ -15,16 +15,31 @@ class CarsListing extends StatefulWidget {
   State<CarsListing> createState() => _CarState();
 }
 
+class SelectOption {
+  final String name;
+  final int? isAvailable;
+
+  SelectOption({required this.name,this.isAvailable});
+}
+
 class _CarState extends State<CarsListing> {
   List<Car> cars = [];
   bool isCalling = false;
   Set<String> permission = {};
 
+  List<SelectOption> selections = [
+    SelectOption(name: 'Tất cả'),
+    SelectOption(name: 'Chưa bán', isAvailable: 1),
+    SelectOption(name: 'Đã bán', isAvailable: 0),
+  ];
+
+  var selected =  SelectOption(name: 'all');
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      getCars();
+      getCars(null);
       getPermission();
     });
   }
@@ -36,11 +51,11 @@ class _CarState extends State<CarsListing> {
     });
   }
 
-  Future<void> getCars() async {
+  Future<void> getCars(int? available) async {
     setState(() {
       isCalling = true;
     });
-    var carsAPI =  await CarsService.getCarsOfSalon();
+    var carsAPI =  await CarsService.getCarsOfSalon(available);
     setState(() {
       cars = carsAPI;
       isCalling = false;
@@ -64,11 +79,34 @@ class _CarState extends State<CarsListing> {
             permission.contains("OWNER") || permission.contains("C_CAR")
                 ? TextButton.icon(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/new_car').then((value) => getCars());
+                      Navigator.pushNamed(context, '/new_car').then((value) => getCars(selected.isAvailable));
                     },
                     icon: Icon(Icons.add),
                     label: Text('Thêm xe'))
                 : Container(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: DropdownMenu<SelectOption>(
+                hintText: "Tình trạng",
+                label: const Text('Tình trạng'),
+                initialSelection: selections[0],
+                width: 150,
+                onSelected: (e) {
+                  setState(() {
+                    selected = (e)!;
+                  });
+                  getCars(e?.isAvailable);
+                },
+                dropdownMenuEntries: selections
+                    .map<DropdownMenuEntry<SelectOption>>(
+                        (SelectOption element) {
+                      return DropdownMenuEntry<SelectOption>(
+                        value: element,
+                        label: element.name,
+                      );
+                    }).toList(),
+              ),
+            ),
             permission.contains("OWNER") || permission.contains("R_CAR")
                 ? Expanded(
                     child: isCalling

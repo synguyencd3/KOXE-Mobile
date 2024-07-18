@@ -191,13 +191,15 @@ class CarsService {
     return false;
   }
 
-  static Future<List<Car>> getCarsOfSalon() async {
+  static Future<List<Car>> getCarsOfSalon(int? available) async {
     String salonId = await SalonsService.isSalon();
     var LoginInfo = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
-    var url = Uri.https(Config.apiURL, '${Config.getCarsOfSalonAPI}/$salonId');
+    var url = Uri.https(Config.apiURL, '${Config.getCarsOfSalonAPI}/$salonId', available!=null ? {
+      'available': available.toString()
+    } : {});
     var response = await http.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
