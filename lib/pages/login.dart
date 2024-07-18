@@ -8,6 +8,8 @@ import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/services/shared_service.dart';
 import 'package:mobile/socket/socket_manager.dart';
 
+import '../services/Firebase_service.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -35,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     LoginRequest model =
-        LoginRequest(username: _username.text, password: _password.text);
+        LoginRequest(username: _username.text, password: _password.text, androidFcmToken: FirebaseServices.token );
 
     APIService.login(model).then((response) => {
           if (response)

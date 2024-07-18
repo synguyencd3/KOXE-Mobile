@@ -3,12 +3,13 @@ import 'package:mobile/main.dart';
 
 class FirebaseServices {
    final _firebaseMessaging = FirebaseMessaging.instance;
+   static String? token;
 
    Future<void> initNotification() async {
      await _firebaseMessaging.requestPermission();
 
      final fCMToken = await _firebaseMessaging.getToken();
-
+     token = fCMToken;
      print('token: $fCMToken');
    }
 
