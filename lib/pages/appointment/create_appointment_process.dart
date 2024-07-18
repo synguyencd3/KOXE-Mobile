@@ -167,7 +167,7 @@ class _CreateAppointProcessState extends State<CreateAppointProcess> {
                     AppointmentModel appointment = AppointmentModel(
                         datetime: combined,
                         phone: data.phone,
-                        carId:"438bc588-400f-413c-b0fa-cb5cadd076fd",
+                        carId: data.legalsUser!.carId!,
                         salon: data.seller!.salonId!,
                         description: _description.text);
                     bool response =

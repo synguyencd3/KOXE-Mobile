@@ -20,13 +20,20 @@ class AppointmentService {
     var url = Uri.https(Config.apiURL, Config.getAppointmentsAPI);
 
     var response = await http.post(url, headers: requestHeaders);
-    print(response.body);
+    //print(response.body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       print(data);
+    //   try
+    //   {
+    //     return appointmentsFromJson(data['appointments']);
+    //   }
+    //   catch(e)
+    // {
+    //   print(e);
+    // }
       return appointmentsFromJson(data['appointments']);
     }
-    print('error');
     return [];
   }
 
@@ -65,7 +72,6 @@ class AppointmentService {
       //print(data);
       return appointmentsFromJson(data['appointments']);
     }
-    print('error');
     return [];
   }
 

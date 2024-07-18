@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mobile/model/CarInvoice_response.dart';
 import 'package:mobile/model/stage_model.dart';
 import 'package:mobile/model/transaction_model.dart';
 
@@ -121,8 +123,9 @@ class _TransactionDetailState extends State<TransactionDetail> {
                       fontWeight: FontWeight.bold,
                       color: Colors.red),
                 ),
-                Text('Trạng thái: ${transaction.status}'),
-                Text('Hoa tiêu: ${transaction.userTransaction?.name ?? 'N/A'}'),
+                Text(
+                    'Trạng thái: ${transaction.status == 'pending' ? 'Chưa hoàn thành' : transaction.status == 'success' ? 'Đã hoàn thành' : 'Đã hủy'}'),
+                Text('Hoa tiêu: ${transaction.userTransaction?.name ?? 'Bạn'}'),
                 Text('Giai đoạn hiện tại: ${transaction.stage?.name ?? ' '}'),
                 SingleChildScrollView(
                   child: Column(
@@ -172,7 +175,11 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                             child: AlertDialog(
                                               title: Text('Đánh giá hoa tiêu'),
                                               content: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
+                                                  Text(
+                                                      'Đánh giá phần trăm hoàn thành'),
                                                   DropdownMenuExample(
                                                       valueNotifier:
                                                           _selectedRatingValue,
@@ -252,6 +259,10 @@ class _TransactionDetailState extends State<TransactionDetail> {
                                                       }
 
                                                       Navigator.pop(context);
+                                                      setState(() {
+                                                        transaction.status =
+                                                            'success';
+                                                      });
                                                     },
                                                     child: Text('Tiếp tục')),
                                               ],
@@ -304,15 +315,16 @@ class _TransactionDetailState extends State<TransactionDetail> {
                 ),
               ),
       ),
-      bottomNavigationBar: checkStatus() == false
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FloatingActionButton(
-                onPressed: () {},
-                child: Text('Đặt lịch hẹn'),
-              ),
-            )
-          : null,
+      // bottomNavigationBar: checkStatus() == false
+      //     ? Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: FloatingActionButton(
+      //           onPressed: () {
+      //           },
+      //           child: Text('Đặt lịch hẹn'),
+      //         ),
+      //       )
+      //     : null,
     );
   }
 }
