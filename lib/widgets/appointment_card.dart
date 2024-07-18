@@ -34,7 +34,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
     DateTime appointmentDateTime = widget.appointment.datetime;
     String appointmentDate =
         '${appointmentDateTime.day}/${appointmentDateTime.month}/${appointmentDateTime.year}';
-    String formattedHour = appointmentDateTime.hour.toString().padLeft(2, '0');
+    String formattedHour = (appointmentDateTime.hour+7).toString().padLeft(2, '0');
     String formattedMinute =
         appointmentDateTime.minute.toString().padLeft(2, '0');
     return Card(

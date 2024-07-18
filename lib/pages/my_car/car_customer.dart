@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/CarInvoice_response.dart';
 import 'package:mobile/model/chat_user_model.dart';
 import 'package:mobile/services/CarInvoice_Service.dart';
+import 'package:mobile/pages/loading.dart';
+import 'package:mobile/utils/utils.dart';
 
 class CarCustomer extends StatefulWidget {
   const CarCustomer({super.key});
@@ -34,7 +36,7 @@ class _CarCustomerState extends State<CarCustomer> {
           future: getInvoices(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return Loading();
             }
             return invoices.isEmpty
                 ? Center(child: Text('Không có xe nào'))
@@ -60,58 +62,69 @@ class _CarCustomerState extends State<CarCustomer> {
                                             'Tên xe: ${invoice.carName!.length > 10 ? invoice.carName!.substring(0, 10) + '...' : invoice.carName}'),
                                         Text(
                                             'Biển số: ${invoice.licensePlate ?? 'Chưa có'}'),
+                                        Text(
+                                            'Ngày mua: ${formatDate(DateTime.parse(invoice.createAt ?? ''))}'),
+                                        Text(
+                                            'Mua tại: ${invoice.seller?.name ?? 'Chưa có'}'),
                                       ],
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        TextButton(
-                                            onPressed: () {
-                                              //print(invoice.legalsUser!.carId);
-                                              Navigator.pushNamed(context,
-                                                  '/car_detail_customer',
-                                                  arguments: invoice
-                                                      .legalsUser!.carId);
-                                            },
-                                            child: Text('Xem thông tin xe')),
-                                        TextButton(
-                                            onPressed: () {
+                                    PopupMenuButton<String>(
+                                      onSelected: (value) async {
+                                        switch (value) {
+                                          case 'detail':
+                                            Navigator.pushNamed(
+                                                context, '/car_detail_customer',
+                                                arguments:
+                                                    invoice.legalsUser!.carId);
+                                            break;
+                                          case 'warranty':
+                                            Navigator.pushNamed(
+                                                context, '/car_warranty',
+                                                arguments:
+                                                    invoice.legalsUser!.carId);
+                                            break;
+                                          case 'maintaince':
+                                            if (invoice.licensePlate != null) {
                                               Navigator.pushNamed(
-                                                  context, '/car_warranty',
-                                                  arguments: invoice
-                                                      .legalsUser!.carId);
-                                            },
-                                            child: Text('Xem bảo hành')),
-                                        invoice.licensePlate != null
-                                            ? TextButton(
-                                                onPressed: () {
-                                                  Navigator.pushNamed(context,
-                                                      '/car_maintaince',
-                                                      arguments:
-                                                          invoice.licensePlate);
-                                                },
-                                                child: Text(
-                                                    'Xem lịch sử bảo dưỡng'))
-                                            : Container(),
-                                        TextButton(
-                                            onPressed: () async {
-                                              print(invoice.legalsUser!.carId!);
-                                              ChatUserModel user =
-                                                  ChatUserModel(
-                                                reason: 'Bảo dưỡng xe',
-                                                id: invoice.seller?.salonId ??
-                                                    '',
-                                                carId:
-                                                    invoice.legalsUser!.carId!,
-                                                name:
-                                                    invoice.seller?.name ?? '',
-                                              );
-                                              Navigator.pushNamed(context,
-                                                  '/create_appointment',
-                                                  arguments: user);
-                                            },
-                                            child: Text('Đặt lịch bảo dưỡng'))
+                                                  context, '/car_maintaince',
+                                                  arguments:
+                                                      invoice.licensePlate);
+                                            }
+                                            break;
+                                          case 'appointment':
+                                            print(invoice.legalsUser!.carId!);
+                                            ChatUserModel user = ChatUserModel(
+                                              reason: 'Bảo dưỡng xe',
+                                              id: invoice.seller?.salonId ?? '',
+                                              carId: invoice.legalsUser!.carId!,
+                                              name: invoice.seller?.name ?? '',
+                                            );
+                                            Navigator.pushNamed(
+                                                context, '/create_appointment',
+                                                arguments: user);
+                                            break;
+                                        }
+                                      },
+                                      itemBuilder: (BuildContext context) =>
+                                          <PopupMenuEntry<String>>[
+                                        const PopupMenuItem<String>(
+                                          value: 'detail',
+                                          child: Text('Xem thông tin xe'),
+                                        ),
+                                        const PopupMenuItem<String>(
+                                          value: 'warranty',
+                                          child: Text('Xem bảo hành'),
+                                        ),
+                                        PopupMenuItem<String>(
+                                          value: 'maintaince',
+                                          child: invoice.licensePlate != null
+                                              ? Text('Xem lịch sử bảo dưỡng')
+                                              : null,
+                                        ),
+                                        const PopupMenuItem<String>(
+                                          value: 'appointment',
+                                          child: Text('Đặt lịch bảo dưỡng'),
+                                        ),
                                       ],
                                     ),
                                   ],

@@ -671,6 +671,7 @@ class _CreatePostState extends State<CreatePost> {
                                                           backgroundColor:
                                                               Colors.green,
                                                         ));
+                                                        Navigator.pop(context);
                                                       } else {
                                                         ScaffoldMessenger.of(
                                                                 context)
@@ -766,6 +767,7 @@ class _CreatePostState extends State<CreatePost> {
                                                           backgroundColor:
                                                               Colors.green,
                                                         ));
+                                                        Navigator.pop(context);
                                                       } else {
                                                         ScaffoldMessenger.of(
                                                                 context)
