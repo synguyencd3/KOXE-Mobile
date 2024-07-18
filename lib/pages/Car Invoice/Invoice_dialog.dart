@@ -207,7 +207,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                               ProcessService.updateDetails(
                                   widget.model.legalsUser!.carId!,
                                   widget.model.phone!,
-                                  selectedProcesses.toList());
+                                  selectedProcesses.toList()).then((value) {
                               ProcessService.updateProcess(
                                       widget.model.legalsUser!.carId!,
                                       widget.model.phone!,
@@ -221,7 +221,6 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                                     content: Text('Tạo thành công'),
                                     backgroundColor: Colors.green,
                                   ));
-                                  Navigator.pop(context);
                                 } else {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
@@ -231,7 +230,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                                   ));
                                 }
                               });
-                              Navigator.pop(context);
+                              Navigator.pop(context);});
                             },
                             child: Text('next'),
                           )
