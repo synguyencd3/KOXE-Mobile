@@ -67,8 +67,9 @@ class SocketManager {
       _messageController.add(data);
     });
     _socket!.on('notification', (data) {
+      print(data);
       _notificationController.add(data);
-      //print(data);
+
     });
     _socket!.on('getOnlineUsers', (data) {
      onlineUsers = data;

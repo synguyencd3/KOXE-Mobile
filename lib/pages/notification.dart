@@ -60,7 +60,6 @@ class _NotiState extends State<Noti> {
         }
       }
     }
-    setState(() {});
   }
 
   @override
@@ -88,6 +87,7 @@ class _NotiState extends State<Noti> {
                         TextButton(
                             onPressed: () {
                               readAllNotification();
+                              setState(() {});
                             },
                             child: Text('Xem tất cả')),
                       ],

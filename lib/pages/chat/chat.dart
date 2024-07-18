@@ -68,14 +68,30 @@ class _ChatState extends State<ChatPage> {
     });
     _messageSubscription = SocketManager().messageStream.listen((data) {
       print(data);
-      // Parse the message and create a types.Message object
-      final messageReceive = types.TextMessage(
-        author: _receiver,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
-        id: const Uuid().v4(),
-        text: data['message'],
-      );
-      _addMessage(messageReceive);
+
+      if (data['message'] != '') {
+        final messageReceive = types.TextMessage(
+          author: _receiver,
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          id: const Uuid().v4(),
+          text: data['message'],
+        );
+        _addMessage(messageReceive);
+      }
+      else
+        {
+          final messageReceive = types.ImageMessage(
+            author: _receiver,
+            id: const Uuid().v4(),
+            height: 100,
+            width: 100,
+            name: 'Image',
+            size: 100,
+            uri: data['image'][0],
+          );
+          _addMessage(messageReceive);
+        }
+
     });
 
     _onlineUsersSubscription =
