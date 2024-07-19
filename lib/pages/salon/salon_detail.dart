@@ -116,7 +116,7 @@ class _SalonDetailState extends State<SalonDetail> {
       print("is calling: $isCallingCar");
     });
     try {
-      data = await SalonsService.getDetail(salon.salonId ?? '');
+      data = await SalonsService.getDetail(salon.salonId ?? '', 1);
     }
     catch (e) {
       print("error fetching salon cars");

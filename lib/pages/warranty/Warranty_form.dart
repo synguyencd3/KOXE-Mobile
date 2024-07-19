@@ -61,7 +61,7 @@ class _WarrantyFormState extends State<WarrantyForm> {
   void getCars() async {
     print('getting car');
     var salonId = await SalonsService.isSalon();
-    var data = await SalonsService.getDetail(salonId);
+    var data = await SalonsService.getDetail(salonId, null);
     setState(() {
       cars = data;
     });

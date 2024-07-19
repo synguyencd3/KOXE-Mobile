@@ -76,7 +76,7 @@ class _CarInvoiceFormState extends State<CarInvoiceForm> {
   }
 
   void getCars() async {
-    var data = await SalonsService.getDetail(null);
+    var data = await SalonsService.getDetail(null, 1);
     setState(() {
       cars = data;
       _selectedCar = cars[0];

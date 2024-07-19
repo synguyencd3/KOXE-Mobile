@@ -43,7 +43,7 @@ class SalonsService {
     return [];
   }
 
-  static Future<List<Car>> getDetail(String? salonId) async {
+  static Future<List<Car>> getDetail(String? salonId, int? available) async {
     await APIService.refreshToken();
     var mySalon = await SalonsService.isSalon();
     var LoginInfo = await SharedService.loginDetails();
@@ -54,9 +54,14 @@ class SalonsService {
       HttpHeaders.authorizationHeader: 'Bearer ${LoginInfo?.accessToken}',
     };
 
-    var url = Uri.https(Config.apiURL, '${Config.salonCarsAPI}/$mySalon');
-    if (salonId != null)
-      url = Uri.https(Config.apiURL, '${Config.salonCarsAPI}/$salonId');
+    var url = Uri.https(Config.apiURL, '${Config.salonCarsAPI}/$mySalon', available!=null ? {
+      'available' : available.toString()
+    } : {});
+    if (salonId != null) {
+      url = Uri.https(Config.apiURL, '${Config.salonCarsAPI}/$salonId', available!=null ? {
+        'available' : available.toString()
+      } : {});
+    }
 
     var response = await http.get(url, headers: requestHeaders);
     print (response.body);

@@ -62,7 +62,7 @@ class _CreateAppointState extends State<CreateAppoint> {
   }
 
   Future<void> getCars() async {
-    List<Car>? carsApi = await SalonsService.getDetail(user.id);
+    List<Car>? carsApi = await SalonsService.getDetail(user.id, 1);
     if (user.carId != '' && carsApi.isNotEmpty) {
       int initialPage = carsApi.indexWhere((car) => car.id == user.carId);
       //print(initialPage);
