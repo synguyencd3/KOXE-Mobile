@@ -56,14 +56,14 @@ android {
         jvmTarget = '1.8'
     }
 
-    // signingConfigs {
-    //     debug {
-    //         keyAlias 'upload'
-    //         keyPassword '123456'
-    //         storeFile file('upload-keystore.jks')
-    //         storePassword '123456'
-    //     }
-    // }
+     signingConfigs {
+         debug {
+             keyAlias 'upload'
+             keyPassword '123456'
+             storeFile file('upload-keystore.jks')
+             storePassword '123456'
+         }
+     }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -84,13 +84,13 @@ android {
         ]
     }
 
-    // buildTypes {
-    //     release {
-    //         // TODO: Add your own signing config for the release build.
-    //         // Signing with the debug keys for now, so `flutter run --release` works.
-    //         signingConfig signingConfigs.debug
-    //     }
-    // }
+     buildTypes {
+         release {
+             // TODO: Add your own signing config for the release build.
+             // Signing with the debug keys for now, so `flutter run --release` works.
+             signingConfig signingConfigs.debug
+         }
+     }
 }
 
 flutter {

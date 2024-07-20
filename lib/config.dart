@@ -65,15 +65,10 @@ class Config {
   static const String removeMaintenance = '/warranty/remove-maintenance';
 
   //Google API
-  static const String client_id =
-      '146451497096-20opkm9vb1m2gtjq1pt203jq23mvi6tc.apps.googleusercontent.com';
-  static const String client_secret = "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";
-  static const String google_api_key =
-      "AIzaSyBMl0xRys9OM2P3I-1WCzhmcBH4tP7mL3w";
-  static const String geocoding_api = "AIzaSyACOwKyJN5nUGEgXfli64bUMCuTcZPEY4A";
+   static const String geocoding_api = "AIzaSyACOwKyJN5nUGEgXfli64bUMCuTcZPEY4A";
 
   //Web url
-  static const String webURL = "http://localhost:3000";
+  static const String webURL = 'https://fe-salon-oto.vercel.app';// "http://localhost:3000";
   static const String webVNPayCallback = '/payment/vnpay';
 
   //KeyMap

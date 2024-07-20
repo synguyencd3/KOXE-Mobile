@@ -163,7 +163,7 @@ class APIService {
 
     //begin sign in process
     var googleAccount = await _googleSignIn.signIn();
-
+    print(googleAccount);
     if (googleAccount == null) return false;
     if (googleAccount.serverAuthCode == null) return false;
 
@@ -214,7 +214,7 @@ class APIService {
 
     //begin sign in process
     var googleAccount = await _googleSignIn.signIn();
-
+    print(googleAccount);
     if (googleAccount == null) return false;
     if (googleAccount.serverAuthCode == null) return false;
 
