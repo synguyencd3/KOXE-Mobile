@@ -64,9 +64,9 @@ class _CarInvoiceListState extends State<UserCarInvoiceList> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('Customer: ${invoice.fullname}'),
+                                      Text('Tên khách hàng: ${invoice.fullname}'),
                                       SizedBox(height: 5),
-                                      Text('Phone: ${invoice.phone}'),
+                                      Text('Số điện thoại: ${invoice.phone}'),
                                       SizedBox(height: 5),
                                       Text('Biển số: ${invoice.licensePlate ?? 'Chưa có'}'),
                                       SizedBox(height: 5),

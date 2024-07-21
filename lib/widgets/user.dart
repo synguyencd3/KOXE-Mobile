@@ -141,14 +141,14 @@ class _UserState extends State<User> {
               //     }),
               keyMap.contains(Config.SalonKeyMap) && permissions.length > 0 ?
               text_card(
-                  title: 'Quản lý',
-                  headingIcon: Icons.manage_accounts,
+                  title: 'Quản lý salon',
+                  headingIcon: Icons.car_crash,
                   onTap: () {
                     Navigator.pushNamed(context, '/manage');
                   }) : Container(),
               text_card(
                   title: 'Quản lý cá nhân',
-                  headingIcon: Icons.car_crash,
+                  headingIcon: Icons.manage_accounts,
                   onTap: () {
                     Navigator.pushNamed(context, '/my_car');
                   }),

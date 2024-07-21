@@ -8,7 +8,8 @@ import 'package:mobile/utils/utils.dart';
 class ConnectionCard extends StatefulWidget {
   final String connectionId;
   bool isShow;
-  ConnectionCard({super.key, required this.connectionId, this.isShow=true});
+
+  ConnectionCard({super.key, required this.connectionId, this.isShow = true});
 
   @override
   State<ConnectionCard> createState() => _ConnectionCardState();
@@ -74,13 +75,32 @@ class _ConnectionCardState extends State<ConnectionCard> {
                 leading: Icon(Icons.car_repair),
               ),
               Column(
-                children: connection.processData?.stages?.map((stage) {
-                      return ListTile(
-                        title: Text(stage.name ?? ''),
-                        // Add more properties as needed
-                      );
-                    }).toList() ??
-                    [], // Use an empty list if stages is null
+                children: [
+                  ListTile(
+                    title: Text(
+                      'Tên giai đoạn',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    trailing: Text(
+                      'Phần trăm hoa hồng',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Column(
+                    children: connection.processData?.stages?.map((stage) {
+                          return ListTile(
+                            title: Text(stage.name ?? ''),
+                            trailing: Text(
+                              stage.commissionRate.toString() ?? '',
+                              style:
+                                  TextStyle(color: Colors.green, fontSize: 16),
+                            ),
+                            // Add more properties as needed
+                          );
+                        }).toList() ??
+                        [], // Use an empty list if stages is null
+                  ),
+                ],
               ),
               ListTile(
                 title: Text(
@@ -98,48 +118,54 @@ class _ConnectionCardState extends State<ConnectionCard> {
                 ),
                 leading: Icon(Icons.check_circle),
               ),
-              (connection.status == 'pending' &&
-                      salonId == '' ) ? widget.isShow == true ?
-                   Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        FilledButton.icon(
-                          onPressed: () async {
-                            bool response =
-                                await updateStatusConnection('accepted');
-                            if (response) {
-                              setState(() {
-                                connection.status = 'accepted';
-                              });
-                            }
+              (connection.status == 'pending' && salonId == '')
+                  ? widget.isShow == true
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            FilledButton.icon(
+                              onPressed: () async {
+                                bool response =
+                                    await updateStatusConnection('accepted');
+                                if (response) {
+                                  setState(() {
+                                    connection.status = 'accepted';
+                                  });
+                                }
+                              },
+                              icon: Icon(Icons.check_circle),
+                              label: Text('Đồng ý'),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.green)),
+                            ),
+                            FilledButton.icon(
+                              onPressed: () async {
+                                bool response =
+                                    await updateStatusConnection('rejected');
+                                if (response) {
+                                  setState(() {
+                                    connection.status = 'rejected';
+                                  });
+                                }
+                              },
+                              label: Text('Từ chối'),
+                              icon: Icon(Icons.do_not_disturb_on_rounded),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.red)),
+                            ),
+                          ],
+                        )
+                      : TextButton(
+                          child: Text('Đến trang quản lý kết nối'),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/connection');
                           },
-                          icon: Icon(Icons.check_circle),
-                          label: Text('Đồng ý'),
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.green)),
-                        ),
-                        FilledButton.icon(
-                          onPressed: () async {
-                            bool response =
-                                await updateStatusConnection('rejected');
-                            if (response) {
-                              setState(() {
-                                connection.status = 'rejected';
-                              });
-                            }
-                          },
-                          label: Text('Từ chối'),
-                          icon: Icon(Icons.do_not_disturb_on_rounded),
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.red)),
-                        ),
-                      ],
-                    )
-                  : TextButton(child: Text('Đến trang quản lý kết nối'),onPressed: (){
-                    Navigator.pushNamed(context,  '/connection');
-              },): Container(),
+                        )
+                  : Container(),
             ],
           ),
         ),

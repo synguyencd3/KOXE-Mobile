@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/model/transaction_model.dart';
 import 'package:mobile/services/transaction_service.dart';
 import 'package:mobile/services/salon_service.dart';
+import 'package:mobile/utils/utils.dart';
 
 class TransactionCard extends StatefulWidget {
   TransactionModel transaction;
@@ -68,6 +69,13 @@ class _TransactionCardState extends State<TransactionCard> {
                     title: Text('Hoa tiêu'),
                     trailing: Text(
                         widget.transaction.userTransaction?.name ?? 'Bạn',
+                        style: TextStyle(fontSize: trailingSize)),
+                  ),
+                  ListTile(
+                    title: Text('Ngày tạo'),
+                    trailing: Text(
+                        formatDate(
+                            widget.transaction.createAt ?? DateTime.now()),
                         style: TextStyle(fontSize: trailingSize)),
                   ),
                   Row(

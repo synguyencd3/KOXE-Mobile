@@ -71,7 +71,7 @@ class _UserInvoiceDialogState extends State<UserInvoiceDialog> {
   Widget build(BuildContext context) {
     return
       AlertDialog(
-      title: Text('Information'),
+      title: Text('Thông tin'),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,22 +80,22 @@ class _UserInvoiceDialogState extends State<UserInvoiceDialog> {
             TextField(
               readOnly: true,
               controller: fullNameController,
-              decoration: InputDecoration(labelText: 'Full Name'),
+              decoration: InputDecoration(labelText: 'Họ tên'),
             ),
             TextField(
               readOnly: true,
               controller: phoneNumberController,
-              decoration: InputDecoration(labelText: 'Phone Number'),
+              decoration: InputDecoration(labelText: 'Số điện thoại'),
             ),
             TextField(
               readOnly: true,
               controller: carNameController,
-              decoration: InputDecoration(labelText: 'Car Name'),
+              decoration: InputDecoration(labelText: 'Tên xe'),
             ),
             TextField(
               readOnly: true,
               controller: emailAddressController,
-              decoration: InputDecoration(labelText: 'Email Address'),
+              decoration: InputDecoration(labelText: 'Email'),
             ),
             SizedBox(height: 16),
             (currentPeriod == null ) ? Loading() :
@@ -123,7 +123,7 @@ class _UserInvoiceDialogState extends State<UserInvoiceDialog> {
       ),
       actions: [
         TextButton(
-          child: Text('Cancel'),
+          child: Text('Thoát'),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ],

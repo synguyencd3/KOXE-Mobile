@@ -5,6 +5,7 @@ import '../../services/salon_service.dart';
 import '../loading.dart';
 import 'createPayment.dart';
 import 'package:mobile/utils/utils.dart';
+import 'package:mobile/utils/utils.dart';
 
 class UserPaymentPage extends StatefulWidget {
   @override
@@ -42,14 +43,33 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  ListTile(title: Text('Ngày tạo'), subtitle: Text(obj.createDate ?? ""),),
-                  ListTile(title: Text('Số điện thoại'), subtitle: Text(obj.custormerPhone ?? "")),
-                  ListTile(title: Text('Tên khách hàng'), subtitle: Text(obj.custormerFullname ?? "")),
-                  ListTile(title: Text('Nội dung'), subtitle: Text(obj.reason ?? "")),
-                 // ListTile(title: Text('Creator'), subtitle: Text(obj.creator ?? "")),
-                  ListTile(title: Text('Phương thức'), subtitle: Text(obj.payment_method ?? "")),
-                  ListTile(title: Text('Số tiền'), subtitle: Text(obj.amount.toString() ?? "")),
-                  ListTile(title: Text('Trạng thái'), subtitle: Text(obj.status == true ? 'Hoàn thành' : 'Chưa hoàn thành')),
+                  ListTile(
+                    title: Text('Ngày tạo'),
+                    subtitle:
+                        Text(formatDate(DateTime.parse(obj.createDate ?? ""))),
+                  ),
+                  ListTile(
+                      title: Text('Số điện thoại'),
+                      subtitle: Text(obj.custormerPhone ?? "")),
+                  ListTile(
+                      title: Text('Tên khách hàng'),
+                      subtitle: Text(obj.custormerFullname ?? "")),
+                  ListTile(
+                      title: Text('Nội dung'),
+                      subtitle: Text(obj.reason ?? "")),
+                  // ListTile(title: Text('Creator'), subtitle: Text(obj.creator ?? "")),
+                  ListTile(
+                      title: Text('Phương thức'),
+                      subtitle: Text(obj.payment_method ?? "")),
+                  ListTile(
+                    title: Text('Số tiền'),
+                    subtitle: Text(formatCurrency(obj.amount ?? 0)),
+                  ),
+                  ListTile(
+                      title: Text('Trạng thái'),
+                      subtitle: Text(obj.status == true
+                          ? 'Hoàn thành'
+                          : 'Chưa hoàn thành')),
                 ],
               ),
             ),
@@ -92,7 +112,9 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
                 itemBuilder: (context, index) {
                   SalonPaymentModel obj = _payments[index];
                   return GestureDetector(
-                    onTap: () {showInvoiceDialog(context, obj);},
+                    onTap: () {
+                      showInvoiceDialog(context, obj);
+                    },
                     child: Card(
                       child: ListTile(
                         title: Text(
@@ -150,7 +172,8 @@ class _CustomObjectListPageState extends State<UserPaymentPage> {
                                   'Ngày tạo: ',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Text(formatDate(DateTime.parse(obj.createDate ?? ""))),
+                                Text(formatDate(
+                                    DateTime.parse(obj.createDate ?? ""))),
                               ],
                             ),
                             Row(
