@@ -122,7 +122,8 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   Future<bool> createPost() async {
-    //print(selectedSalonIds);
+    print(pickedFile?.length);
+    print(selectedSalonIds);
     PostModel postModel = PostModel(
       title: _title.text,
       text: _text.text,
@@ -148,9 +149,9 @@ class _CreatePostState extends State<CreatePost> {
           price: _price.text != '' ? int.parse(_price.text) : 0,
           seat: _seat.text != '' ? int.parse(_seat.text) : 0),
     );
-    //return true;
     bool response = await PostService.createPost(postModel);
     return response;
+   // return true;
   }
 
   @override
