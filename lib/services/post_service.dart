@@ -31,22 +31,44 @@ class PostService {
   }
 
   static Future<bool> createPost(PostModel postModel) async {
-    // print(postModel.salonId);
-    // return true;
     await APIService.refreshToken();
     var loginDetail = await SharedService.loginDetails();
-
     Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Access-Control-Allow-Origin': "*",
       'Authorization': 'Bearer ${loginDetail?.accessToken}',
     };
+    var uri = Uri.https(Config.apiURL, Config.posts);
 
-    var url = Uri.https(Config.apiURL, Config.posts);
-    print(jsonEncode(postModel.toJson()));
-    var response = await http.post(url,
-        headers: requestHeaders, body: jsonEncode(postModel.toJson()));
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll(requestHeaders);
+    request.fields['text'] = postModel.text ?? '';
+    request.fields['salons'] = postModel.salonId!.join(',');
+    request.fields['brand'] = postModel.car?.brand ?? '';
+    request.fields['type'] = postModel.car?.type ?? '';
+    request.fields['mfg'] = postModel.car?.mfg ?? '';
+    request.fields['version'] = postModel.car?.model ?? '';
+    request.fields['gear'] = postModel.car?.gear ?? '';
+    request.fields['fuel'] = postModel.fuel ?? '';
+    request.fields['origin'] = postModel.car?.origin ?? '';
+    request.fields['design'] = postModel.design ?? '';
+    request.fields['seat'] = postModel.car?.seat.toString() ?? '';
+    request.fields['color'] = postModel.color ?? '';
+    request.fields['licensePlate'] = postModel.licensePlate ?? '';
+    request.fields['ownerNumber'] = postModel.ownerNumber?.toString() ?? '';
+    request.fields['accessory'] = postModel.accessory.toString();
+    request.fields['registrationDeadline'] = postModel.registrationDeadline.toString();
+    request.fields['kilometer'] = postModel.car?.kilometer.toString() ?? '';
+    request.fields['price'] = postModel.car?.price.toString() ?? '';
+    request.fields['address'] = postModel.address ?? '';
+    request.fields['title'] = postModel.title ?? '';
+
+
+    if (postModel.image != null) {
+      for (var imagePath in postModel.image!) {
+        var file = await http.MultipartFile.fromPath('image', imagePath);
+        request.files.add(file);
+      }
+    }
+    var response = await request.send();
 
     return response.statusCode == 201;
   }
