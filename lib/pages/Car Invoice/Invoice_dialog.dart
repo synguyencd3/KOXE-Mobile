@@ -64,7 +64,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
     setState(() {
       isCalling = true;
     });
-    var data = await ProcessService.get(widget.model.legalsUser?.processId);
+    var data = await ProcessService.get(widget.model.legalsUser?.processId, null);
     setState(() {
       isCalling = false;
       selectedProcessInThisStage = {};

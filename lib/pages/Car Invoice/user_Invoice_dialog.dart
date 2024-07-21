@@ -37,7 +37,7 @@ class _UserInvoiceDialogState extends State<UserInvoiceDialog> {
 
   void getProcess() async {
     if (widget.model.legalsUser?.processId == null) return;
-    var data = await ProcessService.get(widget.model.legalsUser?.processId);
+    var data = await ProcessService.get(widget.model.legalsUser?.processId, widget.model.seller?.salonId);
     setState(() {
       selectedProcessInThisStage = {};
       _process = data;

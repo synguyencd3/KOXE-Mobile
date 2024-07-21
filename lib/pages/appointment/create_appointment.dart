@@ -39,8 +39,9 @@ class _CreateAppointState extends State<CreateAppoint> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
-      getSalon();
-      getCars().then((value) => getTimeBusy());
+      getSalon().then((value) =>{
+      getCars().then((value) => getTimeBusy())
+      });
     });
   }
 
@@ -62,7 +63,7 @@ class _CreateAppointState extends State<CreateAppoint> {
   }
 
   Future<void> getCars() async {
-    List<Car>? carsApi = await SalonsService.getDetail(user.id, 1);
+    List<Car>? carsApi = await SalonsService.getDetail(user.id, null);
     if (user.carId != '' && carsApi.isNotEmpty) {
       int initialPage = carsApi.indexWhere((car) => car.id == user.carId);
       //print(initialPage);
