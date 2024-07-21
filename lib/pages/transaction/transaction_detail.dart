@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/model/CarInvoice_response.dart';
+import 'package:mobile/model/process_model.dart';
 import 'package:mobile/model/stage_model.dart';
 import 'package:mobile/model/transaction_model.dart';
 
@@ -23,6 +24,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
   StageModel stage = StageModel();
   List<bool> checkboxValues = [];
   bool showButton = true;
+  process processData = process();
   late final TextEditingController _commission = TextEditingController();
   ValueNotifier<String> _selectedRatingValue = ValueNotifier('0');
   List<String> _values = [
@@ -58,6 +60,12 @@ class _TransactionDetailState extends State<TransactionDetail> {
     TransactionModel transactionArgument =
         ModalRoute.of(context)!.settings.arguments as TransactionModel;
     transaction = transactionArgument;
+  }
+  Future<void> getProcessDetail() async {
+    print(transaction.processData?.id);
+    var processAPI = await TransactionService.getProcessDetail(
+        transaction.processData?.id ?? '');
+    processData = processAPI;
   }
 
   Future<void> getStageDetail() async {
@@ -296,24 +304,49 @@ class _TransactionDetailState extends State<TransactionDetail> {
                   ],
                 ),
               ])
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                      size: 100,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text('Giao dịch đã hoàn thành',
-                        style: TextStyle(fontSize: 20)),
-                  ],
-                ),
-              ),
+            : FutureBuilder(
+            future: getProcessDetail(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return Column(
+                children: [
+                  Text(
+                    'Giao dịch đã hoàn thành',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.green),
+                  ),
+                  Column(
+                    children:
+                    processData.stages!.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      var stage = entry.value;
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(stage.name ?? ''),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                    transaction.ratingList?[index]=='-1' ? 'Chưa đánh giá':'Phần trăm hoàn thành: ${transaction.ratingList?[index] ?? 0}%'),
+                                Text(
+                                    'Hoa hồng: ${transaction.commissionList?[index] ?? 0}'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  )
+                ],
+              );
+            }),
       ),
       // bottomNavigationBar: checkStatus() == false
       //     ? Padding(

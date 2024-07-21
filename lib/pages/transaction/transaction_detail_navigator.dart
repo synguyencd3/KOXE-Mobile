@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/model/process_model.dart';
 import 'package:mobile/model/stage_model.dart';
 import 'package:mobile/model/transaction_model.dart';
 
@@ -23,20 +24,7 @@ class _TransactionDetailNavigatorState
   StageModel stage = StageModel();
   List<bool> checkboxValues = [];
   bool showButton = true;
-  late final TextEditingController _commission = TextEditingController();
-  ValueNotifier<String> _selectedRatingValue = ValueNotifier('0');
-  List<String> _values = [
-    '10',
-    '20',
-    '30',
-    '40',
-    '50',
-    '60',
-    '70',
-    '80',
-    '90',
-    '100'
-  ];
+  process processData = process();
 
   @override
   void initState() {
@@ -50,7 +38,6 @@ class _TransactionDetailNavigatorState
 
   @override
   void dispose() {
-    _commission.dispose();
     super.dispose();
   }
 
@@ -74,27 +61,24 @@ class _TransactionDetailNavigatorState
     });
   }
 
-  Future<void> getTransactionDetail() async {
-    print(transaction.id);
-    TransactionModel transactionAPI =
-        await TransactionService.getTransactionDetail(transaction.id ?? '');
-    setState(() {
-      transaction = transactionAPI;
-    });
+  // Future<void> getTransactionDetail() async {
+  //   print(transaction.id);
+  //   TransactionModel transactionAPI =
+  //       await TransactionService.getTransactionDetail(transaction.id ?? '');
+  //   setState(() {
+  //     transaction = transactionAPI;
+  //   });
+  // }
+  Future<void> getProcessDetail() async {
+    print(transaction.processData?.id);
+    var processAPI = await TransactionService.getProcessDetail(
+        transaction.processData?.id ?? '');
+    processData = processAPI;
   }
 
   Future<bool> updateCheckedTransaction() async {
     bool updated = await TransactionService.updateCheckedTransaction(
         transaction.id ?? '', transaction.checked ?? []);
-    return updated;
-  }
-
-  Future<int> updateNextStage() async {
-    if (_commission.text == '') {
-      _commission.text = '0';
-    }
-    int updated = await TransactionService.updateNextStage(transaction.id ?? '',
-        int.parse(_commission.text), int.parse(_selectedRatingValue.value));
     return updated;
   }
 
@@ -113,54 +97,80 @@ class _TransactionDetailNavigatorState
         title: Text('Chi tiết giao dịch'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: (checkStatus() == false)
-            ? Column(children: [
-                Text(
-                  transaction.processData?.name ?? '',
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red),
-                ),
-                Text('Trạng thái: ${transaction.status}'),
-                Text('Hoa tiêu: ${transaction.userTransaction?.name ?? 'N/A'}'),
-                Text('Giai đoạn hiện tại: ${transaction.stage?.name ?? ' '}'),
-                SingleChildScrollView(
-                  child: Column(
-                    children:
-                        stage.commissionDetails?.asMap().entries.map((entry) {
-                              int index = entry.key;
-                              CommissionDetailModel detail = entry.value;
-                              return CheckboxListTile(
-                                title: Text(detail.name ?? ''),
-                                value: checkboxValues[index],
-                                onChanged: null,
-                              );
-                            }).toList() ??
-                            [],
+          padding: const EdgeInsets.all(8.0),
+          child: (checkStatus() == false)
+              ? Column(children: [
+                  Text(
+                    transaction.processData?.name ?? '',
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red),
                   ),
-                ),
-              ])
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                      size: 100,
+                  Text(
+                      'Trạng thái: ${transaction.status == 'pending' ? 'Chưa hoàn thành' : transaction.status == 'success' ? 'Đã hoàn thành' : 'Đã hủy'}'),
+                  Text(
+                      'Hoa tiêu: ${transaction.userTransaction?.name ?? 'Bạn'}'),
+                  Text('Giai đoạn hiện tại: ${transaction.stage?.name ?? ''}'),
+                  SingleChildScrollView(
+                    child: Column(
+                      children:
+                          stage.commissionDetails?.asMap().entries.map((entry) {
+                                int index = entry.key;
+                                CommissionDetailModel detail = entry.value;
+                                return CheckboxListTile(
+                                  title: Text(detail.name ?? ''),
+                                  value: checkboxValues[index],
+                                  onChanged: null,
+                                );
+                              }).toList() ??
+                              [],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text('Giao dịch đã hoàn thành',
-                        style: TextStyle(fontSize: 20)),
-                  ],
-                ),
-              ),
-      ),
+                  ),
+                ])
+              : FutureBuilder(
+                  future: getProcessDetail(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return Column(
+                      children: [
+                        Text(
+                          'Giao dịch đã hoàn thành',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.green),
+                        ),
+                        Column(
+                          children:
+                              processData.stages!.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            var stage = entry.value;
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(stage.name ?? ''),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                          transaction.ratingList?[index]=='-1' ? 'Chưa đánh giá':'Phần trăm hoàn thành: ${transaction.ratingList?[index] ?? 0}%'),
+                                      Text(
+                                          'Hoa hồng: ${transaction.commissionList?[index] ?? 0}'),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        )
+                      ],
+                    );
+                  })),
     );
   }
 }

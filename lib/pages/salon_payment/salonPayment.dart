@@ -55,7 +55,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
                 children: <Widget>[
                   ListTile(
                     title: Text('Ngày tạo'),
-                    subtitle: Text(obj.createDate ?? ""),
+                    subtitle: Text(formatDate(DateTime.parse(obj.createDate ?? ""))),
                   ),
                   ListTile(
                       title: Text('Số điện thoại'),
@@ -72,7 +72,7 @@ class _CustomObjectListPageState extends State<SalonPaymentPage> {
                       subtitle: Text(obj.payment_method ?? "")),
                   ListTile(
                       title: Text('Số tiền'),
-                      subtitle: Text(obj.amount.toString() ?? "")),
+                      subtitle: Text(formatCurrency(obj.amount ?? 0))),
                   ListTile(
                       title: Text('Trạng thái'),
                       subtitle: Text(obj.status == true

@@ -9,25 +9,29 @@ class TransactionModel {
   String? id;
   String? status;
   List<dynamic>? checked;
-  List<dynamic>? commissionAmount;
+  List<dynamic>? commissionList;
+  List<dynamic>? ratingList;
   process? processData;
   StageModel? stage;
   UserTransactionModel? userTransaction;
+  DateTime? createAt;
 
   TransactionModel({
     this.id,
     this.status,
     this.checked,
-    this.commissionAmount,
+    this.commissionList,
     this.processData,
     this.stage,
   });
 
   TransactionModel.fromJson(Map<String, dynamic> json)
       : id = json['transaction_id'],
+  createAt = DateTime.parse(json['createdAt']),
         status = json['status'],
         checked = json['checked'],
-        commissionAmount = json['commissionAmount'],
+        commissionList = json['commissionList'],
+        ratingList = json['ratingList'],
         processData = json['process'] != null
             ? new process.fromJson(json['process'])
             : null,
@@ -42,7 +46,7 @@ class TransactionModel {
         'id': id,
         'status': status,
         'checked': checked,
-        'commission_amount': commissionAmount,
+        //'commission_amount': commissionList,
         'process': processData!.toJson(),
       };
 }
