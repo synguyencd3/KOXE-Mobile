@@ -40,7 +40,7 @@ class ProcessService {
     return [];
   }
 
-  static Future<process?> get(String? id) async {
+  static Future<process?> get(String? id, String? salonId) async {
     await APIService.refreshToken();
     String mySalon = await SalonsService.isSalon();
     var LoginInfo = await SharedService.loginDetails();
@@ -53,7 +53,7 @@ class ProcessService {
     var url = Uri.https(Config.apiURL, Config.getProcess);
 
     var requestBody = {
-      'salonId': mySalon,
+      'salonId': salonId ?? mySalon,
       'processId': id
     };
 
