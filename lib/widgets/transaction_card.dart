@@ -85,9 +85,16 @@ class _TransactionCardState extends State<TransactionCard> {
                           ? SizedBox.shrink()
                           : IconButton(
                               onPressed: () {
-                                Navigator.pushNamed(
-                                    context, '/transaction_detail_navigator',
-                                    arguments: widget.transaction);
+                                Navigator.pushNamed(context,
+                                        '/transaction_detail_navigator',
+                                        arguments: widget.transaction)
+                                    .then((result) {
+                                  if (result != null) {
+                                    setState(() {
+                                      widget.transaction = result as TransactionModel;
+                                    });
+                                  }
+                                });
                               },
                               icon: Icon(Icons.info)),
                       permission.contains("OWNER")

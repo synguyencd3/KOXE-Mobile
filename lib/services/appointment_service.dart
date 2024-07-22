@@ -103,6 +103,32 @@ class AppointmentService {
         description: '',
         datetime: DateTime.now());
   }
+  static Future<AppointmentModel> getAppointmentByIdUser(String appointmentId) async {
+    await APIService.refreshToken();
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails?.accessToken}',
+    };
+    print(appointmentId);
+    var url = Uri.https(Config.apiURL, Config.getAppointmentsAPI);
+
+    var response = await http.post(url,
+        headers: requestHeaders,
+        body: jsonEncode({'id': appointmentId}));
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      return AppointmentModel.fromJson(data['appointments'][0]);
+    }
+    return AppointmentModel(
+        id: '',
+        status: 0,
+        salon: '',
+        description: '',
+        datetime: DateTime.now());
+  }
 
   static Future<bool> updateSalonAppointment(
       String salonId, String? appointmentId, int status) async {
