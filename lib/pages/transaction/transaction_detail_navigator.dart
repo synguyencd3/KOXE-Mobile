@@ -95,6 +95,12 @@ class _TransactionDetailNavigatorState
     return Scaffold(
       appBar: AppBar(
         title: Text('Chi tiết giao dịch'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context, transaction);
+          },
+        ),
       ),
       body: Padding(
           padding: const EdgeInsets.all(8.0),

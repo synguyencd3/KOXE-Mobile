@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/connection_model.dart';
 import 'package:mobile/model/notification_model.dart';
+import 'package:mobile/model/transaction_model.dart';
 import 'package:mobile/services/connection_service.dart';
 import 'package:mobile/services/notification_service.dart';
 import 'package:mobile/services/salon_service.dart';
@@ -12,7 +13,7 @@ import 'package:mobile/services/salon_service.dart';
 import 'package:mobile/widgets/connection_card.dart';
 import 'package:mobile/pages/loading.dart';
 import 'package:mobile/utils/utils.dart';
-
+import 'package:mobile/services/transaction_service.dart';
 class NotificationCard extends StatefulWidget {
   final NotificationModel notification;
 
@@ -31,7 +32,6 @@ class _NotificationCardState extends State<NotificationCard> {
     salonId = salonIdAPI;
     //});
   }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -83,6 +83,40 @@ class _NotificationCardState extends State<NotificationCard> {
                           if (salonId == '') {
                             await NotificationService.markAsRead(
                                 widget.notification.id);
+                            if (widget.notification.types == 'salon-payment') {
+                              Navigator.pushNamed(context, '/salon_payment');
+                            }
+                            if (widget.notification.types == 'updateStage') {
+                             TransactionModel transaction = await TransactionService.getTransactionDetail(widget.notification.data ?? '');
+                             Navigator.pushNamed(context, '/transaction_detail', arguments: transaction);
+                            }
+                            if (widget.notification.types == 'appointment'){
+                              AppointmentModel appointment = await AppointmentService.getAppointmentByIdUser(
+                                  widget.notification.data ?? '');
+                              appointment.dayDiff = appointment.datetime
+                                  .difference(DateTime.now())
+                                  .inDays +
+                                  1;
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                      insetPadding: EdgeInsets.all(8),
+                                      backgroundColor: Colors.transparent,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            AppointmentCard(
+                                              appointment: appointment,
+                                              isSalon: '',
+                                            ),
+                                          ],
+                                        ),
+                                      ));
+                                },
+                              );
+                            }
                             if (widget.notification.types == 'connection') {
                               showDialog(
                                 context: context,
@@ -102,10 +136,10 @@ class _NotificationCardState extends State<NotificationCard> {
                                       ));
                                 },
                               );
-                              setState(() {
-                                widget.notification.isRead = true;
-                              });
                             }
+                            setState(() {
+                              widget.notification.isRead = true;
+                            });
                           } else {
                             await NotificationService.markAsReadSalon(
                                 widget.notification.id, salonId);
@@ -143,26 +177,49 @@ class _NotificationCardState extends State<NotificationCard> {
                               Navigator.pushNamed(context, '/post_detail',
                                   arguments: widget.notification.data);
                             }
+                            if (widget.notification.types == 'salon-payment') {
+                              Navigator.pushNamed(context, '/salon_payment');
+                            }
+                            if (widget.notification.types == 'connection') {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                      insetPadding: EdgeInsets.all(10),
+                                      backgroundColor: Colors.transparent,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ConnectionCard(
+                                            isShow: false,
+                                            connectionId:
+                                            widget.notification.data ?? '',
+                                          ),
+                                        ],
+                                      ));
+                                },
+                              );
+                            }
                             setState(() {
                               widget.notification.isRead = true;
                             });
                           }
                         }),
-                    ((widget.notification.types == 'request' &&
-                                salonId != '') ||
-                            (widget.notification.types == 'connection' &&
-                                salonId == '') ||
-                            (widget.notification.types == 'appointment' &&
-                                salonId != ''))
-                        ? Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Text('Nhấp vào để xem chi tiết',
-                                  style:
-                                      TextStyle(fontStyle: FontStyle.italic)),
-                            ))
-                        : Container(),
+                    // ((widget.notification.types == 'request' &&
+                    //             salonId != '') ||
+                    //         (widget.notification.types == 'connection' &&
+                    //             salonId == '') ||
+                    //         (widget.notification.types == 'appointment' &&
+                    //             salonId != ''))
+                    //     ? Align(
+                    //         alignment: Alignment.centerRight,
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.only(right: 8.0),
+                    //           child: Text('Nhấp vào để xem chi tiết',
+                    //               style:
+                    //                   TextStyle(fontStyle: FontStyle.italic)),
+                    //         ))
+                    //     : Container(),
                     (salonId == '' &&
                             widget.notification.types == 'invite' &&
                             widget.notification.isAccepted == 0)
