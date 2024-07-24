@@ -54,7 +54,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
                   for (var service in widget.invoice.maintainces)
                     ListTile(
                       title: Text(service.name ?? ''),
-                      trailing: Text(formatCurrency(service.cost)),
+                       trailing: Text(formatCurrency(service.cost)),
                     ),
                   Divider(
                     height: 20,
@@ -73,7 +73,7 @@ class _InvoiceCardState extends State<InvoiceCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Số lượng: ' + accessory.quantity.toString()),
-                          Text('Tổng tiền: ' + formatCurrency(accessory.price)),
+                           Text('Tổng tiền: ' + formatCurrency(accessory.price)),
                         ],
                       ),
                     ),
@@ -132,37 +132,40 @@ class _InvoiceCardState extends State<InvoiceCard> {
   @override
   Widget build(BuildContext context) {
     return isShow
-        ? Card(
-            child: Column(
-            children: [
-              ListTile(
-                title: Text(
-                  'Ngày tạo',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+        ? Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Card(
+              child: Column(
+              children: [
+                ListTile(
+                  title: Text(
+                    'Ngày tạo',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  trailing: Text(widget.invoice.createAt ?? '',
+                      style: TextStyle(fontSize: 16)),
                 ),
-                trailing: Text(widget.invoice.createAt ?? '',
-                    style: TextStyle(fontSize: 16)),
-              ),
-              simpleInvoiceCard(widget.invoice),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        showDialogDetail();
-                      },
-                      icon: Icon(Icons.info)),
-                  permission.contains("OWNER") || permission.contains("R_IV")
-                      ? IconButton(
-                          onPressed: () async {
-                            await deleteCard();
-                          },
-                          icon: Icon(Icons.delete))
-                      : Container()
-                ],
-              ),
-            ],
-          ))
+                simpleInvoiceCard(widget.invoice),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          showDialogDetail();
+                        },
+                        icon: Icon(Icons.info)),
+                    permission.contains("OWNER") || permission.contains("R_IV")
+                        ? IconButton(
+                            onPressed: () async {
+                              await deleteCard();
+                            },
+                            icon: Icon(Icons.delete))
+                        : Container()
+                  ],
+                ),
+              ],
+            )),
+        )
         : Container();
   }
 

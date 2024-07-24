@@ -1,5 +1,6 @@
 List<AccessoryModel> accessoriesFromJson(dynamic str) =>
-    List<AccessoryModel>.from((str).map((x) => AccessoryModel.fromJson(x)));
+    List<AccessoryModel>.from(
+        (str).where((x) => x != null).map((x) => AccessoryModel.fromJson(x)));
 // create function accessoriesToJson
 dynamic accessoriesToJson(List<AccessoryModel> data) =>
     List<dynamic>.from(data.map((x) => x.toJson()));
@@ -22,7 +23,8 @@ class AccessoryModel {
   AccessoryModel.fromJson(Map<String, dynamic> json)
       : id = json.containsKey('accessory_id') ? json['accessory_id'] : null,
         name = json['name'],
-        manufacturer =json.containsKey('manufacturer')  ? json['manufacturer']: null,
+        manufacturer =
+            json.containsKey('manufacturer') ? json['manufacturer'] : null,
         quantity = json['quantity'],
         price = json['price'];
 
