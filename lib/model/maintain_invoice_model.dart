@@ -1,5 +1,5 @@
 List<MaintainInvoiceModel> maintainceInvoiceFromJson(dynamic str) =>
-    List<MaintainInvoiceModel>.from((str).map((x) => MaintainInvoiceModel.fromJson(x)));
+    List<MaintainInvoiceModel>.from((str).where((x) => x != null).map((x) => MaintainInvoiceModel.fromJson(x)));
 class MaintainInvoiceModel {
   final String name;
   final int cost;

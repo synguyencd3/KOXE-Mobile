@@ -26,6 +26,7 @@ class InvoiceService{
       var data = jsonDecode(response.body);
       if (data['invoices'] == '[]')
         return [];
+      //print(data);
       return invoiceFromJson(data['invoices']);
     }
     return [];

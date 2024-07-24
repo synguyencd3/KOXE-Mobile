@@ -17,13 +17,9 @@ class _UserMaintainceState extends State<UserMaintaince> {
   late List<InvoiceModel> invoices = [];
 
   Future<void> getAllInvoices() async {
-    List<InvoiceModel>? data = ModalRoute.of(context)!.settings.arguments as List<InvoiceModel>?;
-    if (data != null) {
-      print('data is not null');
-    } else {
       List<InvoiceModel> invoicesAPI = await InvoiceService().getAllInvoices();
+
       invoices = invoicesAPI;
-    }
   }
 
   @override
