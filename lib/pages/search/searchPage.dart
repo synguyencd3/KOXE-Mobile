@@ -49,6 +49,7 @@ class _SearchPageState extends State<SearchPage> {
                   EasyDebounce.debounce('my-debouncer',  Duration(seconds: 1), () {
                     if (value!="") {
                       print("searching for" + value);
+                      result = [];
                       getCars(value);
                       getSalons(value);
                     }
