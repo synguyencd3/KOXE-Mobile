@@ -41,7 +41,7 @@ class PostService {
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll(requestHeaders);
     request.fields['text'] = postModel.text ?? '';
-    request.fields['salons'] = postModel.salonId!.join(',');
+    //request.fields['salons'] = jsonEncode(postModel.salonId!);
     request.fields['brand'] = postModel.car?.brand ?? '';
     request.fields['type'] = postModel.car?.type ?? '';
     request.fields['mfg'] = postModel.car?.mfg ?? '';
@@ -61,7 +61,11 @@ class PostService {
     request.fields['address'] = postModel.address ?? '';
     request.fields['title'] = postModel.title ?? '';
 
-
+    if (postModel.salonId != null) {
+      for (int i = 0; i < postModel.salonId!.length; i++) {
+        request.fields['salons[$i]'] = postModel.salonId![i].toString();
+      }
+    }
     if (postModel.image != null) {
       for (var imagePath in postModel.image!) {
         var file = await http.MultipartFile.fromPath('image', imagePath);
